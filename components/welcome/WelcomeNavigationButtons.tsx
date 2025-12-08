@@ -50,8 +50,8 @@ export function WelcomeNavigationButtons({
         <Button
           title={isLastSlide ? 'Get started' : 'Next'}
           onPress={onNext}
+          className={`${isLastSlide ? 'px-8' : ''}`}
           variant="primary"
-          className="px-8 py-3"
           size="medium"
         />
       </View>

@@ -12,7 +12,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/theme/colors';
 
 interface ButtonProps {
-  title: string;
+  title?: string;
+  children?: React.ReactNode;
+  iconLeft?: React.ReactNode;
   onPress: () => void;
   variant?: 'primary' | 'secondary' | 'outline' | 'gradient-border';
   size?: 'small' | 'medium' | 'large';
@@ -23,6 +25,8 @@ interface ButtonProps {
 
 export function Button({
   title,
+  children,
+  iconLeft,
   onPress,
   variant = 'primary',
   size = 'medium',
@@ -39,8 +43,8 @@ export function Button({
         ];
       case 'secondary':
         return [
-          colors['primary-tints'].purple['200'],
-          colors['primary-tints'].purple['500'],
+          colors['primary-tints'].purple['50'],
+          colors['primary-tints'].purple['50'],
         ];
       case 'gradient-border':
         return [
@@ -58,7 +62,12 @@ export function Button({
   const getVariantStyles = () => {
     switch (variant) {
       case 'outline':
-        return 'border border-primary bg-transparent active:bg-primary-tints-100';
+        const hasWhiteBorder =
+          className.includes('border-white') ||
+          className.includes('border-grey-plain-50');
+        return hasWhiteBorder
+          ? 'border border-grey-plain-50 bg-transparent'
+          : 'border border-primary bg-transparent active:bg-primary-tints-100';
       default:
         return '';
     }
@@ -78,18 +87,39 @@ export function Button({
   };
 
   const getTextStyles = (): TextStyle => {
-    const fontSize = size === 'large' ? 18 : 14;
+    const fontSize = size === 'large' ? 18 : size === 'medium' ? 14 : 14;
+    const hasWhiteBorder =
+      (variant === 'outline' &&
+        (className.includes('border-white') ||
+          className.includes('border-grey-plain-50'))) ||
+      (variant === 'secondary' &&
+        (className.includes('border-white') ||
+          className.includes('border-grey-plain-50')));
 
     switch (variant) {
       case 'primary':
-      case 'secondary':
         return {
           fontSize,
           fontWeight: '600',
           color: colors['grey-plain']['50'],
           textAlign: 'center',
         };
+      case 'secondary':
+        return {
+          fontSize,
+          fontWeight: '600',
+          color: colors['grey-plain']['550'],
+          textAlign: 'center',
+        };
       case 'outline':
+        return {
+          fontSize,
+          fontWeight: '600',
+          color: hasWhiteBorder
+            ? colors['grey-plain']['50']
+            : colors.primary.purple,
+          textAlign: 'center',
+        };
       case 'gradient-border':
         return {
           fontSize,
@@ -118,9 +148,14 @@ export function Button({
               : colors['grey-plain']['50']
           }
         />
-      ) : (
-        <Text style={getTextStyles()}>{title}</Text>
-      )}
+      ) : children ? (
+        children
+      ) : title ? (
+        <View className="flex-row items-center gap-3">
+          {iconLeft && iconLeft}
+          <Text style={getTextStyles()}>{title}</Text>
+        </View>
+      ) : null}
     </>
   );
 
@@ -131,6 +166,7 @@ export function Button({
       <Pressable
         onPress={onPress}
         disabled={disabled || loading}
+        className={className}
         style={{
           opacity: disabled ? 0.5 : 1,
         }}
@@ -154,7 +190,6 @@ export function Button({
                 justify-center
                 rounded-full
                 bg-transparent
-                ${className}
               `}
               style={{
                 backgroundColor: colors['grey-plain']['50'],
@@ -189,12 +224,143 @@ export function Button({
     );
   }
 
+  if (variant === 'secondary') {
+    // Check if secondary should have white border (for dark backgrounds)
+    const hasWhiteBorder =
+      className.includes('border-white') ||
+      className.includes('border-grey-plain-50');
+
+    if (hasWhiteBorder) {
+      // Separate padding classes from margin/other classes
+      const paddingClasses = className
+        .split(' ')
+        .filter(
+          (cls) =>
+            cls.startsWith('p') &&
+            (cls.includes('x') || cls.includes('y') || cls.match(/^p-\d+$/))
+        )
+        .join(' ');
+      const otherClasses = className
+        .split(' ')
+        .filter(
+          (cls) =>
+            !cls.startsWith('p') ||
+            (!cls.includes('x') && !cls.includes('y') && !cls.match(/^p-\d+$/))
+        )
+        .join(' ')
+        .replace('border-white', '')
+        .replace('border-grey-plain-50', '');
+
+      return (
+        <Pressable
+          onPress={onPress}
+          disabled={disabled || loading}
+          className={otherClasses}
+          style={{
+            opacity: disabled ? 0.5 : 1,
+          }}
+        >
+          {({ pressed }) => (
+            <View
+              className={`
+                ${getSizeStyles()}
+                flex-row
+                items-center
+                justify-center
+                rounded-full
+                border
+                border-grey-plain-50
+                bg-primary-tints-50
+                ${paddingClasses}
+              `}
+              style={{
+                opacity: pressed ? 0.9 : 1,
+              }}
+            >
+              {buttonContent}
+            </View>
+          )}
+        </Pressable>
+      );
+    }
+
+    // Default secondary variant with purple border
+    // Separate padding classes from margin/other classes
+    const paddingClasses = className
+      .split(' ')
+      .filter(
+        (cls) =>
+          cls.startsWith('p') &&
+          (cls.includes('x') || cls.includes('y') || cls.match(/^p-\d+$/))
+      )
+      .join(' ');
+    const otherClasses = className
+      .split(' ')
+      .filter(
+        (cls) =>
+          !cls.startsWith('p') ||
+          (!cls.includes('x') && !cls.includes('y') && !cls.match(/^p-\d+$/))
+      )
+      .join(' ');
+
+    return (
+      <Pressable
+        onPress={onPress}
+        disabled={disabled || loading}
+        className={otherClasses}
+        style={{
+          opacity: disabled ? 0.5 : 1,
+        }}
+      >
+        {({ pressed }) => (
+          <View
+            className={`
+              ${getSizeStyles()}
+              flex-row
+              items-center
+              justify-center
+              rounded-2xl
+              border
+              ${paddingClasses}
+            `}
+            style={{
+              borderColor: colors['primary-tints'].purple['50'],
+              backgroundColor: colors['primary-tints'].purple['50'],
+              opacity: pressed ? 0.9 : 1,
+            }}
+          >
+            {buttonContent}
+          </View>
+        )}
+      </Pressable>
+    );
+  }
+
   const borderWidth = 2;
+
+  // Separate padding classes from margin/other classes
+  const paddingClasses = className
+    .split(' ')
+    .filter(
+      (cls) =>
+        cls.startsWith('p') &&
+        (cls.includes('x') || cls.includes('y') || cls.match(/^p-\d+$/))
+    )
+    .join(' ');
+  const otherClasses = className
+    .split(' ')
+    .filter(
+      (cls) =>
+        !cls.startsWith('p') ||
+        (!cls.includes('x') && !cls.includes('y') && !cls.match(/^p-\d+$/))
+    )
+    .join(' ');
 
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled || loading}
+      className={otherClasses}
       style={{
         opacity: disabled ? 0.5 : 1,
       }}
@@ -231,7 +397,7 @@ export function Button({
                 flex-row
                 items-center
                 justify-center
-                ${className}
+                ${paddingClasses}
               `}
             >
               {buttonContent}

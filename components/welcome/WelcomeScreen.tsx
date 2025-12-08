@@ -6,13 +6,11 @@ import {
   NativeScrollEvent,
   NativeSyntheticEvent,
   ImageSourcePropType,
-  TouchableOpacity,
-  Text,
 } from 'react-native';
-import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { WelcomeSlide } from './WelcomeSlide';
 import { PageIndicator } from './PageIndicator';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
@@ -123,21 +121,8 @@ export function WelcomeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
-      <View className="flex-row items-center justify-between px-6 pt-4">
-        <Image
-          source={require('../../assets/images/logo/logo-color.png')}
-          style={{ width: 104, height: 30 }}
-          contentFit="contain"
-          transition={200}
-        />
-        <TouchableOpacity
-          onPress={handleOpenRequestLift}
-          className="rounded-full border border-primary px-3 py-1"
-        >
-          <Text className="text-xs font-semibold text-primary">
-            Request lift
-          </Text>
-        </TouchableOpacity>
+      <View className="flex-row items-center justify-start px-6 pt-4">
+        <LogoColor width={104} height={30} />
       </View>
 
       <View className="flex-1">

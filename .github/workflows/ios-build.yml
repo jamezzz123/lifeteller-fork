@@ -1,0 +1,100 @@
+name: CI - iOS Build
+
+on:
+    push:
+        branches: [main, develop]
+    pull_request:
+        branches: [main, develop]
+    workflow_dispatch:
+
+jobs:
+    validate:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Setup pnpm
+              uses: pnpm/action-setup@v2
+              with:
+                  version: 8
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "20"
+                  cache: "pnpm"
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: TypeScript type check
+              run: pnpm run compile
+
+            - name: ESLint check
+              run: pnpm run lint
+
+            - name: Validate Expo config
+              run: npx expo config --type public
+
+            - name: Validate iOS project can be generated
+              run: |
+                  echo "Validating iOS project structure..."
+                  npx expo prebuild --platform ios --clean --no-install
+                  # Check that essential iOS files exist
+                  test -f ios/lifteller.xcodeproj/project.pbxproj || exit 1
+                  test -f ios/Podfile || exit 1
+                  echo "✓ iOS project structure is valid"
+
+    # TODO: Uncomment when you need full iOS builds with code signing
+    # build-ios:
+    #     runs-on: macos-latest
+    #     needs: validate
+    #     steps:
+    #         - name: Checkout code
+    #           uses: actions/checkout@v4
+    #         - name: Setup pnpm
+    #           uses: pnpm/action-setup@v2
+    #           with:
+    #               version: 8
+    #         - name: Setup Node.js
+    #           uses: actions/setup-node@v4
+    #           with:
+    #               node-version: "20"
+    #               cache: "pnpm"
+    #         - name: Install dependencies
+    #           run: pnpm install --frozen-lockfile
+    #         - name: Setup Ruby
+    #           uses: ruby/setup-ruby@v1
+    #           with:
+    #               ruby-version: "3.1"
+    #               bundler-cache: true
+    #         - name: Install CocoaPods
+    #           run: gem install cocoapods
+    #         - name: Generate native iOS project
+    #           run: npx expo prebuild --platform ios --clean
+    #         - name: Install CocoaPods dependencies
+    #           working-directory: ios
+    #           run: pod install
+    #         - name: Build iOS Archive (Requires Code Signing)
+    #           working-directory: ios
+    #           env:
+    #               DEVELOPMENT_TEAM: ${{ secrets.IOS_DEVELOPMENT_TEAM }}
+    #           run: |
+    #               if [ -z "$DEVELOPMENT_TEAM" ]; then
+    #                 echo "Error: IOS_DEVELOPMENT_TEAM secret is required"
+    #                 exit 1
+    #               fi
+    #               xcodebuild archive \
+    #                 -workspace lifteller.xcworkspace \
+    #                 -scheme lifteller \
+    #                 -configuration Release \
+    #                 -archivePath ./build/Lifteller.xcarchive \
+    #                 -destination "generic/platform=iOS" \
+    #                 DEVELOPMENT_TEAM="$DEVELOPMENT_TEAM" \
+    #                 CODE_SIGN_IDENTITY="iPhone Developer" \
+    #                 CODE_SIGNING_REQUIRED=YES \
+    #                 CODE_SIGNING_ALLOWED=YES \
+    #                 -allowProvisioningUpdates
