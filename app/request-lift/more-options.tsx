@@ -2,7 +2,13 @@ import { useRef, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Switch } from 'react-native';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { ChevronLeft, Calendar, CalendarX, Users, Hand } from 'lucide-react-native';
+import {
+  ChevronLeft,
+  Calendar,
+  CalendarX,
+  Users,
+  Hand,
+} from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import {
@@ -18,10 +24,14 @@ export default function MoreOptionsScreen() {
   const [liftEndDate, setLiftEndDate] = useState(false);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [allowCollaborators, setAllowCollaborators] = useState(false);
-  const [collaboratorLimit, setCollaboratorLimit] = useState<'unlimited' | number>('unlimited');
+  const [collaboratorLimit, setCollaboratorLimit] = useState<
+    'unlimited' | number
+  >('unlimited');
   const [allowRequesters, setAllowRequesters] = useState(false);
-  const [showRemoveCollaboratorsDialog, setShowRemoveCollaboratorsDialog] = useState(false);
-  const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] = useState(false);
+  const [showRemoveCollaboratorsDialog, setShowRemoveCollaboratorsDialog] =
+    useState(false);
+  const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] =
+    useState(false);
 
   const scheduleSheetRef = useRef<BottomSheetRef>(null);
   const endDateSheetRef = useRef<BottomSheetRef>(null);
@@ -146,7 +156,10 @@ export default function MoreOptionsScreen() {
         </Text>
       </View>
 
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 32 }}
+      >
         {/* Schedule lift */}
         <TouchableOpacity
           onPress={handleScheduleLiftPress}
@@ -185,7 +198,7 @@ export default function MoreOptionsScreen() {
             </View>
             <Switch
               value={scheduleLift}
-              onValueChange={handleScheduleLiftToggle}
+              // onValueChange={handleScheduleLiftToggle}
               trackColor={{
                 false: colors['grey-plain']['450'],
                 true: colors.primary.purple,
@@ -262,7 +275,10 @@ export default function MoreOptionsScreen() {
                   </Text>
                 ) : allowCollaborators ? (
                   <Text className="text-sm font-medium text-grey-alpha-500">
-                    {typeof collaboratorLimit === 'number' ? collaboratorLimit : '5'} →
+                    {typeof collaboratorLimit === 'number'
+                      ? collaboratorLimit
+                      : '5'}{' '}
+                    →
                   </Text>
                 ) : (
                   <Text className="text-sm text-grey-alpha-400">
@@ -294,8 +310,8 @@ export default function MoreOptionsScreen() {
                   Allow requesters
                 </Text>
                 <Text className="text-sm text-grey-alpha-400">
-                  Approve people&apos;s request to join and benefit from the lift you
-                  are raising.
+                  Approve people&apos;s request to join and benefit from the
+                  lift you are raising.
                 </Text>
               </View>
             </View>

@@ -27,6 +27,8 @@ function LayoutContent() {
 
   // Hide layout header for certain routes
   const hideLayoutHeader = pathname === '/request-lift/more-options';
+  // Hide next button for step 4 (has its own button at the bottom)
+  const hideNextButton = pathname === '/request-lift/step-4';
 
   const {
     selectedContacts,
@@ -94,13 +96,15 @@ function LayoutContent() {
                 {headerTitle}
               </Text>
             </View>
-            <Button
-              title={nextButtonLabel}
-              onPress={() => onNextRef.current?.()}
-              size="small"
-              disabled={!canProceed}
-              // className="min-w-[110px]"
-            />
+            {!hideNextButton && (
+              <Button
+                title={nextButtonLabel}
+                onPress={() => onNextRef.current?.()}
+                size="small"
+                disabled={!canProceed}
+                // className="min-w-[110px]"
+              />
+            )}
           </View>
         )}
 

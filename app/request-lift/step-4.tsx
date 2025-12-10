@@ -1,22 +1,14 @@
-import { useEffect, useState, useCallback } from 'react';
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import {
-  ChevronLeft,
-  ChevronRight,
-  Tag,
-  Clock,
-} from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Tag, Clock } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { RequestSuccessBottomSheet } from '@/components/request-lift';
 import { useRequestLift } from './context';
 
 // Mock images for carousel
@@ -36,7 +28,7 @@ export default function Step4Screen() {
     liftAmount,
     liftItems,
     category,
-    audienceType,
+    audienceOfferType,
     setHeaderTitle,
     setNextButtonLabel,
     setCanProceed,
@@ -44,10 +36,12 @@ export default function Step4Screen() {
   } = useRequestLift();
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const successSheetRef = useRef<BottomSheetRef>(null);
 
   const handleNext = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    router.push('/request-lift/success' as any);
+    // Show success bottom sheet instead of navigating
+    successSheetRef.current?.expand();
   }, []);
 
   const handleEditDetails = useCallback(() => {
@@ -63,7 +57,13 @@ export default function Step4Screen() {
     return () => {
       onNextRef.current = null;
     };
-  }, [setHeaderTitle, setNextButtonLabel, setCanProceed, handleNext, onNextRef]);
+  }, [
+    setHeaderTitle,
+    setNextButtonLabel,
+    setCanProceed,
+    handleNext,
+    onNextRef,
+  ]);
 
   function handlePreviousImage() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -79,8 +79,21 @@ export default function Step4Screen() {
     );
   }
 
+  function handleGoToFeeds() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    successSheetRef.current?.close();
+    router.replace('/home' as any);
+  }
+
+  function handleShareRequest() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Implement share functionality
+    // For now, just close the sheet
+    successSheetRef.current?.close();
+  }
+
   const getAudienceLabel = () => {
-    switch (audienceType) {
+    switch (audienceOfferType) {
       case 'everyone':
         return 'Everyone';
       case 'friends':
@@ -124,7 +137,7 @@ export default function Step4Screen() {
             {/* Navigation Arrows */}
             <TouchableOpacity
               onPress={handlePreviousImage}
-              className="absolute left-3 top-1/2 -translate-y-1/2 size-10 items-center justify-center rounded-full bg-white shadow-sm"
+              className="absolute left-3 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
               style={{ transform: [{ translateY: -20 }] }}
             >
               <ChevronLeft
@@ -136,7 +149,7 @@ export default function Step4Screen() {
 
             <TouchableOpacity
               onPress={handleNextImage}
-              className="absolute right-3 top-1/2 -translate-y-1/2 size-10 items-center justify-center rounded-full bg-white shadow-sm"
+              className="absolute right-3 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
               style={{ transform: [{ translateY: -20 }] }}
             >
               <ChevronRight
@@ -165,7 +178,7 @@ export default function Step4Screen() {
         </View>
 
         {/* Category and Duration Badges */}
-        <View className="mb-3 flex-row items-center gap-3 px-4">
+        <View className="mb-3 flex-row items-center justify-between gap-3 px-4">
           <View className="flex-row items-center gap-1.5">
             <Tag size={16} color={colors.primary.purple} strokeWidth={2.5} />
             <Text className="text-sm font-medium text-grey-alpha-500">
@@ -225,18 +238,22 @@ export default function Step4Screen() {
               </View>
             )}
 
-            {/* 0% Badge */}
-            <View
-              className="self-start rounded-full px-2.5 py-1"
-              style={{
-                backgroundColor: colors['grey-alpha']['150'],
-                borderColor: colors['grey-alpha']['250'],
-                borderWidth: 1,
-              }}
-            >
-              <Text className="text-xs font-semibold text-grey-alpha-500">
-                0%
-              </Text>
+            {/* Progress Slider */}
+            <View className="relative w-full">
+              <View className="h-2 w-full overflow-hidden rounded-full bg-grey-alpha-150">
+                <View
+                  className="h-full rounded-full"
+                  style={{
+                    width: '0%',
+                    backgroundColor: colors.primary.purple,
+                  }}
+                />
+              </View>
+              <View className="absolute -top-3 mb-2 w-auto flex-row items-center justify-between rounded-full border border-primary bg-white p-2">
+                <Text className="text-xs font-semibold text-grey-alpha-500">
+                  0%
+                </Text>
+              </View>
             </View>
           </View>
         )}
@@ -258,24 +275,27 @@ export default function Step4Screen() {
             {startDate}
           </Text>
         </View>
+      </ScrollView>
 
-        {/* Bottom Actions */}
-        <View className="flex-row items-center justify-between px-4">
+      {/* Bottom Actions - Sticky to bottom */}
+      <View className="border-t border-grey-plain-450/20 bg-grey-alpha-150 px-4 pb-6 pt-4">
+        <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={handleEditDetails}>
             <Text className="text-base font-semibold text-grey-alpha-500">
               Edit details
             </Text>
           </TouchableOpacity>
 
-          <Button
-            title="Request lift"
-            onPress={handleNext}
-            variant="primary"
-            size="large"
-            className="ml-4"
-          />
+          <Button title="Request lift" onPress={handleNext} variant="primary" />
         </View>
-      </ScrollView>
+      </View>
+
+      {/* Success Bottom Sheet */}
+      <RequestSuccessBottomSheet
+        ref={successSheetRef}
+        onGoToFeeds={handleGoToFeeds}
+        onShareRequest={handleShareRequest}
+      />
     </View>
   );
 }
