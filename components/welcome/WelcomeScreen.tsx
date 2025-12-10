@@ -14,6 +14,7 @@ import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { WelcomeSlide } from './WelcomeSlide';
 import { PageIndicator } from './PageIndicator';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
+import { Button } from '../ui/Button';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -170,6 +171,10 @@ export function WelcomeScreen() {
         onNext={handleNext}
         onBack={handleBack}
       />
+      <Button
+        title="Go to request lift"
+        onPress={handleOpenRequestLift}
+      ></Button>
     </SafeAreaView>
   );
 }

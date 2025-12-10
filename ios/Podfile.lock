@@ -1,6 +1,9 @@
 PODS:
   - EXConstants (18.0.10):
     - ExpoModulesCore
+  - EXImageLoader (6.0.0):
+    - ExpoModulesCore
+    - React-Core
   - EXJSONUtils (0.15.0)
   - EXManifests (1.0.9):
     - ExpoModulesCore
@@ -202,6 +205,8 @@ PODS:
     - Yoga
   - ExpoAsset (12.0.10):
     - ExpoModulesCore
+  - ExpoClipboard (8.0.8):
+    - ExpoModulesCore
   - ExpoFileSystem (19.0.19):
     - ExpoModulesCore
   - ExpoFont (14.0.9):
@@ -218,6 +223,8 @@ PODS:
     - SDWebImageAVIFCoder (~> 0.11.0)
     - SDWebImageSVGCoder (~> 1.7.0)
     - SDWebImageWebPCoder (~> 0.14.6)
+  - ExpoImagePicker (17.0.9):
+    - ExpoModulesCore
   - ExpoKeepAwake (15.0.7):
     - ExpoModulesCore
   - ExpoLinearGradient (15.0.7):
@@ -2250,6 +2257,7 @@ PODS:
 
 DEPENDENCIES:
   - "EXConstants (from `../node_modules/.pnpm/expo-constants@18.0.10_expo@54.0.26_react-native@0.81.5/node_modules/expo-constants/ios`)"
+  - "EXImageLoader (from `../node_modules/.pnpm/expo-image-loader@6.0.0_expo@54.0.26/node_modules/expo-image-loader/ios`)"
   - "EXJSONUtils (from `../node_modules/.pnpm/expo-json-utils@0.15.0/node_modules/expo-json-utils/ios`)"
   - "EXManifests (from `../node_modules/.pnpm/expo-manifests@1.0.9_expo@54.0.26/node_modules/expo-manifests/ios`)"
   - "Expo (from `../node_modules/.pnpm/expo@54.0.26_@babel+core@7.28.5_@expo+metro-runtime@6.1.2_expo-router@6.0.16_react-native@0.81.5_react@19.1.0/node_modules/expo`)"
@@ -2258,11 +2266,13 @@ DEPENDENCIES:
   - "expo-dev-menu (from `../node_modules/.pnpm/expo-dev-menu@7.0.18_expo@54.0.26/node_modules/expo-dev-menu`)"
   - "expo-dev-menu-interface (from `../node_modules/.pnpm/expo-dev-menu-interface@2.0.0_expo@54.0.26/node_modules/expo-dev-menu-interface/ios`)"
   - "ExpoAsset (from `../node_modules/.pnpm/expo-asset@12.0.10_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-asset/ios`)"
+  - "ExpoClipboard (from `../node_modules/.pnpm/expo-clipboard@8.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios`)"
   - "ExpoFileSystem (from `../node_modules/.pnpm/expo-file-system@19.0.19_expo@54.0.26_react-native@0.81.5/node_modules/expo-file-system/ios`)"
   - "ExpoFont (from `../node_modules/.pnpm/expo-font@14.0.9_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-font/ios`)"
   - "ExpoHaptics (from `../node_modules/.pnpm/expo-haptics@15.0.7_expo@54.0.26/node_modules/expo-haptics/ios`)"
   - "ExpoHead (from `../node_modules/.pnpm/expo-router@6.0.16_@expo+metro-runtime@6.1.2_@types+react@19.1.17_expo-constants@18.0.10_expo_4mpmolqirgaeplbdsaux6wmkje/node_modules/expo-router/ios`)"
   - "ExpoImage (from `../node_modules/.pnpm/expo-image@3.0.10_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-image/ios`)"
+  - "ExpoImagePicker (from `../node_modules/.pnpm/expo-image-picker@17.0.9_expo@54.0.26/node_modules/expo-image-picker/ios`)"
   - "ExpoKeepAwake (from `../node_modules/.pnpm/expo-keep-awake@15.0.7_expo@54.0.26_react@19.1.0/node_modules/expo-keep-awake/ios`)"
   - "ExpoLinearGradient (from `../node_modules/.pnpm/expo-linear-gradient@15.0.7_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-linear-gradient/ios`)"
   - "ExpoLinking (from `../node_modules/.pnpm/expo-linking@8.0.9_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-linking/ios`)"
@@ -2360,6 +2370,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   EXConstants:
     :path: "../node_modules/.pnpm/expo-constants@18.0.10_expo@54.0.26_react-native@0.81.5/node_modules/expo-constants/ios"
+  EXImageLoader:
+    :path: "../node_modules/.pnpm/expo-image-loader@6.0.0_expo@54.0.26/node_modules/expo-image-loader/ios"
   EXJSONUtils:
     :path: "../node_modules/.pnpm/expo-json-utils@0.15.0/node_modules/expo-json-utils/ios"
   EXManifests:
@@ -2376,6 +2388,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/.pnpm/expo-dev-menu-interface@2.0.0_expo@54.0.26/node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/.pnpm/expo-asset@12.0.10_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-asset/ios"
+  ExpoClipboard:
+    :path: "../node_modules/.pnpm/expo-clipboard@8.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios"
   ExpoFileSystem:
     :path: "../node_modules/.pnpm/expo-file-system@19.0.19_expo@54.0.26_react-native@0.81.5/node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2386,6 +2400,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/.pnpm/expo-router@6.0.16_@expo+metro-runtime@6.1.2_@types+react@19.1.17_expo-constants@18.0.10_expo_4mpmolqirgaeplbdsaux6wmkje/node_modules/expo-router/ios"
   ExpoImage:
     :path: "../node_modules/.pnpm/expo-image@3.0.10_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-image/ios"
+  ExpoImagePicker:
+    :path: "../node_modules/.pnpm/expo-image-picker@17.0.9_expo@54.0.26/node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
     :path: "../node_modules/.pnpm/expo-keep-awake@15.0.7_expo@54.0.26_react@19.1.0/node_modules/expo-keep-awake/ios"
   ExpoLinearGradient:
@@ -2554,6 +2570,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   EXConstants: e6e50cdfcb4524f40121d1fdcff24e97b7dcd2fd
+  EXImageLoader: e501c001bc40b8326605e82e6e80363c80fe06b5
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
   EXManifests: eaf327418721c4a7482576c579d215516d36319c
   Expo: a429ae95cbae859785ece75d42ff768d6176099f
@@ -2562,11 +2579,13 @@ SPEC CHECKSUMS:
   expo-dev-menu: ea4fb803ace52e60d7cd8060c7cd379612a140b2
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
   ExpoAsset: ee515c16290e521de1870dcdee66d78173fbc533
+  ExpoClipboard: 50fa3332136758be7ca2ea912bae585f74bb93c3
   ExpoFileSystem: 73a9f3f2e0affc61eba5b9326153f64870438af1
   ExpoFont: b881d43057dceb7b31ff767b24f612609e80f60f
   ExpoHaptics: b48d913e7e5f23816c6f130e525c9a6501b160b5
   ExpoHead: 4ad178d6b19c2bf786b0d1889a870ba3187c18ef
   ExpoImage: 6eb842cd07817402640545c41884dd7f5fbfbca5
+  ExpoImagePicker: 04328b6b72a995ee74679558a6aa2e7f3a304f6f
   ExpoKeepAwake: 3f5e3ac53627849174f3603271df8e08f174ed4a
   ExpoLinearGradient: f9e7182e5253d53b2de4134b69d70bbfc2d50588
   ExpoLinking: 50a65cd7beb6051ffc82f84ffb33961dd5e55a5b
