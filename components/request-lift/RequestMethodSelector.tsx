@@ -1,8 +1,4 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Image, ImageSource } from 'expo-image';
 import { ChevronDown } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
@@ -21,7 +17,7 @@ export function RequestMethodSelector({
   const defaultAvatar = require('../../assets/images/welcome/collage-1.jpg');
 
   return (
-    <View className="flex-row items-center gap-3 px-4">
+    <View className="flex-row items-center gap-3 px-2">
       {/* User Avatar */}
       <Image
         source={userAvatar || defaultAvatar}
@@ -32,7 +28,7 @@ export function RequestMethodSelector({
       {/* Dropdown Button */}
       <TouchableOpacity
         onPress={onPress}
-        className="flex-row items-center justify-between gap-2 rounded-full border-2 border-primary px-4 py-2.5"
+        className="flex-row items-center justify-between gap-2 rounded-full border-2 border-primary px-4 py-1.5"
         accessibilityRole="button"
         accessibilityLabel={`Request via chat, ${selectedCount} contacts selected`}
       >

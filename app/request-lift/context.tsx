@@ -15,10 +15,11 @@ export type MediaItem = {
   fileName?: string;
 };
 
-export type AudienceType =
+export type AudienceOfferType =
   | 'everyone'
   | 'friends'
   | 'selected-people'
+  | 'chat-direct'
   | 'my-list'
   | 'private';
 
@@ -56,8 +57,8 @@ type RequestLiftContextType = {
   setCollaborators: (collaborators: Contact[]) => void;
 
   // Audience settings
-  audienceType: AudienceType;
-  setAudienceType: (type: AudienceType) => void;
+  audienceOfferType: AudienceOfferType;
+  setAudienceOfferType: (type: AudienceOfferType) => void;
   selectedPeopleForAudience: Contact[];
   setSelectedPeopleForAudience: (people: Contact[]) => void;
   selectedList: List | null;
@@ -97,8 +98,11 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
   const [collaborators, setCollaborators] = useState<Contact[]>([]);
 
   // Audience settings
-  const [audienceType, setAudienceType] = useState<AudienceType>('everyone');
-  const [selectedPeopleForAudience, setSelectedPeopleForAudience] = useState<Contact[]>([]);
+  const [audienceOfferType, setAudienceOfferType] =
+    useState<AudienceOfferType>('chat-direct');
+  const [selectedPeopleForAudience, setSelectedPeopleForAudience] = useState<
+    Contact[]
+  >([]);
   const [selectedList, setSelectedList] = useState<List | null>(null);
 
   // Header customization
@@ -124,7 +128,7 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
     setCategory('');
     setLocation('');
     setCollaborators([]);
-    setAudienceType('everyone');
+    setAudienceOfferType('chat-direct');
     setSelectedPeopleForAudience([]);
     setSelectedList(null);
     setHeaderTitle('Request lift');
@@ -157,8 +161,8 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
         setLocation,
         collaborators,
         setCollaborators,
-        audienceType,
-        setAudienceType,
+        audienceOfferType,
+        setAudienceOfferType,
         selectedPeopleForAudience,
         setSelectedPeopleForAudience,
         selectedList,

@@ -6,9 +6,10 @@ import { X } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { CancelBottomSheet } from '@/components/request-lift';
+import { Button } from '@/components/ui/Button';
 import { RequestLiftProvider, useRequestLift } from './context';
 
-const TOTAL_STEPS = 8; // Update this based on your actual number of steps
+const TOTAL_STEPS = 4;
 
 // Map routes to step numbers
 const ROUTE_TO_STEP: Record<string, number> = {
@@ -16,10 +17,6 @@ const ROUTE_TO_STEP: Record<string, number> = {
   '/request-lift/step-2': 2,
   '/request-lift/step-3': 3,
   '/request-lift/step-4': 4,
-  '/request-lift/step-5': 5,
-  '/request-lift/step-6': 6,
-  '/request-lift/step-7': 7,
-  '/request-lift/step-8': 8,
 };
 
 function LayoutContent() {
@@ -59,7 +56,6 @@ function LayoutContent() {
   };
 
   const handleSaveAsDraft = () => {
-    // TODO: Implement save as draft functionality
     setShowCancelSheet(false);
     reset();
     router.back();
@@ -81,45 +77,36 @@ function LayoutContent() {
         {/* Header */}
         {!hideLayoutHeader && (
           <View className="flex-row items-center justify-between px-4 pb-3 pt-2">
-            <TouchableOpacity
-              onPress={handleClose}
-              accessibilityLabel="Close request lift"
-              hitSlop={10}
-              className="pr-2"
-            >
-              <X
-                size={20}
-                color={colors['grey-alpha']['500']}
-                strokeWidth={2.6}
-              />
-            </TouchableOpacity>
-            <Text className="text-base font-semibold text-grey-alpha-500">
-              {headerTitle}
-            </Text>
-            <TouchableOpacity
-              onPress={() => onNextRef.current?.()}
-              disabled={!canProceed}
-              className="rounded-full px-6 py-2"
-              style={{
-                backgroundColor: canProceed
-                  ? colors.primary.purple
-                  : colors['grey-plain']['450'],
-              }}
-              accessibilityLabel={nextButtonLabel}
-            >
-              <Text
-                className="text-sm font-semibold"
-                style={{ color: canProceed ? '#FFFFFF' : colors['grey-alpha']['400'] }}
+            <View className="flex-row space-x-2">
+              <TouchableOpacity
+                onPress={handleClose}
+                accessibilityLabel="Close request lift"
+                hitSlop={10}
+                className="pr-2"
               >
-                {nextButtonLabel}
+                <X
+                  size={20}
+                  color={colors['grey-alpha']['450']}
+                  strokeWidth={2.6}
+                />
+              </TouchableOpacity>
+              <Text className="text-base font-semibold text-grey-alpha-450">
+                {headerTitle}
               </Text>
-            </TouchableOpacity>
+            </View>
+            <Button
+              title={nextButtonLabel}
+              onPress={() => onNextRef.current?.()}
+              size="small"
+              disabled={!canProceed}
+              // className="min-w-[110px]"
+            />
           </View>
         )}
 
         {/* Progress Bar */}
         {!hideLayoutHeader && (
-          <View className="px-4">
+          <View className="">
             <View className="h-[3px] w-full rounded-full bg-grey-plain-450/60">
               <View
                 className="h-[3px] rounded-full bg-primary"

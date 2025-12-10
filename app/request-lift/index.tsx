@@ -2,8 +2,10 @@ import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
   ScrollView,
   Text,
+  TextInput as RNTextInput,
   View,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -24,29 +26,33 @@ import {
   ChooseListBottomSheet,
   ChooseFromListModal,
   CreateListModal,
+  ReviewContactsModal,
   Contact,
 } from '@/components/request-lift';
-import { useRequestLift, AudienceType, List } from './context';
+import { useRequestLift, AudienceOfferType, List } from './context';
 
 export default function SelectContactsScreen() {
   const {
     selectedContacts,
     setSelectedContacts,
-    setAudienceType,
+    setAudienceOfferType,
     selectedPeopleForAudience,
     setSelectedPeopleForAudience,
     setSelectedList,
     setCanProceed,
     onNextRef,
+    audienceOfferType,
   } = useRequestLift();
 
   const [search, setSearch] = useState('');
+  const [showReviewModal, setShowReviewModal] = useState(false);
   const [showSelectedPeopleModal, setShowSelectedPeopleModal] = useState(false);
   const [showChooseListModal, setShowChooseListModal] = useState(false);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
 
   const audienceSheetRef = useRef<BottomSheetRef>(null);
   const chooseListSheetRef = useRef<BottomSheetRef>(null);
+  const searchInputRef = useRef<RNTextInput>(null);
 
   // Initialize with some default contacts for testing (remove in production)
   useEffect(() => {
@@ -59,8 +65,13 @@ export default function SelectContactsScreen() {
 
   const handleNext = useCallback(() => {
     if (!isValid) return;
-    router.push('/request-lift/step-2');
+    setShowReviewModal(true);
   }, [isValid]);
+
+  const handleProceed = useCallback(() => {
+    setShowReviewModal(false);
+    router.push('/request-lift/step-2');
+  }, []);
 
   // Update canProceed and Next handler
   useEffect(() => {
@@ -85,7 +96,7 @@ export default function SelectContactsScreen() {
   const remainingSelection = MAX_SELECTION - selectedContacts.length;
   const showResults = search.trim().length > 0;
 
-  function handleSelect(contact: typeof CONTACTS[0]) {
+  function handleSelect(contact: (typeof CONTACTS)[0]) {
     if (selectedContacts.find((item) => item.id === contact.id)) {
       return;
     }
@@ -106,16 +117,18 @@ export default function SelectContactsScreen() {
 
   function handleExploreOptions() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    searchInputRef.current?.blur();
+    Keyboard.dismiss();
     audienceSheetRef.current?.expand();
   }
 
-  function handleAudienceSelect(type: AudienceType) {
+  function handleAudienceSelect(type: AudienceOfferType) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setAudienceType(type);
+    setAudienceOfferType(type);
     audienceSheetRef.current?.close();
 
-    if (type === 'selected-people') {
-      setShowSelectedPeopleModal(true);
+    if (type === 'chat-direct') {
+      // setShowSelectedPeopleModal(true);
     } else if (type === 'my-list') {
       chooseListSheetRef.current?.expand();
     }
@@ -172,11 +185,8 @@ export default function SelectContactsScreen() {
         >
           <View className="px-4 pt-5">
             <View className="flex-row items-center justify-between">
-              <Text className="text-sm font-semibold text-grey-alpha-500">
+              <Text className="text-sm font-semibold text-grey-alpha-450">
                 Request from:
-              </Text>
-              <Text className="text-xs font-medium text-primary">
-                {selectedContacts.length}/{MAX_SELECTION}
               </Text>
             </View>
 
@@ -197,34 +207,35 @@ export default function SelectContactsScreen() {
               ) : null}
             </View>
 
-            <View className="mt-3">
-              <TextInput
+            <View className="mt-3 border-b border-grey-plain-450/40 pb-2">
+              <RNTextInput
+                ref={searchInputRef}
                 value={search}
                 onChangeText={setSearch}
                 placeholder="Search people"
+                placeholderTextColor={colors['grey-plain']['300']}
                 returnKeyType="search"
                 autoCapitalize="none"
                 autoCorrect={false}
-                containerClassName=""
+                className="text-base text-grey-alpha-450"
+                style={{
+                  fontSize: 16,
+                  color: colors['grey-alpha']['450'],
+                  padding: 0,
+                  margin: 0,
+                }}
               />
             </View>
           </View>
 
           {showResults ? (
-            <View className="mx-4 mt-4 overflow-hidden rounded-3xl border border-grey-plain-450/70 bg-grey-plain-50">
+            <View className="mx-4 mt-4 overflow-hidden rounded-3xl  bg-grey-plain-50">
               {filteredContacts.map((contact, index) => {
                 const isSelected = selectedContacts.some(
                   (item) => item.id === contact.id
                 );
                 return (
-                  <View
-                    key={contact.id}
-                    className={
-                      index < filteredContacts.length - 1
-                        ? 'border-b border-grey-plain-450/60'
-                        : ''
-                    }
-                  >
+                  <View key={contact.id}>
                     <ContactRow
                       contact={contact}
                       onSelect={handleSelect}
@@ -272,6 +283,8 @@ export default function SelectContactsScreen() {
         {/* Audience Bottom Sheet */}
         <AudienceBottomSheet
           ref={audienceSheetRef}
+          variant="offer"
+          selectedType={audienceOfferType}
           onSelectAudience={handleAudienceSelect}
         />
 
@@ -302,6 +315,15 @@ export default function SelectContactsScreen() {
           visible={showCreateListModal}
           onDone={handleCreateListDone}
           onClose={() => setShowCreateListModal(false)}
+        />
+
+        {/* Review Contacts Modal */}
+        <ReviewContactsModal
+          visible={showReviewModal}
+          contacts={selectedContacts}
+          onRemove={handleRemove}
+          onProceed={handleProceed}
+          onClose={() => setShowReviewModal(false)}
         />
       </View>
     </KeyboardAvoidingView>

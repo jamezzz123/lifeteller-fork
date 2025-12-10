@@ -85,6 +85,8 @@ export default function Step4Screen() {
         return 'Everyone';
       case 'friends':
         return 'Friends';
+      case 'chat-direct':
+        return 'Request via chat/direct message';
       case 'selected-people':
         return 'Selected people';
       case 'my-list':

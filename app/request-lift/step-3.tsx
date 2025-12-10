@@ -32,7 +32,7 @@ import {
   Contact,
   CreateListModal,
 } from '@/components/request-lift';
-import { useRequestLift, AudienceType, List } from './context';
+import { useRequestLift, AudienceOfferType, List } from './context';
 import {
   BottomSheetComponent,
   BottomSheetRef,
@@ -51,8 +51,8 @@ export default function Step3Screen() {
     setLocation,
     collaborators,
     setCollaborators,
-    audienceType,
-    setAudienceType,
+    audienceOfferType,
+    setAudienceOfferType,
     selectedPeopleForAudience,
     setSelectedPeopleForAudience,
     selectedList,
@@ -103,7 +103,14 @@ export default function Step3Screen() {
     return () => {
       onNextRef.current = null;
     };
-  }, [isValid, setCanProceed, handleNext, onNextRef, setHeaderTitle, setNextButtonLabel]);
+  }, [
+    isValid,
+    setCanProceed,
+    handleNext,
+    onNextRef,
+    setHeaderTitle,
+    setNextButtonLabel,
+  ]);
 
   // Auto-open collaborators modal when toggle is turned on
   useEffect(() => {
@@ -167,12 +174,12 @@ export default function Step3Screen() {
   };
 
   // Handle audience selection
-  function handleAudienceSelect(type: AudienceType) {
+  function handleAudienceSelect(type: AudienceOfferType) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setAudienceType(type);
+    setAudienceOfferType(type);
     audienceSheetRef.current?.close();
 
-    if (type === 'selected-people') {
+    if (type === 'selected-people' || type === 'chat-direct') {
       setShowSelectedPeopleModal(true);
     } else if (type === 'my-list') {
       chooseListSheetRef.current?.expand();
@@ -223,11 +230,13 @@ export default function Step3Screen() {
 
   // Get audience display label
   function getAudienceLabel() {
-    switch (audienceType) {
+    switch (audienceOfferType) {
       case 'everyone':
         return 'Everyone';
       case 'friends':
         return 'Friends';
+      case 'chat-direct':
+        return 'Request via chat/direct message';
       case 'selected-people':
         return 'Selected people';
       case 'my-list':
@@ -251,229 +260,208 @@ export default function Step3Screen() {
           contentContainerClassName="flex-grow pb-8"
           showsVerticalScrollIndicator={false}
         >
-        {/* Summary Section */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
-          {/* User Avatar and Audience */}
-          <View className="mb-3 flex-row items-center gap-3">
-            <Image
-              source={require('../../assets/images/welcome/collage-1.jpg')}
-              style={{ width: 48, height: 48, borderRadius: 24 }}
-              contentFit="cover"
-            />
-            <TouchableOpacity
-              onPress={handleAudienceButtonPress}
-              className="flex-row items-center gap-2 rounded-full border-2 px-4 py-1.5"
-              style={{ borderColor: colors.primary.purple }}
-            >
-              <Text
-                className="text-sm font-semibold"
-                style={{ color: colors.primary.purple }}
-              >
-                {getAudienceLabel()}
-              </Text>
-              <ChevronRight
-                size={16}
-                color={colors.primary.purple}
-                strokeWidth={2.5}
+          {/* Summary Section */}
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            {/* User Avatar and Audience */}
+            <View className="mb-3 flex-row items-center gap-3">
+              <Image
+                source={require('../../assets/images/welcome/collage-1.jpg')}
+                style={{ width: 48, height: 48, borderRadius: 24 }}
+                contentFit="cover"
               />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleAudienceButtonPress}
+                className="flex-row items-center gap-2 rounded-full border-2 px-4 py-1.5"
+                style={{ borderColor: colors.primary.purple }}
+              >
+                <Text
+                  className="text-sm font-semibold"
+                  style={{ color: colors.primary.purple }}
+                >
+                  {getAudienceLabel()}
+                </Text>
+                <ChevronRight
+                  size={16}
+                  color={colors.primary.purple}
+                  strokeWidth={2.5}
+                />
+              </TouchableOpacity>
+            </View>
+
+            {/* Title */}
+            <Text className="mb-2 text-xl font-bold text-grey-alpha-500">
+              {liftTitle || 'Untitled'}
+            </Text>
+
+            {/* Description */}
+            <Text
+              className="mb-3 text-sm text-grey-alpha-400"
+              numberOfLines={2}
+              ellipsizeMode="tail"
+            >
+              {liftDescription || 'No description'}
+            </Text>
+
+            {/* Lift Type Info */}
+            {(liftAmount > 0 || liftItems.length > 0) && (
+              <View className="flex-row flex-wrap gap-1">
+                <View
+                  className="rounded-full px-3 py-1"
+                  style={{ backgroundColor: '#F8F8F8' }}
+                >
+                  <Text className="text-xs font-medium text-black">
+                    4 Images/Videos
+                  </Text>
+                </View>
+                {liftAmount > 0 && (
+                  <View
+                    className="rounded-full px-3 py-1"
+                    style={{ backgroundColor: '#F8F8F8' }}
+                  >
+                    <Text className="text-xs font-medium text-black">
+                      ₦{liftAmount.toLocaleString()}
+                    </Text>
+                  </View>
+                )}
+                {liftItems.map((item, index) => (
+                  <View
+                    key={item.id}
+                    className="rounded-full px-3 py-1"
+                    style={{ backgroundColor: '#F8F8F8' }}
+                  >
+                    <Text className="text-xs font-medium text-black">
+                      {item.name || `Item ${index + 1}`} ({item.quantity})
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
 
-          {/* Title */}
-          <Text className="mb-2 text-xl font-bold text-grey-alpha-500">
-            {liftTitle || 'Untitled'}
-          </Text>
-
-          {/* Description */}
-          <Text
-            className="mb-3 text-sm text-grey-alpha-400"
-            numberOfLines={2}
-            ellipsizeMode="tail"
-          >
-            {liftDescription || 'No description'}
-          </Text>
-
-          {/* Lift Type Info */}
-          {(liftAmount > 0 || liftItems.length > 0) && (
-            <View className="flex-row flex-wrap gap-1">
-              <View
-                className="rounded-full px-3 py-1"
-                style={{ backgroundColor: '#F8F8F8' }}
-              >
-                <Text className="text-xs font-medium text-black">
-                  4 Images/Videos
+          {/* Select Category */}
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            <TouchableOpacity
+              onPress={() => categorySheetRef.current?.expand()}
+              className="mb-3 flex-row items-center justify-between"
+            >
+              <View className="flex-row items-center gap-3">
+                <Tag size={20} color={colors['grey-alpha']['500']} />
+                <Text className="text-base font-medium text-grey-alpha-500">
+                  Select category
                 </Text>
               </View>
-              {liftAmount > 0 && (
-                <View
-                  className="rounded-full px-3 py-1"
-                  style={{ backgroundColor: '#F8F8F8' }}
-                >
-                  <Text className="text-xs font-medium text-black">
-                    ₦{liftAmount.toLocaleString()}
-                  </Text>
-                </View>
-              )}
-              {liftItems.map((item, index) => (
-                <View
-                  key={item.id}
-                  className="rounded-full px-3 py-1"
-                  style={{ backgroundColor: '#F8F8F8' }}
-                >
-                  <Text className="text-xs font-medium text-black">
-                    {item.name || `Item ${index + 1}`} ({item.quantity})
-                  </Text>
-                </View>
-              ))}
-            </View>
-          )}
-        </View>
-
-        {/* Select Category */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
-          <TouchableOpacity
-            onPress={() => categorySheetRef.current?.expand()}
-            className="mb-3 flex-row items-center justify-between"
-          >
-            <View className="flex-row items-center gap-3">
-              <Tag size={20} color={colors['grey-alpha']['500']} />
-              <Text className="text-base font-medium text-grey-alpha-500">
-                Select category
-              </Text>
-            </View>
-            <ChevronRight
-              size={20}
-              color={colors['grey-alpha']['400']}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-
-          {/* Category chips */}
-          <View className="flex-row flex-wrap gap-2">
-            {CATEGORIES.map((cat) => {
-              const isSelected = category === cat;
-              return (
-                <TouchableOpacity
-                  key={cat}
-                  onPress={() => setCategory(cat)}
-                  className="rounded-lg px-4 py-2.5"
-                  style={{
-                    backgroundColor: isSelected
-                      ? colors['primary-tints'].purple['100']
-                      : colors['grey-plain']['150'],
-                  }}
-                >
-                  <Text
-                    className="text-sm font-medium"
-                    style={{
-                      color: isSelected
-                        ? colors.primary.purple
-                        : colors['grey-alpha']['500'],
-                    }}
-                  >
-                    {cat}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Location */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
-          <TouchableOpacity
-            onPress={() => locationSheetRef.current?.expand()}
-            className="mb-3 flex-row items-center justify-between"
-          >
-            <View className="flex-row items-center gap-3">
-              <MapPin size={20} color={colors['grey-alpha']['500']} />
-              <Text className="text-base font-medium text-grey-alpha-500">
-                Location
-              </Text>
-            </View>
-            <ChevronRight
-              size={20}
-              color={colors['grey-alpha']['400']}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-
-          {/* Location chips */}
-          <View className="flex-row flex-wrap gap-2">
-            {LOCATIONS.map((loc) => {
-              const isSelected = location === loc;
-              return (
-                <TouchableOpacity
-                  key={loc}
-                  onPress={() => setLocation(loc)}
-                  className="rounded-lg px-4 py-2.5"
-                  style={{
-                    backgroundColor: isSelected
-                      ? colors['primary-tints'].purple['100']
-                      : colors['grey-plain']['150'],
-                  }}
-                >
-                  <Text
-                    className="text-sm"
-                    style={{
-                      color: isSelected
-                        ? colors.primary.purple
-                        : colors['grey-alpha']['500'],
-                    }}
-                  >
-                    {loc}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </View>
-
-        {/* Add Collaborators */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
-          {!addCollaboratorsEnabled || collaborators.length === 0 ? (
-            <View className="flex-row items-start justify-between">
-              <View className="flex-1 flex-row gap-3">
-                <UserPlus size={20} color={colors['grey-alpha']['500']} />
-                <View className="flex-1">
-                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
-                    Add collaborators
-                  </Text>
-                  <Text className="text-sm text-grey-alpha-400">
-                    Add people to join you in raising the lift. They have to
-                    approve your request.
-                  </Text>
-                </View>
-              </View>
-              <Switch
-                value={addCollaboratorsEnabled}
-                onValueChange={handleToggleCollaborators}
-                trackColor={{
-                  false: colors['grey-plain']['450'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
+              <ChevronRight
+                size={20}
+                color={colors['grey-alpha']['400']}
+                strokeWidth={2}
               />
-            </View>
-          ) : (
-            <TouchableOpacity
-              onPress={() => setShowCollaboratorsModal(true)}
-              className="flex-row items-center justify-between"
+            </TouchableOpacity>
+
+            {/* Category chips */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 8 }}
             >
-              <View className="flex-1 flex-row items-center gap-3">
-                <UserPlus size={20} color={colors['grey-alpha']['500']} />
-                <View className="flex-1 flex-row items-center gap-2">
-                  <Image
-                    source={collaborators[0].avatar}
-                    style={{ width: 32, height: 32, borderRadius: 16 }}
-                    contentFit="cover"
-                  />
-                  <Text className="flex-1 text-base font-medium text-grey-alpha-500">
-                    {getCollaboratorsDisplay()}
-                  </Text>
-                </View>
+              {CATEGORIES.map((cat) => {
+                const isSelected = category === cat;
+                return (
+                  <TouchableOpacity
+                    key={cat}
+                    onPress={() => setCategory(cat)}
+                    className="rounded-lg px-4 py-2.5"
+                    style={{
+                      backgroundColor: isSelected
+                        ? colors['primary-tints'].purple['100']
+                        : colors['grey-plain']['150'],
+                    }}
+                  >
+                    <Text
+                      className="text-sm font-medium"
+                      style={{
+                        color: isSelected
+                          ? colors.primary.purple
+                          : colors['grey-alpha']['500'],
+                      }}
+                    >
+                      {cat}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+
+          {/* Location */}
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            <TouchableOpacity
+              onPress={() => locationSheetRef.current?.expand()}
+              className="mb-3 flex-row items-center justify-between"
+            >
+              <View className="flex-row items-center gap-3">
+                <MapPin size={20} color={colors['grey-alpha']['500']} />
+                <Text className="text-base font-medium text-grey-alpha-500">
+                  Location
+                </Text>
               </View>
-              <View className="flex-row items-center gap-2">
+              <ChevronRight
+                size={20}
+                color={colors['grey-alpha']['400']}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
+
+            {/* Location chips */}
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 8 }}
+            >
+              {LOCATIONS.map((loc) => {
+                const isSelected = location === loc;
+                return (
+                  <TouchableOpacity
+                    key={loc}
+                    onPress={() => setLocation(loc)}
+                    className="rounded-lg px-4 py-2.5"
+                    style={{
+                      backgroundColor: isSelected
+                        ? colors['primary-tints'].purple['100']
+                        : colors['grey-plain']['150'],
+                    }}
+                  >
+                    <Text
+                      className="text-sm"
+                      style={{
+                        color: isSelected
+                          ? colors.primary.purple
+                          : colors['grey-alpha']['500'],
+                      }}
+                    >
+                      {loc}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
+
+          {/* Add Collaborators */}
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            {!addCollaboratorsEnabled || collaborators.length === 0 ? (
+              <View className="flex-row items-start justify-between">
+                <View className="flex-1 flex-row gap-3">
+                  <UserPlus size={20} color={colors['grey-alpha']['500']} />
+                  <View className="flex-1">
+                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                      Add collaborators
+                    </Text>
+                    <Text className="text-sm text-grey-alpha-400">
+                      Add people to join you in raising the lift. They have to
+                      approve your request.
+                    </Text>
+                  </View>
+                </View>
                 <Switch
                   value={addCollaboratorsEnabled}
                   onValueChange={handleToggleCollaborators}
@@ -484,12 +472,41 @@ export default function Step3Screen() {
                   thumbColor={colors['grey-plain']['50']}
                 />
               </View>
-            </TouchableOpacity>
-          )}
-        </View>
+            ) : (
+              <TouchableOpacity
+                onPress={() => setShowCollaboratorsModal(true)}
+                className="flex-row items-center justify-between"
+              >
+                <View className="flex-1 flex-row items-center gap-3">
+                  <UserPlus size={20} color={colors['grey-alpha']['500']} />
+                  <View className="flex-1 flex-row items-center gap-2">
+                    <Image
+                      source={collaborators[0].avatar}
+                      style={{ width: 32, height: 32, borderRadius: 16 }}
+                      contentFit="cover"
+                    />
+                    <Text className="flex-1 text-base font-medium text-grey-alpha-500">
+                      {getCollaboratorsDisplay()}
+                    </Text>
+                  </View>
+                </View>
+                <View className="flex-row items-center gap-2">
+                  <Switch
+                    value={addCollaboratorsEnabled}
+                    onValueChange={handleToggleCollaborators}
+                    trackColor={{
+                      false: colors['grey-plain']['450'],
+                      true: colors.primary.purple,
+                    }}
+                    thumbColor={colors['grey-plain']['50']}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
+          </View>
 
-        {/* More Options (Audience) */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
+          {/* More Options (Audience) */}
+          {/* <View className="border-b border-grey-plain-450/20 px-4 py-4">
           <TouchableOpacity
             onPress={() => audienceSheetRef.current?.expand()}
             className="flex-row items-center justify-between"
@@ -506,167 +523,168 @@ export default function Step3Screen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-        </View>
+        </View> */}
 
-        {/* More Options (Settings) */}
-        <View className="px-4 py-4">
-          <TouchableOpacity
-            onPress={() => router.push('/request-lift/more-options')}
-            className="flex-row items-center justify-between"
-          >
-            <View className="flex-row items-center gap-3">
-              <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
-              <Text className="text-base font-medium text-grey-alpha-500">
-                More options
-              </Text>
-            </View>
-            <ChevronRight
-              size={20}
-              color={colors['grey-alpha']['400']}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
-
-      {/* Category Bottom Sheet */}
-      <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
-        <View className="px-4 pb-4">
-          <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
-            Choose category
-          </Text>
-
-          {/* Search Input */}
-          <View className="mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 bg-grey-plain-200 px-4 py-3">
-            <Search size={20} color={colors['grey-alpha']['400']} />
-            <TextInput
-              value={categorySearch}
-              onChangeText={setCategorySearch}
-              placeholder="Search for category"
-              placeholderTextColor={colors['grey-alpha']['400']}
-              className="flex-1 text-base text-grey-alpha-500"
-            />
+          {/* More Options (Settings) */}
+          <View className="px-4 py-4">
+            <TouchableOpacity
+              onPress={() => router.push('/request-lift/more-options')}
+              className="flex-row items-center justify-between"
+            >
+              <View className="flex-row items-center gap-3">
+                <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
+                <Text className="text-base font-medium text-grey-alpha-500">
+                  More options
+                </Text>
+              </View>
+              <ChevronRight
+                size={20}
+                color={colors['grey-alpha']['400']}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
           </View>
+        </ScrollView>
 
-          {/* Category List */}
-          <ScrollView className="max-h-96">
-            {filteredCategories.map((cat) => (
-              <TouchableOpacity
-                key={cat}
-                onPress={() => handleCategorySelect(cat)}
-                className="flex-row items-center justify-between border-b border-grey-plain-450/20 py-4"
-              >
-                <Text className="text-base text-grey-alpha-500">{cat}</Text>
-                <ChevronRight
-                  size={20}
-                  color={colors['grey-alpha']['400']}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </View>
-      </BottomSheetComponent>
-
-      {/* Location Bottom Sheet */}
-      <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
-        <View className="px-4 pb-4">
-          <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
-            Choose location
-          </Text>
-
-          {/* Search Input */}
-          <View className="mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 bg-grey-plain-200 px-4 py-3">
-            <Search size={20} color={colors['grey-alpha']['400']} />
-            <TextInput
-              value={locationSearch}
-              onChangeText={setLocationSearch}
-              placeholder="Search for location"
-              placeholderTextColor={colors['grey-alpha']['400']}
-              className="flex-1 text-base text-grey-alpha-500"
-            />
-          </View>
-
-          {/* Get Location Button */}
-          <TouchableOpacity className="mb-4 flex-row items-center gap-3 rounded-2xl bg-grey-plain-200 px-4 py-4">
-            <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
-              <MapPin size={20} color={colors['grey-alpha']['500']} />
-            </View>
-            <Text className="text-base font-medium text-grey-alpha-500">
-              Get my location on map
+        {/* Category Bottom Sheet */}
+        <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
+          <View className="px-4 pb-4">
+            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+              Choose category
             </Text>
-          </TouchableOpacity>
 
-          {/* Location Chips */}
-          <View className="mb-4 flex-row flex-wrap gap-2">
-            {filteredLocations.map((loc) => (
-              <TouchableOpacity
-                key={loc}
-                onPress={() => handleLocationSelect(loc)}
-                className="rounded-lg bg-grey-plain-200 px-4 py-2.5"
-              >
-                <Text className="text-sm text-grey-alpha-500">{loc}</Text>
-              </TouchableOpacity>
-            ))}
+            {/* Search Input */}
+            <View className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 px-4 py-3">
+              <Search size={20} color={colors['grey-alpha']['400']} />
+              <TextInput
+                value={categorySearch}
+                onChangeText={setCategorySearch}
+                placeholder="Search for category"
+                placeholderTextColor={colors['grey-alpha']['400']}
+                className="flex-1 text-base text-grey-alpha-500"
+              />
+            </View>
+
+            {/* Category List */}
+            <ScrollView className="max-h-96">
+              {filteredCategories.map((cat) => (
+                <TouchableOpacity
+                  key={cat}
+                  onPress={() => handleCategorySelect(cat)}
+                  className="flex-row items-center justify-between border-b border-grey-plain-450/20 py-4"
+                >
+                  <Text className="text-base text-grey-alpha-500">{cat}</Text>
+                  <ChevronRight
+                    size={20}
+                    color={colors['grey-alpha']['400']}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
           </View>
-        </View>
-      </BottomSheetComponent>
+        </BottomSheetComponent>
 
-      {/* Add Collaborators Modal */}
-      <AddCollaboratorsModal
-        visible={showCollaboratorsModal}
-        currentCollaborators={collaborators}
-        onDone={handleCollaboratorsDone}
-        onClose={() => setShowCollaboratorsModal(false)}
-      />
+        {/* Location Bottom Sheet */}
+        <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
+          <View className="px-4 pb-4">
+            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+              Choose location
+            </Text>
 
-      {/* Remove Collaborators Confirmation */}
-      <ConfirmDialog
-        visible={showRemoveConfirm}
-        title="Are you sure you want to remove all collaborators?"
-        message='They can still request to join and support your lift if you enable the "Allow collaborators" settings.'
-        confirmText="Yes, remove"
-        cancelText="No, go back"
-        onConfirm={handleConfirmRemove}
-        onCancel={handleCancelRemove}
-        destructive
-      />
+            {/* Search Input */}
+            <View className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 px-4 py-3">
+              <Search size={20} color={colors['grey-alpha']['400']} />
+              <TextInput
+                value={locationSearch}
+                onChangeText={setLocationSearch}
+                placeholder="Search for location"
+                placeholderTextColor={colors['grey-alpha']['400']}
+                className="flex-1 text-base text-grey-alpha-500"
+              />
+            </View>
 
-      {/* Audience Bottom Sheet */}
-      <AudienceBottomSheet
-        ref={audienceSheetRef}
-        onSelectAudience={handleAudienceSelect}
-      />
+            {/* Get Location Button */}
+            <TouchableOpacity className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-2xl px-4 py-4">
+              <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
+                <MapPin size={20} color={colors['grey-alpha']['500']} />
+              </View>
+              <Text className="text-base font-medium text-grey-alpha-500">
+                Get my location on map
+              </Text>
+            </TouchableOpacity>
 
-      {/* Selected People Modal (for "Selected people" audience) */}
-      <AddCollaboratorsModal
-        visible={showSelectedPeopleModal}
-        currentCollaborators={selectedPeopleForAudience}
-        onDone={handleSelectedPeopleDone}
-        onClose={() => setShowSelectedPeopleModal(false)}
-      />
+            {/* Location Chips */}
+            <View className="mb-4 flex-row flex-wrap gap-2">
+              {filteredLocations.map((loc) => (
+                <TouchableOpacity
+                  key={loc}
+                  onPress={() => handleLocationSelect(loc)}
+                  className="bg-grey-plain-200 rounded-lg px-4 py-2.5"
+                >
+                  <Text className="text-sm text-grey-alpha-500">{loc}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </BottomSheetComponent>
 
-      {/* Choose List Bottom Sheet */}
-      <ChooseListBottomSheet
-        ref={chooseListSheetRef}
-        onSelectList={handleSelectList}
-        onCreateNewList={handleCreateNewList}
-      />
+        {/* Add Collaborators Modal */}
+        <AddCollaboratorsModal
+          visible={showCollaboratorsModal}
+          currentCollaborators={collaborators}
+          onDone={handleCollaboratorsDone}
+          onClose={() => setShowCollaboratorsModal(false)}
+        />
 
-      {/* Choose From List Modal */}
-      <ChooseFromListModal
-        visible={showChooseListModal}
-        onDone={handleChooseFromListDone}
-        onClose={() => setShowChooseListModal(false)}
-      />
+        {/* Remove Collaborators Confirmation */}
+        <ConfirmDialog
+          visible={showRemoveConfirm}
+          title="Are you sure you want to remove all collaborators?"
+          message='They can still request to join and support your lift if you enable the "Allow collaborators" settings.'
+          confirmText="Yes, remove"
+          cancelText="No, go back"
+          onConfirm={handleConfirmRemove}
+          onCancel={handleCancelRemove}
+          destructive
+        />
 
-      {/* Create List Modal */}
-      <CreateListModal
-        visible={showCreateListModal}
-        onDone={handleCreateListDone}
-        onClose={() => setShowCreateListModal(false)}
-      />
-    </View>
+        {/* Audience Bottom Sheet */}
+        <AudienceBottomSheet
+          ref={audienceSheetRef}
+          selectedType={audienceOfferType}
+          onSelectAudience={handleAudienceSelect}
+        />
+
+        {/* Selected People Modal (for "Selected people" audience) */}
+        <AddCollaboratorsModal
+          visible={showSelectedPeopleModal}
+          currentCollaborators={selectedPeopleForAudience}
+          onDone={handleSelectedPeopleDone}
+          onClose={() => setShowSelectedPeopleModal(false)}
+        />
+
+        {/* Choose List Bottom Sheet */}
+        <ChooseListBottomSheet
+          ref={chooseListSheetRef}
+          onSelectList={handleSelectList}
+          onCreateNewList={handleCreateNewList}
+        />
+
+        {/* Choose From List Modal */}
+        <ChooseFromListModal
+          visible={showChooseListModal}
+          onDone={handleChooseFromListDone}
+          onClose={() => setShowChooseListModal(false)}
+        />
+
+        {/* Create List Modal */}
+        <CreateListModal
+          visible={showCreateListModal}
+          onDone={handleCreateListDone}
+          onClose={() => setShowCreateListModal(false)}
+        />
+      </View>
     </KeyboardAvoidingView>
   );
 }

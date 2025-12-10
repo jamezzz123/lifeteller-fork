@@ -11,7 +11,13 @@ import {
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import { Info, ChevronRight, Edit2, Trash2, ImagePlus } from 'lucide-react-native';
+import {
+  Info,
+  ChevronRight,
+  Edit2,
+  Trash2,
+  ImagePlus,
+} from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import {
@@ -50,6 +56,8 @@ export default function Step2Screen() {
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
   const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
   const [pendingLiftType, setPendingLiftType] = useState<LiftType>(null);
+  const [titleFocused, setTitleFocused] = useState(false);
+  const [descriptionFocused, setDescriptionFocused] = useState(false);
 
   const mediaPickerRef = useRef<BottomSheetRef>(null);
 
@@ -136,6 +144,8 @@ export default function Step2Screen() {
   const hasMonetary = liftAmount > 0;
   const hasNonMonetary = liftItems.length > 0;
   const showTypeSelector = !hasMonetary && !hasNonMonetary;
+  const hasBoth = hasMonetary && hasNonMonetary;
+
   const firstItemName =
     liftItems[0]?.name?.trim() || (liftItems.length ? 'Item' : '');
   const nonMonetarySummary =
@@ -171,12 +181,21 @@ export default function Step2Screen() {
               onChangeText={handleTitleChange}
               placeholder="Enter lift title"
               placeholderTextColor={colors['grey-alpha']['250']}
-              className="border-b-2 border-primary pb-2 text-lg text-grey-alpha-500"
+              className="border-b-2 pb-2 text-lg text-grey-alpha-500"
               returnKeyType="next"
-              onFocus={() => setShowTitleSuggestions(liftTitle.length > 0)}
+              onFocus={() => {
+                setTitleFocused(true);
+                setShowTitleSuggestions(liftTitle.length > 0);
+              }}
               onBlur={() => {
+                setTitleFocused(false);
                 // Delay to allow suggestion tap to register
                 setTimeout(() => setShowTitleSuggestions(false), 200);
+              }}
+              style={{
+                borderColor: titleFocused
+                  ? colors.primary.purple
+                  : colors['grey-plain']['450'],
               }}
             />
 
@@ -225,10 +244,17 @@ export default function Step2Screen() {
               onChangeText={setLiftDescription}
               placeholder="Describe your lift request here..."
               placeholderTextColor={colors['grey-alpha']['250']}
-              className="min-h-[20px] border-b-2 border-primary pb-2 text-base text-grey-alpha-500"
+              className="min-h-[20px] border-b-2 pb-2 text-base text-grey-alpha-500"
               multiline
               textAlignVertical="top"
               returnKeyType="default"
+              onFocus={() => setDescriptionFocused(true)}
+              onBlur={() => setDescriptionFocused(false)}
+              style={{
+                borderColor: descriptionFocused
+                  ? colors.primary.purple
+                  : colors['grey-plain']['450'],
+              }}
             />
 
             {/* Description Helper */}
@@ -255,20 +281,21 @@ export default function Step2Screen() {
               />
             </View>
           ) : (
-            <View className="mt-6 gap-3 px-4">
-              {hasMonetary && (
+            <View className="mt-6">
+              {hasBoth ? (
+                // Combined view for both monetary and non-monetary
                 <TouchableOpacity
-                  onPress={() => handleOpenLiftTypeModal('Monetary')}
-                  className="flex-row items-center justify-between rounded-2xl border border-grey-plain-450/60 bg-grey-plain-50 px-4 py-3"
+                  onPress={() => handleOpenLiftTypeModal('Both')}
+                  className="flex-row items-center justify-between px-4 py-3"
                   accessibilityRole="button"
-                  accessibilityLabel="Edit monetary lift amount"
+                  accessibilityLabel="Edit lift details"
                 >
                   <View className="flex-1">
                     <Text className="text-xs font-semibold text-grey-alpha-400">
-                      Monetary lift
+                      Monetary and Non-monetary lift
                     </Text>
                     <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
-                      ₦{liftAmount.toLocaleString()}
+                      ₦{liftAmount.toLocaleString()} · {nonMonetarySummary}
                     </Text>
                   </View>
                   <ChevronRight
@@ -277,29 +304,55 @@ export default function Step2Screen() {
                     strokeWidth={2}
                   />
                 </TouchableOpacity>
-              )}
+              ) : (
+                // Individual views when only one type is selected
+                <>
+                  {hasMonetary && (
+                    <TouchableOpacity
+                      onPress={() => handleOpenLiftTypeModal('Monetary')}
+                      className="flex-row items-center justify-between px-4 py-3"
+                      accessibilityRole="button"
+                      accessibilityLabel="Edit monetary lift amount"
+                    >
+                      <View className="flex-1">
+                        <Text className="text-xs font-semibold text-grey-alpha-400">
+                          Monetary lift
+                        </Text>
+                        <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
+                          ₦{liftAmount.toLocaleString()}
+                        </Text>
+                      </View>
+                      <ChevronRight
+                        size={20}
+                        color={colors['grey-alpha']['400']}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                  )}
 
-              {hasNonMonetary && (
-                <TouchableOpacity
-                  onPress={() => handleOpenLiftTypeModal('Non-monetary')}
-                  className="flex-row items-center justify-between rounded-2xl border border-grey-plain-450/60 bg-grey-plain-50 px-4 py-3"
-                  accessibilityRole="button"
-                  accessibilityLabel="Edit non-monetary lift items"
-                >
-                  <View className="flex-1">
-                    <Text className="text-xs font-semibold text-grey-alpha-400">
-                      Non-monetary lift
-                    </Text>
-                    <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
-                      {nonMonetarySummary || 'Add items'}
-                    </Text>
-                  </View>
-                  <ChevronRight
-                    size={20}
-                    color={colors['grey-alpha']['400']}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
+                  {hasNonMonetary && (
+                    <TouchableOpacity
+                      onPress={() => handleOpenLiftTypeModal('Non-monetary')}
+                      className="flex-row items-center justify-between px-4 py-3"
+                      accessibilityRole="button"
+                      accessibilityLabel="Edit non-monetary lift items"
+                    >
+                      <View className="flex-1">
+                        <Text className="text-xs font-semibold text-grey-alpha-400">
+                          Non-monetary lift
+                        </Text>
+                        <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
+                          {nonMonetarySummary || 'Add items'}
+                        </Text>
+                      </View>
+                      <ChevronRight
+                        size={20}
+                        color={colors['grey-alpha']['400']}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                  )}
+                </>
               )}
             </View>
           )}
@@ -359,13 +412,15 @@ export default function Step2Screen() {
             ) : (
               <TouchableOpacity
                 onPress={handleOpenMediaPicker}
-                className="flex-row items-center gap-3 rounded-2xl border border-dashed border-grey-alpha-300 bg-grey-plain-50 px-4 py-4"
+                className="border-grey-alpha-300 flex-row items-center gap-3 rounded-2xl border border-dashed bg-grey-plain-50 px-4 py-4"
                 accessibilityRole="button"
                 accessibilityLabel="Add photos or videos"
               >
                 <View
                   className="size-10 items-center justify-center rounded-full"
-                  style={{ backgroundColor: colors['primary-tints'].purple['100'] }}
+                  style={{
+                    backgroundColor: colors['primary-tints'].purple['100'],
+                  }}
                 >
                   <ImagePlus
                     size={20}

@@ -46,12 +46,8 @@ export function ContactRow({
           @{contact.username}
         </Text>
       </View>
-      {isSelected ? (
+      {isSelected && (
         <Text className="text-sm text-grey-alpha-400">Already added</Text>
-      ) : (
-        <View className="size-9 items-center justify-center rounded-full border border-primary-tints-200">
-          <Plus size={18} color={colors.primary.purple} strokeWidth={2.6} />
-        </View>
       )}
     </TouchableOpacity>
   );
