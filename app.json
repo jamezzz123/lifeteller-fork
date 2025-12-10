@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "lifteller",
+    "name": "Lifteller",
     "slug": "lifteller",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,6 +8,16 @@
     "scheme": "lifteller",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/logo/logo-light.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#7538BA",
+      "dark": {
+        "image": "./assets/images/logo/logo-light.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#7538BA"
+      }
+    },
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.lifteller"
@@ -32,12 +42,14 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/splash-icon.png",
+          "image": "./assets/images/logo/logo-light.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
+          "backgroundColor": "#7538BA",
           "dark": {
-            "backgroundColor": "#000000"
+            "backgroundColor": "#7538BA",
+            "imageWidth": 200,
+            "resizeMode": "contain"
           }
         }
       ]

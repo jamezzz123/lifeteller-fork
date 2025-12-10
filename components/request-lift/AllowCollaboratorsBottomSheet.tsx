@@ -42,7 +42,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
           Allow collaborators
         </Text>
         <Text className="mb-6 text-sm text-grey-alpha-400">
-          Approve people's request to join you in supporting and raising the
+          Approve people&apos;s request to join you in supporting and raising the
           lift.
         </Text>
 

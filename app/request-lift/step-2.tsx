@@ -11,7 +11,6 @@ import {
 import { router } from 'expo-router';
 import { Info, ChevronRight } from 'lucide-react-native';
 
-import { Button } from '@/components/ui/Button';
 import { colors } from '@/theme/colors';
 import {
   RequestMethodSelector,

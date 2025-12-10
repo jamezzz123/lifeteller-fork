@@ -164,7 +164,7 @@ export default function MoreOptionsScreen() {
                   </Text>
                 ) : (
                   <Text className="text-sm text-grey-alpha-400">
-                    Approve people's request to join you in supporting and
+                    Approve people&apos;s request to join you in supporting and
                     raising the lift.
                   </Text>
                 )}
@@ -192,7 +192,7 @@ export default function MoreOptionsScreen() {
                   Allow requesters
                 </Text>
                 <Text className="text-sm text-grey-alpha-400">
-                  Approve people's request to join and benefit from the lift you
+                  Approve people&apos;s request to join and benefit from the lift you
                   are raising.
                 </Text>
               </View>

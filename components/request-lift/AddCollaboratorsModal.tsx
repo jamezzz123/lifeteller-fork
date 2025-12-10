@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { Search, X } from 'lucide-react-native';
+import { X } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { FullScreenModal } from '@/components/ui/FullScreenModal';

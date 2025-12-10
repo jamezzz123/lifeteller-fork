@@ -1,0 +1,37 @@
+import React from 'react';
+import { ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
+import { FeedHeader } from '@/components/feed/FeedHeader';
+import { ShareSection } from '@/components/feed/ShareSection';
+import { StoriesSection } from '@/components/feed/StoriesSection';
+import { FeedFilters } from '@/components/feed/FeedFilters';
+import { FeedList } from '@/components/feed/FeedList';
+import { FloatingActionButton } from '@/components/feed/FloatingActionButton';
+
+export default function HomeScreen() {
+  const handleFABPress = () => {
+    router.push('/request-lift');
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
+      {/* Fixed Header */}
+      <FeedHeader />
+
+      {/* Scrollable Content */}
+      <ScrollView
+        className="flex-1"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
+        <ShareSection />
+        <StoriesSection />
+        <FeedFilters />
+        <FeedList />
+      </ScrollView>
+
+      <FloatingActionButton onPress={handleFABPress} />
+    </SafeAreaView>
+  );
+}

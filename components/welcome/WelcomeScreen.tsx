@@ -14,7 +14,6 @@ import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { WelcomeSlide } from './WelcomeSlide';
 import { PageIndicator } from './PageIndicator';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
-import { Button } from '../ui/Button';
 
 const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
@@ -102,10 +101,6 @@ export function WelcomeScreen() {
   function handleGetStarted() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
     router.push('/(auth)/get-started');
-  }
-
-  function handleOpenRequestLift() {
-    router.push('/request-lift');
   }
 
   function renderSlide({ item }: { item: WelcomeSlideData }) {

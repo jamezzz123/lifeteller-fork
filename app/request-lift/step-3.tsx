@@ -48,11 +48,9 @@ export default function Step3Screen() {
     setLocation,
     collaborators,
     setCollaborators,
-    audienceType,
     setAudienceType,
     selectedPeopleForAudience,
     setSelectedPeopleForAudience,
-    selectedList,
     setSelectedList,
     setHeaderTitle,
     setNextButtonLabel,
@@ -67,7 +65,6 @@ export default function Step3Screen() {
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
   // Audience states
-  const [showAudienceSheet, setShowAudienceSheet] = useState(false);
   const [showSelectedPeopleModal, setShowSelectedPeopleModal] = useState(false);
   const [showChooseListModal, setShowChooseListModal] = useState(false);
   const [showCreateListModal, setShowCreateListModal] = useState(false);

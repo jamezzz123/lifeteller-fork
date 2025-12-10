@@ -109,7 +109,7 @@ export function LiftTypeModal({
     onDone(selectedType, amount ? parseInt(amount, 10) : 0, items);
   }
 
-  const types: Array<{ value: LiftType; label: string }> = [
+  const types: { value: LiftType; label: string }[] = [
     { value: 'Monetary', label: 'Monetary' },
     { value: 'Non-monetary', label: 'Non-monetary' },
     { value: 'Both', label: 'Both' },
@@ -203,8 +203,8 @@ export function LiftTypeModal({
                   Amount
                 </Text>
 
-                <View className="mt-3 flex-row items-end gap-2 border-b border-grey-plain-450/60 pb-2">
-                  <Text className="text-2xl font-bold text-grey-alpha-500">
+                <View className="mt-2 flex-row items-end gap-2 border-b border-grey-plain-450/60 pb-2">
+                  <Text className="text-2xl mb-3 font-bold text-grey-alpha-500">
                     ₦
                   </Text>
                   <TextInput

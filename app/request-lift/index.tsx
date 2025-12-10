@@ -11,7 +11,6 @@ import {
 import { router } from 'expo-router';
 import { Info } from 'lucide-react-native';
 
-import { Button } from '@/components/ui/Button';
 import { colors } from '@/theme/colors';
 import {
   ContactChip,
@@ -31,7 +30,7 @@ export default function SelectContactsScreen() {
     if (selectedContacts.length === 0) {
       setSelectedContacts(CONTACTS.slice(0, 2));
     }
-  }, []);
+  }, [selectedContacts.length, setSelectedContacts]);
 
   const isValid = selectedContacts.length > 0;
 

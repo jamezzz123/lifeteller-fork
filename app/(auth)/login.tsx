@@ -43,7 +43,7 @@ export default function LoginScreen() {
   function handleGoogleLogin() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     // TODO: Implement Google OAuth
-    console.log('Google login');
+    router.replace('/(tabs)');
   }
 
   function handleOtherSocials() {
@@ -74,6 +74,7 @@ export default function LoginScreen() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log('Logging in:', { usernameOrEmail, keepLoggedIn });
+      router.replace('/(tabs)');
       // Navigate to home screen after successful login
     } catch (error) {
       console.error('Login error:', error);
