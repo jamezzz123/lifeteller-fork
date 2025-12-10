@@ -171,10 +171,10 @@ export function WelcomeScreen() {
         onNext={handleNext}
         onBack={handleBack}
       />
-      <Button
+      {/* <Button
         title="Go to request lift"
         onPress={handleOpenRequestLift}
-      ></Button>
+      ></Button> */}
     </SafeAreaView>
   );
 }
