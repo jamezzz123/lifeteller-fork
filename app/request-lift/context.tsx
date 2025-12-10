@@ -8,6 +8,13 @@ export type LiftItem = {
   quantity: number;
 };
 
+export type MediaItem = {
+  id: string;
+  uri: string;
+  type: 'image' | 'video';
+  fileName?: string;
+};
+
 export type AudienceType =
   | 'everyone'
   | 'friends'
@@ -37,6 +44,8 @@ type RequestLiftContextType = {
   setLiftAmount: (amount: number) => void;
   liftItems: LiftItem[];
   setLiftItems: (items: LiftItem[]) => void;
+  selectedMedia: MediaItem[];
+  setSelectedMedia: (media: MediaItem[]) => void;
 
   // Step 3: Category and Location
   category: string;
@@ -82,6 +91,7 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
   const [liftType, setLiftType] = useState<LiftType>(null);
   const [liftAmount, setLiftAmount] = useState(0);
   const [liftItems, setLiftItems] = useState<LiftItem[]>([]);
+  const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
   const [category, setCategory] = useState('');
   const [location, setLocation] = useState('');
   const [collaborators, setCollaborators] = useState<Contact[]>([]);
@@ -110,6 +120,7 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
     setLiftType(null);
     setLiftAmount(0);
     setLiftItems([]);
+    setSelectedMedia([]);
     setCategory('');
     setLocation('');
     setCollaborators([]);
@@ -138,6 +149,8 @@ export function RequestLiftProvider({ children }: { children: ReactNode }) {
         setLiftAmount,
         liftItems,
         setLiftItems,
+        selectedMedia,
+        setSelectedMedia,
         category,
         setCategory,
         location,

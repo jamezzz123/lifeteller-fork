@@ -1,4 +1,4 @@
-import { ImageSourcePropType } from 'react-native';
+import { ImageSource } from 'expo-image';
 
 export type Contact = {
   id: string;
@@ -6,7 +6,7 @@ export type Contact = {
   username: string;
   location: string;
   verified?: boolean;
-  avatar: ImageSourcePropType;
+  avatar: ImageSource;
 };
 
 export const MAX_SELECTION = 5;

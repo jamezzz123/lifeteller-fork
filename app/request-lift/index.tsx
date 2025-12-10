@@ -1,29 +1,52 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
-  TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { Info } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
+import { TextInput } from '@/components/ui/TextInput';
+import { TextButton } from '@/components/ui/TextButton';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import {
   ContactChip,
   ContactRow,
   CONTACTS,
   MAX_SELECTION,
+  AudienceBottomSheet,
+  AddCollaboratorsModal,
+  ChooseListBottomSheet,
+  ChooseFromListModal,
+  CreateListModal,
+  Contact,
 } from '@/components/request-lift';
-import { useRequestLift } from './context';
+import { useRequestLift, AudienceType, List } from './context';
 
 export default function SelectContactsScreen() {
-  const { selectedContacts, setSelectedContacts, setCanProceed, onNextRef } =
-    useRequestLift();
+  const {
+    selectedContacts,
+    setSelectedContacts,
+    setAudienceType,
+    selectedPeopleForAudience,
+    setSelectedPeopleForAudience,
+    setSelectedList,
+    setCanProceed,
+    onNextRef,
+  } = useRequestLift();
+
   const [search, setSearch] = useState('');
+  const [showSelectedPeopleModal, setShowSelectedPeopleModal] = useState(false);
+  const [showChooseListModal, setShowChooseListModal] = useState(false);
+  const [showCreateListModal, setShowCreateListModal] = useState(false);
+
+  const audienceSheetRef = useRef<BottomSheetRef>(null);
+  const chooseListSheetRef = useRef<BottomSheetRef>(null);
 
   // Initialize with some default contacts for testing (remove in production)
   useEffect(() => {
@@ -66,14 +89,73 @@ export default function SelectContactsScreen() {
     if (selectedContacts.find((item) => item.id === contact.id)) {
       return;
     }
-    if (selectedContacts.length >= MAX_SELECTION) return;
+    if (selectedContacts.length >= MAX_SELECTION) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
+      return;
+    }
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedContacts([...selectedContacts, contact]);
   }
 
   function handleRemove(contactId: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedContacts(
       selectedContacts.filter((contact) => contact.id !== contactId)
     );
+  }
+
+  function handleExploreOptions() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    audienceSheetRef.current?.expand();
+  }
+
+  function handleAudienceSelect(type: AudienceType) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setAudienceType(type);
+    audienceSheetRef.current?.close();
+
+    if (type === 'selected-people') {
+      setShowSelectedPeopleModal(true);
+    } else if (type === 'my-list') {
+      chooseListSheetRef.current?.expand();
+    }
+  }
+
+  function handleSelectedPeopleDone(people: Contact[]) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setSelectedPeopleForAudience(people);
+    setShowSelectedPeopleModal(false);
+  }
+
+  function handleSelectList(list: List) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedList(list);
+    chooseListSheetRef.current?.close();
+    setShowChooseListModal(true);
+  }
+
+  function handleCreateNewList() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    chooseListSheetRef.current?.close();
+    setShowCreateListModal(true);
+  }
+
+  function handleCreateListDone(people: Contact[], listName: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    // Create a new list (in real app, this would save to backend)
+    const newList: List = {
+      id: Date.now().toString(),
+      name: listName,
+      peopleCount: people.length,
+    };
+    setSelectedList(newList);
+    setShowCreateListModal(false);
+  }
+
+  function handleChooseFromListDone(list: List) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setSelectedList(list);
+    setShowChooseListModal(false);
   }
 
   return (
@@ -85,7 +167,8 @@ export default function SelectContactsScreen() {
         <ScrollView
           className="flex-1"
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ paddingBottom: 32 }}
+          contentContainerClassName="flex-grow pb-8"
+          showsVerticalScrollIndicator={false}
         >
           <View className="px-4 pt-5">
             <View className="flex-row items-center justify-between">
@@ -114,16 +197,15 @@ export default function SelectContactsScreen() {
               ) : null}
             </View>
 
-            <View className="mt-3 border-b border-grey-plain-450">
+            <View className="mt-3">
               <TextInput
                 value={search}
                 onChangeText={setSearch}
                 placeholder="Search people"
-                placeholderTextColor={colors['grey-alpha']['250']}
-                className="pb-2 text-base text-grey-alpha-500"
                 returnKeyType="search"
                 autoCapitalize="none"
                 autoCorrect={false}
+                containerClassName=""
               />
             </View>
           </View>
@@ -176,18 +258,51 @@ export default function SelectContactsScreen() {
               </Text>
             </View>
 
-            <TouchableOpacity
-              onPress={() => {}}
-              className="mt-5"
-              accessibilityRole="button"
-              accessibilityLabel="Explore other options"
-            >
-              <Text className="text-center text-sm font-medium text-primary underline">
-                Explore other options
-              </Text>
-            </TouchableOpacity>
+            <View className="mt-5">
+              <TextButton
+                title="Explore other options"
+                onPress={handleExploreOptions}
+                underline
+                className="self-center"
+              />
+            </View>
           </View>
         </ScrollView>
+
+        {/* Audience Bottom Sheet */}
+        <AudienceBottomSheet
+          ref={audienceSheetRef}
+          onSelectAudience={handleAudienceSelect}
+        />
+
+        {/* Selected People Modal (for "Selected people" audience) */}
+        <AddCollaboratorsModal
+          visible={showSelectedPeopleModal}
+          currentCollaborators={selectedPeopleForAudience}
+          onDone={handleSelectedPeopleDone}
+          onClose={() => setShowSelectedPeopleModal(false)}
+        />
+
+        {/* Choose List Bottom Sheet */}
+        <ChooseListBottomSheet
+          ref={chooseListSheetRef}
+          onSelectList={handleSelectList}
+          onCreateNewList={handleCreateNewList}
+        />
+
+        {/* Choose From List Modal */}
+        <ChooseFromListModal
+          visible={showChooseListModal}
+          onDone={handleChooseFromListDone}
+          onClose={() => setShowChooseListModal(false)}
+        />
+
+        {/* Create List Modal */}
+        <CreateListModal
+          visible={showCreateListModal}
+          onDone={handleCreateListDone}
+          onClose={() => setShowCreateListModal(false)}
+        />
       </View>
     </KeyboardAvoidingView>
   );

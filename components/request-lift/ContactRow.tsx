@@ -26,9 +26,8 @@ export function ContactRow({
     >
       <Image
         source={contact.avatar}
-        className="size-11 rounded-full"
+        style={{ width: 44, height: 44, borderRadius: 22 }}
         contentFit="cover"
-        transition={150}
       />
       <View className="ml-3 flex-1">
         <View className="flex-row items-center gap-1">

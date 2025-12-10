@@ -1,0 +1,279 @@
+import { useEffect, useState, useCallback } from 'react';
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Image } from 'expo-image';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Tag,
+  Clock,
+} from 'lucide-react-native';
+
+import { colors } from '@/theme/colors';
+import { Button } from '@/components/ui/Button';
+import { useRequestLift } from './context';
+
+// Mock images for carousel
+const MOCK_IMAGES = [
+  'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800',
+  'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800',
+  'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800',
+  'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=800',
+  'https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800',
+];
+
+export default function Step4Screen() {
+  const {
+    liftTitle,
+    liftDescription,
+    liftType,
+    liftAmount,
+    liftItems,
+    category,
+    audienceType,
+    setHeaderTitle,
+    setNextButtonLabel,
+    setCanProceed,
+    onNextRef,
+  } = useRequestLift();
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const handleNext = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    router.push('/request-lift/success' as any);
+  }, []);
+
+  const handleEditDetails = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.back();
+  }, []);
+
+  useEffect(() => {
+    setHeaderTitle('Preview lift');
+    setNextButtonLabel('Request lift');
+    setCanProceed(true);
+    onNextRef.current = handleNext;
+    return () => {
+      onNextRef.current = null;
+    };
+  }, [setHeaderTitle, setNextButtonLabel, setCanProceed, handleNext, onNextRef]);
+
+  function handlePreviousImage() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setCurrentImageIndex((prev) =>
+      prev > 0 ? prev - 1 : MOCK_IMAGES.length - 1
+    );
+  }
+
+  function handleNextImage() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setCurrentImageIndex((prev) =>
+      prev < MOCK_IMAGES.length - 1 ? prev + 1 : 0
+    );
+  }
+
+  const getAudienceLabel = () => {
+    switch (audienceType) {
+      case 'everyone':
+        return 'Everyone';
+      case 'friends':
+        return 'Friends';
+      case 'selected-people':
+        return 'Selected people';
+      case 'my-list':
+        return 'My list';
+      case 'private':
+        return 'Private';
+      default:
+        return 'Everyone';
+    }
+  };
+
+  // Mock start date for now
+  const startDate = 'Tues, 21/12/2025';
+  const liftDuration = '7 days';
+
+  const showAmount = liftType === 'Monetary' || liftType === 'Both';
+  const showItems = liftType === 'Non-monetary' || liftType === 'Both';
+
+  return (
+    <View className="flex-1 bg-background">
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 24 }}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Image Carousel */}
+        <View className="mb-4 mt-4 px-4">
+          <View className="relative">
+            <Image
+              source={{ uri: MOCK_IMAGES[currentImageIndex] }}
+              style={{ width: '100%', height: 224, borderRadius: 16 }}
+              contentFit="cover"
+            />
+
+            {/* Navigation Arrows */}
+            <TouchableOpacity
+              onPress={handlePreviousImage}
+              className="absolute left-3 top-1/2 -translate-y-1/2 size-10 items-center justify-center rounded-full bg-white shadow-sm"
+              style={{ transform: [{ translateY: -20 }] }}
+            >
+              <ChevronLeft
+                size={20}
+                color={colors['grey-alpha']['500']}
+                strokeWidth={2.5}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={handleNextImage}
+              className="absolute right-3 top-1/2 -translate-y-1/2 size-10 items-center justify-center rounded-full bg-white shadow-sm"
+              style={{ transform: [{ translateY: -20 }] }}
+            >
+              <ChevronRight
+                size={20}
+                color={colors['grey-alpha']['500']}
+                strokeWidth={2.5}
+              />
+            </TouchableOpacity>
+
+            {/* Dots Indicator */}
+            <View className="absolute bottom-3 left-0 right-0 flex-row items-center justify-center gap-1.5">
+              {MOCK_IMAGES.map((_, index) => (
+                <View
+                  key={index}
+                  className="size-2 rounded-full"
+                  style={{
+                    backgroundColor:
+                      index === currentImageIndex
+                        ? colors.primary.purple
+                        : colors['grey-alpha']['250'],
+                  }}
+                />
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* Category and Duration Badges */}
+        <View className="mb-3 flex-row items-center gap-3 px-4">
+          <View className="flex-row items-center gap-1.5">
+            <Tag size={16} color={colors.primary.purple} strokeWidth={2.5} />
+            <Text className="text-sm font-medium text-grey-alpha-500">
+              {category}
+            </Text>
+          </View>
+          <View className="flex-row items-center gap-1.5">
+            <Clock
+              size={16}
+              color={colors['grey-alpha']['400']}
+              strokeWidth={2.5}
+            />
+            <Text className="text-sm font-medium text-grey-alpha-500">
+              {liftDuration}
+            </Text>
+          </View>
+        </View>
+
+        {/* Title */}
+        <Text className="mb-3 px-4 text-xl font-bold text-grey-alpha-500">
+          {liftTitle}
+        </Text>
+
+        {/* Description */}
+        <Text className="mb-6 px-4 text-sm leading-5 text-grey-alpha-500">
+          {liftDescription}
+        </Text>
+
+        {/* Amount and Items Section */}
+        {(showAmount || showItems) && (
+          <View
+            className="mx-4 mb-6 rounded-2xl border p-4"
+            style={{
+              backgroundColor: colors['grey-plain']['50'],
+              borderColor: colors['grey-alpha']['150'],
+            }}
+          >
+            {showAmount && (
+              <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
+                ₦{liftAmount.toLocaleString()}
+              </Text>
+            )}
+
+            {showItems && liftItems.length > 0 && (
+              <View className="mb-3 flex-row flex-wrap gap-2">
+                {liftItems.map((item) => (
+                  <View
+                    key={item.id}
+                    className="rounded-full px-3 py-1.5"
+                    style={{ backgroundColor: colors['grey-alpha']['150'] }}
+                  >
+                    <Text className="text-xs font-medium text-grey-alpha-500">
+                      {item.name} ({item.quantity})
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* 0% Badge */}
+            <View
+              className="self-start rounded-full px-2.5 py-1"
+              style={{
+                backgroundColor: colors['grey-alpha']['150'],
+                borderColor: colors['grey-alpha']['250'],
+                borderWidth: 1,
+              }}
+            >
+              <Text className="text-xs font-semibold text-grey-alpha-500">
+                0%
+              </Text>
+            </View>
+          </View>
+        )}
+
+        {/* Who can offer you this lift */}
+        <View className="mb-4 px-4">
+          <Text className="mb-1 text-sm text-grey-alpha-400">
+            Who can offer you this lift?
+          </Text>
+          <Text className="text-base font-semibold text-grey-alpha-500">
+            {getAudienceLabel()}
+          </Text>
+        </View>
+
+        {/* Start date */}
+        <View className="mb-6 px-4">
+          <Text className="mb-1 text-sm text-grey-alpha-400">Start date</Text>
+          <Text className="text-base font-semibold text-grey-alpha-500">
+            {startDate}
+          </Text>
+        </View>
+
+        {/* Bottom Actions */}
+        <View className="flex-row items-center justify-between px-4">
+          <TouchableOpacity onPress={handleEditDetails}>
+            <Text className="text-base font-semibold text-grey-alpha-500">
+              Edit details
+            </Text>
+          </TouchableOpacity>
+
+          <Button
+            title="Request lift"
+            onPress={handleNext}
+            variant="primary"
+            size="large"
+            className="ml-4"
+          />
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

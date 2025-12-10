@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
+import { useMemo, useState, useEffect, useCallback, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -9,17 +9,21 @@ import {
   View,
 } from 'react-native';
 import { router } from 'expo-router';
-import { Info, ChevronRight } from 'lucide-react-native';
+import * as Haptics from 'expo-haptics';
+import { Image } from 'expo-image';
+import { Info, ChevronRight, Edit2, Trash2, ImagePlus } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import {
   RequestMethodSelector,
   LiftTypeSelector,
   LiftTypeModal,
+  MediaPickerBottomSheet,
   filterTitleSuggestions,
   LiftType,
 } from '@/components/request-lift';
-import { LiftItem, useRequestLift } from './context';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { LiftItem, MediaItem, useRequestLift } from './context';
 
 const TITLE_MAX_LENGTH = 55;
 const DESCRIPTION_MIN_LENGTH = 400;
@@ -37,6 +41,8 @@ export default function Step2Screen() {
     setLiftAmount,
     liftItems,
     setLiftItems,
+    selectedMedia,
+    setSelectedMedia,
     setCanProceed,
     onNextRef,
   } = useRequestLift();
@@ -44,6 +50,8 @@ export default function Step2Screen() {
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
   const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
   const [pendingLiftType, setPendingLiftType] = useState<LiftType>(null);
+
+  const mediaPickerRef = useRef<BottomSheetRef>(null);
 
   const titleSuggestions = useMemo(() => {
     return filterTitleSuggestions(liftTitle);
@@ -74,21 +82,25 @@ export default function Step2Screen() {
   }
 
   function handleSelectSuggestion(suggestion: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLiftTitle(suggestion);
     setShowTitleSuggestions(false);
   }
 
   function handleRequestMethodPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     // Navigate back to step 1 to modify selected contacts
     router.back();
   }
 
   function handleOpenLiftTypeModal(type?: LiftType) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setPendingLiftType(type ?? liftType);
     setShowLiftTypeModal(true);
   }
 
   function handleCloseLiftTypeModal() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShowLiftTypeModal(false);
     setPendingLiftType(null);
   }
@@ -98,11 +110,27 @@ export default function Step2Screen() {
     amount: number,
     items: LiftItem[]
   ) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setLiftType(type);
     setLiftAmount(amount);
     setLiftItems(items);
     setShowLiftTypeModal(false);
     setPendingLiftType(null);
+  }
+
+  function handleOpenMediaPicker() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    mediaPickerRef.current?.expand();
+  }
+
+  function handleMediaPickerDone(media: MediaItem[]) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setSelectedMedia(media);
+  }
+
+  function handleDeleteAllMedia() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setSelectedMedia([]);
   }
 
   const hasMonetary = liftAmount > 0;
@@ -124,7 +152,8 @@ export default function Step2Screen() {
         <ScrollView
           className="flex-1"
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ paddingBottom: 32 }}
+          contentContainerClassName="flex-grow pb-8"
+          showsVerticalScrollIndicator={false}
         >
           {/* Request Method Selector */}
           <View className="pt-5">
@@ -274,6 +303,82 @@ export default function Step2Screen() {
               )}
             </View>
           )}
+
+          {/* Media Section */}
+          <View className="mt-6 px-4">
+            {selectedMedia.length > 0 ? (
+              <View>
+                {/* Media Header */}
+                <View className="mb-3 flex-row items-center justify-between">
+                  <Text className="text-sm font-semibold text-grey-alpha-500">
+                    {selectedMedia.length} media added
+                  </Text>
+                  <View className="flex-row items-center gap-4">
+                    <TouchableOpacity
+                      onPress={handleOpenMediaPicker}
+                      hitSlop={10}
+                      accessibilityLabel="Edit media"
+                    >
+                      <Edit2
+                        size={20}
+                        color={colors['grey-alpha']['500']}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={handleDeleteAllMedia}
+                      hitSlop={10}
+                      accessibilityLabel="Delete all media"
+                    >
+                      <Trash2
+                        size={20}
+                        color={colors.state.red}
+                        strokeWidth={2}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+
+                {/* Media Thumbnails */}
+                <ScrollView
+                  horizontal
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={{ gap: 8 }}
+                >
+                  {selectedMedia.map((item) => (
+                    <View key={item.id} className="relative">
+                      <Image
+                        source={{ uri: item.uri }}
+                        style={{ width: 100, height: 100, borderRadius: 12 }}
+                        contentFit="cover"
+                      />
+                    </View>
+                  ))}
+                </ScrollView>
+              </View>
+            ) : (
+              <TouchableOpacity
+                onPress={handleOpenMediaPicker}
+                className="flex-row items-center gap-3 rounded-2xl border border-dashed border-grey-alpha-300 bg-grey-plain-50 px-4 py-4"
+                accessibilityRole="button"
+                accessibilityLabel="Add photos or videos"
+              >
+                <View
+                  className="size-10 items-center justify-center rounded-full"
+                  style={{ backgroundColor: colors['primary-tints'].purple['100'] }}
+                >
+                  <ImagePlus
+                    size={20}
+                    color={colors.primary.purple}
+                    strokeWidth={2}
+                  />
+                </View>
+                <Text className="text-base font-medium text-grey-alpha-500">
+                  Add Photos/Videos
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </ScrollView>
 
         {/* Lift Type Modal */}
@@ -284,6 +389,13 @@ export default function Step2Screen() {
           currentItems={liftItems}
           onDone={handleLiftTypeModalDone}
           onClose={handleCloseLiftTypeModal}
+        />
+
+        {/* Media Picker Bottom Sheet */}
+        <MediaPickerBottomSheet
+          ref={mediaPickerRef}
+          currentMedia={selectedMedia}
+          onDone={handleMediaPickerDone}
         />
       </View>
     </KeyboardAvoidingView>

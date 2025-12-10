@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import {
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -9,6 +11,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import {
   ChevronRight,
   MapPin,
@@ -48,9 +51,11 @@ export default function Step3Screen() {
     setLocation,
     collaborators,
     setCollaborators,
+    audienceType,
     setAudienceType,
     selectedPeopleForAudience,
     setSelectedPeopleForAudience,
+    selectedList,
     setSelectedList,
     setHeaderTitle,
     setNextButtonLabel,
@@ -111,23 +116,27 @@ export default function Step3Screen() {
   }, [addCollaboratorsEnabled, collaborators.length]);
 
   function handleCategorySelect(cat: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setCategory(cat);
     categorySheetRef.current?.close();
     setCategorySearch('');
   }
 
   function handleLocationSelect(loc: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setLocation(loc);
     locationSheetRef.current?.close();
     setLocationSearch('');
   }
 
   function handleCollaboratorsDone(selectedCollaborators: Contact[]) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setCollaborators(selectedCollaborators);
     setShowCollaboratorsModal(false);
   }
 
   function handleToggleCollaborators(enabled: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     if (!enabled && collaborators.length > 0) {
       // Show confirmation dialog if there are collaborators
       setShowRemoveConfirm(true);
@@ -137,12 +146,14 @@ export default function Step3Screen() {
   }
 
   function handleConfirmRemove() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setCollaborators([]);
     setAddCollaboratorsEnabled(false);
     setShowRemoveConfirm(false);
   }
 
   function handleCancelRemove() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShowRemoveConfirm(false);
   }
 
@@ -157,6 +168,7 @@ export default function Step3Screen() {
 
   // Handle audience selection
   function handleAudienceSelect(type: AudienceType) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setAudienceType(type);
     audienceSheetRef.current?.close();
 
@@ -168,22 +180,26 @@ export default function Step3Screen() {
   }
 
   function handleSelectedPeopleDone(people: Contact[]) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setSelectedPeopleForAudience(people);
     setShowSelectedPeopleModal(false);
   }
 
   function handleSelectList(list: List) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedList(list);
     chooseListSheetRef.current?.close();
     setShowChooseListModal(true);
   }
 
   function handleCreateNewList() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     chooseListSheetRef.current?.close();
     setShowCreateListModal(true);
   }
 
   function handleCreateListDone(people: Contact[], listName: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     // Create a new list (in real app, this would save to backend)
     const newList: List = {
       id: Date.now().toString(),
@@ -195,27 +211,57 @@ export default function Step3Screen() {
   }
 
   function handleChooseFromListDone(list: List) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedList(list);
     setShowChooseListModal(false);
   }
 
+  function handleAudienceButtonPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    audienceSheetRef.current?.expand();
+  }
+
+  // Get audience display label
+  function getAudienceLabel() {
+    switch (audienceType) {
+      case 'everyone':
+        return 'Everyone';
+      case 'friends':
+        return 'Friends';
+      case 'selected-people':
+        return 'Selected people';
+      case 'my-list':
+        return selectedList ? selectedList.name : 'My list';
+      case 'private':
+        return 'Private';
+      default:
+        return 'Everyone';
+    }
+  }
+
   return (
-    <View className="flex-1 bg-white">
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 32 }}
-        showsVerticalScrollIndicator={false}
-      >
+    <KeyboardAvoidingView
+      className="flex-1"
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <View className="flex-1 bg-white">
+        <ScrollView
+          className="flex-1"
+          keyboardShouldPersistTaps="handled"
+          contentContainerClassName="flex-grow pb-8"
+          showsVerticalScrollIndicator={false}
+        >
         {/* Summary Section */}
         <View className="border-b border-grey-plain-450/20 px-4 py-4">
           {/* User Avatar and Audience */}
           <View className="mb-3 flex-row items-center gap-3">
             <Image
               source={require('../../assets/images/welcome/collage-1.jpg')}
-              className="size-12 rounded-full"
+              style={{ width: 48, height: 48, borderRadius: 24 }}
               contentFit="cover"
             />
             <TouchableOpacity
+              onPress={handleAudienceButtonPress}
               className="flex-row items-center gap-2 rounded-full border-2 px-4 py-1.5"
               style={{ borderColor: colors.primary.purple }}
             >
@@ -223,7 +269,7 @@ export default function Step3Screen() {
                 className="text-sm font-semibold"
                 style={{ color: colors.primary.purple }}
               >
-                Everyone
+                {getAudienceLabel()}
               </Text>
               <ChevronRight
                 size={16}
@@ -419,7 +465,7 @@ export default function Step3Screen() {
                 <View className="flex-1 flex-row items-center gap-2">
                   <Image
                     source={collaborators[0].avatar}
-                    className="size-8 rounded-full"
+                    style={{ width: 32, height: 32, borderRadius: 16 }}
                     contentFit="cover"
                   />
                   <Text className="flex-1 text-base font-medium text-grey-alpha-500">
@@ -621,5 +667,6 @@ export default function Step3Screen() {
         onClose={() => setShowCreateListModal(false)}
       />
     </View>
+    </KeyboardAvoidingView>
   );
 }

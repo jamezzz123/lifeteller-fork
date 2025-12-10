@@ -15,9 +15,8 @@ export function ContactChip({ contact, onRemove }: ContactChipProps) {
     <View className="flex-row items-center gap-2 rounded-full border border-grey-plain-450 bg-grey-plain-50 px-3 py-2">
       <Image
         source={contact.avatar}
-        className="size-8 rounded-full"
+        style={{ width: 32, height: 32, borderRadius: 16 }}
         contentFit="cover"
-        transition={150}
       />
       <Text className="text-sm font-medium text-grey-alpha-500">
         {contact.name}

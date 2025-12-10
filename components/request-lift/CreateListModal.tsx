@@ -105,7 +105,7 @@ export function CreateListModal({
                   <View className="flex-1 flex-row items-center gap-3">
                     <Image
                       source={contact.avatar}
-                      className="size-12 rounded-full"
+                      style={{ width: 48, height: 48, borderRadius: 24 }}
                       contentFit="cover"
                     />
                     <View className="flex-1">

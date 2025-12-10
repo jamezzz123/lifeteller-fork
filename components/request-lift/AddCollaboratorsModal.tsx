@@ -109,7 +109,7 @@ export function AddCollaboratorsModal({
               >
                 <Image
                   source={collaborator.avatar}
-                  className="size-6 rounded-full"
+                  style={{ width: 24, height: 24, borderRadius: 12 }}
                   contentFit="cover"
                 />
                 <Text className="text-sm text-grey-alpha-500">
@@ -149,7 +149,7 @@ export function AddCollaboratorsModal({
                   <View className="flex-1 flex-row items-center gap-3">
                     <Image
                       source={contact.avatar}
-                      className="size-12 rounded-full"
+                      style={{ width: 48, height: 48, borderRadius: 24 }}
                       contentFit="cover"
                     />
                     <View className="flex-1">

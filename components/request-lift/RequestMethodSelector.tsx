@@ -2,15 +2,14 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageSourcePropType,
 } from 'react-native';
-import { Image } from 'expo-image';
+import { Image, ImageSource } from 'expo-image';
 import { ChevronDown } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 
 type RequestMethodSelectorProps = {
   selectedCount: number;
-  userAvatar?: ImageSourcePropType;
+  userAvatar?: ImageSource;
   onPress: () => void;
 };
 
@@ -26,9 +25,8 @@ export function RequestMethodSelector({
       {/* User Avatar */}
       <Image
         source={userAvatar || defaultAvatar}
-        className="size-12 rounded-full"
+        style={{ width: 48, height: 48, borderRadius: 24 }}
         contentFit="cover"
-        transition={150}
       />
 
       {/* Dropdown Button */}

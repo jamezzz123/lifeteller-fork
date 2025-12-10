@@ -1,23 +1,81 @@
 import { useRef, useState } from 'react';
 import { ScrollView, Text, TouchableOpacity, View, Switch } from 'react-native';
 import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { ChevronLeft, Calendar, CalendarX, Users, Hand } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
-import { AllowCollaboratorsBottomSheet } from '@/components/request-lift';
+import {
+  AllowCollaboratorsBottomSheet,
+  ScheduleRequestBottomSheet,
+} from '@/components/request-lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export default function MoreOptionsScreen() {
   const [scheduleLift, setScheduleLift] = useState(false);
+  const [scheduleDate, setScheduleDate] = useState<Date | null>(null);
   const [liftEndDate, setLiftEndDate] = useState(false);
+  const [endDate, setEndDate] = useState<Date | null>(null);
   const [allowCollaborators, setAllowCollaborators] = useState(false);
   const [collaboratorLimit, setCollaboratorLimit] = useState<'unlimited' | number>('unlimited');
   const [allowRequesters, setAllowRequesters] = useState(false);
   const [showRemoveCollaboratorsDialog, setShowRemoveCollaboratorsDialog] = useState(false);
   const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] = useState(false);
 
+  const scheduleSheetRef = useRef<BottomSheetRef>(null);
+  const endDateSheetRef = useRef<BottomSheetRef>(null);
   const collaboratorsSheetRef = useRef<BottomSheetRef>(null);
+
+  function handleScheduleLiftToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setScheduleLift(value);
+    if (value) {
+      // Open schedule picker when toggled on
+      setTimeout(() => {
+        scheduleSheetRef.current?.expand();
+      }, 300);
+    } else {
+      setScheduleDate(null);
+    }
+  }
+
+  function handleScheduleDone(date: Date) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setScheduleDate(date);
+  }
+
+  function handleLiftEndDateToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setLiftEndDate(value);
+    if (value) {
+      // Open end date picker when toggled on
+      setTimeout(() => {
+        endDateSheetRef.current?.expand();
+      }, 300);
+    } else {
+      setEndDate(null);
+    }
+  }
+
+  function handleEndDateDone(date: Date) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setEndDate(date);
+  }
+
+  function handleScheduleLiftPress() {
+    if (scheduleLift) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      scheduleSheetRef.current?.expand();
+    }
+  }
+
+  function handleLiftEndDatePress() {
+    if (liftEndDate) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      endDateSheetRef.current?.expand();
+    }
+  }
 
   function handleAllowCollaboratorsToggle(value: boolean) {
     if (!value && allowCollaborators) {
@@ -90,7 +148,11 @@ export default function MoreOptionsScreen() {
 
       <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
         {/* Schedule lift */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
+        <TouchableOpacity
+          onPress={handleScheduleLiftPress}
+          className="border-b border-grey-plain-450/20 px-4 py-4"
+          activeOpacity={scheduleLift ? 0.7 : 1}
+        >
           <View className="flex-row items-center justify-between">
             <View className="flex-1 flex-row items-center gap-3">
               <Calendar size={24} color={colors['grey-alpha']['500']} />
@@ -98,14 +160,32 @@ export default function MoreOptionsScreen() {
                 <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                   Schedule lift
                 </Text>
-                <Text className="text-sm text-grey-alpha-400">
-                  Choose a start date for your lift.
-                </Text>
+                {scheduleLift && scheduleDate ? (
+                  <Text className="text-sm font-medium text-grey-alpha-500">
+                    {scheduleDate.toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}{' '}
+                    at{' '}
+                    {scheduleDate.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}{' '}
+                    →
+                  </Text>
+                ) : (
+                  <Text className="text-sm text-grey-alpha-400">
+                    Choose a start date for your lift.
+                  </Text>
+                )}
               </View>
             </View>
             <Switch
               value={scheduleLift}
-              onValueChange={setScheduleLift}
+              onValueChange={handleScheduleLiftToggle}
               trackColor={{
                 false: colors['grey-plain']['450'],
                 true: colors.primary.purple,
@@ -113,10 +193,14 @@ export default function MoreOptionsScreen() {
               thumbColor={colors['grey-plain']['50']}
             />
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Lift end date */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
+        <TouchableOpacity
+          onPress={handleLiftEndDatePress}
+          className="border-b border-grey-plain-450/20 px-4 py-4"
+          activeOpacity={liftEndDate ? 0.7 : 1}
+        >
           <View className="flex-row items-center justify-between">
             <View className="flex-1 flex-row items-center gap-3">
               <CalendarX size={24} color={colors['grey-alpha']['500']} />
@@ -124,14 +208,32 @@ export default function MoreOptionsScreen() {
                 <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                   Lift end date
                 </Text>
-                <Text className="text-sm text-grey-alpha-400">
-                  This will end the lift even when the target is not met.
-                </Text>
+                {liftEndDate && endDate ? (
+                  <Text className="text-sm font-medium text-grey-alpha-500">
+                    {endDate.toLocaleDateString('en-US', {
+                      weekday: 'short',
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric',
+                    })}{' '}
+                    at{' '}
+                    {endDate.toLocaleTimeString('en-US', {
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    })}{' '}
+                    →
+                  </Text>
+                ) : (
+                  <Text className="text-sm text-grey-alpha-400">
+                    This will end the lift even when the target is not met.
+                  </Text>
+                )}
               </View>
             </View>
             <Switch
               value={liftEndDate}
-              onValueChange={setLiftEndDate}
+              onValueChange={handleLiftEndDateToggle}
               trackColor={{
                 false: colors['grey-plain']['450'],
                 true: colors.primary.purple,
@@ -139,7 +241,7 @@ export default function MoreOptionsScreen() {
               thumbColor={colors['grey-plain']['50']}
             />
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Allow collaborators */}
         <TouchableOpacity
@@ -209,6 +311,20 @@ export default function MoreOptionsScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Schedule Request Bottom Sheet */}
+      <ScheduleRequestBottomSheet
+        ref={scheduleSheetRef}
+        onDone={handleScheduleDone}
+        initialDate={scheduleDate || undefined}
+      />
+
+      {/* End Date Bottom Sheet */}
+      <ScheduleRequestBottomSheet
+        ref={endDateSheetRef}
+        onDone={handleEndDateDone}
+        initialDate={endDate || undefined}
+      />
 
       {/* Allow Collaborators Bottom Sheet */}
       <AllowCollaboratorsBottomSheet
