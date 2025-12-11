@@ -13,7 +13,6 @@ import * as Haptics from 'expo-haptics';
 import { Info } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
-import { TextInput } from '@/components/ui/TextInput';
 import { TextButton } from '@/components/ui/TextButton';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import {

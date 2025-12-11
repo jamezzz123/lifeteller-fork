@@ -3,8 +3,8 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableOpacity,
-  Dimensions,
+  NativeSyntheticEvent,
+  NativeScrollEvent,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
@@ -12,7 +12,6 @@ import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
 
-const { height } = Dimensions.get('window');
 const ITEM_HEIGHT = 50;
 
 type ScheduleRequestBottomSheetProps = {
@@ -106,7 +105,7 @@ export const ScheduleRequestBottomSheet = forwardRef<
     return () => clearTimeout(timer);
   }, [selectedHour, selectedMinute]);
 
-  function handleDateScroll(event: any) {
+  function handleDateScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
     if (index !== selectedDateIndex && index >= 0 && index < dates.length) {
@@ -115,7 +114,7 @@ export const ScheduleRequestBottomSheet = forwardRef<
     }
   }
 
-  function handleHourScroll(event: any) {
+  function handleHourScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
     if (index !== selectedHour && index >= 0 && index < hours.length) {
@@ -124,7 +123,7 @@ export const ScheduleRequestBottomSheet = forwardRef<
     }
   }
 
-  function handleMinuteScroll(event: any) {
+  function handleMinuteScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const offsetY = event.nativeEvent.contentOffset.y;
     const index = Math.round(offsetY / ITEM_HEIGHT);
     if (index !== selectedMinute && index >= 0 && index < minutes.length) {
@@ -141,13 +140,15 @@ export const ScheduleRequestBottomSheet = forwardRef<
     selectedDate.setSeconds(0);
     selectedDate.setMilliseconds(0);
     onDone(selectedDate);
-    (ref as any)?.current?.close();
+    if (typeof ref !== 'function' && ref?.current) {
+      ref.current.close();
+    }
   }
 
-  function renderPickerItem(
-    item: any,
+  function renderPickerItem<T>(
+    item: T,
     isSelected: boolean,
-    formatter: (val: any) => string
+    formatter: (val: T) => string
   ) {
     return (
       <View
@@ -164,7 +165,7 @@ export const ScheduleRequestBottomSheet = forwardRef<
             fontWeight: isSelected ? '600' : '400',
             color: isSelected
               ? colors['grey-alpha']['500']
-              : colors['grey-alpha']['300'],
+              : colors['grey-alpha']['250'],
           }}
         >
           {formatter(item)}

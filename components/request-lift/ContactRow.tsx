@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { CheckCircle2, Plus } from 'lucide-react-native';
+import { CheckCircle2} from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { Contact } from './types';

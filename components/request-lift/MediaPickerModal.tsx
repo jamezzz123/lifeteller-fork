@@ -56,7 +56,7 @@ export const MediaPickerBottomSheet = forwardRef<
         id: Date.now().toString(),
         uri: result.assets[0].uri,
         type: result.assets[0].type === 'video' ? 'video' : 'image',
-        fileName: result.assets[0].fileName,
+        fileName: result.assets[0].fileName ?? undefined,
       };
 
       if (selectedMedia.length < MAX_MEDIA) {
@@ -84,7 +84,7 @@ export const MediaPickerBottomSheet = forwardRef<
         id: `${Date.now()}-${index}`,
         uri: asset.uri,
         type: asset.type === 'video' ? 'video' : 'image',
-        fileName: asset.fileName,
+        fileName: asset.fileName ?? undefined,
       }));
 
       const combined = [...selectedMedia, ...newMedia].slice(0, MAX_MEDIA);
@@ -100,7 +100,9 @@ export const MediaPickerBottomSheet = forwardRef<
   function handleProceed() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     onDone(selectedMedia);
-    (ref as any)?.current?.close();
+    if (typeof ref !== 'function' && ref?.current) {
+      ref.current.close();
+    }
   }
 
   return (

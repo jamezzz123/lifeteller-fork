@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef } from 'react';
-import { View, Text, Pressable, Linking, Alert } from 'react-native';
+import { View, Text, Pressable, Linking, Alert, GestureResponderEvent } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import * as WebBrowser from 'expo-web-browser';
 import {
@@ -104,7 +104,7 @@ export const ContactUsSheet = forwardRef<
     },
   }));
 
-  async function handleCopy(id: string, value: string, e?: any) {
+  async function handleCopy(id: string, value: string, e?: GestureResponderEvent) {
     e?.stopPropagation();
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     await Clipboard.setStringAsync(value);

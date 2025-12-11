@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
+import { ImageSource } from 'expo-image';
+
 export interface User {
   id: string;
   username: string;
   handle: string;
   fullName: string;
   email: string;
-  profileImage: any;
+  profileImage: ImageSource;
   bio?: string;
   followersCount?: number;
   followingCount?: number;

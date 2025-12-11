@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { ChevronLeft, ChevronRight, Tag, Clock } from 'lucide-react-native';
 
@@ -82,7 +82,7 @@ export default function Step4Screen() {
   function handleGoToFeeds() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     successSheetRef.current?.close();
-    router.replace('/home' as any);
+    router.replace('/(tabs)/home' as Href);
   }
 
   function handleShareRequest() {

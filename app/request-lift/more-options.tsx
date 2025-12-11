@@ -19,7 +19,7 @@ import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export default function MoreOptionsScreen() {
-  const [scheduleLift, setScheduleLift] = useState(false);
+  const [scheduleLift,] = useState(false);
   const [scheduleDate, setScheduleDate] = useState<Date | null>(null);
   const [liftEndDate, setLiftEndDate] = useState(false);
   const [endDate, setEndDate] = useState<Date | null>(null);
@@ -37,18 +37,19 @@ export default function MoreOptionsScreen() {
   const endDateSheetRef = useRef<BottomSheetRef>(null);
   const collaboratorsSheetRef = useRef<BottomSheetRef>(null);
 
-  function handleScheduleLiftToggle(value: boolean) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setScheduleLift(value);
-    if (value) {
-      // Open schedule picker when toggled on
-      setTimeout(() => {
-        scheduleSheetRef.current?.expand();
-      }, 300);
-    } else {
-      setScheduleDate(null);
-    }
-  }
+  // function handleScheduleLiftToggle(value: boolean) {
+
+  //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+  //   setScheduleLift(value);
+  //   if (value) {
+  //     // Open schedule picker when toggled on
+  //     setTimeout(() => {
+  //       scheduleSheetRef.current?.expand();
+  //     }, 300);
+  //   } else {
+  //     setScheduleDate(null);
+  //   }
+  // }
 
   function handleScheduleDone(date: Date) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);

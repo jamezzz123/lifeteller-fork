@@ -10,7 +10,12 @@ import {
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 
-function TabIcon({ focused, children }: any) {
+interface TabIconProps {
+  focused: boolean;
+  children: React.ReactNode;
+}
+
+function TabIcon({ focused, children }: TabIconProps) {
   return (
     <View style={styles.iconWrapper}>
       {focused && <View style={styles.activeIndicator} />}

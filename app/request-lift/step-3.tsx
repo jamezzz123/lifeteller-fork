@@ -10,7 +10,7 @@ import {
   Switch,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
+import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
   ChevronRight,
@@ -91,7 +91,7 @@ export default function Step3Screen() {
 
   const handleNext = useCallback(() => {
     if (!isValid) return;
-    router.push('/request-lift/step-4');
+    router.push('/request-lift/step-4' as Href);
   }, [isValid]);
 
   useEffect(() => {
