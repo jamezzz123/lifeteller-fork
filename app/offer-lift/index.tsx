@@ -2,7 +2,6 @@ import { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -25,7 +24,6 @@ import {
   type NonMonetaryItem,
 } from '@/components/OfferLift/NonMonetaryItemInput';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
-import { colors } from '@/theme/colors';
 
 // Mock data - replace with actual data from router params or API
 const LIFT_DATA = {

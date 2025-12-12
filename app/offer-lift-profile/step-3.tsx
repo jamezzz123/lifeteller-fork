@@ -1,5 +1,5 @@
 import { useEffect, useCallback, useRef } from 'react';
-import { ScrollView, Text, View, TouchableOpacity } from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
 import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 
@@ -15,7 +15,6 @@ import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
 export default function Step3Screen() {
   const {
     selectedRecipient,
-    offerMessage,
     offerAmount,
     isAnonymous,
     setHeaderTitle,
@@ -81,7 +80,7 @@ export default function Step3Screen() {
         {/* Message */}
         <View className="mt-6 px-4">
           <Text className="mt-2 text-sm leading-5 text-grey-alpha-400">
-            It is my guy's birthday. I love him do much.
+            It is my guy&apos;s birthday. I love him do much.
           </Text>
         </View>
 

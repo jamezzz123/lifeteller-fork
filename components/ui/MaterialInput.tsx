@@ -5,11 +5,9 @@ import {
   Text,
   TextInputProps as RNTextInputProps,
   Platform,
-  Animated,
 } from 'react-native';
 
 import { colors } from '@/theme/colors';
-import { themeConfig } from '@/theme/config';
 
 interface MaterialInputProps extends Omit<RNTextInputProps, 'style'> {
   label?: string;
@@ -33,7 +31,6 @@ export function MaterialInput({
   const [isFocused, setIsFocused] = useState(false);
 
   const hasValue = value && value.length > 0;
-  const showFloatingLabel = isFocused || hasValue;
 
   // Size variants
   const sizeStyles = {

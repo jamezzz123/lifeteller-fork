@@ -7,12 +7,10 @@ import {
   TouchableOpacity,
   View,
   Switch,
-  Pressable,
 } from 'react-native';
-import { Image } from 'expo-image';
 import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { BadgeCheck, User } from 'lucide-react-native';
+import { User } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { ContactRow } from '@/components/request-lift';
@@ -76,15 +74,6 @@ export default function Step2Screen() {
     setAmountText(cleaned);
     setOfferAmount(cleaned ? parseInt(cleaned, 10) : 0);
   }
-
-  function handleHelpMeWrite() {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // Placeholder for AI writing assistance
-    // TODO: Implement AI writing feature
-  }
-
-  const characterCount = offerMessage.length;
-  const characterProgress = `${characterCount}/${MESSAGE_MAX_LENGTH}`;
 
   return (
     <KeyboardAvoidingView
@@ -190,7 +179,7 @@ export default function Step2Screen() {
                     Offer lift anonymously
                   </Text>
                   <Text className="mt-1 text-sm text-grey-alpha-400">
-                    People who see and join your lift offer won't know it is
+                    People who see and join your lift offer won&apos;t know it is
                     you.
                   </Text>
                 </View>
