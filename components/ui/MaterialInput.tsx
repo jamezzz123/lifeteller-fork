@@ -17,6 +17,7 @@ interface MaterialInputProps extends Omit<RNTextInputProps, 'style'> {
   error?: string;
   helperText?: string;
   containerClassName?: string;
+  size?: 'small' | 'large';
 }
 
 export function MaterialInput({
@@ -25,6 +26,7 @@ export function MaterialInput({
   error,
   helperText,
   containerClassName = '',
+  size = 'large',
   value,
   ...props
 }: MaterialInputProps) {
@@ -32,6 +34,24 @@ export function MaterialInput({
 
   const hasValue = value && value.length > 0;
   const showFloatingLabel = isFocused || hasValue;
+
+  // Size variants
+  const sizeStyles = {
+    small: {
+      fontSize: 14,
+      lineHeight: 20,
+      textClass: 'text-sm',
+      prefixClass: 'text-sm',
+    },
+    large: {
+      fontSize: 18,
+      lineHeight: 24,
+      textClass: 'text-lg',
+      prefixClass: 'text-lg',
+    },
+  };
+
+  const currentSize = sizeStyles[size];
 
   return (
     <View className={containerClassName}>
@@ -66,8 +86,10 @@ export function MaterialInput({
         {/* Prefix */}
         {prefix && (
           <Text
-            className={`mr-3 text-lg font-bold ${
-              isFocused || hasValue ? 'text-grey-alpha-500' : 'text-grey-alpha-400'
+            className={`mr-3 ${currentSize.prefixClass}  ${
+              isFocused || hasValue
+                ? 'text-grey-alpha-500'
+                : 'text-grey-alpha-400'
             }`}
           >
             {prefix}
@@ -86,16 +108,16 @@ export function MaterialInput({
             setIsFocused(false);
             props.onBlur?.(e);
           }}
-          placeholderTextColor={colors['grey-alpha']['400']}
-          className="flex-1 text-lg font-semibold text-grey-alpha-500"
+          placeholderTextColor={colors['grey-alpha']['250']}
+          className={`flex-1 ${currentSize.textClass}  text-grey-plain-300`}
           style={{
-            fontFamily: themeConfig.typography.primary.semiBold,
-            fontSize: 18,
+            // fontFamily: themeConfig.typography.primary.medium,
+            fontSize: currentSize.fontSize,
             color: colors['grey-alpha']['500'],
             paddingVertical: 0,
             paddingTop: 0,
             paddingBottom: 0,
-            lineHeight: 24,
+            lineHeight: currentSize.lineHeight,
             ...(Platform.OS === 'android' && {
               textAlignVertical: 'center',
               includeFontPadding: false,
@@ -105,9 +127,7 @@ export function MaterialInput({
       </View>
 
       {/* Error or Helper Text */}
-      {error && (
-        <Text className="mt-1.5 text-xs text-red-500">{error}</Text>
-      )}
+      {error && <Text className="mt-1.5 text-xs text-red-500">{error}</Text>}
       {helperText && !error && (
         <Text className="mt-1.5 text-xs text-grey-alpha-400">{helperText}</Text>
       )}
