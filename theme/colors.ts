@@ -21,6 +21,7 @@ const palette = {
   },
   'grey-plain': {
     '50': '#FFFFFF',
+    '100': '#FAFAFA',
     '150': '#F8F8F8',
     '300': '#E8E8E8',
     '350': '#D1D1D1',
@@ -29,6 +30,12 @@ const palette = {
   },
   state: {
     red: '#BC1521',
+  },
+  yellow: {
+    '50': '#D97A0D',
+  },
+  'yellow-tint': {
+    '50': '#FEF6EB',
   },
   variant: {
     yellow: {
