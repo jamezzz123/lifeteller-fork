@@ -162,7 +162,7 @@ export const PasscodeBottomSheet = forwardRef<
                   size={24}
                   color={
                     passcode.length === 0
-                      ? colors['grey-alpha']['300']
+                      ? colors['grey-alpha']['250']
                       : colors['grey-alpha']['500']
                   }
                   strokeWidth={2}
@@ -196,7 +196,7 @@ export const PasscodeBottomSheet = forwardRef<
                   color={
                     passcode.length === passcodeLength
                       ? '#FFFFFF'
-                      : colors['grey-alpha']['300']
+                      : colors['grey-alpha']['250']
                   }
                   strokeWidth={2.5}
                 />

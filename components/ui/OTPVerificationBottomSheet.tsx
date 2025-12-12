@@ -130,7 +130,7 @@ export const OTPVerificationBottomSheet = forwardRef<
             {Array.from({ length: otpLength }).map((_, index) => (
               <TextInput
                 key={index}
-                ref={(el) => (inputRefs.current[index] = el)}
+                ref={(el) => { inputRefs.current[index] = el; }}
                 value={otp[index]}
                 onChangeText={(text) => handleChangeText(text, index)}
                 onKeyPress={(e) => handleKeyPress(e, index)}
