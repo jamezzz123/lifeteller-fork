@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -16,6 +16,14 @@ import { colors } from '@/theme/colors';
 import { ContactRow } from '@/components/request-lift';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { Dropdown } from '@/components/ui/Dropdown';
+import {
+  LiftSettingsBottomSheet,
+  LiftSettingsBottomSheetRef,
+} from '@/components/offer-lift/LiftSettingsBottomSheet';
+import {
+  NumberOfRecipientsBottomSheet,
+  NumberOfRecipientsBottomSheetRef,
+} from '@/components/offer-lift/NumberOfRecipientsBottomSheet';
 import { useOfferLiftProfile } from './context';
 
 const MESSAGE_MAX_LENGTH = 400;
@@ -23,6 +31,10 @@ const MESSAGE_MAX_LENGTH = 400;
 export default function Step2Screen() {
   const {
     selectedRecipient,
+    liftType,
+    setLiftType,
+    numberOfRecipients,
+    setNumberOfRecipients,
     offerMessage,
     setOfferMessage,
     offerAmount,
@@ -34,6 +46,9 @@ export default function Step2Screen() {
     setCanProceed,
     onNextRef,
   } = useOfferLiftProfile();
+
+  const liftSettingsSheetRef = useRef<LiftSettingsBottomSheetRef>(null);
+  const numberOfRecipientsSheetRef = useRef<NumberOfRecipientsBottomSheetRef>(null);
 
   const [amountText, setAmountText] = useState(
     offerAmount > 0 ? offerAmount.toString() : ''
@@ -75,6 +90,37 @@ export default function Step2Screen() {
     setOfferAmount(cleaned ? parseInt(cleaned, 10) : 0);
   }
 
+  const handleOpenLiftSettings = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    liftSettingsSheetRef.current?.expand();
+  }, []);
+
+  const handleSelectOneToOne = useCallback(() => {
+    setLiftType('one-to-one');
+  }, [setLiftType]);
+
+  const handleSelectOneToMany = useCallback(() => {
+    setLiftType('one-to-many');
+    // Open the number of recipients sheet
+    setTimeout(() => {
+      numberOfRecipientsSheetRef.current?.expand();
+    }, 300);
+  }, [setLiftType]);
+
+  const handleConfirmNumberOfRecipients = useCallback(
+    (count: number) => {
+      setNumberOfRecipients(count);
+    },
+    [setNumberOfRecipients]
+  );
+
+  const getDropdownLabel = () => {
+    if (liftType === 'one-to-one') {
+      return 'One-to-one';
+    }
+    return `One-to-many (${numberOfRecipients})`;
+  };
+
   return (
     <KeyboardAvoidingView
       className="flex-1"
@@ -108,7 +154,10 @@ export default function Step2Screen() {
                   />
                 </View>
                 <View className="flex-2">
-                  <Dropdown label="One-to-one" onPress={() => router.back()} />
+                  <Dropdown
+                    label={getDropdownLabel()}
+                    onPress={handleOpenLiftSettings}
+                  />
                 </View>
               </TouchableOpacity>
             )}
@@ -200,6 +249,21 @@ export default function Step2Screen() {
           </View>
         </ScrollView>
       </View>
+
+      {/* Lift Settings Bottom Sheet */}
+      <LiftSettingsBottomSheet
+        ref={liftSettingsSheetRef}
+        onSelectOneToOne={handleSelectOneToOne}
+        onSelectOneToMany={handleSelectOneToMany}
+        numberOfRecipients={numberOfRecipients}
+      />
+
+      {/* Number of Recipients Bottom Sheet */}
+      <NumberOfRecipientsBottomSheet
+        ref={numberOfRecipientsSheetRef}
+        initialValue={numberOfRecipients}
+        onConfirm={handleConfirmNumberOfRecipients}
+      />
     </KeyboardAvoidingView>
   );
 }

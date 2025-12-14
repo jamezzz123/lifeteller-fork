@@ -1,10 +1,18 @@
 import { createContext, useContext, useState, useRef, ReactNode } from 'react';
 import { Contact } from '@/components/request-lift';
 
+export type LiftType = 'one-to-one' | 'one-to-many';
+
 type OfferLiftProfileContextType = {
   // Step 1: Selected recipient (only one person)
   selectedRecipient: Contact | null;
   setSelectedRecipient: (contact: Contact | null) => void;
+
+  // Lift settings
+  liftType: LiftType;
+  setLiftType: (type: LiftType) => void;
+  numberOfRecipients: number;
+  setNumberOfRecipients: (count: number) => void;
 
   // Step 2: Offer details
   offerMessage: string;
@@ -37,6 +45,8 @@ export function OfferLiftProfileProvider({ children }: { children: ReactNode }) 
   const [selectedRecipient, setSelectedRecipient] = useState<Contact | null>(
     null
   );
+  const [liftType, setLiftType] = useState<LiftType>('one-to-one');
+  const [numberOfRecipients, setNumberOfRecipients] = useState(5);
   const [offerMessage, setOfferMessage] = useState('');
   const [offerAmount, setOfferAmount] = useState(0);
   const [isAnonymous, setIsAnonymous] = useState(false);
@@ -51,6 +61,8 @@ export function OfferLiftProfileProvider({ children }: { children: ReactNode }) 
 
   const reset = () => {
     setSelectedRecipient(null);
+    setLiftType('one-to-one');
+    setNumberOfRecipients(5);
     setOfferMessage('');
     setOfferAmount(0);
     setIsAnonymous(false);
@@ -65,6 +77,10 @@ export function OfferLiftProfileProvider({ children }: { children: ReactNode }) 
       value={{
         selectedRecipient,
         setSelectedRecipient,
+        liftType,
+        setLiftType,
+        numberOfRecipients,
+        setNumberOfRecipients,
         offerMessage,
         setOfferMessage,
         offerAmount,
