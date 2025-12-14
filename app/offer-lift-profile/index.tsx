@@ -16,6 +16,7 @@ import { colors } from '@/theme/colors';
 import { ContactRow, CONTACTS, Contact } from '@/components/request-lift';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { useOfferLiftProfile } from './context';
+import ImpactCard from '@/components/OfferLift/ImpactCard';
 
 export default function SelectRecipientScreen() {
   const { selectedRecipient, setSelectedRecipient, setCanProceed, onNextRef } =
@@ -80,7 +81,9 @@ export default function SelectRecipientScreen() {
             <MaterialInput
               value={search}
               onChangeText={setSearch}
-              placeholder={selectedRecipient?.name || ''}
+              placeholder={
+                selectedRecipient?.name || 'Search by name or username'
+              }
               returnKeyType="search"
               autoCapitalize="none"
               autoCorrect={false}
@@ -101,27 +104,14 @@ export default function SelectRecipientScreen() {
               </Text>
             </View>
 
-            {/* Multiply impact card */}
-            <Pressable
-              className="mt-5 flex-row items-center justify-between overflow-hidden rounded-2xl bg-gradient-to-r from-primary to-primary-purple-light p-4"
-              onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-                // Navigate to multi-recipient flow or show modal
-              }}
-              style={{
-                backgroundColor: colors.primary.purple,
-              }}
-            >
-              <View className="flex-1">
-                <Text className="text-base font-semibold text-white">
-                  Multiply your impact. Reach more people
-                </Text>
-                <Text className="mt-1 text-sm text-white/90">
-                  Offer lift to more people at the same time.
-                </Text>
-              </View>
-              <ArrowRight size={24} color="#FFFFFF" strokeWidth={2} />
-            </Pressable>
+            <View className="mt-8">
+              <ImpactCard
+                handlePress={() => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  // Navigate to multi-recipient flow or show modal
+                }}
+              />
+            </View>
           </View>
         </ScrollView>
 
