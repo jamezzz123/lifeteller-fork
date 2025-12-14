@@ -5,25 +5,25 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Button } from '@/components/ui/Button';
 import { MaterialInput } from '@/components/ui/MaterialInput';
-import { LiftCard } from '@/components/OfferLift/LiftCard';
-import { QuickAmountButtons } from '@/components/OfferLift/QuickAmountButtons';
-import { UserHeader } from '@/components/OfferLift/UserHeader';
-import { PaymentBottomSheet } from '@/components/OfferLift/PaymentBottomSheet';
+import { LiftCard } from '@/components/lift/LiftCard';
+import { QuickAmountButtons } from '@/components/lift/QuickAmountButtons';
+import { UserHeader } from '@/components/lift/UserHeader';
+import { PaymentBottomSheet } from '@/components/lift/PaymentBottomSheet';
 import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
-import { LiftSuccessBottomSheet } from '@/components/OfferLift/LiftSuccessBottomSheet';
-import {
-  LiftTypeSelector,
-  type LiftType,
-} from '@/components/OfferLift/LiftTypeSelector';
+import { LiftSuccessBottomSheet } from '@/components/lift/LiftSuccessBottomSheet';
 import {
   NonMonetaryItemInput,
   type NonMonetaryItem,
-} from '@/components/OfferLift/NonMonetaryItemInput';
+} from '@/components/lift/NonMonetaryItemInput';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
+
+// Type for offer lift (monetary/non-monetary)
+type OfferLiftType = 'monetary' | 'non-monetary' | 'both';
 
 // Mock data - replace with actual data from router params or API
 const LIFT_DATA = {
@@ -44,7 +44,7 @@ const LIFT_DATA = {
     availableItems: ['Laptop', 'Mouse', 'Keyboard'],
     // Determines what types of lifts this request accepts
     // Can be: ['monetary'], ['non-monetary'], or ['monetary', 'non-monetary', 'both']
-    acceptedLiftTypes: ['monetary', 'non-monetary', 'both'] as LiftType[],
+    acceptedLiftTypes: ['monetary', 'non-monetary', 'both'] as OfferLiftType[],
   },
 };
 
@@ -58,7 +58,7 @@ export default function OfferLiftPage() {
   const [selectedQuickAmount, setSelectedQuickAmount] = useState<number | null>(
     null
   );
-  const [selectedLiftType, setSelectedLiftType] = useState<LiftType>(
+  const [selectedLiftType, setSelectedLiftType] = useState<OfferLiftType>(
     LIFT_DATA.lift.acceptedLiftTypes[0]
   );
   const [nonMonetaryItems, setNonMonetaryItems] = useState<NonMonetaryItem[]>([
@@ -96,7 +96,7 @@ export default function OfferLiftPage() {
     setLiftAmount(amount.toString());
   };
 
-  const handleLiftTypeChange = (type: LiftType) => {
+  const handleLiftTypeChange = (type: OfferLiftType) => {
     setSelectedLiftType(type);
     // Reset inputs when changing type
     if (type === 'monetary') {
@@ -251,11 +251,27 @@ export default function OfferLiftPage() {
           <View className="-mx-4 mb-6 border-t border-grey-plain-450/60" />
 
           {/* Lift Type Selector */}
-          <LiftTypeSelector
-            selected={selectedLiftType}
-            onSelect={handleLiftTypeChange}
-            availableTypes={LIFT_DATA.lift.acceptedLiftTypes}
-          />
+          {/* TODO: Replace with correct LiftTypeSelector component that matches these props */}
+          <View className="mb-6">
+            <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
+              Lift Type
+            </Text>
+            <View className="flex-row gap-3">
+              {LIFT_DATA.lift.acceptedLiftTypes.map((type) => (
+                <TouchableOpacity
+                  key={type}
+                  onPress={() => handleLiftTypeChange(type)}
+                  className={`rounded-lg px-5 py-2.5 ${selectedLiftType === type ? 'bg-primary-purple' : 'bg-grey-plain-50'}`}
+                >
+                  <Text
+                    className={`text-sm font-medium ${selectedLiftType === type ? 'text-white' : 'text-grey-alpha-500'}`}
+                  >
+                    {type.charAt(0).toUpperCase() + type.slice(1)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
 
           {/* Monetary Input */}
           {(selectedLiftType === 'monetary' || selectedLiftType === 'both') && (

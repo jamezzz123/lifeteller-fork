@@ -10,13 +10,13 @@ import {
 } from 'react-native';
 import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { Info, ArrowRight } from 'lucide-react-native';
+import { Info } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
-import { ContactRow, CONTACTS, Contact } from '@/components/request-lift';
+import { ContactRow, CONTACTS, Contact } from '@/components/lift';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { useOfferLiftProfile } from './context';
-import ImpactCard from '@/components/OfferLift/ImpactCard';
+import ImpactCard from '@/components/lift/ImpactCard';
 
 export default function SelectRecipientScreen() {
   const { selectedRecipient, setSelectedRecipient, setCanProceed, onNextRef } =

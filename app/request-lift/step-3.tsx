@@ -31,7 +31,7 @@ import {
   ChooseListBottomSheet,
   Contact,
   CreateListModal,
-} from '@/components/request-lift';
+} from '@/components/lift';
 import { useRequestLift, AudienceOfferType, List } from './context';
 import {
   BottomSheetComponent,

@@ -8,7 +8,7 @@ import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import {
   RequestSuccessBottomSheet,
   ContactRow,
-} from '@/components/request-lift';
+} from '@/components/lift';
 import { useOfferLiftProfile } from './context';
 import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';

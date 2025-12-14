@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, Tag, Clock } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
-import { RequestSuccessBottomSheet } from '@/components/request-lift';
+import { RequestSuccessBottomSheet } from '@/components/lift';
 import { useRequestLift } from './context';
 
 // Mock images for carousel

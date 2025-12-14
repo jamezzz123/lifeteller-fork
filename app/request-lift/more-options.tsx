@@ -14,7 +14,7 @@ import { colors } from '@/theme/colors';
 import {
   AllowCollaboratorsBottomSheet,
   ScheduleRequestBottomSheet,
-} from '@/components/request-lift';
+} from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 

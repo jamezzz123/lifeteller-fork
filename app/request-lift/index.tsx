@@ -27,7 +27,7 @@ import {
   CreateListModal,
   ReviewContactsModal,
   Contact,
-} from '@/components/request-lift';
+} from '@/components/lift';
 import { useRequestLift, AudienceOfferType, List } from './context';
 
 export default function SelectContactsScreen() {

@@ -13,17 +13,17 @@ import * as Haptics from 'expo-haptics';
 import { User } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
-import { ContactRow } from '@/components/request-lift';
+import { ContactRow } from '@/components/lift';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { Dropdown } from '@/components/ui/Dropdown';
 import {
   LiftSettingsBottomSheet,
   LiftSettingsBottomSheetRef,
-} from '@/components/offer-lift/LiftSettingsBottomSheet';
+} from '@/components/lift/LiftSettingsBottomSheet';
 import {
   NumberOfRecipientsBottomSheet,
   NumberOfRecipientsBottomSheetRef,
-} from '@/components/offer-lift/NumberOfRecipientsBottomSheet';
+} from '@/components/lift/NumberOfRecipientsBottomSheet';
 import { useOfferLiftProfile } from './context';
 
 const MESSAGE_MAX_LENGTH = 400;

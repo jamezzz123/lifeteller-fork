@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useRef, ReactNode } from 'react';
-import { Contact } from '@/components/request-lift';
+import { Contact } from '@/components/lift';
 
 export type LiftType = 'one-to-one' | 'one-to-many';
 

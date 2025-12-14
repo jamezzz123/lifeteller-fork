@@ -5,7 +5,7 @@ import { Slot, router, usePathname } from 'expo-router';
 import { X, ChevronLeft } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
-import { CancelBottomSheet } from '@/components/request-lift';
+import { CancelBottomSheet } from '@/components/lift';
 import { Button } from '@/components/ui/Button';
 import { OfferLiftProfileProvider, useOfferLiftProfile } from './context';
 

@@ -27,7 +27,7 @@ import {
   MediaPickerBottomSheet,
   filterTitleSuggestions,
   LiftType,
-} from '@/components/request-lift';
+} from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { LiftItem, MediaItem, useRequestLift } from './context';
 

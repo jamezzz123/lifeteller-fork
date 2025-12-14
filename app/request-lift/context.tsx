@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useRef, ReactNode } from 'react';
-import { Contact } from '@/components/request-lift';
-import { LiftType } from '@/components/request-lift/LiftTypeSelector';
+import { Contact } from '@/components/lift';
+import { LiftType } from '@/components/lift/LiftTypeSelector';
 
 export type LiftItem = {
   id: string;

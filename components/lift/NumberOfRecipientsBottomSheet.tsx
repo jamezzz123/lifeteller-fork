@@ -5,7 +5,6 @@ import React, {
   useImperativeHandle,
 } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Check } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { MaterialInput } from '@/components/ui/MaterialInput';
