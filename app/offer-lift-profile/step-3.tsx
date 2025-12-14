@@ -1,4 +1,4 @@
-import { useEffect, useCallback, useRef } from 'react';
+import { useEffect, useCallback, useRef, useState } from 'react';
 import { ScrollView, Text, View } from 'react-native';
 import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -11,6 +11,7 @@ import {
 } from '@/components/request-lift';
 import { useOfferLiftProfile } from './context';
 import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 
 export default function Step3Screen() {
   const {
@@ -22,6 +23,7 @@ export default function Step3Screen() {
 
   const successSheetRef = useRef<BottomSheetRef>(null);
   const passcodeBottomSheetRef = useRef<BottomSheetRef>(null);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   // Set header title on mount
   useEffect(() => {
@@ -30,8 +32,20 @@ export default function Step3Screen() {
 
   const handleOfferLift = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // Show success bottom sheet
+    // Show confirmation modal
+    setShowConfirmationModal(true);
+  }, []);
+
+  const handleConfirmLift = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setShowConfirmationModal(false);
+    // Show passcode bottom sheet
     passcodeBottomSheetRef.current?.expand();
+  }, []);
+
+  const handleCancelLift = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowConfirmationModal(false);
   }, []);
 
   const handleEditDetails = useCallback(() => {
@@ -55,6 +69,7 @@ export default function Step3Screen() {
     passcodeBottomSheetRef.current?.close();
     successSheetRef.current?.expand();
   }
+
   return (
     <View className="flex-1 bg-background">
       <ScrollView
@@ -146,6 +161,17 @@ export default function Step3Screen() {
         ref={passcodeBottomSheetRef}
         mode="verify"
         onComplete={handlePasscodeComplete}
+      />
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        visible={showConfirmationModal}
+        title={`You are about to lift ${selectedRecipient?.name || 'this person'} with ₦${offerAmount.toLocaleString()}`}
+        message="They will receive the monetary value of your lift in their wallet."
+        confirmText="Yes, lift"
+        cancelText="Cancel"
+        onConfirm={handleConfirmLift}
+        onCancel={handleCancelLift}
       />
     </View>
   );
