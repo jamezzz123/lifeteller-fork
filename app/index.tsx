@@ -1,6 +1,5 @@
 import { WelcomeScreen } from '@/components/welcome/WelcomeScreen';
-import { Redirect, router, Href } from 'expo-router';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { Redirect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Index() {

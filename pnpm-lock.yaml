@@ -95,6 +95,9 @@ dependencies:
   react-native-international-phone-number:
     specifier: ^0.11.4
     version: 0.11.4(react-native-safe-area-context@5.6.2)(react-native@0.81.5)(react@19.1.0)
+  react-native-pager-view:
+    specifier: ^7.0.2
+    version: 7.0.2(react-native@0.81.5)(react@19.1.0)
   react-native-reanimated:
     specifier: ~4.1.6
     version: 4.1.6(@babel/core@7.28.5)(react-native-worklets@0.5.1)(react-native@0.81.5)(react@19.1.0)
@@ -107,6 +110,9 @@ dependencies:
   react-native-svg:
     specifier: ^15.15.1
     version: 15.15.1(react-native@0.81.5)(react@19.1.0)
+  react-native-tab-view:
+    specifier: ^4.2.0
+    version: 4.2.0(react-native-pager-view@7.0.2)(react-native@0.81.5)(react@19.1.0)
   react-native-web:
     specifier: ~0.21.0
     version: 0.21.2(react-dom@19.1.0)(react@19.1.0)
@@ -7595,6 +7601,16 @@ packages:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
 
+  /react-native-pager-view@7.0.2(react-native@0.81.5)(react@19.1.0):
+    resolution: {integrity: sha512-yj/v6BN/WGuV1VBVWaCjYOjQlhTaqJs4Ocismw0XRSsHGqO2wuQdWF8it5iFnfibQVBBED0/GC7qKOlQ4FBzNg==}
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
+    dev: false
+
   /react-native-reanimated@4.1.6(@babel/core@7.28.5)(react-native-worklets@0.5.1)(react-native@0.81.5)(react@19.1.0):
     resolution: {integrity: sha512-F+ZJBYiok/6Jzp1re75F/9aLzkgoQCOh4yxrnwATa8392RvM3kx+fiXXFvwcgE59v48lMwd9q0nzF1oJLXpfxQ==}
     peerDependencies:
@@ -7659,6 +7675,19 @@ packages:
       react: 19.1.0
       react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
       warn-once: 0.1.1
+
+  /react-native-tab-view@4.2.0(react-native-pager-view@7.0.2)(react-native@0.81.5)(react@19.1.0):
+    resolution: {integrity: sha512-TUbh7Yr0tE/99t1pJQLbQ+4/Px67xkT7/r3AhfV+93Q3WoUira0Lx7yuKUP2C118doqxub8NCLERwcqsHr29nQ==}
+    peerDependencies:
+      react: '>= 18.2.0'
+      react-native: '*'
+      react-native-pager-view: '>= 6.0.0'
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.28.5)(@types/react@19.1.17)(react@19.1.0)
+      react-native-pager-view: 7.0.2(react-native@0.81.5)(react@19.1.0)
+      use-latest-callback: 0.2.6(react@19.1.0)
+    dev: false
 
   /react-native-web@0.21.2(react-dom@19.1.0)(react@19.1.0):
     resolution: {integrity: sha512-SO2t9/17zM4iEnFvlu2DA9jqNbzNhoUP+AItkoCOyFmDMOhUnBBznBDCYN92fGdfAkfQlWzPoez6+zLxFNsZEg==}
