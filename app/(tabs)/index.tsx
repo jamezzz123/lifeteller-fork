@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -8,10 +8,17 @@ import { StoriesSection } from '@/components/feed/StoriesSection';
 import { FeedFilters } from '@/components/feed/FeedFilters';
 import { FeedList } from '@/components/feed/FeedList';
 import { FloatingActionButton } from '@/components/feed/FloatingActionButton';
+import {
+  LiftOptionsBottomSheet,
+  LiftOptionsBottomSheetRef,
+} from '@/components/feed/LiftOptionsBottomSheet';
 
 export default function HomeScreen() {
+  const liftOptionsSheetRef = useRef<LiftOptionsBottomSheetRef>(null);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+
   const handleFABPress = () => {
-    router.push('/request-lift');
+    liftOptionsSheetRef.current?.open();
   };
 
   return (
@@ -31,7 +38,11 @@ export default function HomeScreen() {
         <FeedList />
       </ScrollView>
 
-      <FloatingActionButton onPress={handleFABPress} />
+      <FloatingActionButton onPress={handleFABPress} visible={!isBottomSheetOpen} />
+      <LiftOptionsBottomSheet
+        ref={liftOptionsSheetRef}
+        onSheetChange={setIsBottomSheetOpen}
+      />
     </SafeAreaView>
   );
 }

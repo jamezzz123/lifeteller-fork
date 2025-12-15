@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useRef, ReactNode } from 'react';
-import { Contact } from '@/components/lift';
+import { Contact, CONTACTS } from '@/components/lift';
 import { LiftType } from '@/components/lift/LiftTypeSelector';
 
 export type LiftItem = {
@@ -86,7 +86,9 @@ const RequestLiftContext = createContext<RequestLiftContextType | undefined>(
 );
 
 export function RequestLiftProvider({ children }: { children: ReactNode }) {
-  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([]);
+  const [selectedContacts, setSelectedContacts] = useState<Contact[]>([
+    CONTACTS[0],
+  ]);
   const [liftTitle, setLiftTitle] = useState('');
   const [liftDescription, setLiftDescription] = useState('');
   const [liftType, setLiftType] = useState<LiftType>(null);

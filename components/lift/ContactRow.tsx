@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { CheckCircle2} from 'lucide-react-native';
+import { CheckCircle2 } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { Contact } from './types';
@@ -9,6 +9,7 @@ type ContactRowProps = {
   contact: Contact;
   disabled: boolean;
   isSelected: boolean;
+  showName?: boolean;
   onSelect: (contact: Contact) => void;
 };
 
@@ -17,6 +18,7 @@ export function ContactRow({
   disabled,
   isSelected,
   onSelect,
+  showName = true,
 }: ContactRowProps) {
   return (
     <TouchableOpacity
@@ -29,23 +31,26 @@ export function ContactRow({
         style={{ width: 44, height: 44, borderRadius: 22 }}
         contentFit="cover"
       />
-      <View className="ml-3 flex-1">
-        <View className="flex-row items-center gap-1">
-          <Text className="text-base font-semibold text-grey-alpha-500">
-            {contact.name}
+      {showName && (
+        <View className="ml-3 flex-1">
+          <View className="flex-row items-center gap-1">
+            <Text className="text-base font-semibold text-grey-alpha-500">
+              {contact.name}
+            </Text>
+            {contact.verified ? (
+              <CheckCircle2
+                size={16}
+                color={colors.primary.purple}
+                strokeWidth={2.4}
+              />
+            ) : null}
+          </View>
+          <Text className="mt-1 text-sm text-grey-alpha-400">
+            @{contact.username}
           </Text>
-          {contact.verified ? (
-            <CheckCircle2
-              size={16}
-              color={colors.primary.purple}
-              strokeWidth={2.4}
-            />
-          ) : null}
         </View>
-        <Text className="mt-1 text-sm text-grey-alpha-400">
-          @{contact.username}
-        </Text>
-      </View>
+      )}
+
       {isSelected && (
         <Text className="text-sm text-grey-alpha-400">Already added</Text>
       )}

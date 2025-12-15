@@ -21,15 +21,23 @@ import {
 
 import { colors } from '@/theme/colors';
 import {
-  RequestMethodSelector,
   LiftTypeSelector,
   LiftTypeModal,
   MediaPickerBottomSheet,
   filterTitleSuggestions,
   LiftType,
+  ContactRow,
+  AudienceBottomSheet,
 } from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
-import { LiftItem, MediaItem, useRequestLift } from './context';
+import {
+  LiftItem,
+  MediaItem,
+  useRequestLift,
+  AudienceOfferType,
+} from './context';
+import { Dropdown } from '@/components/ui/Dropdown';
+import { useLocalSearchParams } from 'expo-router';
 
 const TITLE_MAX_LENGTH = 55;
 const DESCRIPTION_MIN_LENGTH = 400;
@@ -51,7 +59,13 @@ export default function Step2Screen() {
     setSelectedMedia,
     setCanProceed,
     onNextRef,
+    audienceOfferType,
+    setAudienceOfferType,
   } = useRequestLift();
+
+  const { headerText } = useLocalSearchParams<{
+    headerText?: string;
+  }>();
 
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
   const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
@@ -60,6 +74,7 @@ export default function Step2Screen() {
   const [descriptionFocused, setDescriptionFocused] = useState(false);
 
   const mediaPickerRef = useRef<BottomSheetRef>(null);
+  const audienceBottomSheetRef = useRef<BottomSheetRef>(null);
 
   const titleSuggestions = useMemo(() => {
     return filterTitleSuggestions(liftTitle);
@@ -97,8 +112,19 @@ export default function Step2Screen() {
 
   function handleRequestMethodPress() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // Navigate back to step 1 to modify selected contacts
-    router.back();
+    // Open audience selection bottom sheet
+    audienceBottomSheetRef.current?.expand();
+  }
+
+  function handleSelectAudience(type: AudienceOfferType) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setAudienceOfferType(type);
+    audienceBottomSheetRef.current?.close();
+
+    // If switching to chat-direct or selected-people, navigate to contact selection
+    if (type === 'chat-direct' || type === 'selected-people') {
+      router.back(); // Go back to step 1 to select contacts
+    }
   }
 
   function handleOpenLiftTypeModal(type?: LiftType) {
@@ -167,11 +193,29 @@ export default function Step2Screen() {
         >
           {/* Request Method Selector */}
           <View className="pt-5">
-            <RequestMethodSelector
-              selectedCount={selectedContacts.length}
-              userAvatar={require('../../assets/images/welcome/collage-1.jpg')}
-              onPress={handleRequestMethodPress}
-            />
+            {selectedContacts.length > 0 && (
+              <TouchableOpacity
+                onPress={handleRequestMethodPress}
+                className="flex-row items-center px-4"
+              >
+                <View className="flex-1">
+                  <ContactRow
+                    key={selectedContacts[0].id}
+                    contact={selectedContacts[0] as any}
+                    isSelected={false}
+                    onSelect={() => {}}
+                    disabled={false}
+                    showName={audienceOfferType !== 'everyone'}
+                  />
+                </View>
+                <View className="ml-3">
+                  <Dropdown
+                    label={audienceOfferType === 'everyone' ? 'Everyone' : 'Selected people'}
+                    onPress={handleRequestMethodPress}
+                  />
+                </View>
+              </TouchableOpacity>
+            )}
           </View>
 
           {/* Title Input */}
@@ -451,6 +495,14 @@ export default function Step2Screen() {
           ref={mediaPickerRef}
           currentMedia={selectedMedia}
           onDone={handleMediaPickerDone}
+        />
+
+        {/* Audience Selection Bottom Sheet */}
+        <AudienceBottomSheet
+          ref={audienceBottomSheetRef}
+          variant={audienceOfferType === 'everyone' ? 'see' : 'offer'}
+          selectedType={audienceOfferType}
+          onSelectAudience={handleSelectAudience}
         />
       </View>
     </KeyboardAvoidingView>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot, router, usePathname } from 'expo-router';
@@ -7,7 +7,12 @@ import { X } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { CancelBottomSheet } from '@/components/lift';
 import { Button } from '@/components/ui/Button';
-import { RequestLiftProvider, useRequestLift } from './context';
+import {
+  AudienceOfferType,
+  RequestLiftProvider,
+  useRequestLift,
+} from './context';
+import { useLocalSearchParams } from 'expo-router';
 
 const TOTAL_STEPS = 4;
 
@@ -30,6 +35,11 @@ function LayoutContent() {
   // Hide next button for step 4 (has its own button at the bottom)
   const hideNextButton = pathname === '/request-lift/step-4';
 
+  const { headerText, audience } = useLocalSearchParams<{
+    headerText?: string;
+    audience?: AudienceOfferType;
+  }>();
+
   const {
     selectedContacts,
     liftTitle,
@@ -40,7 +50,19 @@ function LayoutContent() {
     canProceed,
     onNextRef,
     reset,
+    setAudienceOfferType,
+    setHeaderTitle,
   } = useRequestLift();
+
+  // Set audience type and header title from URL params
+  useEffect(() => {
+    if (audience) {
+      setAudienceOfferType(audience);
+    }
+    if (headerText) {
+      setHeaderTitle(headerText);
+    }
+  }, [audience, headerText, setAudienceOfferType, setHeaderTitle]);
 
   // Check if user has entered any data
   const hasData =

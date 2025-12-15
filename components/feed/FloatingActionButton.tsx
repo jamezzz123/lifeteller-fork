@@ -5,9 +5,12 @@ import { colors } from '@/theme/colors';
 
 interface FloatingActionButtonProps {
   onPress?: () => void;
+  visible?: boolean;
 }
 
-export function FloatingActionButton({ onPress }: FloatingActionButtonProps) {
+export function FloatingActionButton({ onPress, visible = true }: FloatingActionButtonProps) {
+  if (!visible) return null;
+
   return (
     <TouchableOpacity
       style={styles.container}
