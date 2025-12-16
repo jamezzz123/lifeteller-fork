@@ -14,7 +14,7 @@ import { Camera, Folder, X } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
-import { MediaItem } from '@/app/request-lift/context';
+import { MediaItem } from '@/context/request-lift';
 
 const MAX_MEDIA = 10;
 const { width } = Dimensions.get('window');

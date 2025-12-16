@@ -13,7 +13,7 @@ import { Check, Minus, Plus, X } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { LiftType } from './LiftTypeSelector';
-import { LiftItem } from '../../app/request-lift/context';
+import { LiftItem } from '../../context/request-lift';
 
 const PRESET_AMOUNTS = [5000, 10000, 20000, 30000, 50000, 100000];
 const MAX_ITEMS = 5;

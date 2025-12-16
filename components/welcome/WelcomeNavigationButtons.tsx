@@ -23,7 +23,7 @@ export function WelcomeNavigationButtons({
 }: WelcomeNavigationButtonsProps) {
   return (
     <SafeAreaView edges={['bottom']} className="w-full">
-      <View className="flex-row items-center px-6 pb-6">
+      <View className="flex-row items-center px-6 ">
         <TextButton title="Skip" onPress={onSkip} />
 
         {isFirstSlide ? (

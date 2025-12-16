@@ -5,10 +5,10 @@ import {
   TextInput,
   Pressable,
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { X, Clock } from 'lucide-react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/Button';
 import { colors } from '@/theme/colors';

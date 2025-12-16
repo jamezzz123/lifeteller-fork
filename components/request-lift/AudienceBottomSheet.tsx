@@ -5,7 +5,7 @@ import {
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
-import { AudienceOfferType } from '@/app/request-lift/context';
+import { AudienceOfferType } from '@/context/request-lift';
 import { forwardRef } from 'react';
 
 type AudienceOption = {

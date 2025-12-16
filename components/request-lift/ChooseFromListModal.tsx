@@ -4,7 +4,7 @@ import { ChevronDown } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { FullScreenModal } from '@/components/ui/FullScreenModal';
-import { List } from '@/app/request-lift/context';
+import { List } from '@/context/request-lift';
 
 // Mock data
 const EXISTING_LISTS: List[] = [

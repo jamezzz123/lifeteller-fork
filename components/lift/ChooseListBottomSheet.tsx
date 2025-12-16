@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from 'react-native';
 import { ChevronRight, Plus } from 'lucide-react-native';
 import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
-import { List } from '@/app/request-lift/context';
+import { List } from '@/context/request-lift';
 import { forwardRef } from 'react';
 
 // Mock data for existing lists

@@ -35,9 +35,8 @@ import {
   MediaItem,
   useRequestLift,
   AudienceOfferType,
-} from './context';
+} from '@/context/request-lift';
 import { Dropdown } from '@/components/ui/Dropdown';
-import { useLocalSearchParams } from 'expo-router';
 
 const TITLE_MAX_LENGTH = 55;
 const DESCRIPTION_MIN_LENGTH = 400;
@@ -63,10 +62,7 @@ export default function Step2Screen() {
     setAudienceOfferType,
   } = useRequestLift();
 
-  const { headerText } = useLocalSearchParams<{
-    headerText?: string;
-  }>();
-
+  
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
   const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
   const [pendingLiftType, setPendingLiftType] = useState<LiftType>(null);

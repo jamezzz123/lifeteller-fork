@@ -1,7 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import { FeedHeader } from '@/components/feed/FeedHeader';
 import { ShareSection } from '@/components/feed/ShareSection';
 import { StoriesSection } from '@/components/feed/StoriesSection';

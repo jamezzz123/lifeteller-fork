@@ -3,8 +3,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import {
   HandHeart,
   HandHelping,
-  Gift,
-  MessageCircleHeart,
   Video,
   ChevronRight,
   HandCoins,

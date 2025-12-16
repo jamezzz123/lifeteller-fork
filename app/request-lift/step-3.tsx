@@ -32,7 +32,7 @@ import {
   Contact,
   CreateListModal,
 } from '@/components/lift';
-import { useRequestLift, AudienceOfferType, List } from './context';
+import { useRequestLift, AudienceOfferType, List } from '@/context/request-lift';
 import {
   BottomSheetComponent,
   BottomSheetRef,

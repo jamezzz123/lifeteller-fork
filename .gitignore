@@ -3,6 +3,9 @@
 # dependencies
 node_modules/
 
+# pnpm (virtual store dir configured in .npmrc)
+.p/
+
 # Expo
 .expo/
 dist/

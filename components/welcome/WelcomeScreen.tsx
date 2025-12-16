@@ -150,7 +150,7 @@ export function WelcomeScreen() {
 
         <View
           className="absolute left-0 right-0 px-6"
-          style={{ bottom: SCREEN_HEIGHT * 0.15 }}
+          style={{ bottom: SCREEN_HEIGHT * 0.12 }}
         >
           <PageIndicator
             currentIndex={currentIndex}

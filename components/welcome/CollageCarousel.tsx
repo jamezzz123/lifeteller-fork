@@ -45,7 +45,7 @@ export function CollageCarousel({ images }: CollageCarouselProps) {
   }, [imageCount, fadeAnims]);
 
   return (
-    <View className="h-[28rem] w-full overflow-hidden rounded-3xl">
+    <View className="h-[24rem] w-full overflow-hidden rounded-3xl">
       <View className="flex-1 flex-row">
         <Animated.View
           className="flex-1 bg-gray-200"

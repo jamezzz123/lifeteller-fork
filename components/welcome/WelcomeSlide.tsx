@@ -21,14 +21,14 @@ export function WelcomeSlide({
 }: WelcomeSlideProps) {
   return (
     <View
-      className="flex-1 items-center justify-start px-6"
+      className="flex-1 pt-3 items-center justify-start px-6 pt-4"
       style={{ width: SCREEN_WIDTH }}
     >
       <View className="w-full flex-1 items-center justify-center">
         {imageType === 'collage' ? (
           <CollageCarousel images={images || []} />
         ) : (
-          <View className="h-[28rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-primary-tints-100">
+          <View className="h-[24rem] w-full items-center justify-center overflow-hidden rounded-2xl bg-primary-tints-100">
             {image && (
               <Image
                 source={image}
@@ -41,11 +41,11 @@ export function WelcomeSlide({
         )}
       </View>
 
-      <View className="w-full pb-8">
+      <View className="w-full pb-8 mt-2">
         <Text className="mb-4 text-2xl font-bold text-grey-alpha-450">
           {title}
         </Text>
-        <Text className="font-medium text-grey-alpha-400">{description}</Text>
+        <Text className="font-medium text-grey-alpha-400 mt-4">{description}</Text>
       </View>
     </View>
   );

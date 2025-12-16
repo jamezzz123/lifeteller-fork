@@ -3,7 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot, router } from 'expo-router';
 import { CornerUpLeft } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
-import { OfferLiftProvider, useOfferLift } from './context';
+import { OfferLiftProvider, useOfferLift } from '@/context/offer-lift';
 
 function LayoutContent() {
   const { headerTitle } = useOfferLift();

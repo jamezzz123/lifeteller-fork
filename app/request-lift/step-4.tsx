@@ -9,7 +9,7 @@ import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { RequestSuccessBottomSheet } from '@/components/lift';
-import { useRequestLift } from './context';
+import { useRequestLift } from '@/context/request-lift';
 
 // Mock images for carousel
 const MOCK_IMAGES = [

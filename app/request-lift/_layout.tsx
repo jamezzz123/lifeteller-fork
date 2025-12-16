@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Slot, router, usePathname } from 'expo-router';
+import { Slot, router, usePathname, useLocalSearchParams } from 'expo-router';
 import { X } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
@@ -11,8 +11,7 @@ import {
   AudienceOfferType,
   RequestLiftProvider,
   useRequestLift,
-} from './context';
-import { useLocalSearchParams } from 'expo-router';
+} from '@/context/request-lift';
 
 const TOTAL_STEPS = 4;
 
