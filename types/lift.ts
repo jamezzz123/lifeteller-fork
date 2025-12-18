@@ -58,12 +58,12 @@ export interface Lift {
   };
 
   // Collaborators (for co-raised lifts)
-  collaborators?: Array<{
+  collaborators?: {
     id: string;
     name: string;
     avatar: string;
     verified?: boolean;
-  }>;
+  }[];
 
   // Lift details
   title: string;

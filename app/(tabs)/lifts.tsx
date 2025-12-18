@@ -3,7 +3,7 @@ import { FilterTabs } from '@/components/ui/FilterTabs';
 import { LiftCard } from '@/components/lift';
 import { mockLifts } from '@/data/mockLifts';
 import React, { useRef, useState } from 'react';
-import { FlatList, View, Text, TouchableOpacity } from 'react-native';
+import { FlatList, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FloatingActionButton } from '@/components/feed/FloatingActionButton';
 import {

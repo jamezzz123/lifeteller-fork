@@ -1,7 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Search, Bell, MessageSquareText } from 'lucide-react-native';
-import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { colors } from '@/theme/colors';
 
 export function LiftHeader() {

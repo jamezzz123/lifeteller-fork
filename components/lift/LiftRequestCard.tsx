@@ -9,14 +9,13 @@ import {
   Share2,
   Hand,
   HandCoins,
-  Gift,
   CheckCircle2,
   XCircle,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
-import { Lift, LiftStatus } from '@/types/lift';
+import { Lift } from '@/types/lift';
 
 export interface LiftCardProps {
   lift: Lift;
