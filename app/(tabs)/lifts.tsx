@@ -3,13 +3,16 @@ import { FilterTabs } from '@/components/ui/FilterTabs';
 import { LiftCard } from '@/components/lift';
 import { mockLifts } from '@/data/mockLifts';
 import React, { useRef, useState } from 'react';
-import { FlatList, Text, TouchableOpacity } from 'react-native';
+import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ChevronDown } from 'lucide-react-native';
+import { colors } from '@/theme/colors';
 import { FloatingActionButton } from '@/components/feed/FloatingActionButton';
 import {
   LiftOptionsBottomSheet,
   LiftOptionsBottomSheetRef,
 } from '@/components/feed/LiftOptionsBottomSheet';
+import { router } from 'expo-router';
 
 export default function LiftsScreen() {
   const customFilters = [
@@ -20,6 +23,7 @@ export default function LiftsScreen() {
   ];
   const [activeFilter, setActiveFilter] = React.useState('all');
   const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
+  const [sortOption, setSortOption] = React.useState('Most recent');
 
   const handleLike = (id: string) => {
     setLikedItems((prev) => {
@@ -68,14 +72,12 @@ export default function LiftsScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
+      <LiftHeader />
       <FlatList
         data={allLifts}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
-            {/* Fixed Header */}
-            <LiftHeader />
-
             {/* Filter Tabs */}
             <FilterTabs
               filters={customFilters}
@@ -85,6 +87,22 @@ export default function LiftsScreen() {
               scrollable={true}
               contentContainerClassName="py-3"
             />
+
+            {/* Sort Selector */}
+            <View className="mb-4 px-1 py-2">
+              <TouchableOpacity
+                className="flex-row items-center gap-1"
+                activeOpacity={0.7}
+                onPress={() => {
+                  // No functionality needed - UI only
+                }}
+              >
+                <Text className="text-[15px] font-medium text-grey-plain-550">
+                  {sortOption}
+                </Text>
+                <ChevronDown size={20} color={colors['grey-plain']['550']} />
+              </TouchableOpacity>
+            </View>
           </>
         }
         ListFooterComponent={renderFooter}
@@ -98,12 +116,12 @@ export default function LiftsScreen() {
             lift={item}
             isLiked={likedItems.has(item.id)}
             onLike={() => handleLike(item.id)}
-            onOfferLift={() => console.log('Offer lift:', item.id)}
+            onOfferLift={() => router.push(`/lift-request/${item.id}`)}
             onDecline={() => console.log('Decline:', item.id)}
             onAccept={() => console.log('Accept:', item.id)}
             onComment={() => console.log('Comment:', item.id)}
             onShare={() => console.log('Share:', item.id)}
-            onCardPress={() => console.log('View details:', item.id)}
+            onCardPress={() => router.push(`/lift-request/${item.id}`)}
           />
         )}
         showsVerticalScrollIndicator={false}

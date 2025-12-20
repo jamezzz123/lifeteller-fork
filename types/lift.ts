@@ -12,6 +12,7 @@ export type LiftStatus =
   | 'accepted'
   | 'declined'
   | 'active'
+  | 'in-progress'
   | 'completed'
   | 'closed';
 
@@ -42,6 +43,25 @@ export interface MonetaryLiftData {
 // Non-monetary lift data
 export interface NonMonetaryLiftData {
   items: NonMonetaryItem[];
+}
+
+// Status-specific data for offered lifts
+export interface OfferedLiftData {
+  dateOffered: string;
+  amountOffered: number;
+  upliftingMessage: string;
+  offeredBy?: {
+    id: string;
+    name: string;
+    handle: string;
+    avatar: string;
+  };
+}
+
+// Status-specific data for declined lifts
+export interface DeclinedLiftData {
+  dateDeclined: string;
+  reason?: string;
 }
 
 // Main Lift interface
@@ -84,6 +104,15 @@ export interface Lift {
     monetaryAmount?: number;
     items?: NonMonetaryItem[];
   };
+
+  // Status-specific data
+  offeredData?: OfferedLiftData;
+  declinedData?: DeclinedLiftData;
+
+  // Additional fields
+  category?: string;
+  location?: string;
+  timeRemaining?: string;
 
   // Engagement
   likes: number;

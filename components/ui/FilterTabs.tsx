@@ -65,7 +65,7 @@ export function FilterTabs({
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingHorizontal: 16, gap: 8 }}
+          contentContainerStyle={{ paddingHorizontal: 8, gap: 8 }}
         >
           {filters.map(renderFilter)}
         </ScrollView>
@@ -75,7 +75,7 @@ export function FilterTabs({
 
   return (
     <View
-      className={`flex-row gap-2 bg-grey-plain-50 px-4 ${contentContainerClassName}`}
+      className={`flex-row gap-2 bg-grey-plain-50 px-8 ${contentContainerClassName}`}
     >
       {filters.map(renderFilter)}
     </View>
