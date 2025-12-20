@@ -18,11 +18,15 @@ import {
   ChevronRight,
   BadgeCheck,
   Medal,
+  MessageCircleMore,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { mockLifts } from '@/data/mockLifts';
-
+import { ProfileStack } from '@/components/ui/ProfileStack';
+import { MediaCarousel } from '@/components/lift/MediaCarousel';
+import { RaiseLiftList } from '@/components/lift/RaiseLiftList';
+import { MinimalLiftCard } from '@/components/lift/MinimalLiftCard';
 
 export default function LiftRequestDetailScreen() {
   const router = useRouter();
@@ -49,16 +53,18 @@ export default function LiftRequestDetailScreen() {
   const media = liftData.images || [];
   const targetAmount = liftData.monetary?.targetAmount || 0;
 
+  const mediaImage = media.map((item, index) => ({
+    id: index.toString(),
+    uri: item,
+    type: 'image' as const,
+  }));
+
   const handlePrevImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev > 0 ? prev - 1 : media.length - 1
-    );
+    setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : media.length - 1));
   };
 
   const handleNextImage = () => {
-    setCurrentImageIndex((prev) =>
-      prev < media.length - 1 ? prev + 1 : 0
-    );
+    setCurrentImageIndex((prev) => (prev < media.length - 1 ? prev + 1 : 0));
   };
 
   return (
@@ -82,7 +88,7 @@ export default function LiftRequestDetailScreen() {
         className="flex-1"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingBottom: 120,
+          paddingBottom: liftData.status === 'in-progress' ? 20 : 120,
         }}
       >
         {/* User Header */}
@@ -128,58 +134,17 @@ export default function LiftRequestDetailScreen() {
           <View className="mt-3">
             <View className="self-start rounded-full bg-orange-100 px-3 py-1">
               <Text className="text-xs font-medium text-orange-600">
-                {liftData.status.charAt(0).toUpperCase() + liftData.status.slice(1)}
+                {liftData.status.charAt(0).toUpperCase() +
+                  liftData.status.slice(1)}
               </Text>
             </View>
           </View>
         </View>
 
-        {/* Image Carousel */}
-        {media.length > 0 && (
-          <View className="relative bg-white">
-            <Image
-              source={{ uri: media[currentImageIndex] }}
-              style={{ width: '100%', aspectRatio: 4 / 3 }}
-              contentFit="cover"
-            />
-
-            {/* Navigation Arrows */}
-            {media.length > 1 && (
-            <>
-              <TouchableOpacity
-                onPress={handlePrevImage}
-                className="absolute left-4 top-1/2 h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90"
-                activeOpacity={0.8}
-              >
-                <ChevronLeft color={colors['grey-alpha']['500']} size={24} />
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleNextImage}
-                className="absolute right-4 top-1/2 h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/90"
-                activeOpacity={0.8}
-              >
-                <ChevronRight color={colors['grey-alpha']['500']} size={24} />
-              </TouchableOpacity>
-            </>
-          )}
-
-            {/* Dot Indicators */}
-            {media.length > 1 && (
-              <View className="absolute bottom-4 left-0 right-0 flex-row justify-center gap-2">
-                {media.map((_, index) => (
-                <View
-                  key={index}
-                  className={`h-2 w-2 rounded-full ${
-                    index === currentImageIndex
-                      ? 'bg-primary-purple'
-                      : 'bg-grey-plain-300'
-                  }`}
-                />
-              ))}
-            </View>
-          )}
-          </View>
-        )}
+        {/* Media Carousel */}
+        <View className="flex-1 bg-white">
+          <MediaCarousel media={mediaImage} />
+        </View>
 
         {/* Category and Time */}
         {(liftData.category || liftData.timeRemaining) && (
@@ -228,6 +193,9 @@ export default function LiftRequestDetailScreen() {
           </Text>
         </View>
 
+        {liftData.status === 'in-progress' && (
+          <MinimalLiftCard currentAmount={4000} targetAmount={6000} />
+        )}
         {/* Amount */}
         {liftData.monetary && (
           <View className="bg-white px-4 pb-4">
@@ -253,7 +221,7 @@ export default function LiftRequestDetailScreen() {
             </Text>
           </TouchableOpacity>
           <TouchableOpacity className="flex-row items-center gap-1">
-            <MessageCircle color={colors['grey-plain']['550']} size={20} />
+            <MessageCircleMore color={colors['grey-plain']['550']} size={20} />
             <Text className="text-sm text-grey-plain-550">
               {liftData.comments}
             </Text>
@@ -283,7 +251,6 @@ export default function LiftRequestDetailScreen() {
             <Share2 color={colors['grey-plain']['550']} size={20} />
           </TouchableOpacity>
         </View>
-
 
         {/* Divider */}
         <View className="h-2 bg-grey-plain-100" />
@@ -388,21 +355,18 @@ export default function LiftRequestDetailScreen() {
           {/* Followed By */}
           <View className="mt-3 flex-row items-center gap-2">
             <View className="flex-row -space-x-2">
-              {[1, 2, 3].map((i) => (
-                <View
-                  key={i}
-                  className="h-6 w-6 overflow-hidden rounded-full border-2 border-white bg-grey-plain-300"
-                >
-                  <Image
-                    source={{ uri: `https://i.pravatar.cc/150?img=${i}` }}
-                    style={{ width: 24, height: 24 }}
-                    contentFit="cover"
-                  />
-                </View>
-              ))}
+              <ProfileStack
+                profiles={[1, 2, 3].map(
+                  (i) => `https://i.pravatar.cc/150?img=${i}`
+                )}
+                maxVisible={3}
+                size={32}
+                overlap={16}
+              />
             </View>
-            <Text className="text-xs text-grey-plain-550">
-              Followed by dareytemy, donJazzy, Olamibest, and 21 others
+            <Text className="text-[13px] text-grey-plain-550">
+              Followed by <Text className="font-semibold">Seyi Makinde</Text>{' '}
+              and <Text className="font-semibold">21 others</Text>
             </Text>
           </View>
         </View>
@@ -471,37 +435,96 @@ export default function LiftRequestDetailScreen() {
             )}
           </View>
         )}
-      </ScrollView>
 
-      {/* Bottom Action Bar */}
-      <View
-        className="absolute bottom-0 left-0 right-0 border-t border-grey-plain-150 bg-grey-alpha-150 px-4"
-        style={{
-          paddingBottom: Math.max(insets.bottom, 12),
-          paddingTop: 12,
-        }}
-      >
-        <View className="flex-row items-center gap-3">
-          {liftData.monetary && (
-            <View className="flex-1">
-              <Text className="text-2xl font-bold text-grey-alpha-500">
-                ₦{targetAmount.toLocaleString()}
+        {/* In Progress Status - Show requested from and lifted by */}
+        {liftData.status === 'in-progress' && (
+          <>
+            {/* Requested From Section */}
+            <View className="bg-white px-4 py-4">
+              <Text className="mb-2 text-xs font-semibold uppercase tracking-wider text-grey-plain-550">
+                REQUESTED FROM
+              </Text>
+              <Text className="text-base font-semibold text-grey-alpha-500">
+                EVERYONE
               </Text>
             </View>
-          )}
-          <TouchableOpacity
-            className="rounded-full border border-state-red px-6 py-3"
-            activeOpacity={0.7}
-          >
-            <Text className="text-sm font-semibold text-state-red">
-              Decline
-            </Text>
-          </TouchableOpacity>
-          <Button onPress={() => console.log('hello world')} variant="primary">
-            <Text className="text-sm font-semibold text-white">Offer Lift</Text>
-          </Button>
+
+            {/* Divider */}
+            <View className="h-2 bg-grey-plain-100" />
+
+            {/* Lifted By Section */}
+            <View className="bg-white px-4 py-4">
+              {/* Header */}
+              <View className="mb-4 flex-row items-center justify-between">
+                <Text className="text-xs font-semibold uppercase tracking-wider text-grey-alpha-500">
+                  LIFTED BY{' '}
+                  <Text className="font-normal">
+                    ({liftData.monetary?.coRaisers?.length || 0})
+                  </Text>
+                </Text>
+                <TouchableOpacity
+                  onPress={() => router.push(`/lifted-by/${id}`)}
+                >
+                  <Text className="text-primary-purple text-[13px] font-medium">
+                    See more
+                  </Text>
+                </TouchableOpacity>
+              </View>
+
+              {/* Contributors List */}
+              <RaiseLiftList
+                contributors={
+                  liftData.monetary?.coRaisers?.slice(0, 5).map((raiser) => ({
+                    id: raiser.id,
+                    username: raiser.name,
+                    handle: raiser.name.toLowerCase().replace(/\s+/g, ''),
+                    timestamp: '10 seconds ago',
+                    profileImage: raiser.avatar,
+                    amount: raiser.amount || 0,
+                  })) || []
+                }
+              />
+            </View>
+          </>
+        )}
+      </ScrollView>
+
+      {/* Bottom Action Bar - Only show when status is not "in-progress" */}
+      {liftData.status !== 'in-progress' && (
+        <View
+          className="absolute bottom-0 left-0 right-0 border-t border-grey-plain-150 bg-grey-alpha-150 px-4"
+          style={{
+            paddingBottom: Math.max(insets.bottom, 12),
+            paddingTop: 12,
+          }}
+        >
+          <View className="flex-row items-center justify-between gap-3">
+            {liftData.monetary && (
+              <View className="flex-1">
+                <Text className="text-2xl font-bold text-grey-alpha-500">
+                  ₦{targetAmount.toLocaleString()}
+                </Text>
+              </View>
+            )}
+            <TouchableOpacity
+              className="rounded-full border border-state-red px-6 py-3"
+              activeOpacity={0.7}
+            >
+              <Text className="text-sm font-semibold text-state-red">
+                Decline
+              </Text>
+            </TouchableOpacity>
+            <Button
+              onPress={() => console.log('hello world')}
+              variant="primary"
+            >
+              <Text className="text-sm font-semibold text-white">
+                Offer Lift
+              </Text>
+            </Button>
+          </View>
         </View>
-      </View>
+      )}
     </SafeAreaView>
   );
 }

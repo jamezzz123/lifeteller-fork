@@ -116,6 +116,71 @@ export const mockLifts: Lift[] = [
     comments: 3,
     shares: 1,
   },
+  // IN-PROGRESS STATUS - Lift Request with contributors (for testing lift-request detail screen)
+  {
+    id: '2c',
+    owner: {
+      id: 'user2c',
+      name: 'Amaka Obi',
+      handle: 'amakaobi',
+      avatar: 'https://i.pravatar.cc/150?img=45',
+      verified: true,
+    },
+    title: 'Emergency medical treatment 123',
+    description:
+      "I need urgent help for my mother's medical treatment. The hospital requires immediate payment for the surgery. Any contribution will be deeply appreciated and will save a life.",
+    liftType: 'monetary',
+    cardType: 'lift-request',
+    status: 'in-progress',
+    timestamp: '3 hours ago',
+    category: 'Medical',
+    location: 'Ikeja, Lagos',
+    timeRemaining: '5 days left',
+    monetary: {
+      currentAmount: 45000,
+      targetAmount: 150000,
+      coRaisers: [
+        {
+          id: 'raiser1',
+          name: 'Isaac Tolulope',
+          avatar: 'https://i.pravatar.cc/150?img=12',
+          amount: 5000,
+        },
+        {
+          id: 'raiser2',
+          name: 'Sarah Johnson',
+          avatar: 'https://i.pravatar.cc/150?img=5',
+          amount: 10000,
+        },
+        {
+          id: 'raiser3',
+          name: 'Michael Brown',
+          avatar: 'https://i.pravatar.cc/150?img=20',
+          amount: 8000,
+        },
+        {
+          id: 'raiser4',
+          name: 'Jennifer Lee',
+          avatar: 'https://i.pravatar.cc/150?img=25',
+          amount: 12000,
+        },
+        {
+          id: 'raiser5',
+          name: 'David Chen',
+          avatar: 'https://i.pravatar.cc/150?img=30',
+          amount: 10000,
+        },
+      ],
+    },
+    images: [
+      'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=800',
+      'https://images.unsplash.com/photo-1551190822-a9333d879b1f?w=800',
+      'https://images.unsplash.com/photo-1538108149393-fbbd81895907?w=800',
+    ],
+    likes: 78,
+    comments: 24,
+    shares: 18,
+  },
   // IN-PROGRESS STATUS
   {
     id: '3',
