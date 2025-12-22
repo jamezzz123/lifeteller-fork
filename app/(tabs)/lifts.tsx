@@ -23,7 +23,7 @@ export default function LiftsScreen() {
   ];
   const [activeFilter, setActiveFilter] = React.useState('all');
   const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
-  const [sortOption, setSortOption] = React.useState('Most recent');
+  const [sortOption] = React.useState('Most recent');
 
   const handleLike = (id: string) => {
     setLikedItems((prev) => {

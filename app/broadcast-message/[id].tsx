@@ -3,7 +3,6 @@ import {
   View,
   Text,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -12,14 +11,11 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
   CornerUpLeft,
-  MessageSquare,
   MessageSquareText,
-  X,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { mockLifts } from '@/data/mockLifts';
 import { ProfileStack } from '@/components/ui/ProfileStack';
-import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { Button } from '@/components/ui/Button';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';

@@ -10,12 +10,9 @@ import {
   CornerUpLeft,
   EllipsisVertical,
   Heart,
-  MessageCircle,
   Repeat2,
   Bookmark,
   Share2,
-  ChevronLeft,
-  ChevronRight,
   BadgeCheck,
   Medal,
   MessageCircleMore,
@@ -36,7 +33,6 @@ export default function LiftRequestDetailScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
   const insets = useSafeAreaInsets();
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
@@ -62,14 +58,6 @@ export default function LiftRequestDetailScreen() {
     uri: item,
     type: 'image' as const,
   }));
-
-  const handlePrevImage = () => {
-    setCurrentImageIndex((prev) => (prev > 0 ? prev - 1 : media.length - 1));
-  };
-
-  const handleNextImage = () => {
-    setCurrentImageIndex((prev) => (prev < media.length - 1 ? prev + 1 : 0));
-  };
 
   const getStatusConfig = () => {
     switch (liftData.status) {

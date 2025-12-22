@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  TextInput,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -26,8 +25,6 @@ import {
   BottomSheetComponent,
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
-import { MaterialInput } from '@/components/ui/MaterialInput';
-import { Button } from '@/components/ui/Button';
 
 type TabType = 'monetary' | 'non-monetary';
 
@@ -41,7 +38,6 @@ export default function LifterDetailsScreen() {
   const router = useRouter();
   const { id, liftId } = useLocalSearchParams<{ id: string; liftId: string }>();
   const [activeTab, setActiveTab] = useState<TabType>('non-monetary');
-  const [message, setMessage] = useState('');
   const itemMenuBottomSheetRef = useRef<BottomSheetRef>(null);
   const [selectedItem, setSelectedItem] = useState<any>(null);
 
@@ -73,14 +69,8 @@ export default function LifterDetailsScreen() {
   };
 
   const handleTemplatePress = (template: string) => {
-    setMessage(template);
-  };
-
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      // TODO: Implement send message logic
-      console.log('Sending message:', message);
-    }
+    // TODO: Implement send message logic
+    console.log('Template selected:', template);
   };
 
   // Mock data for non-monetary items
