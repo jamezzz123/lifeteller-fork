@@ -19,6 +19,10 @@ import {
   BadgeCheck,
   Medal,
   MessageCircleMore,
+  ThumbsDown,
+  HandMetal,
+  CircleCheck,
+  Info,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -67,6 +71,74 @@ export default function LiftRequestDetailScreen() {
     setCurrentImageIndex((prev) => (prev < media.length - 1 ? prev + 1 : 0));
   };
 
+  const getStatusConfig = () => {
+    switch (liftData.status) {
+      case 'pending':
+        return {
+          bg: colors['yellow-tint']['50'],
+          text: colors.yellow['50'],
+          label: 'Pending',
+          icon: <Info size={16} color={colors.yellow['50']}></Info>,
+        };
+      case 'request-sent':
+        return {
+          bg: colors['primary-tints'].purple['50'],
+          text: colors.primary.purple,
+          label: 'Request sent',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
+        };
+      case 'offered':
+        return {
+          bg: colors['primary-tints'].purple['100'],
+          text: colors.primary.purple,
+          label: 'Offered',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
+        };
+      case 'accepted':
+        return {
+          bg: '#E7F5E9',
+          text: '#22874E',
+          label: 'Accepted',
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
+        };
+      case 'declined':
+        return {
+          bg: '#FEE9E9',
+          text: colors.state.red,
+          label: 'Declined',
+          icon: <ThumbsDown size={16} color={colors.state.red}></ThumbsDown>,
+        };
+      case 'active':
+        return {
+          bg: colors['primary-tints'].purple['50'],
+          text: colors.primary.purple,
+          label: 'Active',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
+        };
+      case 'completed':
+        return {
+          bg: '#E7F5E9',
+          text: '#22874E',
+          label: 'Completed',
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
+        };
+      case 'closed':
+        return {
+          bg: colors['grey-plain']['300'],
+          text: colors['grey-plain']['550'],
+          label: 'Closed',
+          icon: <ThumbsDown size={16} color={colors.state.red}></ThumbsDown>,
+        };
+      default:
+        return {
+          bg: colors['yellow-tint']['50'],
+          text: colors.yellow['50'],
+          label: 'Pending',
+          icon: <Info size={16} color={colors.yellow['50']}></Info>,
+        };
+    }
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
       {/* Header */}
@@ -107,7 +179,7 @@ export default function LiftRequestDetailScreen() {
                 />
               </View>
               <View
-                className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+                className="absolute -bottom-0.5 left-3 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
                 style={{
                   backgroundColor: colors['primary-tints'].purple['100'],
                 }}
@@ -132,10 +204,16 @@ export default function LiftRequestDetailScreen() {
 
           {/* Status Badge */}
           <View className="mt-3">
-            <View className="self-start rounded-full bg-orange-100 px-3 py-1">
-              <Text className="text-xs font-medium text-orange-600">
-                {liftData.status.charAt(0).toUpperCase() +
-                  liftData.status.slice(1)}
+            <View
+              className="self-start flex-row items-center gap-1.5 rounded-full px-3 py-1"
+              style={{ backgroundColor: getStatusConfig().bg }}
+            >
+              {getStatusConfig().icon}
+              <Text
+                className="text-xs font-medium"
+                style={{ color: getStatusConfig().text }}
+              >
+                {getStatusConfig().label}
               </Text>
             </View>
           </View>

@@ -130,7 +130,7 @@ export function MediaCarousel({ media }: MediaCarouselProps) {
   if (media.length === 0) return null;
 
   return (
-    <View className="relative px-4">
+    <View className="relative">
       {/* Swipeable Carousel */}
       <FlatList
         ref={flatListRef}

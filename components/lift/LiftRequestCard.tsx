@@ -9,8 +9,13 @@ import {
   Share2,
   Hand,
   HandCoins,
+  Info,
   CheckCircle2,
   XCircle,
+  CircleCheck,
+  ThumbsDown,
+  HandMetal,
+  Medal,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/theme/colors';
@@ -68,54 +73,63 @@ export function LiftCard({
           bg: colors['yellow-tint']['50'],
           text: colors.yellow['50'],
           label: 'Pending',
+          icon: <Info size={16} color={colors.yellow['50']}></Info>,
         };
       case 'request-sent':
         return {
           bg: colors['primary-tints'].purple['50'],
           text: colors.primary.purple,
           label: 'Request sent',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
         };
       case 'offered':
         return {
           bg: colors['primary-tints'].purple['100'],
           text: colors.primary.purple,
           label: 'Offered',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
         };
       case 'accepted':
         return {
           bg: '#E7F5E9',
           text: '#22874E',
           label: 'Accepted',
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
         };
       case 'declined':
         return {
           bg: '#FEE9E9',
           text: colors.state.red,
           label: 'Declined',
+          icon: <ThumbsDown size={16} color={colors.state.red}></ThumbsDown>,
         };
       case 'active':
         return {
           bg: colors['primary-tints'].purple['50'],
           text: colors.primary.purple,
           label: 'Active',
+          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
         };
       case 'completed':
         return {
           bg: '#E7F5E9',
           text: '#22874E',
           label: 'Completed',
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
         };
       case 'closed':
         return {
           bg: colors['grey-plain']['300'],
           text: colors['grey-plain']['550'],
           label: 'Closed',
+          icon: <ThumbsDown size={16} color={colors.state.red}></ThumbsDown>,
         };
       default:
         return {
           bg: colors['yellow-tint']['50'],
           text: colors.yellow['50'],
           label: 'Pending',
+          icon: <Info size={16} color={colors.yellow['50']}></Info>,
         };
     }
   };
@@ -304,13 +318,13 @@ export function LiftCard({
     // Only show action buttons for pending requests
     if (lift.cardType === 'lift-request' && lift.status === 'pending') {
       return (
-        <View className="flex-row items-center gap-3 border-t border-grey-alpha-250 pt-2">
+        <View className="flex-row items-center justify-between gap-3 border-t border-grey-alpha-250 pt-2">
           <TouchableOpacity
             onPress={onDecline}
-            className="flex-1 items-center justify-center rounded-full border border-grey-alpha-250 bg-white py-3"
+            className="flex-1 items-start rounded-full  border-grey-alpha-250 bg-white py-3"
             activeOpacity={0.7}
           >
-            <Text className="text-[15px] font-semibold text-state-red">
+            <Text className="text-sm font-semibold text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -320,7 +334,8 @@ export function LiftCard({
               title="Offer lift"
               onPress={onOfferLift || (() => {})}
               variant="outline"
-              size="medium"
+              size="small"
+              className="px-1"
               iconLeft={
                 <HandCoins size={18} color={colors['primary']['purple']} />
               }
@@ -382,11 +397,12 @@ export function LiftCard({
           </Text>
         </View>
         <View
-          className="rounded-full px-3 py-1"
+          className="flex-row items-center space-y-2 rounded-full px-3 py-1"
           style={{ backgroundColor: statusConfig.bg }}
         >
+          {statusConfig.icon}
           <Text
-            className="text-[13px] font-semibold"
+            className="px-1 text-[13px] font-semibold"
             style={{ color: statusConfig.text }}
           >
             {statusConfig.label}
@@ -403,6 +419,15 @@ export function LiftCard({
               style={{ width: 40, height: 40 }}
               contentFit="cover"
             />
+
+            <View
+              className="absolute -bottom-0.5 left-3 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+              style={{
+                backgroundColor: colors['primary-tints'].purple['100'],
+              }}
+            >
+              <Medal color={colors.primary.purple} size={12} />
+            </View>
           </View>
           <View className="flex-1">
             <View className="flex-row items-center gap-1">

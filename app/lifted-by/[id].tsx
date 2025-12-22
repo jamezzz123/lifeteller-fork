@@ -1,12 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
-import {
-  SafeAreaView,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import {
-  ArrowLeft,
   Search,
   EllipsisVertical,
   CornerUpLeft,
@@ -14,11 +10,15 @@ import {
 import { colors } from '@/theme/colors';
 import { mockLifts } from '@/data/mockLifts';
 import { RaiseLiftList } from '@/components/lift/RaiseLiftList';
+import {
+  BottomSheetComponent,
+  BottomSheetRef,
+} from '@/components/ui/BottomSheet';
 
 export default function LiftedByScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const insets = useSafeAreaInsets();
+  const menuBottomSheetRef = useRef<BottomSheetRef>(null);
 
   // Get lift data from mockLifts
   const liftData = mockLifts.find((lift) => lift.id === id);
@@ -62,7 +62,9 @@ export default function LiftedByScreen() {
           <TouchableOpacity>
             <Search color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => menuBottomSheetRef.current?.expand()}
+          >
             <EllipsisVertical color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
         </View>
@@ -83,7 +85,12 @@ export default function LiftedByScreen() {
       >
         {contributors.length > 0 ? (
           <View className="px-4">
-            <RaiseLiftList contributors={contributors} />
+            <RaiseLiftList
+              contributors={contributors}
+              onPress={(contributor) =>
+                router.push(`/lifter-details/${contributor.id}?liftId=${id}` as any)
+              }
+            />
           </View>
         ) : (
           <View className="flex-1 items-center justify-center py-20">
@@ -91,6 +98,23 @@ export default function LiftedByScreen() {
           </View>
         )}
       </ScrollView>
+
+      {/* Menu Bottom Sheet */}
+      <BottomSheetComponent ref={menuBottomSheetRef}>
+        <View className="px-6 pb-4">
+          <TouchableOpacity
+            onPress={() => {
+              menuBottomSheetRef.current?.close();
+              router.push(`/broadcast-message/${id}` as any);
+            }}
+            className="flex-row items-center py-4"
+          >
+            <Text className="text-base text-grey-alpha-500">
+              Send message to everyone
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </BottomSheetComponent>
     </SafeAreaView>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { BadgeCheck, Medal } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
@@ -17,11 +17,13 @@ export interface Contributor {
 interface RaiseLiftListProps {
   contributors: Contributor[];
   showDividers?: boolean;
+  onPress?: (contributor: Contributor) => void;
 }
 
 export function RaiseLiftList({
   contributors,
   showDividers = true,
+  onPress,
 }: RaiseLiftListProps) {
   return (
     <View>
@@ -30,8 +32,9 @@ export function RaiseLiftList({
         const isLastItem = index === contributors.length - 1;
 
         return (
-          <View
+          <TouchableOpacity
             key={contributor.id}
+            onPress={() => onPress?.(contributor)}
             className={`flex-row items-center gap-3 py-4 ${
               showDividers && !isLastItem
                 ? 'border-b border-grey-plain-150'
@@ -93,7 +96,7 @@ export function RaiseLiftList({
                 {formattedAmount}
               </Text>
             </View>
-          </View>
+          </TouchableOpacity>
         );
       })}
     </View>
