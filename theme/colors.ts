@@ -10,6 +10,9 @@ const palette = {
       '200': '#844FC2',
       '500': '#7538BA',
     },
+    violet: {
+      '300': '#EF54AC',
+    },
   },
   'grey-alpha': {
     '150': '#F3F4F6',
@@ -30,12 +33,21 @@ const palette = {
   },
   state: {
     red: '#BC1521',
+    yellow: '#D97A0D',
+    green: '#059652',
   },
   yellow: {
     '50': '#D97A0D',
   },
   'yellow-tint': {
     '50': '#FEF6EB',
+    '150': '#FDF0E0',
+  },
+  'green-tint': {
+    '200': '#DFF9ED',
+  },
+  'green-shades': {
+    '150': '#064326',
   },
   variant: {
     yellow: {

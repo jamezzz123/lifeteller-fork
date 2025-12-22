@@ -1,10 +1,16 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import * as WebBrowser from 'expo-web-browser';
 import { router } from 'expo-router';
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  Easing,
+} from 'react-native-reanimated';
 import LogoLight from '@/assets/images/logo/logo-light.svg';
 import GoogleIcon from '@/assets/icons/google.svg';
 import { appConfig } from '@/config/app.config';
@@ -18,6 +24,27 @@ const welcomeImage = require('@/assets/images/welcome/welcome.jpg');
 
 export default function GetStartedScreen() {
   const socialSheetRef = useRef<SocialOptionsSheetRef>(null);
+  const translateX = useSharedValue(-100);
+  const opacity = useSharedValue(0);
+
+  useEffect(() => {
+    translateX.value = withTiming(0, {
+      duration: 800,
+      easing: Easing.out(Easing.cubic),
+    });
+    opacity.value = withTiming(1, {
+      duration: 800,
+      easing: Easing.out(Easing.cubic),
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateX: translateX.value }],
+      opacity: opacity.value,
+    };
+  });
 
   async function handleGoogleSignIn() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
@@ -90,10 +117,13 @@ export default function GetStartedScreen() {
           <View className="mb-4 flex-row items-center">
             <LogoLight width={104} height={30} />
           </View>
-          <Text className="mt-4 text-[2.6rem] font-black leading-[1.1] tracking-tighter text-white">
-            <Text className="text-grey-plain-450">Where</Text> Connection{'\n'}
-            <Text className="text-grey-plain-450">meets</Text> Compassion
-          </Text>
+          <Animated.View style={animatedStyle}>
+            <Text className="mt-4 text-[2.6rem] font-black leading-[1.1] tracking-tighter text-white">
+              <Text className="text-grey-plain-450">Where</Text> Connection
+              {'\n'}
+              <Text className="text-grey-plain-450">meets</Text> Compassion
+            </Text>
+          </Animated.View>
         </View>
 
         <View className="px-6 pb-8">

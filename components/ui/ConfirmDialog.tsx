@@ -11,6 +11,7 @@ type ConfirmDialogProps = {
   onConfirm: () => void;
   onCancel: () => void;
   destructive?: boolean;
+  cancelTextColor?: string;
 };
 
 export function ConfirmDialog({
@@ -22,6 +23,7 @@ export function ConfirmDialog({
   onConfirm,
   onCancel,
   destructive = false,
+  cancelTextColor,
 }: ConfirmDialogProps) {
   return (
     <Modal visible={visible} transparent animationType="fade">
@@ -34,7 +36,12 @@ export function ConfirmDialog({
 
           <View className="flex-row justify-end gap-4">
             <TouchableOpacity onPress={onCancel} className="px-4 py-2">
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text
+                className="text-base font-semibold"
+                style={{
+                  color: cancelTextColor || colors['grey-alpha']['500'],
+                }}
+              >
                 {cancelText}
               </Text>
             </TouchableOpacity>

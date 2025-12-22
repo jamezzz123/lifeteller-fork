@@ -28,6 +28,7 @@ interface LiftData {
 }
 
 interface FeedPostProps {
+  id?: string;
   username: string;
   handle: string;
   timestamp: string;
@@ -40,6 +41,7 @@ interface FeedPostProps {
   comments?: number;
   reposts?: number;
   withUsers?: string[];
+  onMenuPress?: () => void;
 }
 
 // Parse text and style mentions, hashtags, and links
@@ -89,6 +91,7 @@ export function FeedPost({
   comments = 0,
   reposts = 0,
   withUsers,
+  onMenuPress,
 }: FeedPostProps) {
   const textParts = parseTextWithStyling(content);
   return (
@@ -151,7 +154,7 @@ export function FeedPost({
             </View>
           </View>
         </View>
-        <TouchableOpacity className="p-1">
+        <TouchableOpacity className="p-1" onPress={onMenuPress}>
           <Ellipsis color={colors['grey-plain']['550']} size={20} />
         </TouchableOpacity>
       </View>

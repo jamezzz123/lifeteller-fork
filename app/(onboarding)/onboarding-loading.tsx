@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { AlertCircle, Check } from 'lucide-react-native';
 import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { colors } from '@/theme/colors';
 import { themeConfig } from '@/theme/config';
+import { SuccessBottomSheet } from '@/components/ui/SuccessBottomSheet';
 
 const SETUP_STEPS = [
   'Gathering your details',
@@ -16,6 +18,7 @@ const SETUP_STEPS = [
 export default function OnboardingLoadingScreen() {
   const [progress, setProgress] = useState(0);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+  const [showSuccessSheet, setShowSuccessSheet] = useState(false);
 
   useEffect(() => {
     // Simulate progress
@@ -24,10 +27,10 @@ export default function OnboardingLoadingScreen() {
         const newProgress = prev + 2;
         if (newProgress >= 100) {
           clearInterval(interval);
-          // Navigate to main app after completion
-          // setTimeout(() => {
-          //   router.replace('/(tabs)/home'); // TODO: Update with actual main app route
-          // }, 500);
+          // Show success bottom sheet after completion
+          setTimeout(() => {
+            setShowSuccessSheet(true);
+          }, 500);
           return 100;
         }
         return newProgress;
@@ -38,6 +41,19 @@ export default function OnboardingLoadingScreen() {
       clearInterval(interval);
     };
   }, []);
+
+  const handleGoToFeeds = () => {
+    setShowSuccessSheet(false);
+    router.replace('/(tabs)');
+  };
+
+  const handleRaiseLift = () => {
+    setShowSuccessSheet(false);
+    // Navigate to raise/request lift screen
+    router.replace('/(tabs)');
+    // TODO: Navigate to specific raise lift screen when route is available
+    // router.push('/request-lift');
+  };
 
   useEffect(() => {
     // Update current step based on progress
@@ -151,6 +167,17 @@ export default function OnboardingLoadingScreen() {
           </View>
         </View>
       </View>
+
+      {/* Success Bottom Sheet */}
+      <SuccessBottomSheet
+        visible={showSuccessSheet}
+        title="Profile set-up successful"
+        description="What would you like to do first?"
+        primaryActionText="Raise a lift"
+        secondaryActionText="Go to feeds"
+        onPrimaryAction={handleRaiseLift}
+        onSecondaryAction={handleGoToFeeds}
+      />
     </SafeAreaView>
   );
 }

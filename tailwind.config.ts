@@ -17,6 +17,7 @@ const config: Config = {
         'grey-plain': colors['grey-plain'],
         background: colors.background,
         'state-red': colors.state.red,
+        'state-yellow': colors.state.yellow,
         'variant-yellow-150': colors.variant.yellow['150'],
         // Direct tints for convenience
         'primary-tint-50': colors['primary-tints'].purple['50'],
@@ -34,6 +35,9 @@ const config: Config = {
         'grey-plain-300': colors['grey-plain']['300'],
         'grey-plain-450': colors['grey-plain']['450'],
         'grey-plain-550': colors['grey-plain']['550'],
+        'green-tint-200': colors['green-tint']['200'],
+        'green-shades-150': colors['green-shades']['150'],
+        'yellow-tint-150': colors['yellow-tint']['150'],
       },
     },
   },

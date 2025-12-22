@@ -23,7 +23,6 @@ export default function LiftsScreen() {
   ];
   const [activeFilter, setActiveFilter] = React.useState('all');
   const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
-  const [sortOption, setSortOption] = React.useState('Most recent');
 
   const handleLike = (id: string) => {
     setLikedItems((prev) => {
@@ -98,7 +97,7 @@ export default function LiftsScreen() {
                 }}
               >
                 <Text className="text-[15px] font-medium text-grey-plain-550">
-                  {sortOption}
+                Most recent
                 </Text>
                 <ChevronDown size={20} color={colors['grey-plain']['550']} />
               </TouchableOpacity>
@@ -116,12 +115,12 @@ export default function LiftsScreen() {
             lift={item}
             isLiked={likedItems.has(item.id)}
             onLike={() => handleLike(item.id)}
-            onOfferLift={() => router.push(`/lift-request/${item.id}`)}
+            onOfferLift={() => router.push(`/lift-request/${item.id}` as any)}
             onDecline={() => console.log('Decline:', item.id)}
             onAccept={() => console.log('Accept:', item.id)}
             onComment={() => console.log('Comment:', item.id)}
             onShare={() => console.log('Share:', item.id)}
-            onCardPress={() => router.push(`/lift-request/${item.id}`)}
+            onCardPress={() => router.push(`/lift-request/${item.id}` as any)}
           />
         )}
         showsVerticalScrollIndicator={false}

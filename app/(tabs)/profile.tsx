@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, TabBar, Route } from 'react-native-tab-view';
+import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   Search,
@@ -25,6 +26,7 @@ import {
   CalendarHeart,
   Info,
   Star,
+  Play,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
@@ -35,6 +37,8 @@ import { LiftProgressBar } from '@/components/ui/LiftProgressBar';
 import { InterestChip } from '@/components/ui/InterestChip';
 import LifterBadge from '@/assets/images/badges/lifter.svg';
 import LiftCaptainBadge from '@/assets/images/badges/lift-captain.svg';
+import { ShareProfileBottomSheet } from '@/components/profile/ShareProfileBottomSheet';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
 
 const { width } = Dimensions.get('window');
 
@@ -46,6 +50,7 @@ function PostsTab({ user }: { user: User }) {
       showsVerticalScrollIndicator={false}
     >
       <FeedPost
+        id="profile-post-1"
         username={user.fullName}
         handle={user.handle}
         timestamp="10 seconds ago"
@@ -55,6 +60,7 @@ function PostsTab({ user }: { user: User }) {
         reposts={12}
       />
       <FeedPost
+        id="profile-post-2"
         username={user.fullName}
         handle={user.handle}
         timestamp="2 hours ago"
@@ -64,6 +70,7 @@ function PostsTab({ user }: { user: User }) {
         reposts={67}
       />
       <FeedPost
+        id="profile-post-3"
         username={user.fullName}
         handle={user.handle}
         timestamp="1 day ago"
@@ -256,10 +263,107 @@ function PhotosTab() {
 }
 
 function LiftClipsTab() {
+  // Placeholder video clip data - replace with actual data from API/hooks
+  // Each clip should have: { id: string, thumbnailUri: string, videoUri: string, duration?: number }
+  const unsplashImageIds = [
+    '1507003211169-0a1dd7228f2d',
+    '1492562080023-4713a9a30c24',
+    '1500648767791-00dcc994a43e',
+    '1506794778202-cad84cf45f1d',
+    '1502823403499-6ccfcf4fb453',
+    '1539571691757-3988c6b0c0c0',
+    '1544005313-94ddf0286d2b',
+    '1534528741775-53994a69daeb',
+    '1529626455594-4ff0802cfb7e',
+    '1506794778202-cad84cf45f1d',
+    '1500648767791-00dcc994a43e',
+    '1492562080023-4713a9a30c24',
+  ];
+
+  // Shuffle array for randomization
+  const shuffledIds = [...unsplashImageIds].sort(() => Math.random() - 0.5);
+
+  const clips = Array.from({ length: 9 }, (_, i) => ({
+    id: `clip-${i + 1}`,
+    thumbnailUri: `https://images.unsplash.com/photo-${shuffledIds[i]}?w=400&h=400&fit=crop`,
+    videoUri: `https://example.com/video-${i + 1}.mp4`, // Placeholder
+    duration: Math.floor(Math.random() * 120) + 15, // Random duration between 15-135 seconds
+  }));
+
+  const { width } = Dimensions.get('window');
+  const GAP = 2;
+  const CLIP_SIZE = (width - GAP) / 2;
+
+  const handleClipPress = (clipId: string) => {
+    // Navigate to video player or full screen view
+    console.log('Clip pressed:', clipId);
+    // TODO: Navigate to video player screen
+    // router.push(`/clip/${clipId}`);
+  };
+
+  const formatDuration = (seconds: number): string => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <View className="flex-1 items-center justify-center bg-grey-plain-50">
-      <Text className="text-base text-grey-plain-550">Lift clips</Text>
-    </View>
+    <ScrollView
+      className="flex-1 bg-grey-plain-50"
+      showsVerticalScrollIndicator={true}
+      contentContainerStyle={{ paddingBottom: 16 }}
+    >
+      <View
+        className="flex-row flex-wrap"
+        style={{
+          paddingTop: 2,
+        }}
+      >
+        {clips.map((clip, index) => (
+          <Pressable
+            key={clip.id}
+            onPress={() => handleClipPress(clip.id)}
+            style={{
+              width: CLIP_SIZE,
+              height: CLIP_SIZE,
+              marginRight: index % 2 !== 1 ? GAP : 0,
+              marginBottom: GAP,
+            }}
+            className="relative overflow-hidden bg-grey-plain-300"
+          >
+            <Image
+              source={{ uri: clip.thumbnailUri }}
+              style={{ width: '100%', height: '100%' }}
+              contentFit="cover"
+              transition={200}
+            />
+            {/* Video overlay with play icon */}
+            <View className="absolute inset-0 items-center justify-center bg-black/20">
+              <View className="h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-white/30">
+                <Play
+                  color={colors['grey-plain']['50']}
+                  size={24}
+                  fill={colors['grey-plain']['50']}
+                />
+              </View>
+            </View>
+            {/* Duration badge */}
+            {clip.duration && (
+              <View
+                className="absolute bottom-1 right-1 rounded px-1.5 py-0.5"
+                style={{
+                  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                }}
+              >
+                <Text className="text-[10px] font-semibold text-white">
+                  {formatDuration(clip.duration)}
+                </Text>
+              </View>
+            )}
+          </Pressable>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -365,6 +469,14 @@ function AboutTab() {
           }
           title="Badges"
           showInfo
+          onInfoPress={() =>
+            router.push({
+              pathname: '/badges-info',
+              params: {
+                pointsEarned: aboutData.badges.pointsEarned.toString(),
+              },
+            })
+          }
         />
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
           {/* Points and Leaderboard */}
@@ -372,7 +484,7 @@ function AboutTab() {
             <Text className="text-sm text-grey-alpha-500">
               🎉 {aboutData.badges.pointsEarned} points earned so far
             </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push('/leaderboard')}>
               <Text
                 className="border-b border-primary text-sm font-medium"
                 style={{ color: colors.primary.purple }}
@@ -525,6 +637,7 @@ function AboutTab() {
 export default function ProfileScreen() {
   const { user } = useUser();
   const [index, setIndex] = useState(0);
+  const shareProfileSheetRef = useRef<BottomSheetRef>(null);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'liftHistory', title: 'Lift history' },
@@ -559,7 +672,7 @@ export default function ProfileScreen() {
           <TouchableOpacity>
             <Search color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/settings')}>
             <Settings color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
         </View>
@@ -646,14 +759,20 @@ export default function ProfileScreen() {
 
                 {/* Action Buttons */}
                 <View className="ml-auto flex-row gap-3">
-                  <TouchableOpacity className="p-1.5">
+                  <TouchableOpacity
+                    className="p-1.5"
+                    onPress={() => router.push('/edit-details' as any)}
+                  >
                     <Pencil
                       color={colors['grey-alpha']['500']}
                       size={22}
                       strokeWidth={2}
                     />
                   </TouchableOpacity>
-                  <TouchableOpacity className="p-1.5">
+                  <TouchableOpacity
+                    className="p-1.5"
+                    onPress={() => shareProfileSheetRef.current?.expand()}
+                  >
                     <Share2
                       color={colors['grey-alpha']['500']}
                       size={22}
@@ -682,7 +801,18 @@ export default function ProfileScreen() {
               </TouchableOpacity>
 
               {/* Following Card */}
-              <TouchableOpacity className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
+              <TouchableOpacity
+                className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4"
+                onPress={() =>
+                  router.push({
+                    pathname: '/followers-following',
+                    params: {
+                      userName: user.fullName,
+                      initialTab: 'following',
+                    },
+                  })
+                }
+              >
                 <View className="absolute right-2.5 top-2.5">
                   <ArrowUpRight
                     color={colors['grey-plain']['550']}
@@ -699,7 +829,18 @@ export default function ProfileScreen() {
               </TouchableOpacity>
 
               {/* Followers Card */}
-              <TouchableOpacity className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
+              <TouchableOpacity
+                className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4"
+                onPress={() =>
+                  router.push({
+                    pathname: '/followers-following',
+                    params: {
+                      userName: user.fullName,
+                      initialTab: 'followers',
+                    },
+                  })
+                }
+              >
                 <View className="absolute right-2.5 top-2.5">
                   <ArrowUpRight
                     color={colors['grey-plain']['550']}
@@ -768,6 +909,13 @@ export default function ProfileScreen() {
           />
         </View>
       </ScrollView>
+
+      {/* Share Profile Bottom Sheet */}
+      <ShareProfileBottomSheet
+        ref={shareProfileSheetRef}
+        username={user.handle}
+        profileUrl={`https://lifteller.com/${user.handle}`}
+      />
     </SafeAreaView>
   );
 }

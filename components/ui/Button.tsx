@@ -16,7 +16,7 @@ interface ButtonProps {
   children?: React.ReactNode;
   iconLeft?: React.ReactNode;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'gradient-border';
+  variant?: 'primary' | 'secondary' | 'outline' | 'gradient-border' | 'destructive';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   disabled?: boolean;
@@ -51,6 +51,8 @@ export function Button({
           colors['primary-tints'].purple['200'],
           colors['primary-tints'].purple['500'],
         ];
+      case 'destructive':
+        return [colors.state.red, colors.state.red];
       default:
         return [
           colors['primary-tints'].purple['200'],
@@ -125,6 +127,13 @@ export function Button({
           fontSize,
           fontWeight: '600',
           color: colors.primary.purple,
+          textAlign: 'center',
+        };
+      case 'destructive':
+        return {
+          fontSize,
+          fontWeight: '600',
+          color: colors['grey-plain']['50'],
           textAlign: 'center',
         };
       default:
@@ -367,11 +376,15 @@ export function Button({
     >
       {({ pressed }) => (
         <LinearGradient
-          colors={[
-            colors.primary['purple-light'],
-            colors['primary-tints']['purple']['200'],
-            colors.primary.purple,
-          ]}
+          colors={
+            variant === 'destructive'
+              ? [colors.state.red, colors.state.red, colors.state.red]
+              : [
+                  colors.primary['purple-light'],
+                  colors['primary-tints']['purple']['200'],
+                  colors.primary.purple,
+                ]
+          }
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
           style={{
