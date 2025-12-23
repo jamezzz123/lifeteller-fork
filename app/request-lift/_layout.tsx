@@ -2,13 +2,7 @@ import { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot, router, usePathname, useLocalSearchParams } from 'expo-router';
-import {
-  CornerDownLeft,
-  CornerDownRight,
-  CornerRightDown,
-  CornerUpLeft,
-  X,
-} from 'lucide-react-native';
+import { CornerUpLeft } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { CancelBottomSheet } from '@/components/lift';

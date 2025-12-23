@@ -1,5 +1,4 @@
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { Image } from 'expo-image';
 import { X, Trash2, BadgeCheck } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
