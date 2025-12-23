@@ -160,7 +160,7 @@ export default function Step4Screen() {
             </TouchableOpacity>
 
             {/* Dots Indicator */}
-            <View className="absolute bottom-3 left-0 right-0 flex-row items-center justify-center gap-1.5">
+            <View className=" my-5 flex-row items-center justify-center gap-1.5">
               {MOCK_IMAGES.map((_, index) => (
                 <View
                   key={index}

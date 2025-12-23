@@ -3,7 +3,6 @@ export * from './data';
 export * from './AddCollaboratorsModal';
 export * from './AllowCollaboratorsBottomSheet';
 export * from './AudienceBottomSheet';
-export * from './CancelBottomSheet';
 export * from './ChooseFromListModal';
 export * from './ChooseListBottomSheet';
 export * from './ContactChip';

@@ -62,7 +62,6 @@ export default function Step2Screen() {
     setAudienceOfferType,
   } = useRequestLift();
 
-  
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
   const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
   const [pendingLiftType, setPendingLiftType] = useState<LiftType>(null);
@@ -194,19 +193,19 @@ export default function Step2Screen() {
                 onPress={handleRequestMethodPress}
                 className="flex-row items-center px-4"
               >
-                <View className="flex-1">
+                <View className="">
                   <ContactRow
                     key={selectedContacts[0].id}
                     contact={selectedContacts[0] as any}
                     isSelected={false}
                     onSelect={() => {}}
                     disabled={false}
-                    showName={audienceOfferType !== 'everyone'}
+                    showName={false}
                   />
                 </View>
                 <View className="ml-3">
                   <Dropdown
-                    label={audienceOfferType === 'everyone' ? 'Everyone' : 'Selected people'}
+                    label={'Request via chat'}
                     onPress={handleRequestMethodPress}
                   />
                 </View>
@@ -257,16 +256,14 @@ export default function Step2Screen() {
 
             {/* Title Suggestions Dropdown - Floats over content */}
             {showTitleSuggestions && titleSuggestions.length > 0 ? (
-              <View className="absolute left-4 right-4 top-full z-50 mt-1 overflow-hidden rounded-2xl border border-grey-plain-450/70 bg-grey-plain-50 shadow-lg">
+              <View className="absolute left-4 right-4 top-full z-50 mt-1 overflow-hidden rounded-2xl border border-grey-alpha-250 bg-grey-plain-50 shadow-lg">
                 {titleSuggestions.slice(0, 4).map((suggestion, index) => (
                   <TouchableOpacity
                     key={suggestion}
                     onPress={() => handleSelectSuggestion(suggestion)}
-                    className={`px-4 py-3 ${
-                      index < titleSuggestions.slice(0, 4).length - 1
-                        ? 'border-b border-grey-plain-450/60'
-                        : ''
-                    }`}
+                    className={`px-4 py-3`}
+                    accessibilityRole="button"
+                    accessibilityLabel={`Select title suggestion: ${suggestion}`}
                   >
                     <Text className="text-base text-grey-alpha-500">
                       {suggestion}

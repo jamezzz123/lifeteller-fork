@@ -1,10 +1,11 @@
 import { Modal, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'expo-image';
-import { X, Trash2 } from 'lucide-react-native';
+import { X, Trash2, BadgeCheck } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { Contact } from './types';
+import { Avatar } from '../ui/Avatar';
 
 type ReviewContactsModalProps = {
   visible: boolean;
@@ -68,20 +69,25 @@ export function ReviewContactsModal({
                 className="flex-row items-center justify-between border-b border-grey-plain-450/20 px-4 py-4"
               >
                 <View className="flex-1 flex-row items-center gap-3">
-                  <Image
+                  {/* <Image
                     source={contact.avatar}
                     style={{ width: 48, height: 48, borderRadius: 24 }}
                     contentFit="cover"
-                  />
+                  /> */}
+                  <Avatar
+                    profileImage="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop"
+                    name={'JAMES'}
+                  ></Avatar>
                   <View className="flex-1">
                     <View className="flex-row items-center gap-2">
                       <Text className="text-base font-medium text-grey-alpha-500">
                         {contact.name}
                       </Text>
                       {contact.verified && (
-                        <View className="size-4 items-center justify-center rounded-full bg-primary">
-                          <Text className="text-[10px] text-white">✓</Text>
-                        </View>
+                        <BadgeCheck
+                          size={16}
+                          color={colors['primary']['purple']}
+                        ></BadgeCheck>
                       )}
                     </View>
                     <Text className="text-sm text-grey-alpha-400">

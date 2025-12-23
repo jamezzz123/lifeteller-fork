@@ -28,7 +28,11 @@ import {
   ReviewContactsModal,
   Contact,
 } from '@/components/lift';
-import { useRequestLift, AudienceOfferType, List } from '@/context/request-lift';
+import {
+  useRequestLift,
+  AudienceOfferType,
+  List,
+} from '@/context/request-lift';
 
 export default function SelectContactsScreen() {
   const {
@@ -198,7 +202,7 @@ export default function SelectContactsScreen() {
                 />
               ))}
               {selectedContacts.length > 3 ? (
-                <View className="flex-row items-center justify-center rounded-full border border-primary px-3 py-2">
+                <View className="h-3 w-3 flex-row items-center justify-center rounded-full border border-primary">
                   <Text className="text-sm font-semibold text-primary">
                     +{selectedContacts.length - 3}
                   </Text>

@@ -2,7 +2,13 @@ import { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Slot, router, usePathname, useLocalSearchParams } from 'expo-router';
-import { X } from 'lucide-react-native';
+import {
+  CornerDownLeft,
+  CornerDownRight,
+  CornerRightDown,
+  CornerUpLeft,
+  X,
+} from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { CancelBottomSheet } from '@/components/lift';
@@ -107,7 +113,7 @@ function LayoutContent() {
                 hitSlop={10}
                 className="pr-2"
               >
-                <X
+                <CornerUpLeft
                   size={20}
                   color={colors['grey-alpha']['450']}
                   strokeWidth={2.6}
