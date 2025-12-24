@@ -48,7 +48,7 @@ export function CancelBottomSheet({
         </Text> */}
 
         {/* Options */}
-        <View className="gap-4">
+        <View className="gap-6">
           {/* Save as draft */}
           <TouchableOpacity
             onPress={onSaveAsDraft}

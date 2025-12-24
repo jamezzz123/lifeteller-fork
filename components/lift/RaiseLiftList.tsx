@@ -1,9 +1,9 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Image } from 'expo-image';
-import { BadgeCheck, Medal } from 'lucide-react-native';
+import { BadgeCheck } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { formatAmount } from '@/utils/formatAmount';
+import { Avatar } from '../ui/Avatar';
 
 export interface Contributor {
   id: string;
@@ -43,32 +43,7 @@ export function RaiseLiftList({
           >
             {/* Profile Picture with Badge */}
             <View className="relative h-10 w-10">
-              <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
-                <Image
-                  source={{ uri: contributor.profileImage }}
-                  style={{
-                    width: 40,
-                    height: 40,
-                    borderRadius: 20,
-                  }}
-                  contentFit="cover"
-                />
-              </View>
-              {/* Badge Overlay */}
-              <View
-                className="absolute -bottom-0.5 right-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
-                style={{
-                  backgroundColor: colors['primary-tints'].purple['100'],
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Medal
-                  color={colors.primary.purple}
-                  size={10}
-                  style={{ alignSelf: 'center' }}
-                />
-              </View>
+              <Avatar size={40} profileImage={contributor.profileImage} />
             </View>
 
             {/* User Info */}

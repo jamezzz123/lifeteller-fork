@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
   Modal,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -122,14 +123,18 @@ export function LiftTypeModal({
   return (
     <Modal
       visible={visible}
-      animationType="slide"
+      animationType="fade"
       presentationStyle="fullScreen"
       onRequestClose={onClose}
+      statusBarTranslucent={false}
     >
-      <SafeAreaView className="flex-1 bg-background" edges={['top']}>
+      <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
         <View className="flex-1">
           {/* Header */}
-          <View className="flex-row items-center space-x-4 px-4 py-3">
+          <View
+            className="flex-row items-center space-x-4 px-4 py-3"
+            style={{ marginTop: Platform.OS === 'ios' ? 45 : 12 }}
+          >
             <TouchableOpacity
               onPress={onClose}
               hitSlop={10}

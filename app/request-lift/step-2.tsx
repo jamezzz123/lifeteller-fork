@@ -11,27 +11,18 @@ import {
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import {
-  Info,
-  ChevronRight,
-  Edit2,
-  Trash2,
-  ImagePlus,
-} from 'lucide-react-native';
+import { Info, ChevronRight, Edit2, Trash2 } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import {
   LiftTypeSelector,
-  LiftTypeModal,
   MediaPickerBottomSheet,
   filterTitleSuggestions,
-  LiftType,
   ContactRow,
   AudienceBottomSheet,
 } from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import {
-  LiftItem,
   MediaItem,
   useRequestLift,
   AudienceOfferType,
@@ -49,22 +40,18 @@ export default function Step2Screen() {
     liftDescription,
     setLiftDescription,
     liftType,
-    setLiftType,
     liftAmount,
-    setLiftAmount,
     liftItems,
-    setLiftItems,
     selectedMedia,
     setSelectedMedia,
     setCanProceed,
     onNextRef,
     audienceOfferType,
     setAudienceOfferType,
+    setHeaderTitle,
   } = useRequestLift();
 
   const [showTitleSuggestions, setShowTitleSuggestions] = useState(false);
-  const [showLiftTypeModal, setShowLiftTypeModal] = useState(false);
-  const [pendingLiftType, setPendingLiftType] = useState<LiftType>(null);
   const [titleFocused, setTitleFocused] = useState(false);
   const [descriptionFocused, setDescriptionFocused] = useState(false);
 
@@ -85,12 +72,13 @@ export default function Step2Screen() {
 
   // Update canProceed and Next handler
   useEffect(() => {
+    setHeaderTitle('Lift details');
     setCanProceed(isValid);
     onNextRef.current = handleNext;
     return () => {
       onNextRef.current = null;
     };
-  }, [isValid, setCanProceed, handleNext, onNextRef]);
+  }, [isValid, setCanProceed, handleNext, onNextRef, setHeaderTitle]);
 
   function handleTitleChange(text: string) {
     if (text.length <= TITLE_MAX_LENGTH) {
@@ -122,29 +110,14 @@ export default function Step2Screen() {
     }
   }
 
-  function handleOpenLiftTypeModal(type?: LiftType) {
+  function handleNavigateToLiftType() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setPendingLiftType(type ?? liftType);
-    setShowLiftTypeModal(true);
+    router.push('/request-lift/lift-type');
   }
 
-  function handleCloseLiftTypeModal() {
+  function handleHelpMeWrite() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setShowLiftTypeModal(false);
-    setPendingLiftType(null);
-  }
-
-  function handleLiftTypeModalDone(
-    type: LiftType,
-    amount: number,
-    items: LiftItem[]
-  ) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setLiftType(type);
-    setLiftAmount(amount);
-    setLiftItems(items);
-    setShowLiftTypeModal(false);
-    setPendingLiftType(null);
+    // TODO: Implement AI writing assistance
   }
 
   function handleOpenMediaPicker() {
@@ -307,14 +280,31 @@ export default function Step2Screen() {
                 characters
               </Text>
             </View>
+
+            {/* Help Me Write Button */}
+            <TouchableOpacity
+              onPress={handleHelpMeWrite}
+              className="mt-3 flex-row items-center gap-2.5 self-start rounded-full px-3 py-2"
+              style={{ backgroundColor: '#F8F2FF' }}
+              activeOpacity={0.7}
+            >
+              <Image
+                source={require('../../assets/images/sparkles.png')}
+                style={{ width: 16, height: 16 }}
+                contentFit="contain"
+              />
+              <Text className="text-sm font-medium text-grey-alpha-500">
+                Help me write
+              </Text>
+            </TouchableOpacity>
           </View>
 
           {/* Type Selector */}
           {showTypeSelector ? (
             <View className="mt-5">
               <LiftTypeSelector
-                selectedType={pendingLiftType ?? liftType}
-                onSelectType={handleOpenLiftTypeModal}
+                selectedType={liftType}
+                onSelectType={handleNavigateToLiftType}
               />
             </View>
           ) : (
@@ -322,7 +312,7 @@ export default function Step2Screen() {
               {hasBoth ? (
                 // Combined view for both monetary and non-monetary
                 <TouchableOpacity
-                  onPress={() => handleOpenLiftTypeModal('Both')}
+                  onPress={handleNavigateToLiftType}
                   className="flex-row items-center justify-between px-4 py-3"
                   accessibilityRole="button"
                   accessibilityLabel="Edit lift details"
@@ -346,7 +336,7 @@ export default function Step2Screen() {
                 <>
                   {hasMonetary && (
                     <TouchableOpacity
-                      onPress={() => handleOpenLiftTypeModal('Monetary')}
+                      onPress={handleNavigateToLiftType}
                       className="flex-row items-center justify-between px-4 py-3"
                       accessibilityRole="button"
                       accessibilityLabel="Edit monetary lift amount"
@@ -369,7 +359,7 @@ export default function Step2Screen() {
 
                   {hasNonMonetary && (
                     <TouchableOpacity
-                      onPress={() => handleOpenLiftTypeModal('Non-monetary')}
+                      onPress={handleNavigateToLiftType}
                       className="flex-row items-center justify-between px-4 py-3"
                       accessibilityRole="button"
                       accessibilityLabel="Edit non-monetary lift items"
@@ -449,22 +439,15 @@ export default function Step2Screen() {
             ) : (
               <TouchableOpacity
                 onPress={handleOpenMediaPicker}
-                className="border-grey-alpha-300 flex-row items-center gap-3 rounded-2xl border border-dashed bg-grey-plain-50 px-4 py-4"
+                className="bg-grey-alpha-100 flex-row items-center gap-3 rounded border border-grey-plain-450/40 px-4 py-4"
                 accessibilityRole="button"
                 accessibilityLabel="Add photos or videos"
               >
-                <View
-                  className="size-10 items-center justify-center rounded-full"
-                  style={{
-                    backgroundColor: colors['primary-tints'].purple['100'],
-                  }}
-                >
-                  <ImagePlus
-                    size={20}
-                    color={colors.primary.purple}
-                    strokeWidth={2}
-                  />
-                </View>
+                <Image
+                  source={require('../../assets/images/file-upload-image.png')}
+                  style={{ width: 40, height: 40 }}
+                  contentFit="contain"
+                />
                 <Text className="text-base font-medium text-grey-alpha-500">
                   Add Photos/Videos
                 </Text>
@@ -472,16 +455,6 @@ export default function Step2Screen() {
             )}
           </View>
         </ScrollView>
-
-        {/* Lift Type Modal */}
-        <LiftTypeModal
-          visible={showLiftTypeModal}
-          currentType={pendingLiftType ?? liftType}
-          currentAmount={liftAmount}
-          currentItems={liftItems}
-          onDone={handleLiftTypeModalDone}
-          onClose={handleCloseLiftTypeModal}
-        />
 
         {/* Media Picker Bottom Sheet */}
         <MediaPickerBottomSheet

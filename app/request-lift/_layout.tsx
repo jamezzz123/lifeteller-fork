@@ -31,8 +31,11 @@ function LayoutContent() {
 
   // Hide layout header for certain routes
   const hideLayoutHeader = pathname === '/request-lift/more-options';
-  // Hide next button for step 4 (has its own button at the bottom)
-  const hideNextButton = pathname === '/request-lift/step-4';
+  // Hide next button for pages with their own action buttons
+  const hideNextButton =
+    pathname === '/request-lift/step-4' ||
+    pathname === '/request-lift/lift-type' ||
+    pathname === '/request-lift/add-collaborators';
 
   const { headerText, audience } = useLocalSearchParams<{
     headerText?: string;
@@ -71,6 +74,17 @@ function LayoutContent() {
     liftType !== null;
 
   const handleClose = () => {
+    // For certain pages, just go back without showing cancel sheet
+    const skipCancelSheet = [
+      '/request-lift/lift-type',
+      '/request-lift/add-collaborators'
+    ];
+
+    if (skipCancelSheet.includes(pathname)) {
+      router.back();
+      return;
+    }
+
     if (hasData) {
       setShowCancelSheet(true);
     } else {

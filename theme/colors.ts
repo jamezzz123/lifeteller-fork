@@ -15,6 +15,7 @@ const palette = {
     },
   },
   'grey-alpha': {
+    '100': '#F9FAFB',
     '150': '#F3F4F6',
     '250': '#D0D5DD',
     '400': '#4A5564',

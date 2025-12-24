@@ -30,12 +30,17 @@ export function Avatar({
   };
 
   const initials = getInitials(name);
-  const badgeSize = size === 48 ? 20 : size === 40 ? 16 : Math.round(size * 0.42);
-  const medalIconSize = size === 48 ? 12 : size === 40 ? 10 : Math.round(size * 0.25);
+  const badgeSize =
+    size === 48 ? 20 : size === 40 ? 16 : Math.round(size * 0.42);
+  const medalIconSize =
+    size === 48 ? 12 : size === 40 ? 10 : Math.round(size * 0.25);
   const borderRadius = size / 2;
 
   return (
-    <View className={`relative ${className}`} style={{ width: size, height: size }}>
+    <View
+      className={`relative ${className}`}
+      style={{ width: size, height: size }}
+    >
       <View
         className="overflow-hidden rounded-full"
         style={{
@@ -82,7 +87,7 @@ export function Avatar({
       {/* Badge Overlay */}
       {showBadge && (
         <View
-          className="absolute -bottom-0.5 left-0 items-center justify-center rounded-full border-2 border-white"
+          className="absolute -bottom-0.5 left-3 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
           style={{
             width: badgeSize,
             height: badgeSize,
@@ -99,4 +104,3 @@ export function Avatar({
     </View>
   );
 }
-

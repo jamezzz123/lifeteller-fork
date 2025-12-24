@@ -2,7 +2,10 @@ import { forwardRef, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 import { colors } from '@/theme/colors';
-import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
+import {
+  BottomSheetComponent,
+  BottomSheetRef,
+} from '@/components/ui/BottomSheet';
 
 type AllowCollaboratorsBottomSheetProps = {
   currentLimit: 'unlimited' | number;
@@ -36,14 +39,14 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
   }
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['60%']}>
+    <BottomSheetComponent ref={ref} snapPoints={['30%']}>
       <View className="px-4 pb-4">
         <Text className="mb-2 text-lg font-bold text-grey-alpha-500">
           Allow collaborators
         </Text>
         <Text className="mb-6 text-sm text-grey-alpha-400">
-          Approve people&apos;s request to join you in supporting and raising the
-          lift.
+          Approve people&apos;s request to join you in supporting and raising
+          the lift.
         </Text>
 
         {/* Unlimited / Limited Toggle */}
@@ -126,10 +129,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
         )}
 
         {/* Done Button */}
-        <TouchableOpacity
-          onPress={handleDone}
-          className="items-end"
-        >
+        <TouchableOpacity onPress={handleDone} className="items-end">
           <View
             className="rounded-full px-8 py-3"
             style={{ backgroundColor: colors.primary.purple }}

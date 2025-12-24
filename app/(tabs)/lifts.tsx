@@ -2,7 +2,7 @@ import { LiftHeader } from '@/components/lift/LiftHeader';
 import { FilterTabs } from '@/components/ui/FilterTabs';
 import { LiftCard } from '@/components/lift';
 import { mockLifts } from '@/data/mockLifts';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { FlatList, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ChevronDown } from 'lucide-react-native';
@@ -21,8 +21,9 @@ export default function LiftsScreen() {
     // { id: 'clips', label: 'Clips', count: 9 },
     { id: 'offered', label: 'Offered', count: 9 },
   ];
-  const [activeFilter, setActiveFilter] = React.useState('all');
-  const [likedItems, setLikedItems] = React.useState<Set<string>>(new Set());
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
+  const PAGE_SIZE = 4;
 
   const handleLike = (id: string) => {
     setLikedItems((prev) => {
@@ -38,33 +39,50 @@ export default function LiftsScreen() {
 
   // Use mock data (replace with your API data later)
   const allLifts = mockLifts;
+  const [visibleLifts, setVisibleLifts] = useState(() =>
+    allLifts.slice(0, PAGE_SIZE),
+  );
 
   const liftOptionsSheetRef = useRef<LiftOptionsBottomSheetRef>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const hasMoreLifts = visibleLifts.length < allLifts.length;
 
   const handleFABPress = () => {
     liftOptionsSheetRef.current?.open();
   };
 
   const handleLoadMore = () => {
-    // TODO: Implement pagination/load more logic here
+    if (isLoadingMore || !hasMoreLifts) {
+      return;
+    }
+
     setIsLoadingMore(true);
     setTimeout(() => {
+      setVisibleLifts((currentLifts) => {
+        const nextCount = Math.min(
+          allLifts.length,
+          currentLifts.length + PAGE_SIZE,
+        );
+        return allLifts.slice(0, nextCount);
+      });
       setIsLoadingMore(false);
-      console.log('Load more lifts');
-    }, 1000);
+    }, 800);
   };
 
   const renderFooter = () => (
     <TouchableOpacity
       onPress={handleLoadMore}
-      disabled={isLoadingMore}
+      disabled={isLoadingMore || !hasMoreLifts}
       className="items-center justify-center py-6"
       activeOpacity={0.7}
     >
       <Text className="text-[15px] font-medium text-grey-plain-550">
-        {isLoadingMore ? 'Loading...' : 'Load more...'}
+        {isLoadingMore
+          ? 'Loading...'
+          : hasMoreLifts
+            ? 'Load more...'
+            : 'No more lifts'}
       </Text>
     </TouchableOpacity>
   );
@@ -73,7 +91,7 @@ export default function LiftsScreen() {
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
       <LiftHeader />
       <FlatList
-        data={allLifts}
+        data={visibleLifts}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <>
@@ -97,7 +115,7 @@ export default function LiftsScreen() {
                 }}
               >
                 <Text className="text-[15px] font-medium text-grey-plain-550">
-                Most recent
+                  Most recent
                 </Text>
                 <ChevronDown size={20} color={colors['grey-plain']['550']} />
               </TouchableOpacity>

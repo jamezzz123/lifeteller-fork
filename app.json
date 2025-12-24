@@ -52,6 +52,14 @@
             "resizeMode": "contain"
           }
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow Lifteller to access your photos to upload images for your lift requests.",
+          "cameraPermission": "Allow Lifteller to use your camera to take photos for your lift requests.",
+          "microphonePermission": "Allow Lifteller to access your microphone to record videos for your lift requests."
+        }
       ]
     ],
     "experiments": {

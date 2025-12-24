@@ -20,6 +20,7 @@ import {
   HandMetal,
   CircleCheck,
   Info,
+  Tag,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -28,6 +29,7 @@ import { ProfileStack } from '@/components/ui/ProfileStack';
 import { MediaCarousel } from '@/components/lift/MediaCarousel';
 import { RaiseLiftList } from '@/components/lift/RaiseLiftList';
 import { MinimalLiftCard } from '@/components/lift/MinimalLiftCard';
+import { Avatar } from '@/components/ui/Avatar';
 
 export default function LiftRequestDetailScreen() {
   const router = useRouter();
@@ -58,7 +60,6 @@ export default function LiftRequestDetailScreen() {
     uri: item,
     type: 'image' as const,
   }));
-
 
   const getStatusConfig = () => {
     switch (liftData.status) {
@@ -194,7 +195,7 @@ export default function LiftRequestDetailScreen() {
           {/* Status Badge */}
           <View className="mt-3">
             <View
-              className="self-start flex-row items-center gap-1.5 rounded-full px-3 py-1"
+              className="flex-row items-center gap-1.5 self-start rounded-full px-3 py-1"
               style={{ backgroundColor: getStatusConfig().bg }}
             >
               {getStatusConfig().icon}
@@ -218,8 +219,9 @@ export default function LiftRequestDetailScreen() {
           <View className="flex-row items-center justify-between bg-white px-4 py-3">
             {liftData.category && (
               <View className="flex-row items-center gap-2">
-                <View className="rounded-full bg-grey-plain-100 px-2 py-1">
-                  <Text className="text-xs text-grey-alpha-500">
+                <View className="flex-row items-center gap-2 rounded-full px-2 py-1">
+                  <Tag size={14} color={colors['primary']['purple']} />
+                  <Text className="text-sm text-grey-alpha-500">
                     {liftData.category}
                   </Text>
                 </View>
@@ -330,7 +332,7 @@ export default function LiftRequestDetailScreen() {
 
           <View className="flex-row items-start gap-3">
             <View className="relative h-12 w-12">
-              <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
+              {/* <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
                 <Image
                   source={{ uri: liftData.owner.avatar }}
                   style={{
@@ -342,13 +344,14 @@ export default function LiftRequestDetailScreen() {
                 />
               </View>
               <View
-                className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+                className="absolute -bottom-0.5 left-3 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
                 style={{
                   backgroundColor: colors['primary-tints'].purple['100'],
                 }}
               >
                 <Medal color={colors.primary.purple} size={12} />
-              </View>
+              </View> */}
+              <Avatar size={40} profileImage={liftData.owner.avatar} />
             </View>
             <View className="flex-1">
               <View className="flex-row items-center gap-1.5">
@@ -540,6 +543,11 @@ export default function LiftRequestDetailScreen() {
 
               {/* Contributors List */}
               <RaiseLiftList
+                onPress={(contributor) =>
+                  router.push(
+                    `/lifter-details/${contributor.id}?liftId=${id}` as any
+                  )
+                }
                 contributors={
                   liftData.monetary?.coRaisers?.slice(0, 5).map((raiser) => ({
                     id: raiser.id,

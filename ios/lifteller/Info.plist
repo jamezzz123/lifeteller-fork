@@ -83,5 +83,11 @@
     <string>Automatic</string>
     <key>UIViewControllerBasedStatusBarAppearance</key>
     <false/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Allow Lifteller to access your photos to upload images for your lift requests.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>Allow Lifteller to use your camera to take photos for your lift requests.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Allow Lifteller to access your microphone to record videos for your lift requests.</string>
   </dict>
 </plist>

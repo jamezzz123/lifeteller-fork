@@ -32,12 +32,17 @@ import {
   Contact,
   CreateListModal,
 } from '@/components/lift';
-import { useRequestLift, AudienceOfferType, List } from '@/context/request-lift';
+import {
+  useRequestLift,
+  AudienceOfferType,
+  List,
+} from '@/context/request-lift';
 import {
   BottomSheetComponent,
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Dropdown } from '@/components/ui/Dropdown';
 
 export default function Step3Screen() {
   const {
@@ -66,7 +71,6 @@ export default function Step3Screen() {
   const [categorySearch, setCategorySearch] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
   const [addCollaboratorsEnabled, setAddCollaboratorsEnabled] = useState(false);
-  const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false);
   const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
 
   // Audience states
@@ -112,11 +116,11 @@ export default function Step3Screen() {
     setNextButtonLabel,
   ]);
 
-  // Auto-open collaborators modal when toggle is turned on
+  // Auto-navigate to collaborators page when toggle is turned on
   useEffect(() => {
     if (addCollaboratorsEnabled && collaborators.length === 0) {
       const timer = setTimeout(() => {
-        setShowCollaboratorsModal(true);
+        router.push('/request-lift/add-collaborators');
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -136,10 +140,9 @@ export default function Step3Screen() {
     setLocationSearch('');
   }
 
-  function handleCollaboratorsDone(selectedCollaborators: Contact[]) {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setCollaborators(selectedCollaborators);
-    setShowCollaboratorsModal(false);
+  function handleNavigateToCollaborators() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/request-lift/add-collaborators');
   }
 
   function handleToggleCollaborators(enabled: boolean) {
@@ -269,23 +272,10 @@ export default function Step3Screen() {
                 style={{ width: 48, height: 48, borderRadius: 24 }}
                 contentFit="cover"
               />
-              <TouchableOpacity
+              <Dropdown
+                label={getAudienceLabel()}
                 onPress={handleAudienceButtonPress}
-                className="flex-row items-center gap-2 rounded-full border-2 px-4 py-1.5"
-                style={{ borderColor: colors.primary.purple }}
-              >
-                <Text
-                  className="text-sm font-semibold"
-                  style={{ color: colors.primary.purple }}
-                >
-                  {getAudienceLabel()}
-                </Text>
-                <ChevronRight
-                  size={16}
-                  color={colors.primary.purple}
-                  strokeWidth={2.5}
-                />
-              </TouchableOpacity>
+              />
             </View>
 
             {/* Title */}
@@ -474,7 +464,7 @@ export default function Step3Screen() {
               </View>
             ) : (
               <TouchableOpacity
-                onPress={() => setShowCollaboratorsModal(true)}
+                onPress={handleNavigateToCollaborators}
                 className="flex-row items-center justify-between"
               >
                 <View className="flex-1 flex-row items-center gap-3">
@@ -628,14 +618,6 @@ export default function Step3Screen() {
             </View>
           </View>
         </BottomSheetComponent>
-
-        {/* Add Collaborators Modal */}
-        <AddCollaboratorsModal
-          visible={showCollaboratorsModal}
-          currentCollaborators={collaborators}
-          onDone={handleCollaboratorsDone}
-          onClose={() => setShowCollaboratorsModal(false)}
-        />
 
         {/* Remove Collaborators Confirmation */}
         <ConfirmDialog

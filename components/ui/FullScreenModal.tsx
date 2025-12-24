@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Modal, Platform, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Modal, Platform, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
 
@@ -24,21 +24,21 @@ export function FullScreenModal({
   children,
   rightButton,
 }: FullScreenModalProps) {
-  const statusBarHeight = Platform.OS === 'android' ? StatusBar.currentHeight || 0 : 0;
-
   return (
     <Modal
       visible={visible}
-      animationType="slide"
+      animationType="fade"
       presentationStyle="fullScreen"
       onRequestClose={onClose}
       statusBarTranslucent={false}
     >
-      <View className="flex-1 bg-background" style={{ paddingTop: statusBarHeight }}>
-        <SafeAreaView className="flex-1 bg-background" edges={['top']}>
-          <View className="flex-1">
-            {/* Header */}
-            <View className="flex-row items-center justify-between px-4 py-3">
+      <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+        <View className="flex-1">
+          {/* Header */}
+          <View
+            className="flex-row items-center justify-between px-4 py-3"
+            style={{ marginTop: Platform.OS === 'ios' ? 45 : 12 }}
+          >
             <View className="flex-row items-center gap-3">
               <TouchableOpacity
                 onPress={onClose}
@@ -84,9 +84,8 @@ export function FullScreenModal({
 
           {/* Content */}
           {children}
-          </View>
-        </SafeAreaView>
-      </View>
+        </View>
+      </SafeAreaView>
     </Modal>
   );
 }

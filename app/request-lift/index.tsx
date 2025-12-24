@@ -45,6 +45,7 @@ export default function SelectContactsScreen() {
     setCanProceed,
     onNextRef,
     audienceOfferType,
+    setHeaderTitle,
   } = useRequestLift();
 
   const [search, setSearch] = useState('');
@@ -78,12 +79,13 @@ export default function SelectContactsScreen() {
 
   // Update canProceed and Next handler
   useEffect(() => {
+    setHeaderTitle('Request lift');
     setCanProceed(isValid);
     onNextRef.current = handleNext;
     return () => {
       onNextRef.current = null;
     };
-  }, [isValid, setCanProceed, handleNext, onNextRef]);
+  }, [isValid, setCanProceed, handleNext, onNextRef, setHeaderTitle]);
 
   const filteredContacts = useMemo(() => {
     const query = search.trim().toLowerCase();
