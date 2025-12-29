@@ -2,11 +2,7 @@ import React, { useRef } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import {
-  Search,
-  EllipsisVertical,
-  CornerUpLeft,
-} from 'lucide-react-native';
+import { Search, EllipsisVertical, CornerUpLeft } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { mockLifts } from '@/data/mockLifts';
 import { RaiseLiftList } from '@/components/lift/RaiseLiftList';
@@ -88,7 +84,9 @@ export default function LiftedByScreen() {
             <RaiseLiftList
               contributors={contributors}
               onPress={(contributor) =>
-                router.push(`/lifter-details/${contributor.id}?liftId=${id}` as any)
+                router.push(
+                  `/lifter-details/${contributor.id}?liftId=${id}` as any
+                )
               }
             />
           </View>

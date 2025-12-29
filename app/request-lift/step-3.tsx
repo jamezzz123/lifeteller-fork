@@ -10,7 +10,7 @@ import {
   Switch,
 } from 'react-native';
 import { Image } from 'expo-image';
-import { router, Href } from 'expo-router';
+import { router, type Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
   ChevronRight,
@@ -120,7 +120,7 @@ export default function Step3Screen() {
   useEffect(() => {
     if (addCollaboratorsEnabled && collaborators.length === 0) {
       const timer = setTimeout(() => {
-        router.push('/request-lift/add-collaborators');
+        router.push('/request-lift/add-collaborators' as any);
       }, 2000);
       return () => clearTimeout(timer);
     }
@@ -142,7 +142,7 @@ export default function Step3Screen() {
 
   function handleNavigateToCollaborators() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/request-lift/add-collaborators');
+    router.push('/request-lift/add-collaborators' as any);
   }
 
   function handleToggleCollaborators(enabled: boolean) {

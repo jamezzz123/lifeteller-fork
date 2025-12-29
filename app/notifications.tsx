@@ -94,17 +94,23 @@ export default function NotificationsScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
-            Email notification
-          </Text>
+          <View className="mb-4 ml-3 mt-2 flex-row items-center justify-between pr-3">
+            <Text className="text-base font-semibold text-grey-alpha-500">
+              Email notification
+            </Text>
+            <Switch
+              value={emailEnabled}
+              onValueChange={() => setEmailEnabled((s) => !s)}
+              trackColor={{
+                false: colors['grey-plain']['150'],
+                true: colors.primary.purple,
+              }}
+              thumbColor={colors['grey-plain']['50']}
+              ios_backgroundColor={colors['grey-plain']['150']}
+            />
+          </View>
 
           <View className="gap-1">
-            <NotificationRow
-              title="Email notification"
-              value={emailEnabled}
-              onToggle={() => setEmailEnabled((s) => !s)}
-            />
-
             <NotificationRow
               Icon={Package}
               title="Lift offers, Join lifts, Raised lifts, Lift requests, Lift approval, and Lift decline"

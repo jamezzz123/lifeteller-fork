@@ -112,7 +112,7 @@ export default function Step2Screen() {
 
   function handleNavigateToLiftType() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push('/request-lift/lift-type');
+    router.push('/request-lift/lift-type' as any);
   }
 
   function handleHelpMeWrite() {

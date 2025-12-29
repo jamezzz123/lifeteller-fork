@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -24,6 +24,7 @@ const welcomeImage = require('@/assets/images/welcome/welcome.jpg');
 
 export default function GetStartedScreen() {
   const socialSheetRef = useRef<SocialOptionsSheetRef>(null);
+  const [showSocialSheet, setShowSocialSheet] = useState(false);
   const translateX = useSharedValue(-100);
   const opacity = useSharedValue(0);
 
@@ -38,6 +39,16 @@ export default function GetStartedScreen() {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Open the sheet when it mounts
+  useEffect(() => {
+    if (showSocialSheet && socialSheetRef.current) {
+      // Small delay to ensure the component is fully mounted
+      setTimeout(() => {
+        socialSheetRef.current?.open();
+      }, 100);
+    }
+  }, [showSocialSheet]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -68,7 +79,11 @@ export default function GetStartedScreen() {
 
   function handleOtherSocials() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    socialSheetRef.current?.open();
+    setShowSocialSheet(true);
+  }
+
+  function handleSocialSheetClose() {
+    setShowSocialSheet(false);
   }
 
   async function handleSocialSelect(socialId: string) {
@@ -78,6 +93,8 @@ export default function GetStartedScreen() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       console.log('Selected social:', socialId);
+      // Close and unmount the sheet
+      setShowSocialSheet(false);
       // Navigate to onboarding after successful sign-in
       router.replace('/(onboarding)/onboarding-index');
     } catch (error) {
@@ -95,6 +112,8 @@ export default function GetStartedScreen() {
 
   return (
     <View className="flex-1">
+      
+   
       <Image
         source={welcomeImage}
         style={{
@@ -111,8 +130,10 @@ export default function GetStartedScreen() {
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
         }}
       />
+    
 
       <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
+    
         <View className="flex-1 items-start justify-start px-6 pt-8">
           <View className="mb-4 flex-row items-center">
             <LogoLight width={104} height={30} />
@@ -173,9 +194,17 @@ export default function GetStartedScreen() {
             </Text>
           </View>
         </View>
-      </SafeAreaView>
+        
+        </SafeAreaView>
 
-      <SocialOptionsSheet ref={socialSheetRef} onSelect={handleSocialSelect} />
+        {showSocialSheet && (
+          <SocialOptionsSheet
+            ref={socialSheetRef}
+            onSelect={handleSocialSelect}
+            onClose={handleSocialSheetClose}
+          />
+        )}
+
     </View>
   );
 }

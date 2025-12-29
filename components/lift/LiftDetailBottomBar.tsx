@@ -21,7 +21,7 @@ export function LiftDetailBottomBar({ lift }: LiftDetailBottomBarProps) {
 
   return (
     <View
-      className="bg-grey-alpha-100 absolute bottom-0 left-0 right-0 border-t border-grey-plain-300 px-4 py-4 pt-7"
+      className="bg-grey-alpha-100 absolute bottom-0 left-0 right-0 border-t border-grey-plain-300 bg-white px-4 py-4 pt-7"
       style={{
         paddingBottom: Math.max(insets.bottom, 16),
       }}

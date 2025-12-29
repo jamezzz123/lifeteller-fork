@@ -49,6 +49,7 @@ const SOCIAL_OPTIONS: SocialOption[] = [
 
 interface SocialOptionsSheetProps {
   onSelect: (socialId: string) => void;
+  onClose?: () => void;
 }
 
 export interface SocialOptionsSheetRef {
@@ -59,7 +60,7 @@ export interface SocialOptionsSheetRef {
 export const SocialOptionsSheet = forwardRef<
   SocialOptionsSheetRef,
   SocialOptionsSheetProps
->(({ onSelect }, ref) => {
+>(({ onSelect, onClose }, ref) => {
   const [selectedId, setSelectedId] = useState<string>('tiktok');
   const bottomSheetRef = React.useRef<BottomSheetRef>(null);
 
@@ -83,11 +84,16 @@ export const SocialOptionsSheet = forwardRef<
     bottomSheetRef.current?.close();
   }
 
+  function handleClose() {
+    bottomSheetRef.current?.close();
+    onClose?.();
+  }
+
   return (
     <BottomSheetComponent
       ref={bottomSheetRef}
       title="Select an option to proceed"
-      onClose={() => bottomSheetRef.current?.close()}
+      onClose={handleClose}
     >
       <View className="px-6">
         <View className="mb-6">

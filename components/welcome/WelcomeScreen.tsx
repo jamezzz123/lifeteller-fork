@@ -15,7 +15,7 @@ import { WelcomeSlide } from './WelcomeSlide';
 import { PageIndicator } from './PageIndicator';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 interface WelcomeSlideData {
   id: string;
@@ -121,7 +121,7 @@ export function WelcomeScreen() {
         <LogoColor width={104} height={30} />
       </View>
 
-      <View className="flex-1">
+      <View className="relative flex-1">
         <FlatList
           ref={flatListRef}
           data={WELCOME_SLIDES}
@@ -148,9 +148,11 @@ export function WelcomeScreen() {
           }}
         />
 
+        {/* Fixed PageIndicator positioned above text headers */}
         <View
           className="absolute left-0 right-0 px-6"
-          style={{ bottom: SCREEN_HEIGHT * 0.12 }}
+          style={{ bottom: 140 }}
+          pointerEvents="none"
         >
           <PageIndicator
             currentIndex={currentIndex}

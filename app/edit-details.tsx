@@ -570,7 +570,7 @@ export default function EditDetailsScreen() {
             />
           }
           title="Interests"
-          onPress={() => router.push('/interests' as any)}
+          onPress={() => router.push('/edit-interests' as any)}
           showArrow
         >
           <View className="flex-row flex-wrap gap-2">
@@ -590,9 +590,7 @@ export default function EditDetailsScreen() {
             />
           }
           title="Date of birth"
-          onPress={() => {
-            // TODO: Navigate to date picker
-          }}
+          onPress={() => router.push('/edit-date-of-birth' as any)}
           showArrow
         >
           <Text className="text-sm text-grey-alpha-500">

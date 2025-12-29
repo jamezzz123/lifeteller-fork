@@ -113,6 +113,7 @@ export function FeedList() {
       {posts.map((post) => (
         <FeedPost
           key={post.id}
+          id={post.id}
           username={post.username}
           handle={post.handle}
           timestamp={post.timestamp}

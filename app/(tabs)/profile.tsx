@@ -27,6 +27,7 @@ import {
   Info,
   Star,
   Play,
+  Bug,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
@@ -671,6 +672,9 @@ export default function ProfileScreen() {
         <View className="flex-row items-center gap-4">
           <TouchableOpacity>
             <Search color={colors['grey-alpha']['500']} size={24} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/debug')}>
+            <Bug color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push('/settings')}>
             <Settings color={colors['grey-alpha']['500']} size={24} />

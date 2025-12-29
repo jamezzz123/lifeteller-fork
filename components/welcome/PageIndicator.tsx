@@ -17,7 +17,7 @@ export function PageIndicator({
           <View
             key={index}
             className={`w-1.5 rounded-full ${
-              isActive ? 'h-6 bg-primary' : 'bg-grey-alpha-250 h-3'
+              isActive ? 'h-6 bg-primary' : 'h-3 bg-grey-alpha-250'
             }`}
           />
         );
