@@ -18,6 +18,8 @@ import { MediaCarousel } from './MediaCarousel';
 import { MinimalLiftCard } from './MinimalLiftCard';
 import { ProfileStack } from '@/components/ui/ProfileStack';
 import { formatAmount } from '@/utils/formatAmount';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 interface MediaItem {
   id: string;
@@ -36,6 +38,7 @@ interface LiftData {
 
 interface Post {
   id: string;
+  userId?: string;
   username: string;
   handle: string;
   timestamp: string;
@@ -104,39 +107,60 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
         <View className="mb-1 flex-row items-start justify-between">
           <View className="flex-1 flex-row items-center gap-3">
             {/* Profile Picture with Badge */}
-            <View className="relative h-12 w-12">
-              <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
-                {post.profileImage ? (
-                  <Image
-                    source={{ uri: post.profileImage }}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                    }}
-                    contentFit="cover"
+            <TouchableOpacity
+              onPress={() => {
+                if (post.userId) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push(`/user/${post.userId}` as any);
+                }
+              }}
+              disabled={!post.userId}
+              activeOpacity={post.userId ? 0.7 : 1}
+            >
+              <View className="relative h-12 w-12">
+                <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
+                  {post.profileImage ? (
+                    <Image
+                      source={{ uri: post.profileImage }}
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 24,
+                      }}
+                      contentFit="cover"
+                    />
+                  ) : (
+                    <View className="h-full w-full bg-grey-plain-450" />
+                  )}
+                </View>
+                {/* Badge Overlay */}
+                <View
+                  className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+                  style={{
+                    backgroundColor: colors['primary-tints'].purple['100'],
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Medal
+                    color={colors.primary.purple}
+                    size={12}
+                    style={{ alignSelf: 'center' }}
                   />
-                ) : (
-                  <View className="h-full w-full bg-grey-plain-450" />
-                )}
+                </View>
               </View>
-              {/* Badge Overlay */}
-              <View
-                className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
-                style={{
-                  backgroundColor: colors['primary-tints'].purple['100'],
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Medal
-                  color={colors.primary.purple}
-                  size={12}
-                  style={{ alignSelf: 'center' }}
-                />
-              </View>
-            </View>
-            <View className="flex-1">
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="flex-1"
+              onPress={() => {
+                if (post.userId) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push(`/user/${post.userId}` as any);
+                }
+              }}
+              disabled={!post.userId}
+              activeOpacity={post.userId ? 0.7 : 1}
+            >
               <View className="mb-0.5 flex-row items-center gap-1.5">
                 <Text className="text-[15px] font-semibold text-grey-alpha-500">
                   {post.username}
@@ -162,7 +186,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                   {post.timestamp}
                 </Text>
               </View>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
@@ -331,7 +355,17 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
 
           {/* User Profile */}
           <View className="mb-4">
-            <View className="mb-3 flex-row items-start gap-3">
+            <TouchableOpacity
+              className="mb-3 flex-row items-start gap-3"
+              onPress={() => {
+                if (post.userId) {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  router.push(`/user/${post.userId}` as any);
+                }
+              }}
+              disabled={!post.userId}
+              activeOpacity={post.userId ? 0.7 : 1}
+            >
               {/* Profile Picture with Badge */}
               <View className="relative h-12 w-12">
                 <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
@@ -384,7 +418,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                   </Text>
                 </View>
               </View>
-            </View>
+            </TouchableOpacity>
 
             <View className="mb-6">
               <Text className="mb-2 text-[14px] text-grey-alpha-500">
@@ -517,61 +551,71 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                     index < 4 ? 'border-b border-grey-plain-150' : ''
                   }`}
                 >
-                  {/* Profile Picture with Badge */}
-                  <View className="relative h-10 w-10">
-                    <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
-                      <Image
-                        source={{ uri: contributor.profileImage }}
+                  <TouchableOpacity
+                    onPress={() => {
+                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                      router.push(`/user/${contributor.id}` as any);
+                    }}
+                    activeOpacity={0.7}
+                    className="flex-1 flex-row items-center gap-3"
+                  >
+                    {/* Profile Picture with Badge */}
+                    <View className="relative h-10 w-10">
+                      <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
+                        <Image
+                          source={{ uri: contributor.profileImage }}
+                          style={{
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                          }}
+                          contentFit="cover"
+                        />
+                      </View>
+                      {/* Badge Overlay */}
+                      <View
+                        className="absolute -bottom-0.5 right-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
                         style={{
-                          width: 40,
-                          height: 40,
-                          borderRadius: 20,
+                          backgroundColor:
+                            colors['primary-tints'].purple['100'],
+                          alignItems: 'center',
+                          justifyContent: 'center',
                         }}
-                        contentFit="cover"
-                      />
+                      >
+                        <Medal
+                          color={colors.primary.purple}
+                          size={10}
+                          style={{ alignSelf: 'center' }}
+                        />
+                      </View>
                     </View>
-                    {/* Badge Overlay */}
-                    <View
-                      className="absolute -bottom-0.5 right-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
-                      style={{
-                        backgroundColor: colors['primary-tints'].purple['100'],
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Medal
-                        color={colors.primary.purple}
-                        size={10}
-                        style={{ alignSelf: 'center' }}
-                      />
-                    </View>
-                  </View>
 
-                  {/* User Info */}
-                  <View className="flex-1">
-                    <View className="mb-0.5 flex-row items-center gap-1.5">
+                    {/* User Info */}
+                    <View className="flex-1">
+                      <View className="mb-0.5 flex-row items-center gap-1.5">
+                        <Text className="text-[14px] font-semibold text-grey-alpha-500">
+                          {contributor.username}
+                        </Text>
+                        <BadgeCheck color={colors.primary.purple} size={14} />
+                      </View>
+                      <View className="flex-row items-center gap-1">
+                        <Text className="text-[12px] text-grey-plain-550">
+                          @{contributor.handle}
+                        </Text>
+                        <View className="h-1 w-1 rounded-full bg-grey-plain-550" />
+                        <Text className="text-[12px] text-grey-plain-550">
+                          {contributor.timestamp}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Amount */}
+                    <View className="rounded-full bg-grey-plain-150 px-3 py-1.5">
                       <Text className="text-[14px] font-semibold text-grey-alpha-500">
-                        {contributor.username}
-                      </Text>
-                      <BadgeCheck color={colors.primary.purple} size={14} />
-                    </View>
-                    <View className="flex-row items-center gap-1">
-                      <Text className="text-[12px] text-grey-plain-550">
-                        @{contributor.handle}
-                      </Text>
-                      <View className="h-1 w-1 rounded-full bg-grey-plain-550" />
-                      <Text className="text-[12px] text-grey-plain-550">
-                        {contributor.timestamp}
+                        {formattedAmount}
                       </Text>
                     </View>
-                  </View>
-
-                  {/* Amount */}
-                  <View className="rounded-full bg-grey-plain-150 px-3 py-1.5">
-                    <Text className="text-[14px] font-semibold text-grey-alpha-500">
-                      {formattedAmount}
-                    </Text>
-                  </View>
+                  </TouchableOpacity>
                 </View>
               );
             })}

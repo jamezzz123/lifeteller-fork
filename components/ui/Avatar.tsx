@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { Medal } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 interface AvatarProps {
   profileImage?: string;
@@ -10,6 +12,8 @@ interface AvatarProps {
   size?: number;
   showBadge?: boolean;
   className?: string;
+  userId?: string;
+  onPress?: () => void;
 }
 
 export function Avatar({
@@ -18,6 +22,8 @@ export function Avatar({
   size = 48,
   showBadge = true,
   className = '',
+  userId,
+  onPress,
 }: AvatarProps) {
   // Get initials from name
   const getInitials = (name: string): string => {
@@ -36,11 +42,16 @@ export function Avatar({
     size === 48 ? 12 : size === 40 ? 10 : Math.round(size * 0.25);
   const borderRadius = size / 2;
 
-  return (
-    <View
-      className={`relative ${className}`}
-      style={{ width: size, height: size }}
-    >
+  const handlePress = () => {
+    if (userId) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      router.push(`/user/${userId}` as any);
+    }
+    onPress?.();
+  };
+
+  const AvatarContent = (
+    <View className={`relative ${className}`} style={{ width: size, height: size }}>
       <View
         className="overflow-hidden rounded-full"
         style={{
@@ -103,4 +114,18 @@ export function Avatar({
       )}
     </View>
   );
+
+  if (userId || onPress) {
+    return (
+      <TouchableOpacity
+        onPress={handlePress}
+        disabled={!userId && !onPress}
+        activeOpacity={0.7}
+      >
+        {AvatarContent}
+      </TouchableOpacity>
+    );
+  }
+
+  return AvatarContent;
 }

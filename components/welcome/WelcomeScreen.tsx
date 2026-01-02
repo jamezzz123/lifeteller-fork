@@ -12,7 +12,6 @@ import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { WelcomeSlide } from './WelcomeSlide';
-import { PageIndicator } from './PageIndicator';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -111,6 +110,8 @@ export function WelcomeScreen() {
         imageType={item.imageType}
         images={item.images}
         image={item.image}
+        currentIndex={currentIndex}
+        totalSlides={WELCOME_SLIDES.length}
       />
     );
   }
@@ -147,18 +148,6 @@ export function WelcomeScreen() {
             });
           }}
         />
-
-        {/* Fixed PageIndicator positioned above text headers */}
-        <View
-          className="absolute left-0 right-0 px-6"
-          style={{ bottom: 140 }}
-          pointerEvents="none"
-        >
-          <PageIndicator
-            currentIndex={currentIndex}
-            totalSlides={WELCOME_SLIDES.length}
-          />
-        </View>
       </View>
 
       <WelcomeNavigationButtons

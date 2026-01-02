@@ -8,6 +8,7 @@ export function FeedList() {
     // Text-only post with mentions and hashtags
     {
       id: '1',
+      userId: 'user-1',
       username: 'Isaac Tolulope',
       handle: 'dareytemy',
       timestamp: '10 seconds ago',
@@ -22,6 +23,7 @@ export function FeedList() {
     // Media post (single image)
     {
       id: '2',
+      userId: 'user-2',
       username: 'Sarah Johnson',
       handle: 'sarahj',
       timestamp: '15 minutes ago',
@@ -43,6 +45,7 @@ export function FeedList() {
     // Media post (multiple images)
     {
       id: '3',
+      userId: 'user-3',
       username: 'Emma Williams',
       handle: 'emmaw',
       timestamp: '2 hours ago',
@@ -77,6 +80,7 @@ export function FeedList() {
     // Lift post
     {
       id: '4',
+      userId: 'user-4',
       username: 'David Brown',
       handle: 'davidb',
       timestamp: '1 day ago',
@@ -96,6 +100,7 @@ export function FeedList() {
     // Text-only post with hashtags
     {
       id: '5',
+      userId: 'user-5',
       username: 'Michael Chen',
       handle: 'mchen',
       timestamp: '2 days ago',
@@ -114,6 +119,7 @@ export function FeedList() {
         <FeedPost
           key={post.id}
           id={post.id}
+          userId={post.userId}
           username={post.username}
           handle={post.handle}
           timestamp={post.timestamp}

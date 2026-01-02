@@ -12,39 +12,62 @@ import { TabView, TabBar, Route } from 'react-native-tab-view';
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
 import {
+  CornerUpLeft,
   Search,
-  Settings,
-  Pencil,
+  Bell,
+  EllipsisVertical,
   Share2,
+  MessagesSquare,
   BadgeCheck,
   Medal,
   ArrowUpRight,
-  Plus,
-  ChevronRight,
   UserCircle,
   SquareMousePointer,
   CalendarHeart,
   Info,
-  Star,
   Play,
-  Bug,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
-import { useUser, User } from '@/hooks/useUser';
-import { formatCurrency } from '@/utils/formatAmount';
-import { InfoBanner } from '@/components/ui/InfoBanner';
-import { LiftProgressBar } from '@/components/ui/LiftProgressBar';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { MoreOptionsBottomSheet } from './MoreOptionsBottomSheet';
+import { ShareProfileBottomSheet } from './ShareProfileBottomSheet';
 import { InterestChip } from '@/components/ui/InterestChip';
+import { Button } from '@/components/ui/Button';
+import { BlockUserConfirmationModal } from './BlockUserConfirmationModal';
 import LifterBadge from '@/assets/images/badges/lifter.svg';
 import LiftCaptainBadge from '@/assets/images/badges/lift-captain.svg';
-import { ShareProfileBottomSheet } from '@/components/profile/ShareProfileBottomSheet';
-import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import LiftChampionBadge from '@/assets/images/badges/lift-champion.svg';
+import GoldenLifterBadge from '@/assets/images/badges/golden-lifter.svg';
 
 const { width } = Dimensions.get('window');
 
+interface OtherUser {
+  id: string;
+  fullName: string;
+  handle: string;
+  profileImage?: string;
+  bio?: string;
+  followersCount?: number;
+  followingCount?: number;
+  liftsCount?: number;
+  postsCount?: number;
+  isVerified?: boolean;
+  followsYou?: boolean;
+  isFollowing?: boolean;
+  badge?: string;
+  interests?: string[];
+  dateOfBirth?: string;
+  dateJoined?: string;
+  dateVerified?: string;
+}
+
+interface OtherUserProfileProps {
+  user: OtherUser;
+}
+
 // Placeholder tab content components
-function PostsTab({ user }: { user: User }) {
+function PostsTab({ user }: { user: OtherUser }) {
   return (
     <ScrollView
       className="flex-1 bg-grey-plain-50"
@@ -66,137 +89,17 @@ function PostsTab({ user }: { user: User }) {
         userId={user.id}
         username={user.fullName}
         handle={user.handle}
-        timestamp="2 hours ago"
-        content="Another amazing day helping the community! #LiftTogether #CommunityService"
-        likes={234}
-        comments={45}
-        reposts={67}
+        timestamp="1 hour ago"
+        content="Today, I visited the orphanage home at Yaba, Lagos. I went there with @xyz and @abc. We had a joyful moment with the children. #hashtag1 #hashtag2 #hashtag3"
+        likes={56}
+        comments={12}
+        reposts={12}
       />
-      <FeedPost
-        id="profile-post-3"
-        userId={user.id}
-        username={user.fullName}
-        handle={user.handle}
-        timestamp="1 day ago"
-        content="Grateful for everyone who supported our latest initiative 🙏"
-        likes={892}
-        comments={123}
-        reposts={234}
-      />
-    </ScrollView>
-  );
-}
-
-interface LiftHistoryCardProps {
-  title: string;
-  count: number;
-  amount: number;
-  onPress?: () => void;
-}
-
-function LiftHistoryCard({
-  title,
-  count,
-  amount,
-  onPress,
-}: LiftHistoryCardProps) {
-  return (
-    <TouchableOpacity
-      onPress={onPress}
-      className="relative flex-1 rounded-xl bg-grey-plain-150 p-2"
-      activeOpacity={0.7}
-    >
-      <View>
-        {/* Title at the top */}
-        <Text className="px-2 py-1 text-xs font-medium text-grey-plain-550">
-          {title}
-        </Text>
-        <View className="flex-row items-center justify-between rounded-lg bg-white px-2 py-2">
-          <View>
-            {/* Large count number */}
-            <Text className="text-2xl font-bold text-grey-alpha-550">
-              {count.toLocaleString()}
-            </Text>
-            {/* Currency amount */}
-            <Text className="text-base font-medium text-grey-alpha-450">
-              {formatCurrency(amount)}
-            </Text>
-          </View>
-
-          <ChevronRight
-            color={colors['grey-plain']['550']}
-            size={18}
-            strokeWidth={2.5}
-          />
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-}
-
-function LiftHistoryTab() {
-  // Placeholder data - replace with actual data from API/hooks
-  const liftHistoryData = {
-    totalLifts: { count: 24, amount: 2898000 },
-    totalRaised: { count: 24, amount: 2898000 },
-    totalOffered: { count: 24, amount: 2898000 },
-    totalRequested: { count: 24, amount: 2898000 },
-  };
-
-  return (
-    <ScrollView
-      className="flex-1 bg-grey-plain-50"
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Informational Banner */}
-      <InfoBanner message="Only you can see this information" />
-
-      {/* Lift History Cards Grid */}
-      <View className="px-4 py-4">
-        <View className="mb-3 flex-row gap-3">
-          <LiftHistoryCard
-            title="Total Lifts"
-            count={liftHistoryData.totalLifts.count}
-            amount={liftHistoryData.totalLifts.amount}
-            onPress={() => {
-              // Navigate to detailed view
-            }}
-          />
-          <LiftHistoryCard
-            title="Total Lifts Raised"
-            count={liftHistoryData.totalRaised.count}
-            amount={liftHistoryData.totalRaised.amount}
-            onPress={() => {
-              // Navigate to detailed view
-            }}
-          />
-        </View>
-        <View className="flex-row gap-3">
-          <LiftHistoryCard
-            title="Total Lifts Offered"
-            count={liftHistoryData.totalOffered.count}
-            amount={liftHistoryData.totalOffered.amount}
-            onPress={() => {
-              // Navigate to detailed view
-            }}
-          />
-          <LiftHistoryCard
-            title="Total Lifts Requested"
-            count={liftHistoryData.totalRequested.count}
-            amount={liftHistoryData.totalRequested.amount}
-            onPress={() => {
-              // Navigate to detailed view
-            }}
-          />
-        </View>
-      </View>
     </ScrollView>
   );
 }
 
 function PhotosTab() {
-  // Placeholder photo data - replace with actual data from API/hooks
-  // Each photo should have: { id: string, uri: string }
   const unsplashImageIds = [
     '1507003211169-0a1dd7228f2d',
     '1492562080023-4713a9a30c24',
@@ -206,13 +109,12 @@ function PhotosTab() {
     '1539571691757-3988c6b0c0c0',
     '1544005313-94ddf0286d2b',
     '1534528741775-53994a69daeb',
-    '1529626455594-4ff0802cfb7e',
+    '1529626455594-4ff0802cfb9e',
     '1506794778202-cad84cf45f1d',
     '1500648767791-00dcc994a43e',
     '1492562080023-4713a9a30c24',
   ];
 
-  // Shuffle array for randomization
   const shuffledIds = [...unsplashImageIds].sort(() => Math.random() - 0.5);
 
   const photos = Array.from({ length: 12 }, (_, i) => ({
@@ -220,14 +122,8 @@ function PhotosTab() {
     uri: `https://images.unsplash.com/photo-${shuffledIds[i]}?w=400&h=400&fit=crop`,
   }));
 
-  const { width } = Dimensions.get('window');
   const GAP = 2;
   const IMAGE_SIZE = (width - GAP * 2) / 3;
-
-  const handlePhotoPress = (photoId: string) => {
-    // Navigate to photo detail or full screen view
-    console.log('Photo pressed:', photoId);
-  };
 
   return (
     <ScrollView
@@ -244,7 +140,6 @@ function PhotosTab() {
         {photos.map((photo, index) => (
           <Pressable
             key={photo.id}
-            onPress={() => handlePhotoPress(photo.id)}
             style={{
               width: IMAGE_SIZE,
               height: IMAGE_SIZE,
@@ -267,8 +162,6 @@ function PhotosTab() {
 }
 
 function LiftClipsTab() {
-  // Placeholder video clip data - replace with actual data from API/hooks
-  // Each clip should have: { id: string, thumbnailUri: string, videoUri: string, duration?: number }
   const unsplashImageIds = [
     '1507003211169-0a1dd7228f2d',
     '1492562080023-4713a9a30c24',
@@ -278,32 +171,19 @@ function LiftClipsTab() {
     '1539571691757-3988c6b0c0c0',
     '1544005313-94ddf0286d2b',
     '1534528741775-53994a69daeb',
-    '1529626455594-4ff0802cfb7e',
-    '1506794778202-cad84cf45f1d',
-    '1500648767791-00dcc994a43e',
-    '1492562080023-4713a9a30c24',
+    '1529626455594-4ff0802cfb9e',
   ];
 
-  // Shuffle array for randomization
   const shuffledIds = [...unsplashImageIds].sort(() => Math.random() - 0.5);
 
   const clips = Array.from({ length: 9 }, (_, i) => ({
     id: `clip-${i + 1}`,
     thumbnailUri: `https://images.unsplash.com/photo-${shuffledIds[i]}?w=400&h=400&fit=crop`,
-    videoUri: `https://example.com/video-${i + 1}.mp4`, // Placeholder
-    duration: Math.floor(Math.random() * 120) + 15, // Random duration between 15-135 seconds
+    duration: Math.floor(Math.random() * 120) + 15,
   }));
 
-  const { width } = Dimensions.get('window');
   const GAP = 2;
   const CLIP_SIZE = (width - GAP) / 2;
-
-  const handleClipPress = (clipId: string) => {
-    // Navigate to video player or full screen view
-    console.log('Clip pressed:', clipId);
-    // TODO: Navigate to video player screen
-    // router.push(`/clip/${clipId}`);
-  };
 
   const formatDuration = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -326,7 +206,6 @@ function LiftClipsTab() {
         {clips.map((clip, index) => (
           <Pressable
             key={clip.id}
-            onPress={() => handleClipPress(clip.id)}
             style={{
               width: CLIP_SIZE,
               height: CLIP_SIZE,
@@ -341,7 +220,6 @@ function LiftClipsTab() {
               contentFit="cover"
               transition={200}
             />
-            {/* Video overlay with play icon */}
             <View className="absolute inset-0 items-center justify-center bg-black/20">
               <View className="h-12 w-12 items-center justify-center rounded-full border-2 border-white bg-white/30">
                 <Play
@@ -351,7 +229,6 @@ function LiftClipsTab() {
                 />
               </View>
             </View>
-            {/* Duration badge */}
             {clip.duration && (
               <View
                 className="absolute bottom-1 right-1 rounded px-1.5 py-0.5"
@@ -394,40 +271,82 @@ function SectionHeader({
       </View>
       {showInfo && (
         <TouchableOpacity onPress={onInfoPress} className="p-1">
-          <Info color={colors['grey-plain']['550']} size={16} strokeWidth={2} />
+          <Info color={colors['grey-plain']['550']} size={16} />
         </TouchableOpacity>
       )}
     </View>
   );
 }
 
-function AboutTab() {
-  // Placeholder data - replace with actual data from API/hooks
-  const aboutData = {
-    bio: 'Lazy Philanthropist. Touching lives one by one. This is who I am, this is what I am.',
-    badges: {
-      pointsEarned: 427,
+function AboutTab({ user }: { user: OtherUser }) {
+  // Determine current badge based on points or badge name
+  const getBadgeData = () => {
+    const pointsEarned = 427; // Default, should come from user data
+    const badgeName = user.badge || 'Lifter';
+
+    // Map badge names to components
+    const badgeMap: Record<
+      string,
+      {
+        component: React.ComponentType<any>;
+        nextBadge: string;
+        nextComponent: React.ComponentType<any>;
+      }
+    > = {
+      Lifter: {
+        component: LifterBadge,
+        nextBadge: 'Lift Captain',
+        nextComponent: LiftCaptainBadge,
+      },
+      'Lift Captain': {
+        component: LiftCaptainBadge,
+        nextBadge: 'Lift Champion',
+        nextComponent: LiftChampionBadge,
+      },
+      'Lift Champion': {
+        component: LiftChampionBadge,
+        nextBadge: 'Golden Lifter',
+        nextComponent: GoldenLifterBadge,
+      },
+      'Golden Lifter': {
+        component: GoldenLifterBadge,
+        nextBadge: 'Golden Lifter',
+        nextComponent: GoldenLifterBadge,
+      },
+    };
+
+    const current = badgeMap[badgeName] || badgeMap['Lifter'];
+
+    return {
+      pointsEarned,
       currentBadge: {
-        name: 'Lifter',
-        icon: Medal,
+        name: badgeName,
+        component: current.component,
       },
       nextBadge: {
-        name: 'Lift Captain',
-        icon: Star,
+        name: current.nextBadge,
+        component: current.nextComponent,
       },
-      progress: 60,
-      pointsToGo: 50,
-    },
-    interests: [
+      progress: 60, // Default progress percentage
+      pointsToGo: 50, // Default points to next badge
+    };
+  };
+
+  const badgeData = getBadgeData();
+
+  const aboutData = {
+    bio: user.bio || 'Lazy Philanthropist. Touching lives one by one.',
+    badges: badgeData,
+    interests: user.interests || [
       'Religion-based',
       'Education',
       'Faith',
       'Healthcare and Medical',
       'Family',
     ],
-    dateOfBirth: '12th December, 2005',
-    dateJoined: '12/12/2021 • 10:09pm',
-    dateVerified: '12/12/2021 • 10:09pm',
+    dateOfBirth: user.dateOfBirth || '12th December, 2005',
+    dateJoined: user.dateJoined || '12/12/2021 • 10:09pm',
+    dateVerified: user.dateVerified || '12/12/2021 • 10:09pm',
   };
 
   return (
@@ -442,13 +361,7 @@ function AboutTab() {
         style={{ backgroundColor: '#FAFBFC' }}
       >
         <SectionHeader
-          icon={
-            <UserCircle
-              color={colors['grey-alpha']['500']}
-              size={18}
-              strokeWidth={2}
-            />
-          }
+          icon={<UserCircle color={colors['grey-alpha']['500']} size={18} />}
           title="Tagline/bio"
         />
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
@@ -472,81 +385,21 @@ function AboutTab() {
             />
           }
           title="Badges"
-          showInfo
-          onInfoPress={() =>
-            router.push({
-              pathname: '/badges-info',
-              params: {
-                pointsEarned: aboutData.badges.pointsEarned.toString(),
-              },
-            })
-          }
         />
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
-          {/* Points and Leaderboard */}
-          <View className="mb-8 flex-row items-center justify-between">
-            <Text className="text-sm text-grey-alpha-500">
-              🎉 {aboutData.badges.pointsEarned} points earned so far
+          {/* Current Badge */}
+          <View className="items-center">
+            <Text className="mb-2 text-xs font-medium text-grey-plain-550">
+              Current
             </Text>
-            <TouchableOpacity onPress={() => router.push('/leaderboard')}>
-              <Text
-                className="border-b border-primary text-sm font-medium"
-                style={{ color: colors.primary.purple }}
-              >
-                Leaderboard
-              </Text>
-            </TouchableOpacity>
-          </View>
-
-          {/* Current and Next Badges */}
-          <View className="mb-4 flex-row gap-4">
-            {/* Current Badge */}
-            <View className="flex-1 items-center">
-              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
-                Current
-              </Text>
-              <View className="mb-2 h-20 w-20 items-center justify-center">
-                <LifterBadge width={80} height={80} />
-              </View>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                {aboutData.badges.currentBadge.name}
-              </Text>
+            <View className="mb-2 h-20 w-20 items-center justify-center">
+              {React.createElement(aboutData.badges.currentBadge.component, {
+                width: 80,
+                height: 80,
+              })}
             </View>
-
-            {/* Next Badge */}
-            <View className="flex-1 items-center">
-              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
-                Next
-              </Text>
-              <View className="mb-2 h-20 w-20 items-center justify-center opacity-60">
-                <LiftCaptainBadge width={80} height={80} />
-              </View>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                {aboutData.badges.nextBadge.name}
-              </Text>
-            </View>
-          </View>
-
-          {/* Progress Bar */}
-          <View className="mb-2">
-            <LiftProgressBar
-              currentAmount={
-                (aboutData.badges.pointsToGo /
-                  (1 - aboutData.badges.progress / 100)) *
-                (aboutData.badges.progress / 100)
-              }
-              targetAmount={
-                aboutData.badges.pointsToGo /
-                (1 - aboutData.badges.progress / 100)
-              }
-              showAmount={false}
-            />
-          </View>
-
-          {/* Points to go */}
-          <View className="mt-3 flex-row items-center justify-center gap-1">
-            <Text className="text-xs text-grey-plain-550">
-              🎯 {aboutData.badges.pointsToGo} points to go
+            <Text className="text-xs font-medium text-grey-alpha-500">
+              {aboutData.badges.currentBadge.name}
             </Text>
           </View>
         </View>
@@ -559,11 +412,7 @@ function AboutTab() {
       >
         <SectionHeader
           icon={
-            <SquareMousePointer
-              color={colors['grey-alpha']['500']}
-              size={18}
-              strokeWidth={2}
-            />
+            <SquareMousePointer color={colors['grey-alpha']['500']} size={18} />
           }
           title="Interests"
         />
@@ -582,25 +431,14 @@ function AboutTab() {
         style={{ backgroundColor: '#FAFBFC' }}
       >
         <SectionHeader
-          icon={
-            <CalendarHeart
-              color={colors['grey-alpha']['500']}
-              size={18}
-              strokeWidth={2}
-            />
-          }
+          icon={<CalendarHeart color={colors['grey-alpha']['500']} size={18} />}
           title="Date of birth"
           showInfo
         />
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
-          <TouchableOpacity>
-            <Text
-              className="text-sm font-medium underline"
-              style={{ color: colors.primary.purple }}
-            >
-              {aboutData.dateOfBirth}
-            </Text>
-          </TouchableOpacity>
+          <Text className="text-sm text-grey-alpha-500">
+            {aboutData.dateOfBirth}
+          </Text>
         </View>
       </View>
 
@@ -610,13 +448,7 @@ function AboutTab() {
         style={{ backgroundColor: '#FAFBFC' }}
       >
         <SectionHeader
-          icon={
-            <CalendarHeart
-              color={colors['grey-alpha']['500']}
-              size={18}
-              strokeWidth={2}
-            />
-          }
+          icon={<CalendarHeart color={colors['grey-alpha']['500']} size={18} />}
           title="Other details"
         />
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
@@ -638,13 +470,14 @@ function AboutTab() {
   );
 }
 
-export default function ProfileScreen() {
-  const { user } = useUser();
+export function OtherUserProfile({ user }: OtherUserProfileProps) {
   const [index, setIndex] = useState(0);
+  const moreOptionsSheetRef = useRef<BottomSheetRef>(null);
   const shareProfileSheetRef = useRef<BottomSheetRef>(null);
+  const [isFollowing, setIsFollowing] = useState(user.isFollowing || false);
+  const [showBlockConfirmation, setShowBlockConfirmation] = useState(false);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
-    { key: 'liftHistory', title: 'Lift history' },
     { key: 'photos', title: 'Photos' },
     { key: 'liftClips', title: 'Lift clips' },
     { key: 'about', title: 'About' },
@@ -654,41 +487,85 @@ export default function ProfileScreen() {
     switch (route.key) {
       case 'posts':
         return <PostsTab user={user} />;
-      case 'liftHistory':
-        return <LiftHistoryTab />;
       case 'photos':
         return <PhotosTab />;
       case 'liftClips':
         return <LiftClipsTab />;
       case 'about':
-        return <AboutTab />;
+        return <AboutTab user={user} />;
       default:
         return null;
     }
   };
 
+  const handleFollow = () => {
+    setIsFollowing(!isFollowing);
+    // TODO: Implement follow/unfollow functionality
+  };
+
+  const handleRequestLift = () => {
+    router.push({
+      pathname: '/request-lift',
+      params: { recipientId: user.id, recipientName: user.fullName },
+    } as any);
+  };
+
+  const handleOfferLift = () => {
+    router.push({
+      pathname: '/offer-lift',
+      params: { recipientId: user.id, recipientName: user.fullName },
+    } as any);
+  };
+
+  const handleBlockUser = () => {
+    setShowBlockConfirmation(true);
+  };
+
+  const handleConfirmBlock = () => {
+    // TODO: Implement block user functionality
+    console.log('Block user:', user.id);
+    setShowBlockConfirmation(false);
+    router.back();
+  };
+
+  const handleCancelBlock = () => {
+    setShowBlockConfirmation(false);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
-      {/* Fixed Header */}
-      <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
-        <Text className="text-2xl font-bold text-grey-alpha-500">Profile</Text>
-        <View className="flex-row items-center gap-4">
-          <TouchableOpacity>
-            <Search color={colors['grey-alpha']['500']} size={24} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/debug')}>
-            <Bug color={colors['grey-alpha']['500']} size={24} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/settings')}>
-            <Settings color={colors['grey-alpha']['500']} size={24} />
-          </TouchableOpacity>
-        </View>
-      </View>
-
       {/* Scrollable Content */}
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Profile Header Section */}
         <View className="border-b border-grey-plain-150 bg-white">
+          {/* Navigation Bar */}
+          <View className="flex-row items-center justify-between border-b border-grey-plain-150 px-4 py-3">
+            <View className="flex-row items-center gap-3">
+              <TouchableOpacity onPress={() => router.back()}>
+                <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
+              </TouchableOpacity>
+              <Text className="text-lg font-semibold text-grey-alpha-500">
+                {user.fullName}
+              </Text>
+            </View>
+            <View className="flex-row items-center gap-4">
+              <TouchableOpacity>
+                <Search color={colors['grey-alpha']['500']} size={24} />
+              </TouchableOpacity>
+              <TouchableOpacity>
+                <Bell color={colors['grey-alpha']['500']} size={24} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => moreOptionsSheetRef.current?.expand()}
+              >
+                <EllipsisVertical
+                  color={colors['grey-alpha']['500']}
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
           {/* User Info */}
           <View className="px-4 pb-4 pt-6">
             <View className="mb-4">
@@ -698,7 +575,7 @@ export default function ProfileScreen() {
                   <View className="h-24 w-24 overflow-hidden rounded-full bg-grey-plain-300">
                     {user.profileImage ? (
                       <Image
-                        source={user.profileImage}
+                        source={{ uri: user.profileImage }}
                         style={{ width: 96, height: 96 }}
                         contentFit="cover"
                       />
@@ -716,19 +593,6 @@ export default function ProfileScreen() {
                       </View>
                     )}
                   </View>
-                  {/* Add Profile/Story Button */}
-                  <TouchableOpacity
-                    className="absolute -bottom-0.5 -right-0.5 h-7 w-7 items-center justify-center rounded-full border-2 border-white"
-                    style={{
-                      backgroundColor: colors['grey-plain']['50'],
-                    }}
-                  >
-                    <Plus
-                      color={colors['grey-alpha']['550']}
-                      size={16}
-                      strokeWidth={3}
-                    />
-                  </TouchableOpacity>
                 </View>
 
                 {/* User Details */}
@@ -757,55 +621,81 @@ export default function ProfileScreen() {
                           className="text-xs font-semibold"
                           style={{ color: colors['grey-alpha']['550'] }}
                         >
-                          Lift Captain
+                          {user.badge || 'Lift Captain'}
                         </Text>
                       </View>
                     </View>
                   </View>
                 </View>
 
-                {/* Action Buttons */}
+                {/* Action Icons */}
                 <View className="ml-auto flex-row gap-3">
-                  <TouchableOpacity
-                    className="p-1.5"
-                    onPress={() => router.push('/edit-details' as any)}
-                  >
-                    <Pencil
-                      color={colors['grey-alpha']['500']}
-                      size={22}
-                      strokeWidth={2}
-                    />
-                  </TouchableOpacity>
                   <TouchableOpacity
                     className="p-1.5"
                     onPress={() => shareProfileSheetRef.current?.expand()}
                   >
-                    <Share2
+                    <Share2 color={colors['grey-alpha']['500']} size={22} />
+                  </TouchableOpacity>
+                  <TouchableOpacity className="p-1.5">
+                    <MessagesSquare
                       color={colors['grey-alpha']['500']}
                       size={22}
-                      strokeWidth={2}
                     />
                   </TouchableOpacity>
                 </View>
               </View>
 
-              {/* Bio - Below avatar and user info */}
-              {user.bio && (
-                <Text className="text-sm text-grey-plain-550">{user.bio}</Text>
+              {/* Follows You Indicator */}
+              {user.followsYou && (
+                <View className="mb-2">
+                  <Text className="text-sm text-grey-plain-550">
+                    Follows you
+                  </Text>
+                </View>
               )}
+
+              {/* Bio */}
+              {user.bio && (
+                <Text className="mb-4 text-sm text-grey-plain-550">
+                  {user.bio}
+                </Text>
+              )}
+
+              {/* Action Buttons */}
+              <View className="mb-4 flex-row items-center gap-3">
+                <Button
+                  title="Request lift"
+                  onPress={handleRequestLift}
+                  variant="outline"
+                  size="medium"
+                />
+                <Button
+                  title="Offer lift"
+                  onPress={handleOfferLift}
+                  variant="outline"
+                  size="medium"
+                />
+                <Button
+                  title={isFollowing ? 'Following' : 'Follow'}
+                  onPress={handleFollow}
+                  variant="primary"
+                  size="medium"
+                  className="flex-1"
+                />
+              </View>
             </View>
 
             {/* Stats */}
             <View className="flex-row gap-3">
               {/* Lifts Card */}
-              <TouchableOpacity className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
+              <View className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
                 <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
                   {(user.liftsCount || 0).toLocaleString()}
                 </Text>
                 <Text className="text-xs font-medium text-grey-plain-550">
                   Lifts
                 </Text>
-              </TouchableOpacity>
+              </View>
 
               {/* Following Card */}
               <TouchableOpacity
@@ -815,10 +705,12 @@ export default function ProfileScreen() {
                     pathname: '/followers-following',
                     params: {
                       userName: user.fullName,
+                      userId: user.id,
                       initialTab: 'following',
                     },
                   })
                 }
+                activeOpacity={0.7}
               >
                 <View className="absolute right-2.5 top-2.5">
                   <ArrowUpRight
@@ -843,10 +735,12 @@ export default function ProfileScreen() {
                     pathname: '/followers-following',
                     params: {
                       userName: user.fullName,
+                      userId: user.id,
                       initialTab: 'followers',
                     },
                   })
                 }
+                activeOpacity={0.7}
               >
                 <View className="absolute right-2.5 top-2.5">
                   <ArrowUpRight
@@ -856,9 +750,7 @@ export default function ProfileScreen() {
                   />
                 </View>
                 <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                  {user.followersCount && user.followersCount >= 1000
-                    ? `${(user.followersCount / 1000).toFixed(1)}k`
-                    : (user.followersCount || 0).toLocaleString()}
+                  {(user.followersCount || 0).toLocaleString()}
                 </Text>
                 <Text className="text-xs font-medium text-grey-plain-550">
                   Followers
@@ -917,11 +809,43 @@ export default function ProfileScreen() {
         </View>
       </ScrollView>
 
+      {/* More Options Bottom Sheet */}
+      <MoreOptionsBottomSheet
+        ref={moreOptionsSheetRef}
+        userId={user.id}
+        username={user.handle || user.fullName}
+        isFollowing={isFollowing}
+        onUnfollow={() => setIsFollowing(false)}
+        onBlockUser={handleBlockUser}
+        onShareProfile={() => shareProfileSheetRef.current?.expand()}
+        onSharedActivities={() => {
+          router.push({
+            pathname: '/shared-activities/[userId]',
+            params: {
+              userId: user.id,
+              username: user.handle || user.fullName,
+              fullName: user.fullName,
+              profileImage: user.profileImage,
+              isVerified: user.isVerified ? 'true' : 'false',
+              followsYou: user.followsYou ? 'true' : 'false',
+            },
+          } as any);
+        }}
+      />
+
+      {/* Block User Confirmation Modal */}
+      <BlockUserConfirmationModal
+        visible={showBlockConfirmation}
+        username={user.handle || user.fullName}
+        onConfirm={handleConfirmBlock}
+        onCancel={handleCancelBlock}
+      />
+
       {/* Share Profile Bottom Sheet */}
       <ShareProfileBottomSheet
         ref={shareProfileSheetRef}
-        username={user.handle}
-        profileUrl={`https://lifteller.com/${user.handle}`}
+        username={user.handle || user.fullName}
+        profileUrl={`https://lifteller.com/${user.handle || user.id}`}
       />
     </SafeAreaView>
   );

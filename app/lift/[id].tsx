@@ -32,6 +32,7 @@ import { Button } from '@/components/ui/Button';
 const mockPosts: Record<string, any> = {
   '1': {
     id: '1',
+    userId: 'user-1',
     username: 'Isaac Tolulope',
     handle: 'dareytemy',
     timestamp: '10 seconds ago',
@@ -46,6 +47,7 @@ const mockPosts: Record<string, any> = {
   },
   '2': {
     id: '2',
+    userId: 'user-2',
     username: 'Sarah Johnson',
     handle: 'sarahj',
     timestamp: '15 minutes ago',
@@ -67,6 +69,7 @@ const mockPosts: Record<string, any> = {
   },
   '3': {
     id: '3',
+    userId: 'user-3',
     username: 'Emma Williams',
     handle: 'emmaw',
     timestamp: '2 hours ago',
@@ -106,6 +109,7 @@ const mockPosts: Record<string, any> = {
   },
   '4': {
     id: '4',
+    userId: 'user-1',
     username: 'Isaac Tolulope',
     handle: 'dareytemy',
     timestamp: '10 seconds ago',

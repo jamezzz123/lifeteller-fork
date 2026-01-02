@@ -1,4 +1,7 @@
 PODS:
+  - EXAV (16.0.8):
+    - ExpoModulesCore
+    - ReactCommon/turbomodule/core
   - EXConstants (18.0.10):
     - ExpoModulesCore
   - EXImageLoader (6.0.0):
@@ -205,6 +208,12 @@ PODS:
     - Yoga
   - ExpoAsset (12.0.10):
     - ExpoModulesCore
+  - ExpoBlur (15.0.8):
+    - ExpoModulesCore
+  - ExpoCamera (16.0.18):
+    - ExpoModulesCore
+    - ZXingObjC/OneD
+    - ZXingObjC/PDF417
   - ExpoClipboard (8.0.8):
     - ExpoModulesCore
   - ExpoFileSystem (19.0.19):
@@ -2276,8 +2285,14 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.17)
   - Yoga (0.0.0)
+  - ZXingObjC/Core (3.6.9)
+  - ZXingObjC/OneD (3.6.9):
+    - ZXingObjC/Core
+  - ZXingObjC/PDF417 (3.6.9):
+    - ZXingObjC/Core
 
 DEPENDENCIES:
+  - "EXAV (from `../node_modules/.pnpm/expo-av@16.0.8_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-av/ios`)"
   - "EXConstants (from `../node_modules/.pnpm/expo-constants@18.0.10_expo@54.0.26_react-native@0.81.5/node_modules/expo-constants/ios`)"
   - "EXImageLoader (from `../node_modules/.pnpm/expo-image-loader@6.0.0_expo@54.0.26/node_modules/expo-image-loader/ios`)"
   - "EXJSONUtils (from `../node_modules/.pnpm/expo-json-utils@0.15.0/node_modules/expo-json-utils/ios`)"
@@ -2288,6 +2303,8 @@ DEPENDENCIES:
   - "expo-dev-menu (from `../node_modules/.pnpm/expo-dev-menu@7.0.18_expo@54.0.26/node_modules/expo-dev-menu`)"
   - "expo-dev-menu-interface (from `../node_modules/.pnpm/expo-dev-menu-interface@2.0.0_expo@54.0.26/node_modules/expo-dev-menu-interface/ios`)"
   - "ExpoAsset (from `../node_modules/.pnpm/expo-asset@12.0.10_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-asset/ios`)"
+  - "ExpoBlur (from `../node_modules/.pnpm/expo-blur@15.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-blur/ios`)"
+  - "ExpoCamera (from `../node_modules/.pnpm/expo-camera@16.0.18_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-camera/ios`)"
   - "ExpoClipboard (from `../node_modules/.pnpm/expo-clipboard@8.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios`)"
   - "ExpoFileSystem (from `../node_modules/.pnpm/expo-file-system@19.0.19_expo@54.0.26_react-native@0.81.5/node_modules/expo-file-system/ios`)"
   - "ExpoFont (from `../node_modules/.pnpm/expo-font@14.0.9_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-font/ios`)"
@@ -2389,8 +2406,11 @@ SPEC REPOS:
     - SDWebImageAVIFCoder
     - SDWebImageSVGCoder
     - SDWebImageWebPCoder
+    - ZXingObjC
 
 EXTERNAL SOURCES:
+  EXAV:
+    :path: "../node_modules/.pnpm/expo-av@16.0.8_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-av/ios"
   EXConstants:
     :path: "../node_modules/.pnpm/expo-constants@18.0.10_expo@54.0.26_react-native@0.81.5/node_modules/expo-constants/ios"
   EXImageLoader:
@@ -2411,6 +2431,10 @@ EXTERNAL SOURCES:
     :path: "../node_modules/.pnpm/expo-dev-menu-interface@2.0.0_expo@54.0.26/node_modules/expo-dev-menu-interface/ios"
   ExpoAsset:
     :path: "../node_modules/.pnpm/expo-asset@12.0.10_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-asset/ios"
+  ExpoBlur:
+    :path: "../node_modules/.pnpm/expo-blur@15.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-blur/ios"
+  ExpoCamera:
+    :path: "../node_modules/.pnpm/expo-camera@16.0.18_expo@54.0.26_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-camera/ios"
   ExpoClipboard:
     :path: "../node_modules/.pnpm/expo-clipboard@8.0.8_expo@54.0.26_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios"
   ExpoFileSystem:
@@ -2594,6 +2618,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/.pnpm/react-native@0.81.5_@babel+core@7.28.5_@types+react@19.1.17_react@19.1.0/node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
+  EXAV: c2de1057f4d9b0bcbdd908c6f2dcff48ece36f2b
   EXConstants: e6e50cdfcb4524f40121d1fdcff24e97b7dcd2fd
   EXImageLoader: e501c001bc40b8326605e82e6e80363c80fe06b5
   EXJSONUtils: 1d3e4590438c3ee593684186007028a14b3686cd
@@ -2604,6 +2629,8 @@ SPEC CHECKSUMS:
   expo-dev-menu: ea4fb803ace52e60d7cd8060c7cd379612a140b2
   expo-dev-menu-interface: 600df12ea01efecdd822daaf13cc0ac091775533
   ExpoAsset: ee515c16290e521de1870dcdee66d78173fbc533
+  ExpoBlur: 688c53d5d26575cbb6c72e7fbd4caef8d8cfadf6
+  ExpoCamera: 173e000631122854b87c20310513981e89030bc6
   ExpoClipboard: 50fa3332136758be7ca2ea912bae585f74bb93c3
   ExpoFileSystem: 73a9f3f2e0affc61eba5b9326153f64870438af1
   ExpoFont: b881d43057dceb7b31ff767b24f612609e80f60f
@@ -2701,6 +2728,7 @@ SPEC CHECKSUMS:
   SDWebImageSVGCoder: 15a300a97ec1c8ac958f009c02220ac0402e936c
   SDWebImageWebPCoder: e38c0a70396191361d60c092933e22c20d5b1380
   Yoga: 5934998fbeaef7845dbf698f698518695ab4cd1a
+  ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
 PODFILE CHECKSUM: 01ddb5e74bddc081ac9dfd30800da75c3b76e45b
 

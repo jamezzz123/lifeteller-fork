@@ -31,6 +31,7 @@ interface LiftData {
 
 interface FeedPostProps {
   id?: string;
+  userId?: string;
   username: string;
   handle: string;
   timestamp: string;
@@ -82,6 +83,7 @@ function parseTextWithStyling(text: string) {
 
 export function FeedPost({
   id,
+  userId,
   username,
   handle,
   timestamp,
@@ -104,6 +106,15 @@ export function FeedPost({
     router.push(`/lift/${id}` as any);
   }
 
+  function handleProfilePress(e?: any) {
+    if (e) {
+      e.stopPropagation();
+    }
+    if (!userId) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(`/user/${userId}` as any);
+  }
+
   return (
     <Pressable
       onPress={handlePostPress}
@@ -114,61 +125,73 @@ export function FeedPost({
         <View className="mb-3 flex-row items-start justify-between">
           <View className="flex-1 flex-row items-center gap-3">
             {/* Profile Picture with Badge */}
-            <View className="relative h-12 w-12">
-              <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
-                {profileImage ? (
-                  <Image
-                    source={{ uri: profileImage }}
-                    style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                    }}
-                    contentFit="cover"
+            <TouchableOpacity
+              onPress={handleProfilePress}
+              disabled={!userId}
+              activeOpacity={userId ? 0.7 : 1}
+            >
+              <View className="relative h-12 w-12">
+                <View className="h-12 w-12 overflow-hidden rounded-full bg-grey-plain-300">
+                  {profileImage ? (
+                    <Image
+                      source={{ uri: profileImage }}
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 24,
+                      }}
+                      contentFit="cover"
+                    />
+                  ) : (
+                    <View className="h-full w-full bg-grey-plain-450" />
+                  )}
+                </View>
+                {/* Badge Overlay */}
+                <View
+                  className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+                  style={{
+                    backgroundColor: colors['primary-tints'].purple['100'],
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Medal
+                    color={colors.primary.purple}
+                    size={12}
+                    style={{ alignSelf: 'center' }}
                   />
-                ) : (
-                  <View className="h-full w-full bg-grey-plain-450" />
-                )}
+                </View>
               </View>
-              {/* Badge Overlay */}
-              <View
-                className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
-                style={{
-                  backgroundColor: colors['primary-tints'].purple['100'],
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Medal
-                  color={colors.primary.purple}
-                  size={12}
-                  style={{ alignSelf: 'center' }}
-                />
-              </View>
-            </View>
+            </TouchableOpacity>
             <View className="flex-1">
-              <View className="mb-0.5 flex-row items-center gap-1.5">
-                <Text className="text-[15px] font-semibold text-grey-alpha-500">
-                  {username}
-                </Text>
-                <BadgeCheck color={colors.primary.purple} size={16} />
-                {otherUsersCount !== undefined && otherUsersCount > 0 && (
-                  <Text className="text-[13px] text-grey-plain-550">
-                    and{' '}
-                    <Text className="font-semibold">+{otherUsersCount}</Text>{' '}
-                    others
+              <TouchableOpacity
+                onPress={handleProfilePress}
+                disabled={!userId}
+                activeOpacity={userId ? 0.7 : 1}
+              >
+                <View className="mb-0.5 flex-row items-center gap-1.5">
+                  <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                    {username}
                   </Text>
-                )}
-              </View>
-              <View className="flex-row items-center gap-1">
-                <Text className="text-[13px] text-grey-plain-550">
-                  @{handle}
-                </Text>
-                <View className="h-1 w-1 rounded-full bg-grey-plain-550" />
-                <Text className="text-[13px] text-grey-plain-550">
-                  {timestamp}
-                </Text>
-              </View>
+                  <BadgeCheck color={colors.primary.purple} size={16} />
+                  {otherUsersCount !== undefined && otherUsersCount > 0 && (
+                    <Text className="text-[13px] text-grey-plain-550">
+                      and{' '}
+                      <Text className="font-semibold">+{otherUsersCount}</Text>{' '}
+                      others
+                    </Text>
+                  )}
+                </View>
+                <View className="flex-row items-center gap-1">
+                  <Text className="text-[13px] text-grey-plain-550">
+                    @{handle}
+                  </Text>
+                  <View className="h-1 w-1 rounded-full bg-grey-plain-550" />
+                  <Text className="text-[13px] text-grey-plain-550">
+                    {timestamp}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </View>
           <TouchableOpacity className="p-1" onPress={onMenuPress}>

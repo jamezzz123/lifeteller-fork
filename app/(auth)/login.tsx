@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -28,6 +28,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSocialSheet, setShowSocialSheet] = useState(false);
   const socialSheetRef = useRef<SocialOptionsSheetRef>(null);
 
   function handleBack() {
@@ -46,14 +47,30 @@ export default function LoginScreen() {
     router.replace('/(tabs)');
   }
 
+  // Open the sheet when it mounts
+  useEffect(() => {
+    if (showSocialSheet && socialSheetRef.current) {
+      // Small delay to ensure the component is fully mounted
+      setTimeout(() => {
+        socialSheetRef.current?.open();
+      }, 100);
+    }
+  }, [showSocialSheet]);
+
   function handleOtherSocials() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    socialSheetRef.current?.open();
+    setShowSocialSheet(true);
+  }
+
+  function handleSocialSheetClose() {
+    setShowSocialSheet(false);
   }
 
   function handleSocialSelect(socialId: string) {
     // TODO: Implement social sign-in based on selected option
     console.log('Selected social:', socialId);
+    // Close and unmount the sheet
+    setShowSocialSheet(false);
   }
 
   function handleForgotPassword() {
@@ -214,7 +231,13 @@ export default function LoginScreen() {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <SocialOptionsSheet ref={socialSheetRef} onSelect={handleSocialSelect} />
+      {showSocialSheet && (
+        <SocialOptionsSheet
+          ref={socialSheetRef}
+          onSelect={handleSocialSelect}
+          onClose={handleSocialSheetClose}
+        />
+      )}
     </SafeAreaView>
   );
 }

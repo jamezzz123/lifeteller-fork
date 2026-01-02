@@ -1,6 +1,7 @@
 import { View, Text, Dimensions, ImageSourcePropType } from 'react-native';
 import { Image } from 'expo-image';
 import { CollageCarousel } from './CollageCarousel';
+import { PageIndicator } from './PageIndicator';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -10,6 +11,8 @@ interface WelcomeSlideProps {
   imageType: 'collage' | 'illustration';
   images?: ImageSourcePropType[];
   image?: ImageSourcePropType;
+  currentIndex: number;
+  totalSlides: number;
 }
 
 export function WelcomeSlide({
@@ -18,6 +21,8 @@ export function WelcomeSlide({
   imageType,
   images,
   image,
+  currentIndex,
+  totalSlides,
 }: WelcomeSlideProps) {
   return (
     <View
@@ -41,7 +46,11 @@ export function WelcomeSlide({
         )}
       </View>
 
-      <View className="w-full pb-8 mt-6">
+      <View className="w-full mt-6">
+        <PageIndicator currentIndex={currentIndex} totalSlides={totalSlides} />
+      </View>
+
+      <View className="w-full pb-4 mt-2">
         <Text className="mb-2 text-2xl font-bold text-grey-alpha-450">
           {title}
         </Text>

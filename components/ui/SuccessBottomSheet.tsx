@@ -36,7 +36,7 @@ export function SuccessBottomSheet({
         className="flex-1 justify-end bg-black/50"
       >
         <TouchableOpacity activeOpacity={1} onPress={() => {}}>
-          <View className="rounded-t-3xl bg-white px-6 pb-8 pt-4">
+          <View className="items-center rounded-t-3xl bg-white px-6 pb-8 pt-4">
             {/* Handle Bar */}
             <View className="mb-6 items-center">
               <View className="h-1 w-12 rounded-full bg-grey-plain-450" />
@@ -77,7 +77,6 @@ export function SuccessBottomSheet({
                   title={secondaryActionText}
                   onPress={onSecondaryAction}
                   variant="outline"
-                  size="large"
                   className="w-full"
                 />
               </View>
@@ -88,7 +87,6 @@ export function SuccessBottomSheet({
                   title={primaryActionText}
                   onPress={onPrimaryAction}
                   variant="primary"
-                  size="large"
                   className="w-full"
                 />
               </View>

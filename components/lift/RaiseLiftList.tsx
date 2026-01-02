@@ -3,8 +3,9 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { BadgeCheck } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { formatAmount } from '@/utils/formatAmount';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 import { Avatar } from '../ui/Avatar';
-
 export interface Contributor {
   id: string;
   username: string;
@@ -31,15 +32,22 @@ export function RaiseLiftList({
         const formattedAmount = formatAmount(contributor.amount);
         const isLastItem = index === contributors.length - 1;
 
+        const handlePress = () => {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          router.push(`/user/${contributor.id}` as any);
+          onPress?.(contributor);
+        };
+
         return (
           <TouchableOpacity
             key={contributor.id}
-            onPress={() => onPress?.(contributor)}
+            onPress={handlePress}
             className={`flex-row items-center gap-3 py-4 ${
               showDividers && !isLastItem
                 ? 'border-b border-grey-plain-150'
                 : ''
             }`}
+            activeOpacity={0.7}
           >
             {/* Profile Picture with Badge */}
             <View className="relative h-10 w-10">

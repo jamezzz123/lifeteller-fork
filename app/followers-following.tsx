@@ -37,8 +37,16 @@ interface UserListItemProps {
 }
 
 function UserListItemComponent({ user, onFollowPress }: UserListItemProps) {
+  const handleProfilePress = () => {
+    router.push(`/user/${user.id}` as any);
+  };
+
   return (
-    <View className="flex-row items-center border-b border-grey-plain-150 px-4 py-3">
+    <TouchableOpacity
+      className="flex-row items-center border-b border-grey-plain-150 px-4 py-3"
+      onPress={handleProfilePress}
+      activeOpacity={0.7}
+    >
       {/* Profile Picture with Badge */}
       <View className="mr-3">
         <Avatar
@@ -46,6 +54,7 @@ function UserListItemComponent({ user, onFollowPress }: UserListItemProps) {
           name={user.name}
           size={48}
           showBadge={true}
+          userId={user.id}
         />
       </View>
 
@@ -65,14 +74,16 @@ function UserListItemComponent({ user, onFollowPress }: UserListItemProps) {
       </View>
 
       {/* Follow Button */}
-      <Button
-        title={user.isFollowing ? 'Following' : 'Follow back'}
-        onPress={() => onFollowPress(user.id)}
-        variant={user.isFollowing ? 'outline' : 'primary'}
-        size="small"
-        className="rounded-full"
-      />
-    </View>
+      <View onStartShouldSetResponder={() => true}>
+        <Button
+          title={user.isFollowing ? 'Following' : 'Follow back'}
+          onPress={() => onFollowPress(user.id)}
+          variant={user.isFollowing ? 'outline' : 'primary'}
+          size="small"
+          className="rounded-full"
+        />
+      </View>
+    </TouchableOpacity>
   );
 }
 

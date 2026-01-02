@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { BadgeCheck } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 interface UserHeaderProps {
   name: string;
@@ -10,6 +12,7 @@ interface UserHeaderProps {
   timestamp: string;
   profileImage: string;
   verified?: boolean;
+  userId?: string;
 }
 
 export function UserHeader({
@@ -18,9 +21,22 @@ export function UserHeader({
   timestamp,
   profileImage,
   verified = false,
+  userId,
 }: UserHeaderProps) {
+  const handleProfilePress = () => {
+    if (userId) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      router.push(`/user/${userId}` as any);
+    }
+  };
+
   return (
-    <View className="mb-3 flex-row items-center gap-3 py-4">
+    <TouchableOpacity
+      className="mb-3 flex-row items-center gap-3 py-4"
+      onPress={handleProfilePress}
+      disabled={!userId}
+      activeOpacity={userId ? 0.7 : 1}
+    >
       <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
         <Image
           source={{ uri: profileImage }}
@@ -41,6 +57,6 @@ export function UserHeader({
           <Text className="text-[13px] text-grey-plain-550">{timestamp}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

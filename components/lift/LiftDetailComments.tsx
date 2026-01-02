@@ -11,6 +11,8 @@ import {
   ChevronDown,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
+import { router } from 'expo-router';
+import * as Haptics from 'expo-haptics';
 
 interface LiftDetailCommentsProps {
   postId: string;
@@ -51,6 +53,7 @@ function parseTextWithStyling(text: string) {
 const mockComments = [
   {
     id: '1',
+    userId: 'user-1',
     username: 'Isaac Tolulope',
     handle: 'dareytemy',
     timestamp: '10 seconds ago',
@@ -63,6 +66,7 @@ const mockComments = [
   },
   {
     id: '2',
+    userId: 'user-2',
     username: 'Isaac Tolulope',
     handle: 'dareytemy',
     timestamp: '10 seconds ago',
@@ -75,6 +79,7 @@ const mockComments = [
   },
   {
     id: '3',
+    userId: 'user-3',
     username: 'Isaac Tolulope',
     handle: 'dareytemy',
     timestamp: '10 seconds ago',
@@ -122,39 +127,60 @@ export function LiftDetailComments({ postId }: LiftDetailCommentsProps) {
               <View className="mb-2 flex-row items-start justify-between">
                 <View className="flex-1 flex-row items-center gap-3">
                   {/* Profile Picture */}
-                  <View className="relative h-10 w-10">
-                    <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
-                      {comment.profileImage ? (
-                        <Image
-                          source={{ uri: comment.profileImage }}
-                          style={{
-                            width: 40,
-                            height: 40,
-                            borderRadius: 20,
-                          }}
-                          contentFit="cover"
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (comment.userId) {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        router.push(`/user/${comment.userId}` as any);
+                      }
+                    }}
+                    disabled={!comment.userId}
+                    activeOpacity={comment.userId ? 0.7 : 1}
+                  >
+                    <View className="relative h-10 w-10">
+                      <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
+                        {comment.profileImage ? (
+                          <Image
+                            source={{ uri: comment.profileImage }}
+                            style={{
+                              width: 40,
+                              height: 40,
+                              borderRadius: 20,
+                            }}
+                            contentFit="cover"
+                          />
+                        ) : (
+                          <View className="h-full w-full bg-grey-plain-450" />
+                        )}
+                      </View>
+                      {/* Badge Overlay */}
+                      <View
+                        className="absolute -bottom-0.5 left-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
+                        style={{
+                          backgroundColor: colors['primary-tints'].purple['100'],
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Medal
+                          color={colors.primary.purple}
+                          size={10}
+                          style={{ alignSelf: 'center' }}
                         />
-                      ) : (
-                        <View className="h-full w-full bg-grey-plain-450" />
-                      )}
+                      </View>
                     </View>
-                    {/* Badge Overlay */}
-                    <View
-                      className="absolute -bottom-0.5 left-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
-                      style={{
-                        backgroundColor: colors['primary-tints'].purple['100'],
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <Medal
-                        color={colors.primary.purple}
-                        size={10}
-                        style={{ alignSelf: 'center' }}
-                      />
-                    </View>
-                  </View>
-                  <View className="flex-1">
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex-1"
+                    onPress={() => {
+                      if (comment.userId) {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                        router.push(`/user/${comment.userId}` as any);
+                      }
+                    }}
+                    disabled={!comment.userId}
+                    activeOpacity={comment.userId ? 0.7 : 1}
+                  >
                     <View className="mb-0.5 flex-row items-center gap-1.5">
                       <Text className="text-[14px] font-semibold text-grey-alpha-500">
                         {comment.username}
@@ -170,7 +196,7 @@ export function LiftDetailComments({ postId }: LiftDetailCommentsProps) {
                         {comment.timestamp}
                       </Text>
                     </View>
-                  </View>
+                  </TouchableOpacity>
                 </View>
                 <TouchableOpacity className="p-1">
                   <Ellipsis color={colors['grey-plain']['550']} size={18} />
