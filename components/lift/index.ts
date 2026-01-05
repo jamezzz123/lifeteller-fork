@@ -9,6 +9,8 @@ export * from './ChooseListBottomSheet';
 export * from './ContactChip';
 export * from './ContactRow';
 export * from './CreateListModal';
+export { default as HelpMeWriteBottomSheet } from './HelpMeWriteBottomSheet';
+export type { HelpMeWriteBottomSheetRef } from './HelpMeWriteBottomSheet';
 export { LiftCard } from './LiftRequestCard';
 export * from './LiftTypeSelector';
 export { LiftTypeModal } from './LiftTypeModal';

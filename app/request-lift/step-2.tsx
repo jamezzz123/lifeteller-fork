@@ -20,6 +20,8 @@ import {
   filterTitleSuggestions,
   ContactRow,
   AudienceBottomSheet,
+  HelpMeWriteBottomSheet,
+  HelpMeWriteBottomSheetRef,
 } from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import {
@@ -57,6 +59,7 @@ export default function Step2Screen() {
 
   const mediaPickerRef = useRef<BottomSheetRef>(null);
   const audienceBottomSheetRef = useRef<BottomSheetRef>(null);
+  const helpMeWriteRef = useRef<HelpMeWriteBottomSheetRef>(null);
 
   const titleSuggestions = useMemo(() => {
     return filterTitleSuggestions(liftTitle);
@@ -117,7 +120,11 @@ export default function Step2Screen() {
 
   function handleHelpMeWrite() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // TODO: Implement AI writing assistance
+    helpMeWriteRef.current?.expand();
+  }
+
+  function handleSelectRevisedText(revisedText: string) {
+    setLiftDescription(revisedText);
   }
 
   function handleOpenMediaPicker() {
@@ -469,6 +476,13 @@ export default function Step2Screen() {
           variant={audienceOfferType === 'everyone' ? 'see' : 'offer'}
           selectedType={audienceOfferType}
           onSelectAudience={handleSelectAudience}
+        />
+
+        {/* Help Me Write Bottom Sheet */}
+        <HelpMeWriteBottomSheet
+          ref={helpMeWriteRef}
+          originalText={liftDescription}
+          onSelectRevision={handleSelectRevisedText}
         />
       </View>
     </KeyboardAvoidingView>
