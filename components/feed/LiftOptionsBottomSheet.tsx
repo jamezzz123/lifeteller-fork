@@ -30,7 +30,8 @@ const LIFT_OPTIONS: LiftOption[] = [
     title: 'Raise lift',
     description: 'Help/support for others or a cause',
     icon: <HandHeart size={24} color={colors.primary.purple} />,
-    route: '/request-lift/step-2?headerText=Raise Lift&audience=everyone',
+    // route: '/request-lift/step-2?headerText=Raise Lift&audience=everyone',
+    route: '/screens/lifts/raise',
   },
   {
     id: 'request-lift',

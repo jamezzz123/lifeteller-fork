@@ -12,20 +12,27 @@ import { colors } from '@/theme/colors';
 interface MaterialInputProps extends Omit<RNTextInputProps, 'style'> {
   label?: string;
   prefix?: string;
+  suffix?: string;
   error?: string;
   helperText?: string;
   containerClassName?: string;
-  size?: 'small' | 'large';
+  size?: 'small' | 'medium' | 'large' | 'xlarge';
+  showCharacterCount?: boolean;
+  maxCharacters?: number;
 }
 
 export function MaterialInput({
   label,
   prefix,
+  suffix,
   error,
   helperText,
   containerClassName = '',
   size = 'large',
   value,
+  showCharacterCount = false,
+  maxCharacters,
+  multiline = false,
   ...props
 }: MaterialInputProps) {
   const [isFocused, setIsFocused] = useState(false);
@@ -40,11 +47,23 @@ export function MaterialInput({
       textClass: 'text-sm',
       prefixClass: 'text-sm',
     },
+    medium: {
+      fontSize: 16,
+      lineHeight: 22,
+      textClass: 'text-base',
+      prefixClass: 'text-base',
+    },
     large: {
       fontSize: 18,
       lineHeight: 24,
       textClass: 'text-lg',
       prefixClass: 'text-lg',
+    },
+    xlarge: {
+      fontSize: 20,
+      lineHeight: 26,
+      textClass: 'text-xl',
+      prefixClass: 'text-xl',
     },
   };
 
@@ -69,7 +88,7 @@ export function MaterialInput({
 
       {/* Input Container */}
       <View
-        className={`flex-row items-center border-b pb-3 ${
+        className={`flex-row  pb-3 ${multiline ? 'items-start' : 'items-center'} ${
           isFocused
             ? 'border-primary'
             : error
@@ -83,7 +102,7 @@ export function MaterialInput({
         {/* Prefix */}
         {prefix && (
           <Text
-            className={`mr-3 ${currentSize.prefixClass}  ${
+            className={`mr-3 ${currentSize.prefixClass} ${multiline ? 'pt-0.5' : ''} ${
               isFocused || hasValue
                 ? 'text-grey-alpha-500'
                 : 'text-grey-alpha-400'
@@ -97,6 +116,7 @@ export function MaterialInput({
         <RNTextInput
           {...props}
           value={value}
+          multiline={multiline}
           onFocus={(e) => {
             setIsFocused(true);
             props.onFocus?.(e);
@@ -106,21 +126,40 @@ export function MaterialInput({
             props.onBlur?.(e);
           }}
           placeholderTextColor={colors['grey-alpha']['250']}
-          className={`flex-1 ${currentSize.textClass}  text-grey-plain-300`}
+          className={`flex-1 ${currentSize.textClass} text-grey-plain-300`}
           style={{
-            // fontFamily: themeConfig.typography.primary.medium,
             fontSize: currentSize.fontSize,
             color: colors['grey-alpha']['500'],
             paddingVertical: 0,
             paddingTop: 0,
             paddingBottom: 0,
             lineHeight: currentSize.lineHeight,
+            ...(multiline && {
+              maxHeight: 200,
+              textAlignVertical: 'top',
+            }),
             ...(Platform.OS === 'android' && {
-              textAlignVertical: 'center',
+              textAlignVertical: multiline ? 'top' : 'center',
               includeFontPadding: false,
             }),
           }}
         />
+
+        {/* Suffix (Character Count or Custom) */}
+        {(suffix || showCharacterCount) && (
+          <Text
+            className={`ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
+            style={{
+              alignSelf: 'flex-end',
+              paddingBottom: 2,
+            }}
+          >
+            {suffix ||
+              (showCharacterCount && maxCharacters
+                ? `${value?.length || 0}/${maxCharacters}`
+                : '')}
+          </Text>
+        )}
       </View>
 
       {/* Error or Helper Text */}

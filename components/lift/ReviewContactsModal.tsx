@@ -12,6 +12,7 @@ type ReviewContactsModalProps = {
   onRemove: (contactId: string) => void;
   onProceed: () => void;
   onClose: () => void;
+  title?: string;
 };
 
 export function ReviewContactsModal({
@@ -20,6 +21,7 @@ export function ReviewContactsModal({
   onRemove,
   onProceed,
   onClose,
+  title = 'Request from',
 }: ReviewContactsModalProps) {
   return (
     <Modal
@@ -41,7 +43,7 @@ export function ReviewContactsModal({
           {/* Header */}
           <View className="flex-row items-center justify-between rounded-t-3xl border-b border-grey-plain-450/20 bg-grey-alpha-150 px-4 py-4">
             <Text className="text-lg font-semibold text-grey-alpha-500">
-              Request from
+              {title}
             </Text>
             <TouchableOpacity
               onPress={onClose}
