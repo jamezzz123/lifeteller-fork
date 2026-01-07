@@ -164,7 +164,7 @@ export default function PreviewLift() {
             {/* {liftDescription} */}
             Our local community garden is expanding, but we desperately need a
             simple online presence to organize volunteers, share meeting dates,
-            and collect sign-ups. Right now, we're relying on paper sign-up
+            and collect sign-ups. Right now, we&apos;re relying on paper sign-up
             sheets, which is chaotic.
           </Text>
         </View>

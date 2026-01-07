@@ -23,7 +23,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -32,9 +32,8 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { VisibilitySelector } from '@/components/ui/VisibilitySelector';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { ProfileStack } from '@/components/ui/ProfileStack';
-import { SelectedMediaPreview } from '@/components/ui/SelectedMediaPreview';
+// import { SelectedMediaPreview } from '@/components/ui/SelectedMediaPreview';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
-import { useRef } from 'react';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { AudienceBottomSheet } from '@/components/lift/AudienceBottomSheet';
 

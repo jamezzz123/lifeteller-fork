@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { Image } from 'expo-image';
 import { Trash2 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
-import { MediaItem } from '@/contexts/LiftDraftContext';
+import { MediaItem } from '@/context/LiftDraftContext';
 
 type SelectedMediaPreviewProps = {
   selectedMedia: MediaItem[];
