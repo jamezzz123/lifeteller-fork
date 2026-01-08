@@ -250,7 +250,7 @@ export default function LiftCreationScreen({
     if (onSubmit) {
       onSubmit();
     } else {
-      router.push('/screens/lifts/raise/preview');
+      router.push('/screens/lifts/raise/preview' as any);
     }
   };
 

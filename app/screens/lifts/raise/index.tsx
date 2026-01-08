@@ -9,7 +9,7 @@ export default function RaiseLiftScreen() {
       collaboratorsRoute="/screens/lifts/raise/add-collaborators"
       moreOptionsRoute="/screens/lifts/raise/more-options"
       addItemsRoute="/screens/lifts/raise/add-lift-items"
-      onSubmit={() => router.push('/screens/lifts/raise/preview')}
+      onSubmit={() => router.push('/screens/lifts/raise/preview' as any)}
       showVisibilitySelector={true}
     />
   );

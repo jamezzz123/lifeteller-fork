@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Search, Bell, MessageSquareText } from 'lucide-react-native';
+import { router } from 'expo-router';
 import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { colors } from '@/theme/colors';
 
@@ -27,7 +28,10 @@ export function FeedHeader() {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="p-1">
+        <TouchableOpacity
+          className="p-1"
+          onPress={() => router.push('/messages' as any)}
+        >
           <MessageSquareText color={colors['grey-plain']['550']} size={24} />
         </TouchableOpacity>
       </View>

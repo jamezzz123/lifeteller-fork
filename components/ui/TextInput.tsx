@@ -6,6 +6,7 @@ import {
   TextInputProps as RNTextInputProps,
   Pressable,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { Info } from 'lucide-react-native';
 
@@ -18,6 +19,8 @@ interface TextInputProps extends Omit<RNTextInputProps, 'style'> {
   helperText?: string;
   showPasswordToggle?: boolean;
   containerClassName?: string;
+  rightIcon?: React.ReactNode;
+  showLoading?: boolean;
 }
 
 export function TextInput({
@@ -27,6 +30,8 @@ export function TextInput({
   showPasswordToggle = false,
   containerClassName = '',
   secureTextEntry,
+  rightIcon,
+  showLoading = false,
   ...props
 }: TextInputProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -86,7 +91,18 @@ export function TextInput({
             }),
           }}
         />
-        {showPasswordToggle && (
+        {showLoading && (
+          <View className="ml-2">
+            <ActivityIndicator
+              size="small"
+              color={colors.primary.purple}
+            />
+          </View>
+        )}
+        {rightIcon && !showLoading && (
+          <View className="ml-2">{rightIcon}</View>
+        )}
+        {showPasswordToggle && !showLoading && !rightIcon && (
           <Pressable onPress={togglePasswordVisibility} className="ml-2">
             <Text
               className="text-sm font-medium text-primary"

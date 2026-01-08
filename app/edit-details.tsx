@@ -6,6 +6,9 @@ import {
   TouchableOpacity,
   Pressable,
   TextInput as RNTextInput,
+  Alert,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -27,9 +30,11 @@ import {
   Info,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
-import { useUser } from '@/hooks/useUser';
+import { useAuth } from '@/context/auth';
 import { InterestChip } from '@/components/ui/InterestChip';
 import { Button } from '@/components/ui/Button';
+import { useUploadAvatar } from '@/lib/hooks/mutations/useUploadAvatar';
+import { getInitials, getFullName } from '@/utils/user';
 
 interface ProfileSectionProps {
   icon: React.ReactNode;
@@ -82,19 +87,29 @@ function ProfileSection({
 }
 
 export default function EditDetailsScreen() {
-  const { user, setUser } = useUser();
+  const { user } = useAuth();
+  const uploadAvatarMutation = useUploadAvatar();
   const [isEditingName, setIsEditingName] = useState(false);
-  const [name, setName] = useState(user.fullName);
+  const fullName = user ? getFullName(user.first_name, user.last_name) : '';
+  const [name, setName] = useState(fullName);
   const [isUpdatingName, setIsUpdatingName] = useState(false);
+
+  // Get user data with fallbacks
+  const username = user?.username || '';
+  const avatarUrl = user?.avatar_url;
+  const initials = getInitials(fullName);
+  const bio = user?.bio || '';
 
   // Extended user data (in real app, this would come from API)
   const [profileData] = useState({
-    mobileNumber: '+2347091891971',
-    mobileVerified: true,
-    email: 'isaac.a@lifteller.com',
-    emailVerified: true,
-    bio: 'Lazy Philanthropist. Touching lives one by one. This is who I am, this is what I am.',
-    interests: [
+    mobileNumber: user?.phone_number || '+2347091891971',
+    mobileVerified: user?.is_phone_verified || false,
+    email: user?.email || 'isaac.a@lifteller.com',
+    emailVerified: user?.is_email_verified || false,
+    bio:
+      bio ||
+      'Lazy Philanthropist. Touching lives one by one. This is who I am, this is what I am.',
+    interests: user?.interests?.map((i: { name: string }) => i.name) || [
       'Religion-based',
       'Education',
       'Faith',
@@ -107,12 +122,21 @@ export default function EditDetailsScreen() {
   async function handleChangePhoto() {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
-        return;
+
+      // Request permissions
+      if (Platform.OS !== 'web') {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(
+            'Permission Required',
+            'Sorry, we need camera roll permissions to upload your profile picture!'
+          );
+          return;
+        }
       }
 
+      // Launch image picker
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -122,14 +146,48 @@ export default function EditDetailsScreen() {
 
       if (!result.canceled && result.assets[0]) {
         const asset = result.assets[0];
-        // In a real app, upload to server and update user
-        setUser({
-          ...user,
-          profileImage: { uri: asset.uri },
+
+        // Check file size (5MB = 5242880 bytes)
+        if (asset.fileSize && asset.fileSize > 5242880) {
+          Alert.alert('Error', 'Image size should be 5MB or less.');
+          return;
+        }
+
+        // Extract file extension from URI
+        const uriParts = asset.uri.split('.');
+        const fileExtension = uriParts[uriParts.length - 1] || 'jpg';
+        const mimeType = `image/${
+          fileExtension === 'jpg' || fileExtension === 'jpeg'
+            ? 'jpeg'
+            : fileExtension
+        }`;
+
+        // Upload avatar
+        await uploadAvatarMutation.mutateAsync({
+          uri: asset.uri,
+          type: mimeType,
+          name: `avatar.${fileExtension}`,
         });
+
+        // Wait a bit for the profile to refresh, then show success
+        setTimeout(() => {
+          Alert.alert('Success', 'Profile picture updated successfully!');
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }, 500);
       }
-    } catch (error) {
-      console.error('Error picking image:', error);
+    } catch (error: any) {
+      // Extract error message
+      let errorMessage = 'Failed to upload profile picture. Please try again.';
+      if (error?.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
+      Alert.alert('Error', errorMessage);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   }
 
@@ -146,10 +204,8 @@ export default function EditDetailsScreen() {
       // TODO: Call API to update name
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      setUser({
-        ...user,
-        fullName: name.trim(),
-      });
+      // TODO: Call API to update name
+      // For now, just update local state
       setIsEditingName(false);
     } catch (error) {
       console.error('Error updating name:', error);
@@ -159,7 +215,7 @@ export default function EditDetailsScreen() {
   }
 
   function handleCancelEditName() {
-    setName(user.fullName);
+    setName(fullName);
     setIsEditingName(false);
   }
 
@@ -195,42 +251,59 @@ export default function EditDetailsScreen() {
       >
         {/* Profile Picture Section */}
         <View className="items-center py-8">
-          <Pressable onPress={handleChangePhoto} className="relative">
+          <Pressable
+            onPress={handleChangePhoto}
+            className="relative"
+            disabled={uploadAvatarMutation.isPending}
+          >
             <View className="h-24 w-24 overflow-hidden rounded-full bg-grey-plain-300">
-              {user.profileImage ? (
+              {avatarUrl ? (
                 <Image
-                  source={user.profileImage}
+                  source={{ uri: avatarUrl }}
                   style={{ width: 96, height: 96 }}
                   contentFit="cover"
                 />
-              ) : (
+              ) : initials ? (
                 <View className="bg-primary-tints-purple-100 h-full w-full items-center justify-center">
                   <Text
                     className="text-2xl font-bold"
                     style={{ color: colors.primary.purple }}
                   >
-                    {user.fullName
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
+                    {initials}
                   </Text>
                 </View>
+              ) : (
+                <View
+                  className="h-full w-full"
+                  style={{ backgroundColor: colors['grey-plain']['450'] }}
+                />
               )}
             </View>
             <View className="absolute bottom-0 right-0 h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-white">
-              <Camera
-                color={colors['grey-alpha']['500']}
-                size={14}
-                strokeWidth={2.5}
-              />
+              {uploadAvatarMutation.isPending ? (
+                <ActivityIndicator
+                  size="small"
+                  color={colors['grey-alpha']['500']}
+                />
+              ) : (
+                <Camera
+                  color={colors['grey-alpha']['500']}
+                  size={14}
+                  strokeWidth={2.5}
+                />
+              )}
             </View>
           </Pressable>
-          <Pressable onPress={handleChangePhoto} className="mt-3">
+          <Pressable
+            onPress={handleChangePhoto}
+            className="mt-3"
+            disabled={uploadAvatarMutation.isPending}
+          >
             <Text
               className="text-sm font-medium"
               style={{ color: colors.primary.purple }}
             >
-              Change photo
+              {uploadAvatarMutation.isPending ? 'Uploading...' : 'Change photo'}
             </Text>
           </Pressable>
         </View>
@@ -322,7 +395,7 @@ export default function EditDetailsScreen() {
               <View className="mt-6 border-t border-grey-plain-300 pt-6">
                 <View className="flex-row items-center justify-between">
                   <Text className="text-sm text-grey-alpha-500">
-                    @{user.handle}
+                    @{username}
                   </Text>
                   <Pressable
                     onPress={() => {
@@ -345,7 +418,7 @@ export default function EditDetailsScreen() {
             <>
               <View className="mb-3 flex-row items-center justify-between">
                 <Text className="text-sm text-grey-alpha-500">
-                  {user.fullName}
+                  {fullName || 'User'}
                 </Text>
                 <Pressable
                   onPress={() => setIsEditingName(true)}
@@ -360,9 +433,7 @@ export default function EditDetailsScreen() {
                 </Pressable>
               </View>
               <View className="flex-row items-center justify-between">
-                <Text className="text-sm text-grey-alpha-500">
-                  @{user.handle}
-                </Text>
+                <Text className="text-sm text-grey-alpha-500">@{username}</Text>
                 <Pressable
                   onPress={() => {
                     // TODO: Navigate to username edit screen
@@ -574,7 +645,7 @@ export default function EditDetailsScreen() {
           showArrow
         >
           <View className="flex-row flex-wrap gap-2">
-            {profileData.interests.map((interest, index) => (
+            {profileData.interests.map((interest: string, index: number) => (
               <InterestChip key={index} label={interest} selected />
             ))}
           </View>

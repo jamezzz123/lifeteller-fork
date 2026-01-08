@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
@@ -13,13 +12,15 @@ import Svg, {
 import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { Button } from '@/components/ui/Button';
 import { themeConfig } from '@/theme/config';
+import { useAuth } from '@/context/auth';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const onboardingIllustration = require('@/assets/images/welcome/illustration-1.png');
 
 export default function OnboardingWelcomeScreen() {
-  const [username] = useState('isaac.lifteller'); // TODO: Get from auth context
+  const { user } = useAuth();
+  const username = user?.username || 'there';
 
   function handleContinue() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);

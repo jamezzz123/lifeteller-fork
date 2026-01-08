@@ -11,13 +11,15 @@ import { TextInput } from '@/components/ui/TextInput';
 import { IconButton } from '@/components/ui/IconButton';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { colors } from '@/theme/colors';
+import { useOnboarding } from '@/context/onboarding';
 
 const MAX_CHARACTERS = 100;
 
 export default function OnboardingStep3Screen() {
   const currentStep = 3;
   const totalSteps = 4;
-  const [tagline, setTagline] = useState('');
+  const { data, updateData } = useOnboarding();
+  const [tagline, setTagline] = useState(data.bio || '');
 
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -31,7 +33,8 @@ export default function OnboardingStep3Screen() {
 
   function handleContinue() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // TODO: Save tagline to onboarding state/context
+    // Save bio to onboarding context
+    updateData({ bio: tagline.trim() || undefined });
     router.push('/(onboarding)/onboarding-step-4');
   }
 

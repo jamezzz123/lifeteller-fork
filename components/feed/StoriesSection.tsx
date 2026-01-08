@@ -10,10 +10,16 @@ import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Plus } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
-import { useUser } from '@/hooks/useUser';
+import { useAuth } from '@/context/auth';
+import { getInitials, getFullName } from '@/utils/user';
 
 export function StoriesSection() {
-  const { user } = useUser();
+  const { user } = useAuth();
+
+  // Get user data with fallbacks
+  const fullName = user ? getFullName(user.first_name, user.last_name) : '';
+  const initials = getInitials(fullName);
+  const avatarUrl = user?.avatar_url;
 
   const stories = [
     { id: 'your-story', name: 'Your story', isYourStory: true },
@@ -73,11 +79,42 @@ export function StoriesSection() {
                     style={styles.gradientBorder}
                   >
                     <View style={styles.innerCircle}>
-                      <Image
-                        source={user.profileImage}
-                        style={styles.profileImage}
-                        contentFit="cover"
-                      />
+                      {avatarUrl ? (
+                        <Image
+                          source={{ uri: avatarUrl }}
+                          style={styles.profileImage}
+                          contentFit="cover"
+                        />
+                      ) : initials ? (
+                        <View
+                          style={[
+                            styles.profileImage,
+                            {
+                              backgroundColor:
+                                colors['primary-tints'].purple['100'],
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                            },
+                          ]}
+                        >
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'bold',
+                              color: colors.primary.purple,
+                            }}
+                          >
+                            {initials}
+                          </Text>
+                        </View>
+                      ) : (
+                        <View
+                          style={[
+                            styles.profileImage,
+                            { backgroundColor: colors['grey-plain']['450'] },
+                          ]}
+                        />
+                      )}
                     </View>
                   </LinearGradient>
                   {/* Add Icon Overlay */}

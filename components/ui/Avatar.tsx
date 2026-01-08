@@ -5,6 +5,7 @@ import { Medal } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
+import { getInitials } from '@/utils/user';
 
 interface AvatarProps {
   profileImage?: string;
@@ -25,16 +26,6 @@ export function Avatar({
   userId,
   onPress,
 }: AvatarProps) {
-  // Get initials from name
-  const getInitials = (name: string): string => {
-    if (!name.trim()) return '';
-    const parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
-  };
-
   const initials = getInitials(name);
   const badgeSize =
     size === 48 ? 20 : size === 40 ? 16 : Math.round(size * 0.42);

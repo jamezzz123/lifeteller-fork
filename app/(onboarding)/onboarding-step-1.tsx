@@ -14,9 +14,11 @@ import { Button } from '@/components/ui/Button';
 import { TextButton } from '@/components/ui/TextButton';
 import { TextInput } from '@/components/ui/TextInput';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
+import { useOnboarding } from '@/context/onboarding';
 
 export default function OnboardingStep1Screen() {
   const [name, setName] = useState('');
+  const { updateData } = useOnboarding();
   const currentStep = 1;
   const totalSteps = 4;
 
@@ -30,7 +32,18 @@ export default function OnboardingStep1Screen() {
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // TODO: Save name to onboarding state/context
+    
+    // Split name into first and last name
+    const nameParts = name.trim().split(/\s+/);
+    const firstName = nameParts[0] || '';
+    const lastName = nameParts.slice(1).join(' ') || '';
+    
+    // Save to onboarding context
+    updateData({
+      firstName,
+      lastName,
+    });
+    
     router.push('/(onboarding)/onboarding-step-2');
   }
 

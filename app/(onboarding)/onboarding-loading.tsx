@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { View, Text, ActivityIndicator, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { AlertCircle, Check } from 'lucide-react-native';
@@ -7,6 +7,9 @@ import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { colors } from '@/theme/colors';
 import { themeConfig } from '@/theme/config';
 import { SuccessBottomSheet } from '@/components/ui/SuccessBottomSheet';
+import { useOnboarding } from '@/context/onboarding';
+import { useUpdateProfile } from '@/lib/hooks/mutations/useUpdateProfile';
+import { useAuth } from '@/context/auth';
 
 const SETUP_STEPS = [
   'Gathering your details',
@@ -19,28 +22,103 @@ export default function OnboardingLoadingScreen() {
   const [progress, setProgress] = useState(0);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
+  const { data, clearData } = useOnboarding();
+  const updateProfileMutation = useUpdateProfile();
+  const { fetchUserProfile } = useAuth();
+
+  // Use refs to prevent multiple submissions and store stable references
+  const hasSubmittedRef = useRef(false);
+  const isSubmittingRef = useRef(false);
+  const mutateAsyncRef = useRef(updateProfileMutation.mutateAsync);
+  const clearDataRef = useRef(clearData);
+  const fetchUserProfileRef = useRef(fetchUserProfile);
+
+  // Update refs when values change
+  useEffect(() => {
+    mutateAsyncRef.current = updateProfileMutation.mutateAsync;
+    clearDataRef.current = clearData;
+    fetchUserProfileRef.current = fetchUserProfile;
+  }, [updateProfileMutation.mutateAsync, clearData, fetchUserProfile]);
+
+  const submitProfile = useCallback(async () => {
+    // Prevent multiple simultaneous submissions
+    if (isSubmittingRef.current) {
+      return;
+    }
+
+    isSubmittingRef.current = true;
+
+    try {
+      // Update progress: Gathering details (0-25%)
+      setProgress(25);
+
+      // Prepare profile data
+      const profileData: {
+        first_name?: string;
+        last_name?: string;
+        bio?: string;
+        interests?: string[];
+      } = {};
+
+      if (data.firstName) profileData.first_name = data.firstName;
+      if (data.lastName) profileData.last_name = data.lastName;
+      if (data.bio) profileData.bio = data.bio;
+      if (data.interests && data.interests.length > 0) {
+        profileData.interests = data.interests;
+      }
+
+      // Update progress: Getting details ready (25-50%)
+      setProgress(50);
+
+      // Submit profile update
+      await mutateAsyncRef.current(profileData);
+
+      // Update progress: Saving details (50-75%)
+      setProgress(75);
+
+      // Refresh user profile to get updated onboarding status
+      await fetchUserProfileRef.current();
+
+      // Update progress: Populating feed (75-100%)
+      setProgress(100);
+
+      // Clear onboarding data
+      clearDataRef.current();
+
+      // Show success bottom sheet after completion
+      setTimeout(() => {
+        setShowSuccessSheet(true);
+      }, 500);
+    } catch (error) {
+      console.error('Error submitting profile:', error);
+      isSubmittingRef.current = false; // Allow retry on error
+      Alert.alert('Error', 'Failed to complete onboarding. Please try again.', [
+        {
+          text: 'Retry',
+          onPress: () => {
+            setProgress(0);
+            setCurrentStepIndex(0);
+            isSubmittingRef.current = false;
+            submitProfile();
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => router.back(),
+          style: 'cancel',
+        },
+      ]);
+    }
+  }, [data.firstName, data.lastName, data.bio, data.interests]);
 
   useEffect(() => {
-    // Simulate progress
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        const newProgress = prev + 2;
-        if (newProgress >= 100) {
-          clearInterval(interval);
-          // Show success bottom sheet after completion
-          setTimeout(() => {
-            setShowSuccessSheet(true);
-          }, 500);
-          return 100;
-        }
-        return newProgress;
-      });
-    }, 100);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+    // Only submit once on mount
+    if (!hasSubmittedRef.current) {
+      hasSubmittedRef.current = true;
+      submitProfile();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Empty dependency array - only run once on mount
 
   const handleGoToFeeds = () => {
     setShowSuccessSheet(false);

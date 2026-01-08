@@ -31,6 +31,8 @@ import { colors } from '@/theme/colors';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { LanguageBottomSheet } from '@/components/settings/LanguageBottomSheet';
 import { ConfirmationBottomSheet } from '@/components/ui/ConfirmationBottomSheet';
+import { useAuth } from '@/context/auth';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface SettingsOption {
   id: string;
@@ -107,13 +109,27 @@ export default function SettingsScreen() {
   const [selectedLanguage, setSelectedLanguage] = useState('English');
   const [showSignOutConfirm, setShowSignOutConfirm] = useState(false);
   const languageSheetRef = useRef<BottomSheetRef>(null);
+  const { logout } = useAuth();
+  const queryClient = useQueryClient();
 
-  const handleSignOut = () => {
-    // TODO: Implement actual sign out logic
-    console.log('User signed out');
-    setShowSignOutConfirm(false);
-    // Navigate to login screen
-    router.replace('/(auth)/get-started');
+  const handleSignOut = async () => {
+    try {
+      // Close confirmation sheet
+      setShowSignOutConfirm(false);
+
+      // Clear all query cache
+      queryClient.clear();
+
+      // Logout user (clears tokens and auth state)
+      await logout();
+
+      // Navigate to get-started screen
+      router.replace('/(auth)/get-started');
+    } catch (error) {
+      console.error('Error signing out:', error);
+      // Still navigate even if there's an error
+      router.replace('/(auth)/get-started');
+    }
   };
 
   const settingsSections: SettingsSection[] = [

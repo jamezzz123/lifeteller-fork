@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import { View, Text, ScrollView, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -11,13 +11,19 @@ import { IconButton } from '@/components/ui/IconButton';
 import { ProgressIndicator } from '@/components/ui/ProgressIndicator';
 import { ProfilePictureUploader } from '@/components/ui/ProfilePictureUploader';
 import { colors } from '@/theme/colors';
+import { useOnboarding } from '@/context/onboarding';
+import { useAuth } from '@/context/auth';
+import { useUploadAvatar } from '@/lib/hooks/mutations/useUploadAvatar';
 
 export default function OnboardingStep2Screen() {
   const currentStep = 2;
   const totalSteps = 4;
   const [profileImageUri, setProfileImageUri] = useState<string | null>(null);
-  // TODO: Get name from onboarding context/state
-  const userName = 'Test User';
+  const { data, updateData } = useOnboarding();
+  const { user } = useAuth();
+  const uploadAvatarMutation = useUploadAvatar();
+  
+  const userName = `${data.firstName || ''} ${data.lastName || ''}`.trim() || user?.username || 'User';
 
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -31,13 +37,32 @@ export default function OnboardingStep2Screen() {
 
   function handleImageSelected(uri: string) {
     setProfileImageUri(uri);
-    // TODO: Save profile image to onboarding state/context
+    updateData({ avatarUri: uri });
   }
 
-  function handleContinue() {
+  async function handleContinue() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    console.log('profileImageUri', profileImageUri);
-    // TODO: Save profile image if selected
+    
+    // Upload avatar if selected
+    if (profileImageUri) {
+      try {
+        // Extract file extension from URI
+        const uriParts = profileImageUri.split('.');
+        const fileExtension = uriParts[uriParts.length - 1] || 'jpg';
+        const mimeType = `image/${fileExtension === 'jpg' || fileExtension === 'jpeg' ? 'jpeg' : fileExtension}`;
+
+        await uploadAvatarMutation.mutateAsync({
+          uri: profileImageUri,
+          type: mimeType,
+          name: `avatar.${fileExtension}`,
+        });
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        Alert.alert('Error', 'Failed to upload profile picture. Please try again.');
+        return;
+      }
+    }
+    
     router.push('/(onboarding)/onboarding-step-3');
   }
 
@@ -98,6 +123,8 @@ export default function OnboardingStep2Screen() {
                 title="Save and continue"
                 onPress={handleContinue}
                 variant="primary"
+                loading={uploadAvatarMutation.isPending}
+                disabled={uploadAvatarMutation.isPending}
               />
             </View>
           </View>

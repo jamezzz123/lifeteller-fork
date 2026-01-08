@@ -6,11 +6,16 @@ import {
   TouchableOpacity,
   Dimensions,
   Pressable,
+  Alert,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, TabBar, Route } from 'react-native-tab-view';
 import { router } from 'expo-router';
 import { Image } from 'expo-image';
+import * as ImagePicker from 'expo-image-picker';
+import * as Haptics from 'expo-haptics';
 import {
   Search,
   Settings,
@@ -31,8 +36,9 @@ import {
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
-import { useUser, User } from '@/hooks/useUser';
+import { useAuth } from '@/context/auth';
 import { formatCurrency } from '@/utils/formatAmount';
+import { getInitials, getFullName } from '@/utils/user';
 import { InfoBanner } from '@/components/ui/InfoBanner';
 import { LiftProgressBar } from '@/components/ui/LiftProgressBar';
 import { InterestChip } from '@/components/ui/InterestChip';
@@ -40,49 +46,90 @@ import LifterBadge from '@/assets/images/badges/lifter.svg';
 import LiftCaptainBadge from '@/assets/images/badges/lift-captain.svg';
 import { ShareProfileBottomSheet } from '@/components/profile/ShareProfileBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { useUploadAvatar } from '@/lib/hooks/mutations/useUploadAvatar';
 
 const { width } = Dimensions.get('window');
 
 // Placeholder tab content components
-function PostsTab({ user }: { user: User }) {
+function PostsTab() {
+  // Placeholder posts data
+  const posts = [
+    {
+      id: 'profile-post-1',
+      userId: 'user-1',
+      username: 'Isaac Tolulope',
+      handle: 'dareytemy',
+      timestamp: '10 seconds ago',
+      profileImage: 'https://i.pravatar.cc/150?img=12',
+      content:
+        'Today, I visited the orphanage home at Yaba, Lagos. I went there with @xyz and @abc. We had a joyful moment with the children of the @fgh orphanage and geared towards what the future will hold... see more',
+      likes: 56,
+      comments: 12,
+      reposts: 12,
+      withUsers: ['xyz', 'abc', 'fgh'],
+    },
+    {
+      id: 'profile-post-2',
+      userId: 'user-1',
+      username: 'Isaac Tolulope',
+      handle: 'dareytemy',
+      timestamp: '2 hours ago',
+      profileImage: 'https://i.pravatar.cc/150?img=12',
+      content:
+        'Another amazing day helping the community! #LiftTogether #CommunityService',
+      media: [
+        {
+          id: 'media-1',
+          type: 'image' as const,
+          uri: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=800',
+        },
+      ],
+      likes: 234,
+      comments: 45,
+      reposts: 67,
+    },
+    {
+      id: 'profile-post-3',
+      userId: 'user-1',
+      username: 'Isaac Tolulope',
+      handle: 'dareytemy',
+      timestamp: '1 day ago',
+      profileImage: 'https://i.pravatar.cc/150?img=12',
+      content: 'Grateful for everyone who supported our latest initiative 🙏',
+      lift: {
+        title: 'Community Medical Support',
+        currentAmount: 45000,
+        targetAmount: 100000,
+      },
+      likes: 892,
+      comments: 123,
+      reposts: 234,
+    },
+  ];
+
   return (
     <ScrollView
       className="flex-1 bg-grey-plain-50"
       showsVerticalScrollIndicator={false}
     >
+      {posts.map((post) => (
       <FeedPost
-        id="profile-post-1"
-        userId={user.id}
-        username={user.fullName}
-        handle={user.handle}
-        timestamp="10 seconds ago"
-        content="Today, I visited the orphanage home at Yaba, Lagos. I went there with @xyz and @abc. We had a joyful moment with the children of the @fgh orphanage and geared towards what the future will hold... see more"
-        likes={56}
-        comments={12}
-        reposts={12}
+          key={post.id}
+          id={post.id}
+          userId={post.userId}
+          username={post.username}
+          handle={post.handle}
+          timestamp={post.timestamp}
+          profileImage={post.profileImage}
+          content={post.content}
+          media={post.media}
+          lift={post.lift}
+          likes={post.likes}
+          comments={post.comments}
+          reposts={post.reposts}
+          withUsers={post.withUsers}
       />
-      <FeedPost
-        id="profile-post-2"
-        userId={user.id}
-        username={user.fullName}
-        handle={user.handle}
-        timestamp="2 hours ago"
-        content="Another amazing day helping the community! #LiftTogether #CommunityService"
-        likes={234}
-        comments={45}
-        reposts={67}
-      />
-      <FeedPost
-        id="profile-post-3"
-        userId={user.id}
-        username={user.fullName}
-        handle={user.handle}
-        timestamp="1 day ago"
-        content="Grateful for everyone who supported our latest initiative 🙏"
-        likes={892}
-        comments={123}
-        reposts={234}
-      />
+      ))}
     </ScrollView>
   );
 }
@@ -401,10 +448,16 @@ function SectionHeader({
   );
 }
 
-function AboutTab() {
+function AboutTab({
+  userBio,
+  userInterests,
+}: {
+  userBio?: string | null;
+  userInterests?: { id: string; name: string; icon: string | null }[];
+}) {
   // Placeholder data - replace with actual data from API/hooks
   const aboutData = {
-    bio: 'Lazy Philanthropist. Touching lives one by one. This is who I am, this is what I am.',
+    bio: userBio || 'No bio yet.',
     badges: {
       pointsEarned: 427,
       currentBadge: {
@@ -418,13 +471,7 @@ function AboutTab() {
       progress: 60,
       pointsToGo: 50,
     },
-    interests: [
-      'Religion-based',
-      'Education',
-      'Faith',
-      'Healthcare and Medical',
-      'Family',
-    ],
+    interests: userInterests?.map((interest) => interest.name) || [],
     dateOfBirth: '12th December, 2005',
     dateJoined: '12/12/2021 • 10:09pm',
     dateVerified: '12/12/2021 • 10:09pm',
@@ -639,9 +686,10 @@ function AboutTab() {
 }
 
 export default function ProfileScreen() {
-  const { user } = useUser();
+  const { user } = useAuth();
   const [index, setIndex] = useState(0);
   const shareProfileSheetRef = useRef<BottomSheetRef>(null);
+  const uploadAvatarMutation = useUploadAvatar();
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'liftHistory', title: 'Lift history' },
@@ -650,10 +698,95 @@ export default function ProfileScreen() {
     { key: 'about', title: 'About' },
   ]);
 
+  // Get user data with fallbacks
+  const fullName = user ? getFullName(user.first_name, user.last_name) : '';
+  const username = user?.username || '';
+  const avatarUrl = user?.avatar_url;
+  const bio = user?.bio || '';
+  const initials = getInitials(fullName);
+  // TODO: These should come from API when available
+  const liftsCount = 0;
+  const followingCount = 0;
+  const followersCount = 0;
+  const isVerified = user?.is_email_verified || false;
+
+  async function handleChangeAvatar() {
+    try {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+      // Request permissions
+      if (Platform.OS !== 'web') {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert(
+            'Permission Required',
+            'Sorry, we need camera roll permissions to upload your profile picture!'
+          );
+          return;
+        }
+      }
+
+      // Launch image picker
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const asset = result.assets[0];
+
+        // Check file size (5MB = 5242880 bytes)
+        if (asset.fileSize && asset.fileSize > 5242880) {
+          Alert.alert('Error', 'Image size should be 5MB or less.');
+          return;
+        }
+
+        // Extract file extension from URI
+        const uriParts = asset.uri.split('.');
+        const fileExtension = uriParts[uriParts.length - 1] || 'jpg';
+        const mimeType = `image/${
+          fileExtension === 'jpg' || fileExtension === 'jpeg'
+            ? 'jpeg'
+            : fileExtension
+        }`;
+
+        // Upload avatar
+        await uploadAvatarMutation.mutateAsync({
+          uri: asset.uri,
+          type: mimeType,
+          name: `avatar.${fileExtension}`,
+        });
+
+        // Wait a bit for the profile to refresh, then show success
+        // The mutation's onSuccess already calls fetchUserProfile()
+        setTimeout(() => {
+          Alert.alert('Success', 'Profile picture updated successfully!');
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        }, 500);
+      }
+    } catch (error: any) {
+      // Extract error message
+      let errorMessage = 'Failed to upload profile picture. Please try again.';
+      if (error?.response?.data?.error) {
+        errorMessage = error.response.data.error;
+      } else if (error?.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error?.message) {
+        errorMessage = error.message;
+      }
+
+      Alert.alert('Error', errorMessage);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
+    }
+  }
+
   const renderScene = ({ route }: { route: Route }) => {
     switch (route.key) {
       case 'posts':
-        return <PostsTab user={user} />;
+        return <PostsTab />;
       case 'liftHistory':
         return <LiftHistoryTab />;
       case 'photos':
@@ -661,7 +794,7 @@ export default function ProfileScreen() {
       case 'liftClips':
         return <LiftClipsTab />;
       case 'about':
-        return <AboutTab />;
+        return <AboutTab userBio={user?.bio} userInterests={user?.interests} />;
       default:
         return null;
     }
@@ -696,24 +829,26 @@ export default function ProfileScreen() {
                 {/* Profile Picture */}
                 <View className="relative mr-4">
                   <View className="h-24 w-24 overflow-hidden rounded-full bg-grey-plain-300">
-                    {user.profileImage ? (
+                    {avatarUrl ? (
                       <Image
-                        source={user.profileImage}
+                        source={{ uri: avatarUrl }}
                         style={{ width: 96, height: 96 }}
                         contentFit="cover"
                       />
-                    ) : (
+                    ) : initials ? (
                       <View className="bg-primary-tints-purple-100 h-full w-full items-center justify-center">
                         <Text
                           className="text-2xl font-bold"
                           style={{ color: colors.primary.purple }}
                         >
-                          {user.fullName
-                            .split(' ')
-                            .map((n) => n[0])
-                            .join('')}
+                          {initials}
                         </Text>
                       </View>
+                    ) : (
+                      <View
+                        className="h-full w-full"
+                        style={{ backgroundColor: colors['grey-plain']['450'] }}
+                      />
                     )}
                   </View>
                   {/* Add Profile/Story Button */}
@@ -722,12 +857,22 @@ export default function ProfileScreen() {
                     style={{
                       backgroundColor: colors['grey-plain']['50'],
                     }}
+                    onPress={handleChangeAvatar}
+                    disabled={uploadAvatarMutation.isPending}
+                    activeOpacity={0.7}
                   >
+                    {uploadAvatarMutation.isPending ? (
+                      <ActivityIndicator
+                        size="small"
+                        color={colors['grey-alpha']['550']}
+                      />
+                    ) : (
                     <Plus
                       color={colors['grey-alpha']['550']}
                       size={16}
                       strokeWidth={3}
                     />
+                    )}
                   </TouchableOpacity>
                 </View>
 
@@ -735,15 +880,15 @@ export default function ProfileScreen() {
                 <View className="flex-1">
                   <View className="mb-1.5 flex-row items-center gap-2">
                     <Text className="text-xl font-bold text-grey-alpha-500">
-                      {user.fullName}
+                      {fullName || 'User'}
                     </Text>
-                    {user.isVerified && (
+                    {isVerified && (
                       <BadgeCheck color={colors.primary.purple} size={20} />
                     )}
                   </View>
                   <View className="mb-2.5">
                     <Text className="mb-1.5 text-sm text-grey-plain-550">
-                      @{user.handle}
+                      @{username || 'username'}
                     </Text>
                     <View
                       className="self-start rounded-full px-2.5 py-1"
@@ -790,8 +935,8 @@ export default function ProfileScreen() {
               </View>
 
               {/* Bio - Below avatar and user info */}
-              {user.bio && (
-                <Text className="text-sm text-grey-plain-550">{user.bio}</Text>
+              {bio && (
+                <Text className="text-sm text-grey-plain-550">{bio}</Text>
               )}
             </View>
 
@@ -800,7 +945,7 @@ export default function ProfileScreen() {
               {/* Lifts Card */}
               <TouchableOpacity className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
                 <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                  {(user.liftsCount || 0).toLocaleString()}
+                  {liftsCount.toLocaleString()}
                 </Text>
                 <Text className="text-xs font-medium text-grey-plain-550">
                   Lifts
@@ -814,7 +959,7 @@ export default function ProfileScreen() {
                   router.push({
                     pathname: '/followers-following',
                     params: {
-                      userName: user.fullName,
+                      userName: fullName,
                       initialTab: 'following',
                     },
                   })
@@ -828,7 +973,7 @@ export default function ProfileScreen() {
                   />
                 </View>
                 <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                  {(user.followingCount || 0).toLocaleString()}
+                  {followingCount.toLocaleString()}
                 </Text>
                 <Text className="text-xs font-medium text-grey-plain-550">
                   Following
@@ -842,7 +987,7 @@ export default function ProfileScreen() {
                   router.push({
                     pathname: '/followers-following',
                     params: {
-                      userName: user.fullName,
+                      userName: fullName,
                       initialTab: 'followers',
                     },
                   })
@@ -856,9 +1001,9 @@ export default function ProfileScreen() {
                   />
                 </View>
                 <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                  {user.followersCount && user.followersCount >= 1000
-                    ? `${(user.followersCount / 1000).toFixed(1)}k`
-                    : (user.followersCount || 0).toLocaleString()}
+                  {followersCount >= 1000
+                    ? `${(followersCount / 1000).toFixed(1)}k`
+                    : followersCount.toLocaleString()}
                 </Text>
                 <Text className="text-xs font-medium text-grey-plain-550">
                   Followers
@@ -920,8 +1065,8 @@ export default function ProfileScreen() {
       {/* Share Profile Bottom Sheet */}
       <ShareProfileBottomSheet
         ref={shareProfileSheetRef}
-        username={user.handle}
-        profileUrl={`https://lifteller.com/${user.handle}`}
+        username={username}
+        profileUrl={`https://lifteller.com/${username}`}
       />
     </SafeAreaView>
   );

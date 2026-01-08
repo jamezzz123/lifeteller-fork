@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -22,14 +23,20 @@ import {
   SocialOptionsSheetRef,
 } from '@/components/auth/SocialOptionsSheet';
 import { colors } from '@/theme/colors';
+import { useLogin } from '@/lib/hooks/mutations/useLogin';
+import { useAuth } from '@/context/auth';
+import type { AxiosError } from 'axios';
+import type { ApiError } from '@/lib/api/endpoints';
+import * as SecureStore from 'expo-secure-store';
 
 export default function LoginScreen() {
   const [usernameOrEmail, setUsernameOrEmail] = useState('');
   const [password, setPassword] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showSocialSheet, setShowSocialSheet] = useState(false);
   const socialSheetRef = useRef<SocialOptionsSheetRef>(null);
+  const loginMutation = useLogin();
+  const { login: setAuthState } = useAuth();
 
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -84,24 +91,68 @@ export default function LoginScreen() {
     }
 
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setIsLoading(true);
 
-    // TODO: Implement login API call
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log('Logging in:', { usernameOrEmail, keepLoggedIn });
-      router.replace('/(tabs)');
-      // Navigate to home screen after successful login
+      const response = await loginMutation.mutateAsync({
+        login: usernameOrEmail.trim(),
+        password: password.trim(),
+      });
+
+      // Store "keep me logged in" preference
+      await SecureStore.setItemAsync(
+        'keep_logged_in',
+        keepLoggedIn ? 'true' : 'false'
+      );
+
+      // Update auth context state with onboarding status
+      await setAuthState({
+        access: response.data.access,
+        refresh: response.data.refresh,
+        userId: response.data.user_id,
+        onboardingComplete: response.onboarding_complete,
+      });
+
+      // Navigate based on onboarding status after auth state is updated
+      if (response.onboarding_complete) {
+        router.replace('/(tabs)');
+      } else {
+        router.replace('/(onboarding)/onboarding-index');
+      }
     } catch (error) {
       console.error('Login error:', error);
-    } finally {
-      setIsLoading(false);
+
+      // Handle API errors
+      const axiosError = error as AxiosError<
+        ApiError | { detail?: string; message?: string }
+      >;
+
+      // Extract error message from various possible response formats
+      let errorMessage = 'Login failed. Please try again.';
+
+      if (axiosError.response?.data) {
+        const errorData = axiosError.response.data as ApiError & {
+          detail?: string;
+          message?: string;
+        };
+        // Check for 'detail' field
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } else if (axiosError.message) {
+        errorMessage = axiosError.message;
+      }
+
+      Alert.alert('Login Failed', errorMessage);
     }
   }
 
   const isFormValid =
     usernameOrEmail.trim().length > 0 && password.trim().length > 0;
+  const isLoading = loginMutation.isPending;
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>

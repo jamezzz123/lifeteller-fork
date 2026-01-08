@@ -112,8 +112,6 @@ export default function GetStartedScreen() {
 
   return (
     <View className="flex-1">
-      
-   
       <Image
         source={welcomeImage}
         style={{
@@ -130,10 +128,8 @@ export default function GetStartedScreen() {
           backgroundColor: 'rgba(0, 0, 0, 0.7)',
         }}
       />
-    
 
       <SafeAreaView className="flex-1" edges={['top', 'bottom']}>
-    
         <View className="flex-1 items-start justify-start px-6 pt-8">
           <View className="mb-4 flex-row items-center">
             <LogoLight width={104} height={30} />
@@ -194,17 +190,15 @@ export default function GetStartedScreen() {
             </Text>
           </View>
         </View>
-        
-        </SafeAreaView>
+      </SafeAreaView>
 
-        {showSocialSheet && (
-          <SocialOptionsSheet
-            ref={socialSheetRef}
-            onSelect={handleSocialSelect}
-            onClose={handleSocialSheetClose}
-          />
-        )}
-
+      {showSocialSheet && (
+        <SocialOptionsSheet
+          ref={socialSheetRef}
+          onSelect={handleSocialSelect}
+          onClose={handleSocialSheetClose}
+        />
+      )}
     </View>
   );
 }

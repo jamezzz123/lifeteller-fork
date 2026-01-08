@@ -46,7 +46,11 @@ const palette = {
     '50': '#FEF6EB',
     '150': '#FDF0E0',
   },
+  'red-tint': {
+    '150': '#FDEBEC',
+  },
   'green-tint': {
+    '100': '#ECFDF5',
     '200': '#DFF9ED',
   },
   'green-shades': {

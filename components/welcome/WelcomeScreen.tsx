@@ -13,6 +13,7 @@ import * as Haptics from 'expo-haptics';
 import LogoColor from '@/assets/images/logo/logo-color.svg';
 import { WelcomeSlide } from './WelcomeSlide';
 import { WelcomeNavigationButtons } from './WelcomeNavigationButtons';
+import { setOnboardingCompleted } from '@/utils/onboardingStorage';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -97,8 +98,10 @@ export function WelcomeScreen() {
     handleGetStarted();
   }
 
-  function handleGetStarted() {
+  async function handleGetStarted() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
+    // Mark onboarding as completed before navigating
+    await setOnboardingCompleted();
     router.push('/(auth)/get-started');
   }
 

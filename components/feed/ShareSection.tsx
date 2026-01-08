@@ -2,23 +2,30 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
 import { colors } from '@/theme/colors';
-import { useUser } from '@/hooks/useUser';
+import { useAuth } from '@/context/auth';
+import { getInitials, getFullName } from '@/utils/user';
 
 export function ShareSection() {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   const handlePress = () => {
     // TODO: Navigate to create post screen
     console.log('Navigate to create post');
   };
 
+  // Get user's full name and initials
+  const fullName = user ? getFullName(user.first_name, user.last_name) : '';
+  const initials = getInitials(fullName);
+  const avatarUrl = user?.avatar_url;
+
   return (
     <View className="flex-row items-center gap-3 bg-grey-plain-50 px-4 py-3">
       {/* User Avatar */}
       <TouchableOpacity className="h-10 w-10">
         <View className="size-10 overflow-hidden rounded-full bg-grey-plain-300">
+          {avatarUrl ? (
           <Image
-            source={user.profileImage}
+              source={{ uri: avatarUrl }}
             style={{
               width: 40,
               height: 40,
@@ -26,6 +33,29 @@ export function ShareSection() {
             }}
             contentFit="cover"
           />
+          ) : initials ? (
+            <View
+              className="h-full w-full items-center justify-center"
+              style={{
+                backgroundColor: colors['primary-tints'].purple['100'],
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: colors.primary.purple,
+                }}
+              >
+                {initials}
+              </Text>
+            </View>
+          ) : (
+            <View
+              className="h-full w-full"
+              style={{ backgroundColor: colors['grey-plain']['450'] }}
+            />
+          )}
         </View>
       </TouchableOpacity>
 
