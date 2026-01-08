@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { Check, HandCoins, ChevronRight, UserCog } from 'lucide-react-native';
+import { Check, ChevronRight, UserCog } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/theme/colors';
 
@@ -25,13 +25,6 @@ export function RecipientNumberSelector({
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onCustomAmountPress();
   };
-
-  const formatCurrency = (amount: number) =>
-    new Intl.NumberFormat('en-NG', {
-      style: 'currency',
-      currency: 'NGN',
-      minimumFractionDigits: 0,
-    }).format(amount);
 
   const isQuickAmount = (amount: number) =>
     selectedAmount === amount.toString();

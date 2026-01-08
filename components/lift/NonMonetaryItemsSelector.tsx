@@ -4,7 +4,7 @@ import * as Haptics from 'expo-haptics';
 import { colors } from '@/theme/colors';
 
 interface NonMonetaryItemsSelectorProps {
-  items: Array<{ id: string; name: string; quantity: number }>;
+  items: { id: string; name: string; quantity: number }[];
   onAddItemsPress: () => void;
 }
 

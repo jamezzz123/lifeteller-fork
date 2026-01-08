@@ -1,10 +1,6 @@
 import {
-  ChevronLeft,
-  ChevronRight,
-  Clock,
   CornerUpLeft,
   Info,
-  Tag,
 } from 'lucide-react-native';
 import { TouchableOpacity, View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -12,10 +8,8 @@ import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { router, Href } from 'expo-router';
 import { RequestSuccessBottomSheet } from '@/components/lift';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
-import * as Haptics from 'expo-haptics';
-import { Image } from 'expo-image';
 import { useLiftDraft } from '@/context/LiftDraftContext';
 import { ConfirmationModal } from '../ui/ConfirmationModal';
 import { PasscodeBottomSheet } from '../ui/PasscodeBottomSheet';
@@ -33,12 +27,9 @@ export default function PreviewOfferLiftScreen({
   successRoute = '/(tabs)/home' as Href,
 }: PreviewOfferLiftScreenProps) {
   const {
-    selectedMedia,
-    category,
     title,
     description,
     liftAmount,
-    audienceType,
     numberOfRecipients,
   } = useLiftDraft();
 

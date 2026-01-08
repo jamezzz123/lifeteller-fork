@@ -103,8 +103,8 @@ export default function PreviewLiftScreen({
         return 'Everyone';
       case 'friends':
         return 'Friends';
-      case 'close-friends':
-        return 'Close friends';
+      // case 'close-friends':
+      //   return 'Close friends';
       default:
         return 'Everyone';
     }
