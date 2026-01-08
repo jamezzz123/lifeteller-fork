@@ -18,14 +18,14 @@ export function SegmentedControl({
   onValueChange,
 }: SegmentedControlProps) {
   return (
-    <View className="flex-row rounded-full bg-grey-plain-100 p-1">
+    <View className="flex-row rounded-full border border-grey-plain-300 bg-grey-alpha-150  p-1">
       {options.map((option) => {
         const isSelected = option.value === selectedValue;
         return (
           <TouchableOpacity
             key={option.value}
             onPress={() => onValueChange(option.value)}
-            className="flex-1 items-center justify-center rounded-full px-6 py-2.5"
+            className="flex-1 items-center justify-center rounded-full px-6 py-3"
             style={{
               backgroundColor: isSelected ? 'white' : 'transparent',
             }}
@@ -33,11 +33,12 @@ export function SegmentedControl({
             accessibilityState={{ selected: isSelected }}
           >
             <Text
-              className="text-sm font-semibold"
+              className="text-sm"
               style={{
                 color: isSelected
                   ? colors['grey-alpha']['500']
                   : colors['grey-alpha']['400'],
+                fontWeight: isSelected ? '600' : '400',
               }}
             >
               {option.label}

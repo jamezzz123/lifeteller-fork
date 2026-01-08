@@ -38,14 +38,14 @@ const LIFT_OPTIONS: LiftOption[] = [
     title: 'Request lift',
     description: 'Request help/support from others',
     icon: <HandHelping size={24} color={colors.primary.purple} />,
-    route: '/request-lift',
+    route: '/screens/lifts/request',
   },
   {
     id: 'offer-lift',
     title: 'Offer lift',
     description: 'Give back to the community today.',
     icon: <HandCoins size={24} color={colors.primary.purple} />,
-    route: '/offer-lift-profile',
+    route: '/screens/lifts/offer',
   },
   {
     id: 'share-words',
