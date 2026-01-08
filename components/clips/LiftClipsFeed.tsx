@@ -1,5 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { FlatList, ViewToken, ViewabilityConfig, Dimensions } from 'react-native';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { LiftClipItem, LiftClipData } from './LiftClipItem';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
@@ -29,6 +30,8 @@ export function LiftClipsFeed({
 }: LiftClipsFeedProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const flatListRef = useRef<FlatList>(null);
+  const tabBarHeight = useBottomTabBarHeight();
+  const clipHeight = SCREEN_HEIGHT - tabBarHeight;
 
   // Viewability configuration for auto-play
   const viewabilityConfig = useRef<ViewabilityConfig>({
@@ -50,6 +53,7 @@ export function LiftClipsFeed({
       <LiftClipItem
         clip={item}
         isActive={index === activeIndex && isTabFocused}
+        clipHeight={clipHeight}
         onLike={() => onLike?.(item.id)}
         onComment={() => onComment?.(item.id)}
         onShare={() => onShare?.(item.id)}
@@ -62,6 +66,7 @@ export function LiftClipsFeed({
     [
       activeIndex,
       isTabFocused,
+      clipHeight,
       onLike,
       onComment,
       onShare,
@@ -75,12 +80,12 @@ export function LiftClipsFeed({
   const getItemLayout = useCallback(
     (_: any, index: number) => {
       return {
-        length: SCREEN_HEIGHT,
-        offset: SCREEN_HEIGHT * index,
+        length: clipHeight,
+        offset: clipHeight * index,
         index,
       };
     },
-    []
+    [clipHeight]
   );
 
   return (
@@ -91,7 +96,7 @@ export function LiftClipsFeed({
       keyExtractor={(item) => item.id}
       pagingEnabled
       showsVerticalScrollIndicator={false}
-      snapToInterval={SCREEN_HEIGHT}
+      snapToInterval={clipHeight}
       snapToAlignment="start"
       decelerationRate="fast"
       viewabilityConfig={viewabilityConfig}

@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { BlurView } from 'expo-blur';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { useRouter } from 'expo-router';
@@ -21,8 +21,6 @@ import { colors } from '@/theme/colors';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '../ui/Button';
 import { ProfileStack } from '../ui/ProfileStack';
-
-const { height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 export interface LiftClipData {
   id: string;
@@ -45,6 +43,7 @@ export interface LiftClipData {
 interface LiftClipItemProps {
   clip: LiftClipData;
   isActive: boolean;
+  clipHeight: number;
   onLike?: () => void;
   onComment?: () => void;
   onShare?: () => void;
@@ -57,6 +56,7 @@ interface LiftClipItemProps {
 export function LiftClipItem({
   clip,
   isActive,
+  clipHeight,
   onLike,
   onComment,
   onShare,
@@ -65,7 +65,10 @@ export function LiftClipItem({
   onViewLiftDetails,
   onOpenClipOptions,
 }: LiftClipItemProps) {
-  const videoRef = useRef<Video>(null);
+  const player = useVideoPlayer(clip.videoUri, (player) => {
+    player.loop = true;
+    player.volume = 0.1;
+  });
   const [isLiked, setIsLiked] = useState(clip.isLiked || false);
   const [isSaved, setIsSaved] = useState(clip.isSaved || false);
   const [likesCount, setLikesCount] = useState(clip.likes);
@@ -73,12 +76,12 @@ export function LiftClipItem({
   const router = useRouter();
 
   useEffect(() => {
-    if (isActive && videoRef.current) {
-      videoRef.current.playAsync();
-    } else if (!isActive && videoRef.current) {
-      videoRef.current.pauseAsync();
+    if (isActive) {
+      player.play();
+    } else {
+      player.pause();
     }
-  }, [isActive]);
+  }, [isActive, player]);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -109,27 +112,24 @@ export function LiftClipItem({
     <View
       className="relative"
       style={{
-        height: SCREEN_HEIGHT,
+        height: clipHeight,
         backgroundColor: colors['grey-alpha']['500'],
       }}
     >
       {/* Video Player */}
-      <Video
-        ref={videoRef}
-        source={{ uri: clip.videoUri }}
+      <VideoView
+        player={player}
         style={{
           width: '100%',
           height: '100%',
           position: 'absolute',
         }}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay={isActive}
-        isLooping
-        volume={0.1}
+        contentFit="cover"
+        nativeControls={false}
       />
 
       <View
-        style={{ bottom: tabBarHeight + 50 }}
+        style={{ bottom: tabBarHeight + 20 }}
         className="align-items-end absolute z-20 w-full flex-row  justify-between px-2"
       >
         <View className="flex-1 justify-end">

@@ -1,11 +1,11 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   TouchableOpacity,
   StyleSheet,
   TextInput,
 } from 'react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import {
   X,
   AlignLeft,
@@ -33,7 +33,11 @@ export function AddTextScreen({
   onClose,
   onDone,
 }: AddTextScreenProps) {
-  const videoRef = useRef<Video>(null);
+  const player = useVideoPlayer(videoUri, (player) => {
+    player.loop = true;
+    player.volume = 0;
+    player.play();
+  });
   const [text, setText] = useState('Add text');
   const [textStyle, setTextStyle] = useState<TextStyle>({
     color: '#FFFFFF',
@@ -52,14 +56,11 @@ export function AddTextScreen({
   return (
     <View style={styles.container}>
       {/* Video Background */}
-      <Video
-        ref={videoRef}
-        source={{ uri: videoUri }}
+      <VideoView
+        player={player}
         style={styles.video}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        isLooping
-        volume={0}
+        contentFit="cover"
+        nativeControls={false}
       />
 
       {/* Top Bar */}

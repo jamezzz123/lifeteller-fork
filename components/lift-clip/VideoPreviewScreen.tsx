@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { X, Music, Type, HandHelping } from 'lucide-react-native';
-import { Video, ResizeMode } from 'expo-av';
+import { VideoView, useVideoPlayer } from 'expo-video';
 import { colors } from '@/theme/colors';
 import { Button } from '../ui/Button';
 import { BlurView } from 'expo-blur';
@@ -25,25 +25,24 @@ export function VideoPreviewScreen({
   onAddText,
   onProceed,
 }: VideoPreviewScreenProps) {
-  const videoRef = useRef<Video>(null);
+  const player = useVideoPlayer(videoUri, (player) => {
+    player.loop = true;
+    player.volume = 1.0;
+    player.play();
+  });
 
   useEffect(() => {
-    // Auto-play video when component mounts
-    if (videoRef.current) {
-      videoRef.current.playAsync();
-    }
-  }, [videoUri]);
+    // Auto-play video when URI changes
+    player.play();
+  }, [videoUri, player]);
   return (
     <View style={styles.container}>
       {/* Video Player */}
-      <Video
-        ref={videoRef}
-        source={{ uri: videoUri }}
+      <VideoView
+        player={player}
         style={styles.video}
-        resizeMode={ResizeMode.COVER}
-        shouldPlay
-        isLooping
-        volume={1.0}
+        contentFit="cover"
+        nativeControls={false}
       />
 
       {/* Header */}
