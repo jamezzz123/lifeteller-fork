@@ -31,7 +31,7 @@ export default function OnboardingWelcomeScreen() {
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
       <View className="flex-1 px-6">
         {/* Header */}
-        <View className="pt-4">
+        <View className="pb-3 pt-4">
           <LogoColor width={104} height={30} />
         </View>
 

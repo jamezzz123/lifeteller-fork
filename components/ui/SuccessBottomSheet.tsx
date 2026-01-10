@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, Text, TouchableOpacity, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 import { Check } from 'lucide-react-native';
 import { Button } from './Button';
@@ -23,6 +24,8 @@ export function SuccessBottomSheet({
   onPrimaryAction,
   onSecondaryAction,
 }: SuccessBottomSheetProps) {
+  const insets = useSafeAreaInsets();
+
   return (
     <Modal
       visible={visible}
@@ -36,7 +39,10 @@ export function SuccessBottomSheet({
         className="flex-1 justify-end bg-black/50"
       >
         <TouchableOpacity activeOpacity={1} onPress={() => {}}>
-          <View className="items-center rounded-t-3xl bg-white px-6 pb-8 pt-4">
+          <View
+            className="items-center rounded-t-3xl bg-white px-6 pt-4"
+            style={{ paddingBottom: Math.max(insets.bottom, 32) }}
+          >
             {/* Handle Bar */}
             <View className="mb-6 items-center">
               <View className="h-1 w-12 rounded-full bg-grey-plain-450" />

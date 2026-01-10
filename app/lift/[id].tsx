@@ -205,8 +205,8 @@ export default function LiftDetailScreen() {
 
       <KeyboardAvoidingView
         className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 0}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={0}
       >
         {/* Content */}
         <ScrollView
@@ -249,6 +249,8 @@ export default function LiftDetailScreen() {
                   placeholderTextColor={colors['grey-plain']['550']}
                   value={commentText}
                   onChangeText={setCommentText}
+                  onFocus={() => setIsKeyboardVisible(true)}
+                  onBlur={() => setIsKeyboardVisible(false)}
                   className="text-[14px] text-grey-alpha-500"
                   style={{
                     paddingVertical: 8,

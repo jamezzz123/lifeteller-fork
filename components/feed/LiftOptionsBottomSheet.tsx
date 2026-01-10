@@ -56,7 +56,7 @@ const LIFT_OPTIONS: LiftOption[] = [
   },
   {
     id: 'lift-clips',
-    title: 'Lift clips',
+    title: 'LiftClips',
     description: 'Use video to request and tell your lift story',
     icon: <Video size={24} color={colors.primary.purple} />,
     route: '/lift-clips', // Update this route as needed

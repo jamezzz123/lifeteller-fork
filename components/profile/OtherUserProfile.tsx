@@ -479,7 +479,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
     { key: 'photos', title: 'Photos' },
-    { key: 'liftClips', title: 'Lift clips' },
+    { key: 'liftClips', title: 'LiftClips' },
     { key: 'about', title: 'About' },
   ]);
 

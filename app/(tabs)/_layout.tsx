@@ -64,11 +64,11 @@ export default function TabsLayout() {
           }}
         />
 
-        {/* Lift Clips */}
+        {/* LiftClips */}
         <Tabs.Screen
           name="lift-clips"
           options={{
-            title: 'Lift Clips',
+            title: 'LiftClips',
             tabBarIcon: ({ color, size, focused }) => (
               <TabIcon focused={focused}>
                 <ListVideo color={color} size={size} />

@@ -31,8 +31,6 @@ import {
   CalendarHeart,
   Info,
   Star,
-  Play,
-  Bug,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
@@ -694,7 +692,7 @@ export default function ProfileScreen() {
     { key: 'posts', title: 'Posts' },
     { key: 'liftHistory', title: 'Lift history' },
     { key: 'photos', title: 'Photos' },
-    { key: 'liftClips', title: 'Lift clips' },
+    { key: 'liftClips', title: 'LiftClips' },
     { key: 'about', title: 'About' },
   ]);
 

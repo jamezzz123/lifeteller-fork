@@ -1,5 +1,6 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import BottomSheet, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -29,6 +30,7 @@ export const BottomSheetComponent = forwardRef<
     ref: React.Ref<BottomSheetRef>
   ) => {
     const bottomSheetRef = useRef<BottomSheet>(null);
+    const insets = useSafeAreaInsets();
 
     useImperativeHandle(ref, () => ({
       expand: () => {
@@ -74,7 +76,12 @@ export const BottomSheetComponent = forwardRef<
         backgroundStyle={styles.container}
         onClose={onClose}
       >
-        <BottomSheetView style={styles.contentContainer}>
+        <BottomSheetView
+          style={[
+            styles.contentContainer,
+            { paddingBottom: Math.max(insets.bottom, 32) },
+          ]}
+        >
           {title && (
             <View className="px-6 pb-4">
               <Text className="text-grey-alpha-550 text-lg font-bold">
@@ -99,6 +106,6 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
   },
   contentContainer: {
-    paddingBottom: 32,
+    // paddingBottom will be set dynamically using safe area insets
   },
 });
