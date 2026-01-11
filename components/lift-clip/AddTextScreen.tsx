@@ -17,6 +17,8 @@ import { Button } from '../ui/Button';
 
 interface AddTextScreenProps {
   videoUri: string;
+  initialText?: string;
+  initialStyle?: TextStyle;
   onClose: () => void;
   onDone: (text: string, style: TextStyle) => void;
 }
@@ -30,6 +32,8 @@ interface TextStyle {
 
 export function AddTextScreen({
   videoUri,
+  initialText = '',
+  initialStyle,
   onClose,
   onDone,
 }: AddTextScreenProps) {
@@ -38,12 +42,14 @@ export function AddTextScreen({
     player.volume = 0;
     player.play();
   });
-  const [text, setText] = useState('Add text');
-  const [textStyle, setTextStyle] = useState<TextStyle>({
-    color: '#FFFFFF',
-    fontSize: 40,
-    textAlign: 'center',
-  });
+  const [text, setText] = useState(initialText);
+  const [textStyle, setTextStyle] = useState<TextStyle>(
+    initialStyle || {
+      color: '#FFFFFF',
+      fontSize: 40,
+      textAlign: 'center',
+    }
+  );
 
   const handleDone = () => {
     onDone(text, textStyle);

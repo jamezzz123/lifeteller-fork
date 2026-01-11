@@ -88,7 +88,7 @@ export default function PreviewScreen() {
         videoUri,
         name: linkedLiftName,
         songId: selectedSong?.id,
-        text: textOverlay?.text,
+        textOverlay: textOverlay ? JSON.stringify(textOverlay) : undefined,
       },
     });
   };
@@ -104,6 +104,8 @@ export default function PreviewScreen() {
       {showAddText ? (
         <AddTextScreen
           videoUri={videoUri}
+          initialText={textOverlay?.text}
+          initialStyle={textOverlay?.style}
           onClose={handleTextClose}
           onDone={handleTextDone}
         />
@@ -112,6 +114,7 @@ export default function PreviewScreen() {
           <VideoPreviewScreen
             videoUri={videoUri}
             linkedLiftName={linkedLiftName}
+            textOverlay={textOverlay}
             onClose={handleClose}
             onLinkToExistingLift={handleLinkToExistingLift}
             onAddSong={handleAddSong}

@@ -195,7 +195,7 @@ export default function PostLiftClipScreen() {
             />
             <Dropdown label={getAudienceLabel()} onPress={handleAudienceButtonPress} />
           </View>
-          ff
+
           {/* Video Thumbnail */}
           {videoUri && (
             <View className="px-4 py-2">

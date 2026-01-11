@@ -6,9 +6,20 @@ import { colors } from '@/theme/colors';
 import { Button } from '../ui/Button';
 import { BlurView } from 'expo-blur';
 
+interface TextOverlay {
+  text: string;
+  style: {
+    color: string;
+    fontSize: number;
+    textAlign: 'left' | 'center' | 'right';
+    backgroundColor?: string;
+  };
+}
+
 interface VideoPreviewScreenProps {
   videoUri: string;
   linkedLiftName?: string;
+  textOverlay?: TextOverlay | null;
   onClose: () => void;
   onLinkToExistingLift: () => void;
   onAddSong: () => void;
@@ -19,6 +30,7 @@ interface VideoPreviewScreenProps {
 export function VideoPreviewScreen({
   videoUri,
   linkedLiftName,
+  textOverlay,
   onClose,
   onLinkToExistingLift,
   onAddSong,
@@ -44,6 +56,25 @@ export function VideoPreviewScreen({
         contentFit="cover"
         nativeControls={false}
       />
+
+      {/* Text Overlay */}
+      {textOverlay && (
+        <View style={styles.textOverlayContainer}>
+          <Text
+            style={[
+              styles.textOverlay,
+              {
+                color: textOverlay.style.color,
+                fontSize: textOverlay.style.fontSize,
+                textAlign: textOverlay.style.textAlign,
+                backgroundColor: textOverlay.style.backgroundColor,
+              },
+            ]}
+          >
+            {textOverlay.text}
+          </Text>
+        </View>
+      )}
 
       {/* Header */}
       <View style={styles.header}>
@@ -129,7 +160,9 @@ export function VideoPreviewScreen({
             }}
           >
             <Type size={18} color={colors['grey-plain']['50']}></Type>
-            <Text style={styles.actionText}>Add Text</Text>
+            <Text style={styles.actionText}>
+              {textOverlay ? 'Edit Text' : 'Add Text'}
+            </Text>
           </TouchableOpacity>
         </BlurView>
       </View>
@@ -263,5 +296,21 @@ const styles = StyleSheet.create({
   linkedLiftSubtext: {
     fontSize: 11,
     color: colors['grey-plain']['300'],
+  },
+  textOverlayContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 24,
+    pointerEvents: 'none',
+  },
+  textOverlay: {
+    fontWeight: '700',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
 });

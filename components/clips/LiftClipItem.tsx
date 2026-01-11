@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { BlurView } from 'expo-blur';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -73,6 +73,8 @@ export function LiftClipItem({
   const [isSaved, setIsSaved] = useState(clip.isSaved || false);
   const [likesCount, setLikesCount] = useState(clip.likes);
   const tabBarHeight = useBottomTabBarHeight();
+  const bottomPadding =
+    Platform.OS === 'android' ? tabBarHeight - 60 : tabBarHeight;
   const router = useRouter();
 
   useEffect(() => {
@@ -129,8 +131,8 @@ export function LiftClipItem({
       />
 
       <View
-        style={{ bottom: tabBarHeight + 20 }}
-        className="align-items-end absolute z-20 w-full flex-row  justify-between px-2"
+        className="align-items-end absolute bottom-0 z-20 w-full flex-row  justify-between px-2"
+        style={{ paddingBottom: bottomPadding }}
       >
         <View className="flex-1 justify-end">
           <View className="flex-row items-center gap-3">

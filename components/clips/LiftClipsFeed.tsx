@@ -1,5 +1,10 @@
 import React, { useRef, useState, useCallback } from 'react';
-import { FlatList, ViewToken, ViewabilityConfig, Dimensions } from 'react-native';
+import {
+  FlatList,
+  ViewToken,
+  ViewabilityConfig,
+  Dimensions,
+} from 'react-native';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { LiftClipItem, LiftClipData } from './LiftClipItem';
 
