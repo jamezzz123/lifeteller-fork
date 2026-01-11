@@ -99,7 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Fetch user profile to verify token is still valid
         try {
           await fetchUserProfile();
-        } catch (error) {
+        } catch {
           // If profile fetch fails, token might be expired
           // Try to refresh if we have refresh token and keep logged in is enabled
           if (refreshToken && keepLoggedIn === 'true') {

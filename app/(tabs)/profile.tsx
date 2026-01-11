@@ -31,6 +31,8 @@ import {
   CalendarHeart,
   Info,
   Star,
+  Play,
+  Bug,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { FeedPost } from '@/components/feed/FeedPost';
