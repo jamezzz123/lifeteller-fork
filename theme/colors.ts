@@ -14,6 +14,11 @@ const palette = {
       '300': '#EF54AC',
     },
   },
+  'primary-shades': {
+    purple: {
+      '200': '#5A2C8F', // Darker shade of primary purple
+    },
+  },
   'grey-alpha': {
     '100': '#F9FAFB',
     '150': '#F3F4F6',

@@ -208,7 +208,7 @@ export const CountryPickerBottomSheet = forwardRef<
       <BottomSheetFlatList
         data={sortedAndFilteredCountries}
         renderItem={renderCountryItem}
-        keyExtractor={(item) => item.cca2}
+        keyExtractor={(item: ICountry) => item.cca2}
         ListHeaderComponent={renderHeader}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{

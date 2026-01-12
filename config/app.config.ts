@@ -8,7 +8,7 @@ export const appConfig = {
    * API Configuration
    */
   api: {
-    baseUrl: process.env.EXPO_PUBLIC_API_URL || 'https://api.lifteller.com',
+    baseUrl: process.env.EXPO_PUBLIC_API_URL || 'https://dev-api.lifteller.com',
   },
   /**
    * External links and URLs

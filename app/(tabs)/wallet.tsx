@@ -5,8 +5,12 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import {
   Settings,
@@ -34,6 +38,8 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import { WalletSuccessBottomSheet } from '@/components/wallet/WalletSuccessBottomSheet';
 import { WalletCreatePasscodeBottomSheet } from '@/components/wallet/WalletCreatePasscodeBottomSheet';
+import { WalletSettingsBottomSheet } from '@/components/wallet/WalletSettingsBottomSheet';
+import { TierBottomSheet } from '@/components/wallet/TierBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
 import { colors } from '@/theme/colors';
@@ -53,10 +59,19 @@ interface Transaction {
 
 export default function WalletScreen() {
   const params = useLocalSearchParams();
+  const insets = useSafeAreaInsets();
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const passcodeSheetRef = useRef<BottomSheetRef>(null);
+  const settingsSheetRef = useRef<BottomSheetRef>(null);
+  const tierSheetRef = useRef<BottomSheetRef>(null);
+
+  // Calculate bottom padding to account for tab bar
+  // Tab bar height: iOS ~88px, Android ~64px + insets
+  const tabBarHeight =
+    Platform.OS === 'ios' ? 88 : 64 + Math.max(insets.bottom - 8, 0);
+  const bottomPadding = tabBarHeight + 16; // Add extra spacing
 
   // Mock wallet data - replace with actual data from API
   const walletData = {
@@ -79,7 +94,8 @@ export default function WalletScreen() {
   }, [params.showSuccess]);
 
   const handleSettingsPress = () => {
-    router.push('/settings' as any);
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    settingsSheetRef.current?.expand();
   };
 
   const handleDoThisLater = () => {
@@ -139,8 +155,23 @@ export default function WalletScreen() {
   };
 
   const handleUpgradeWallet = () => {
-    // TODO: Navigate to upgrade wallet screen
-    console.log('Upgrade wallet');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    tierSheetRef.current?.expand();
+  };
+
+  const handleTierUpgrade = (targetTier: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const tierMap: Record<string, string> = {
+      'Tier 0': 'tier-1',
+      'Tier 1': 'tier-2',
+      'Tier 2': 'tier-3',
+      'Tier 3': 'tier-3',
+    };
+    const targetTierParam = tierMap[targetTier] || 'tier-1';
+    router.push({
+      pathname: '/upgrade-wallet' as any,
+      params: { targetTier: targetTierParam },
+    });
   };
 
   const handleWithdraw = () => {
@@ -169,8 +200,13 @@ export default function WalletScreen() {
   };
 
   const handleSeeAllTransactions = () => {
-    // TODO: Navigate to all transactions screen
-    console.log('See all transactions');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/all-transactions' as any);
+  };
+
+  const handleTransactionPress = (transactionId: string) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(`/transaction/${transactionId}` as any);
   };
 
   const handleFilterTransactions = () => {
@@ -239,7 +275,7 @@ export default function WalletScreen() {
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <Text className="text-2xl font-bold text-grey-alpha-500">Wallet</Text>
@@ -251,7 +287,7 @@ export default function WalletScreen() {
       {/* Wallet Content */}
       <ScrollView
         className="flex-1 bg-grey-plain-50"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: bottomPadding }}
         showsVerticalScrollIndicator={false}
       >
         {/* Wallet Card */}
@@ -613,10 +649,11 @@ export default function WalletScreen() {
           </Text>
 
           {/* Transaction List */}
-          <View className="gap-3">
+          <View className="gap-3 pb-4">
             {transactions.map((transaction) => (
               <TouchableOpacity
                 key={transaction.id}
+                onPress={() => handleTransactionPress(transaction.id)}
                 className="rounded-xl border border-grey-plain-300 bg-white p-4"
                 activeOpacity={0.7}
               >
@@ -673,6 +710,16 @@ export default function WalletScreen() {
         ref={passcodeSheetRef}
         onComplete={handlePasscodeComplete}
         onClose={handlePasscodeSheetClose}
+      />
+
+      {/* Wallet Settings Bottom Sheet */}
+      <WalletSettingsBottomSheet ref={settingsSheetRef} />
+
+      {/* Tier Bottom Sheet */}
+      <TierBottomSheet
+        ref={tierSheetRef}
+        currentTier={walletData.tier}
+        onUpgrade={handleTierUpgrade}
       />
     </SafeAreaView>
   );

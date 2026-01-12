@@ -30,6 +30,25 @@ export default function DebugScreen() {
       onPress: () => handleNavigate('/earned-badge', { badgeName: 'Lifter' }),
       variant: 'primary',
     },
+    {
+      title: 'BVN Success Screen',
+      description: 'Simulate BVN verification success',
+      onPress: () =>
+        handleNavigate('/upgrade-wallet/success', {
+          type: 'bvn',
+          tier: 'Tier 1',
+        }),
+      variant: 'primary',
+    },
+    {
+      title: 'NIN Success Screen',
+      description: 'Simulate NIN verification success',
+      onPress: () =>
+        handleNavigate('/upgrade-wallet/success', {
+          type: 'nin',
+          tier: 'Tier 2',
+        }),
+    },
   ];
 
   return (

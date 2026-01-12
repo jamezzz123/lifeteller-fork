@@ -41,7 +41,12 @@
           "image": "./assets/images/logo/logo-light.png",
           "imageWidth": 160,
           "resizeMode": "contain",
-          "backgroundColor": "#7538BA"
+          "backgroundColor": "#7538BA",
+          "dark": {
+            "backgroundColor": "#7538BA",
+            "imageWidth": 160,
+            "resizeMode": "contain"
+          }
         }
       ],
       [
