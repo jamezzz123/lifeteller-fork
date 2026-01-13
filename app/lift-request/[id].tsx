@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ScrollView, View, Text, TouchableOpacity } from 'react-native';
 import {
   SafeAreaView,
@@ -21,6 +21,8 @@ import {
   CircleCheck,
   Info,
   Tag,
+  Flag,
+  Ban,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -30,6 +32,10 @@ import { MediaCarousel } from '@/components/lift/MediaCarousel';
 import { RaiseLiftList } from '@/components/lift/RaiseLiftList';
 import { MinimalLiftCard } from '@/components/lift/MinimalLiftCard';
 import { Avatar } from '@/components/ui/Avatar';
+import {
+  BottomSheetComponent,
+  BottomSheetRef,
+} from '@/components/ui/BottomSheet';
 
 export default function LiftRequestDetailScreen() {
   const router = useRouter();
@@ -37,6 +43,7 @@ export default function LiftRequestDetailScreen() {
   const insets = useSafeAreaInsets();
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const moreOptionsSheetRef = useRef<BottomSheetRef>(null);
 
   // Get lift data from mockLifts
   const liftData = mockLifts.find((lift) => lift.id === id);
@@ -60,6 +67,18 @@ export default function LiftRequestDetailScreen() {
     uri: item,
     type: 'image' as const,
   }));
+
+  function handleReportLift() {
+    moreOptionsSheetRef.current?.close();
+    // TODO: Navigate to report screen or show report modal
+    console.log('Report lift');
+  }
+
+  function handleReportAndBlockUser() {
+    moreOptionsSheetRef.current?.close();
+    // TODO: Navigate to report screen or show report modal with block option
+    console.log('Report lift and block user');
+  }
 
   const getStatusConfig = () => {
     switch (liftData.status) {
@@ -141,7 +160,7 @@ export default function LiftRequestDetailScreen() {
             Lift request
           </Text>
         </View>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => moreOptionsSheetRef.current?.expand()}>
           <EllipsisVertical color={colors['grey-plain']['550']} size={24} />
         </TouchableOpacity>
       </View>
@@ -600,6 +619,36 @@ export default function LiftRequestDetailScreen() {
           </View>
         </View>
       )}
+
+      {/* More Options Bottom Sheet */}
+      <BottomSheetComponent ref={moreOptionsSheetRef}>
+        <View className="px-6">
+          {/* Report Lift */}
+          <TouchableOpacity
+            onPress={handleReportLift}
+            className="flex-row items-center gap-3 py-4"
+            activeOpacity={0.7}
+          >
+            <Flag color={colors.state.red} size={24} strokeWidth={2} />
+            <Text className="text-base text-state-red">Report lift</Text>
+          </TouchableOpacity>
+
+          {/* Divider */}
+          <View className="h-px bg-grey-plain-150" />
+
+          {/* Report Lift and Block User */}
+          <TouchableOpacity
+            onPress={handleReportAndBlockUser}
+            className="flex-row items-center gap-3 py-4"
+            activeOpacity={0.7}
+          >
+            <Ban color={colors.state.red} size={24} strokeWidth={2} />
+            <Text className="text-base text-state-red">
+              Report lift and block user
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </BottomSheetComponent>
     </SafeAreaView>
   );
 }
