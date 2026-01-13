@@ -205,6 +205,16 @@ export default function CreateAccountScreen() {
       return;
     }
 
+    // Check if password contains at least one special character (matching backend requirement)
+    const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    if (!hasSpecialChar) {
+      Alert.alert(
+        'Invalid Password',
+        'Password must contain at least one special character (!@#$%^&*(),.?":{}|<>)'
+      );
+      return;
+    }
+
     // Check if username is available
     if (usernameValidationStatus === 'taken') {
       Alert.alert('Username Taken', 'Please choose a different username.');
@@ -258,15 +268,52 @@ export default function CreateAccountScreen() {
 
       // Extract error message from various possible response formats
       let errorMessage = 'Failed to create account. Please try again.';
-      
+      const status = error?.response?.status;
+
       if (error?.response?.data) {
+        const responseData = error.response.data;
+
         // Check for 'detail' field (common in FastAPI/DRF-style APIs)
-        if (error.response.data.detail) {
-          errorMessage = error.response.data.detail;
-        } else if (error.response.data.error) {
-          errorMessage = error.response.data.error;
-        } else if (error.response.data.message) {
-          errorMessage = error.response.data.message;
+        if (responseData.detail) {
+          // Handle detail as array (FastAPI validation errors)
+          if (Array.isArray(responseData.detail)) {
+            // Extract messages from validation error array
+            const messages = responseData.detail.map((err: any) => {
+              if (err.msg) return err.msg;
+              if (err.message) return err.message;
+              return JSON.stringify(err);
+            });
+            errorMessage = messages.join('\n');
+          } else if (typeof responseData.detail === 'string') {
+            errorMessage = responseData.detail;
+          } else {
+            errorMessage = JSON.stringify(responseData.detail);
+          }
+        } else if (responseData.error) {
+          errorMessage = responseData.error;
+        } else if (responseData.message) {
+          errorMessage = responseData.message;
+        } else if (typeof responseData === 'string') {
+          // Handle server errors (500) with tracebacks - extract useful info
+          if (status === 500) {
+            // Check for specific database errors in the traceback
+            if (responseData.includes('duplicate key value violates unique constraint')) {
+              if (responseData.includes('email')) {
+                errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+              } else if (responseData.includes('username')) {
+                errorMessage = 'This username is already taken. Please choose a different username.';
+              } else if (responseData.includes('phone')) {
+                errorMessage = 'This phone number is already registered. Please use a different number.';
+              } else {
+                errorMessage = 'This account already exists. Please try logging in instead.';
+              }
+            } else {
+              errorMessage = 'Server error occurred. Please try again later.';
+            }
+          } else {
+            // For non-500 string responses, show a generic message
+            errorMessage = 'Failed to create account. Please try again.';
+          }
         }
       } else if (error?.message) {
         errorMessage = error.message;
@@ -458,7 +505,7 @@ export default function CreateAccountScreen() {
                 onChangeText={setPassword}
                 secureTextEntry
                 showPasswordToggle
-                helperText="Password must at least be 8 characters"
+                helperText="Password must be at least 8 characters and include a special character"
               />
               <PasswordStrengthIndicator password={password} />
             </View>
