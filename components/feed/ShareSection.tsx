@@ -19,20 +19,20 @@ export function ShareSection() {
   const avatarUrl = user?.avatar_url;
 
   return (
-    <View className="flex-row items-center gap-3 bg-grey-plain-50 px-4 py-3">
+    <View className="flex-row items-center gap-3 border-b border-grey-plain-300 bg-grey-plain-50  px-4 py-4">
       {/* User Avatar */}
       <TouchableOpacity className="h-10 w-10">
         <View className="size-10 overflow-hidden rounded-full bg-grey-plain-300">
           {avatarUrl ? (
-          <Image
+            <Image
               source={{ uri: avatarUrl }}
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 20,
-            }}
-            contentFit="cover"
-          />
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 20,
+              }}
+              contentFit="cover"
+            />
           ) : initials ? (
             <View
               className="h-full w-full items-center justify-center"
@@ -61,13 +61,13 @@ export function ShareSection() {
 
       {/* Text Input Placeholder */}
       <TouchableOpacity
-        className="flex-1 rounded-full border border-grey-plain-300 bg-grey-plain-150 px-4 py-2.5"
+        className="flex-1 rounded-full border border-grey-plain-300 bg-grey-plain-100 px-4 py-2.5"
         onPress={handlePress}
         activeOpacity={0.7}
       >
         <Text
           className="text-[14px] text-grey-plain-550"
-          style={{ color: colors['grey-plain']['550'] }}
+          style={{ color: colors['grey-plain']['400'] }}
         >
           Share some uplifting words...
         </Text>

@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   StyleSheet,
+  Dimensions,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -20,6 +21,12 @@ export function StoriesSection() {
   const fullName = user ? getFullName(user.first_name, user.last_name) : '';
   const initials = getInitials(fullName);
   const avatarUrl = user?.avatar_url;
+
+  // Calculate story width to show 4 at a time
+  const screenWidth = Dimensions.get('window').width;
+  const paddingHorizontal = 16 * 2; // 16px on each side
+  const gap = 16 * 3; // 3 gaps between 4 items
+  const storyWidth = (screenWidth - paddingHorizontal - gap) / 4;
 
   const stories = [
     { id: 'your-story', name: 'Your story', isYourStory: true },
@@ -56,7 +63,7 @@ export function StoriesSection() {
   ];
 
   return (
-    <View className="bg-grey-plain-50 py-3">
+    <View className="border-b border-grey-plain-300  bg-grey-plain-50 py-3">
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -65,7 +72,8 @@ export function StoriesSection() {
         {stories.map((story) => (
           <TouchableOpacity
             key={story.id}
-            className="w-[70px] items-center"
+            style={{ width: storyWidth }}
+            className="items-center"
             activeOpacity={0.7}
           >
             <View className="mb-1 h-[60px] w-[60px]">
