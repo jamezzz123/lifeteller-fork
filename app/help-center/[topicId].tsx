@@ -117,16 +117,28 @@ const topicsData: Record<
   },
   wallet: {
     title: 'Wallet',
-    count: 17,
+    count: 4,
     articles: [
       {
-        id: 'article-wallet-1',
-        title: 'Adding Payment Methods',
-        description: 'How to add and manage your payment methods...',
+        id: 'article-wallet-activation',
+        title: 'Wallet activation',
+        description: 'During onboarding on the Lifteller mobile app...',
         icon: FileText,
       },
       {
-        id: 'article-wallet-2',
+        id: 'article-wallet-policy',
+        title: 'Wallet policy',
+        description: 'Learn about our wallet policies and terms of service...',
+        icon: FileText,
+      },
+      {
+        id: 'article-wallet-fees',
+        title: 'Wallet fees, charges, and limits',
+        description: 'Understanding fees, charges, and transaction limits...',
+        icon: FileText,
+      },
+      {
+        id: 'article-wallet-security',
         title: 'Wallet Security',
         description: 'Tips for keeping your wallet secure...',
         icon: FileText,

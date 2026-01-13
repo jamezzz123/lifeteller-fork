@@ -11,7 +11,12 @@
     "splash": {
       "image": "./assets/images/logo/logo-light.png",
       "resizeMode": "contain",
-      "backgroundColor": "#7538BA"
+      "backgroundColor": "#7538BA",
+      "dark": {
+        "image": "./assets/images/logo/logo-light.png",
+        "resizeMode": "contain",
+        "backgroundColor": "#7538BA"
+      }
     },
     "ios": {
       "supportsTablet": true,

@@ -151,6 +151,305 @@ const articlesData: Record<string, ArticleContent> = {
       },
     ],
   },
+  'article-wallet-activation': {
+    title: 'Wallet activation',
+    sections: [
+      {
+        type: 'intro',
+        content:
+          'During onboarding on the Lifteller mobile app, you will be guided through the wallet activation process. This is a simple and secure process that enables you to send and receive monetary lifts.',
+      },
+      {
+        type: 'heading',
+        content: 'Activation Steps',
+        level: 1,
+      },
+      {
+        type: 'bullet',
+        content:
+          'Complete your KYC verification by providing your BVN or other required identification documents.',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Set up your wallet passcode for secure transactions. This 6-digit code will be required for all wallet operations.',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Verify your phone number or email address to complete the activation process.',
+      },
+      {
+        type: 'heading',
+        content: 'What You Can Do After Activation',
+        level: 1,
+      },
+      {
+        type: 'bullet',
+        content: 'Send and receive monetary lifts',
+      },
+      {
+        type: 'bullet',
+        content: 'Withdraw funds to your bank account',
+      },
+      {
+        type: 'bullet',
+        content: 'Fund your wallet using various payment methods',
+      },
+    ],
+  },
+  'article-wallet-policy': {
+    title: 'Wallet policy',
+    sections: [
+      {
+        type: 'intro',
+        content:
+          'Our wallet policy outlines the terms and conditions for using the Lifteller wallet service. Please read this carefully to understand your rights and responsibilities.',
+      },
+      {
+        type: 'heading',
+        content: 'Account Eligibility',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'To use the Lifteller wallet, you must be at least 18 years old and have completed the required KYC verification process.',
+      },
+      {
+        type: 'heading',
+        content: 'Transaction Limits',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'Transaction limits are set based on your account tier and verification level. You can view and manage your limits in Wallet Settings.',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Daily cumulative transaction limit: Set a maximum amount you can transact per day',
+      },
+      {
+        type: 'bullet',
+        content:
+          'One-time transaction limit: Set a maximum amount for individual transactions',
+      },
+      {
+        type: 'heading',
+        content: 'Prohibited Activities',
+        level: 1,
+      },
+      {
+        type: 'bullet',
+        content:
+          'Using the wallet for illegal activities or money laundering',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Fraudulent transactions or chargebacks',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Violating any applicable laws or regulations',
+      },
+      {
+        type: 'heading',
+        content: 'Account Security',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'You are responsible for maintaining the security of your wallet passcode and account. Never share your passcode with anyone.',
+      },
+    ],
+  },
+  'article-wallet-fees': {
+    title: 'Wallet fees, charges, and limits',
+    sections: [
+      {
+        type: 'intro',
+        content:
+          'Understanding fees, charges, and transaction limits helps you make informed decisions when using your Lifteller wallet.',
+      },
+      {
+        type: 'heading',
+        content: 'Transaction Fees',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'Lifteller charges minimal fees for certain wallet operations to maintain the service:',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Sending monetary lifts: Free for all users',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Receiving monetary lifts: Free for all users',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Withdrawals: ₦50 per transaction',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Wallet funding: Free when using bank transfer, card charges may apply',
+      },
+      {
+        type: 'heading',
+        content: 'Transaction Limits',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'Transaction limits are in place to protect your account and comply with regulatory requirements:',
+      },
+      {
+        type: 'heading',
+        content: 'Tier 0 (Unverified)',
+        level: 2,
+      },
+      {
+        type: 'bullet',
+        content: 'Daily limit: ₦50,000',
+      },
+      {
+        type: 'bullet',
+        content: 'Single transaction: ₦20,000',
+      },
+      {
+        type: 'heading',
+        content: 'Tier 1 (BVN Verified)',
+        level: 2,
+      },
+      {
+        type: 'bullet',
+        content: 'Daily limit: ₦500,000',
+      },
+      {
+        type: 'bullet',
+        content: 'Single transaction: ₦200,000',
+      },
+      {
+        type: 'heading',
+        content: 'Tier 2 (NIN Verified)',
+        level: 2,
+      },
+      {
+        type: 'bullet',
+        content: 'Daily limit: ₦2,000,000',
+      },
+      {
+        type: 'bullet',
+        content: 'Single transaction: ₦1,000,000',
+      },
+      {
+        type: 'heading',
+        content: 'Tier 3 (Full Verification)',
+        level: 2,
+      },
+      {
+        type: 'bullet',
+        content: 'Daily limit: ₦5,000,000',
+      },
+      {
+        type: 'bullet',
+        content: 'Single transaction: ₦2,500,000',
+      },
+      {
+        type: 'heading',
+        content: 'Custom Limits',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'You can set custom daily cumulative and one-time transaction limits in Wallet Settings. These limits cannot exceed your tier maximums.',
+      },
+      {
+        type: 'heading',
+        content: 'Chargebacks and Disputes',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'If you initiate a chargeback or dispute a transaction, a processing fee of ₦1,000 may apply. Please contact support before initiating disputes.',
+      },
+    ],
+  },
+  'article-wallet-security': {
+    title: 'Wallet Security',
+    sections: [
+      {
+        type: 'intro',
+        content:
+          'Keeping your wallet secure is our top priority. Follow these best practices to protect your account and funds.',
+      },
+      {
+        type: 'heading',
+        content: 'Passcode Security',
+        level: 1,
+      },
+      {
+        type: 'bullet',
+        content:
+          'Never share your wallet passcode with anyone, including Lifteller staff',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Use a unique 6-digit passcode that you don\'t use elsewhere',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Change your passcode regularly in Wallet Settings',
+      },
+      {
+        type: 'heading',
+        content: 'Transaction Verification',
+        level: 1,
+      },
+      {
+        type: 'text',
+        content:
+          'Always verify transaction details before confirming. Once a transaction is completed, it cannot be reversed.',
+      },
+      {
+        type: 'heading',
+        content: 'Account Monitoring',
+        level: 1,
+      },
+      {
+        type: 'bullet',
+        content:
+          'Regularly review your transaction history',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Enable transaction notifications in Settings',
+      },
+      {
+        type: 'bullet',
+        content:
+          'Report suspicious activity immediately',
+      },
+    ],
+  },
 };
 
 function ArticleSectionComponent({ section }: { section: ArticleSection }) {

@@ -40,8 +40,12 @@ import { WalletSuccessBottomSheet } from '@/components/wallet/WalletSuccessBotto
 import { WalletCreatePasscodeBottomSheet } from '@/components/wallet/WalletCreatePasscodeBottomSheet';
 import { WalletSettingsBottomSheet } from '@/components/wallet/WalletSettingsBottomSheet';
 import { TierBottomSheet } from '@/components/wallet/TierBottomSheet';
+import { DeactivateWalletConfirmationModal } from '@/components/wallet/DeactivateWalletConfirmationModal';
+import { FreezeWalletConfirmationModal } from '@/components/wallet/FreezeWalletConfirmationModal';
+import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
+import { Toast } from '@/components/ui/Toast';
 import { colors } from '@/theme/colors';
 import { formatAmount } from '@/utils/formatAmount';
 import * as Clipboard from 'expo-clipboard';
@@ -61,11 +65,24 @@ export default function WalletScreen() {
   const params = useLocalSearchParams();
   const insets = useSafeAreaInsets();
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
+  const [showDeactivateToast, setShowDeactivateToast] = useState(false);
+  const [showFreezeToast, setShowFreezeToast] = useState(false);
+  const [showDeactivateConfirmation, setShowDeactivateConfirmation] =
+    useState(false);
+  const [showFreezeConfirmation, setShowFreezeConfirmation] = useState(false);
+  const [deactivatePasscodeError, setDeactivatePasscodeError] = useState<
+    string | undefined
+  >();
+  const [freezePasscodeError, setFreezePasscodeError] = useState<
+    string | undefined
+  >();
   const [isBalanceVisible, setIsBalanceVisible] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const passcodeSheetRef = useRef<BottomSheetRef>(null);
   const settingsSheetRef = useRef<BottomSheetRef>(null);
   const tierSheetRef = useRef<BottomSheetRef>(null);
+  const deactivatePasscodeSheetRef = useRef<BottomSheetRef>(null);
+  const freezePasscodeSheetRef = useRef<BottomSheetRef>(null);
 
   // Calculate bottom padding to account for tab bar
   // Tab bar height: iOS ~88px, Android ~64px + insets
@@ -91,11 +108,101 @@ export default function WalletScreen() {
       // Clear the param to avoid showing again on re-render
       router.setParams({ showSuccess: undefined } as any);
     }
-  }, [params.showSuccess]);
+    if (params.walletDeactivated === 'true') {
+      setShowDeactivateToast(true);
+      // Clear the param to avoid showing again on re-render
+      router.setParams({ walletDeactivated: undefined } as any);
+    }
+    if (params.walletFrozen === 'true') {
+      setShowFreezeToast(true);
+      // Clear the param to avoid showing again on re-render
+      router.setParams({ walletFrozen: undefined } as any);
+    }
+  }, [params.showSuccess, params.walletDeactivated, params.walletFrozen]);
 
   const handleSettingsPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     settingsSheetRef.current?.expand();
+  };
+
+  const handleDeactivateWallet = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowDeactivateConfirmation(true);
+  };
+
+  const handleConfirmDeactivate = () => {
+    setShowDeactivateConfirmation(false);
+    // Show passcode sheet after a short delay
+    setTimeout(() => {
+      setDeactivatePasscodeError(undefined);
+      deactivatePasscodeSheetRef.current?.expand();
+    }, 300);
+  };
+
+  const handleCancelDeactivate = () => {
+    setShowDeactivateConfirmation(false);
+  };
+
+  const handleDeactivatePasscodeComplete = async (passcode: string) => {
+    // TODO: Verify passcode with backend
+    // Mock verification for now
+    const CORRECT_PASSCODE = '123456';
+
+    if (passcode === CORRECT_PASSCODE) {
+      setDeactivatePasscodeError(undefined);
+      deactivatePasscodeSheetRef.current?.close();
+      // Navigate to password verification screen after a short delay
+      setTimeout(() => {
+        router.push('/verify-wallet-password');
+      }, 300);
+    } else {
+      setDeactivatePasscodeError('Incorrect passcode. Please try again.');
+    }
+  };
+
+  const handleDeactivateForgotPasscode = () => {
+    deactivatePasscodeSheetRef.current?.close();
+    router.push('/verify-otp');
+  };
+
+  const handleFreezeWallet = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowFreezeConfirmation(true);
+  };
+
+  const handleConfirmFreeze = () => {
+    setShowFreezeConfirmation(false);
+    // Show passcode sheet after a short delay
+    setTimeout(() => {
+      setFreezePasscodeError(undefined);
+      freezePasscodeSheetRef.current?.expand();
+    }, 300);
+  };
+
+  const handleCancelFreeze = () => {
+    setShowFreezeConfirmation(false);
+  };
+
+  const handleFreezePasscodeComplete = async (passcode: string) => {
+    // TODO: Verify passcode with backend
+    // Mock verification for now
+    const CORRECT_PASSCODE = '123456';
+
+    if (passcode === CORRECT_PASSCODE) {
+      setFreezePasscodeError(undefined);
+      freezePasscodeSheetRef.current?.close();
+      // Navigate to password verification screen after a short delay
+      setTimeout(() => {
+        router.push('/verify-wallet-password-freeze');
+      }, 300);
+    } else {
+      setFreezePasscodeError('Incorrect passcode. Please try again.');
+    }
+  };
+
+  const handleFreezeForgotPasscode = () => {
+    freezePasscodeSheetRef.current?.close();
+    router.push('/verify-otp');
   };
 
   const handleDoThisLater = () => {
@@ -713,13 +820,67 @@ export default function WalletScreen() {
       />
 
       {/* Wallet Settings Bottom Sheet */}
-      <WalletSettingsBottomSheet ref={settingsSheetRef} />
+      <WalletSettingsBottomSheet
+        ref={settingsSheetRef}
+        onDeactivateWallet={handleDeactivateWallet}
+        onBlockWallet={handleFreezeWallet}
+      />
 
       {/* Tier Bottom Sheet */}
       <TierBottomSheet
         ref={tierSheetRef}
         currentTier={walletData.tier}
         onUpgrade={handleTierUpgrade}
+      />
+
+      {/* Deactivate Wallet Confirmation Modal */}
+      <DeactivateWalletConfirmationModal
+        visible={showDeactivateConfirmation}
+        onConfirm={handleConfirmDeactivate}
+        onCancel={handleCancelDeactivate}
+      />
+
+      {/* Deactivate Wallet Passcode Bottom Sheet */}
+      <PasscodeBottomSheet
+        ref={deactivatePasscodeSheetRef}
+        title="Enter your passcode"
+        onComplete={handleDeactivatePasscodeComplete}
+        onForgotPasscode={handleDeactivateForgotPasscode}
+        error={deactivatePasscodeError}
+        mode="verify"
+      />
+
+      {/* Freeze Wallet Confirmation Modal */}
+      <FreezeWalletConfirmationModal
+        visible={showFreezeConfirmation}
+        onConfirm={handleConfirmFreeze}
+        onCancel={handleCancelFreeze}
+      />
+
+      {/* Freeze Wallet Passcode Bottom Sheet */}
+      <PasscodeBottomSheet
+        ref={freezePasscodeSheetRef}
+        title="Enter your passcode"
+        onComplete={handleFreezePasscodeComplete}
+        onForgotPasscode={handleFreezeForgotPasscode}
+        error={freezePasscodeError}
+        mode="verify"
+      />
+
+      {/* Deactivate Wallet Success Toast */}
+      <Toast
+        visible={showDeactivateToast}
+        message="Wallet deactivated successfully"
+        duration={3000}
+        onHide={() => setShowDeactivateToast(false)}
+      />
+
+      {/* Freeze Wallet Success Toast */}
+      <Toast
+        visible={showFreezeToast}
+        message="Wallet frozen successfully"
+        duration={3000}
+        onHide={() => setShowFreezeToast(false)}
       />
     </SafeAreaView>
   );

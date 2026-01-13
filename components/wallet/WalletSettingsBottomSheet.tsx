@@ -45,8 +45,7 @@ export const WalletSettingsBottomSheet = forwardRef<
       if (onBankAccounts) {
         onBankAccounts();
       } else {
-        // TODO: Navigate to bank accounts screen
-        console.log('Bank accounts');
+        router.push('/bank-accounts' as any);
       }
       if (ref && typeof ref !== 'function' && ref.current) {
         ref.current.close();
@@ -83,8 +82,7 @@ export const WalletSettingsBottomSheet = forwardRef<
       if (onWalletPolicyAndFees) {
         onWalletPolicyAndFees();
       } else {
-        // TODO: Navigate to wallet policy and fees screen
-        console.log('Wallet policy and fees');
+        router.push('/help-center/wallet' as any);
       }
       if (ref && typeof ref !== 'function' && ref.current) {
         ref.current.close();

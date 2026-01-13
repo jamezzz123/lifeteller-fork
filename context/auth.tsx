@@ -48,16 +48,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const fetchUserProfile = useCallback(async () => {
-    try {
-      const response = await userApi.getProfile();
-      setUser(response.data);
-      setUserId(response.data.id);
-      setOnboardingComplete(response.onboarding_complete ?? false);
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
-      // Don't clear auth state on profile fetch error
-      // The token might still be valid
-    }
+    const response = await userApi.getProfile();
+    setUser(response.data);
+    setUserId(response.data.id);
+    setOnboardingComplete(response.onboarding_complete ?? false);
+    // Let errors bubble up so they can be handled by the caller
   }, []);
 
   const refreshAuthToken = useCallback(
@@ -70,12 +65,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await SecureStore.setItemAsync('refresh_token', response.data.refresh);
         await SecureStore.setItemAsync('user_id', response.data.user_id);
 
-        setIsAuthenticated(true);
         setUserId(response.data.user_id);
         setOnboardingComplete(response.onboarding_complete ?? false);
 
         // Fetch user profile to get full user data
-        await fetchUserProfile();
+        // Only set authenticated after successful profile fetch
+        try {
+          await fetchUserProfile();
+          setIsAuthenticated(true);
+        } catch (error) {
+          console.error('Error fetching user profile after refresh:', error);
+          // Profile fetch failed, but token refresh succeeded
+          // Set authenticated anyway since we have valid tokens
+          setIsAuthenticated(true);
+        }
       } catch (error) {
         console.error('Error refreshing token:', error);
         // Refresh failed, logout user
@@ -94,16 +97,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       // If we have an access token, try to use it
       if (accessToken && storedUserId) {
-        setIsAuthenticated(true);
+        // Don't set isAuthenticated yet - verify token first by fetching profile
         setUserId(storedUserId);
         // Fetch user profile to verify token is still valid
         try {
           await fetchUserProfile();
+          // Only set authenticated after successful profile fetch
+          setIsAuthenticated(true);
         } catch {
           // If profile fetch fails, token might be expired
           // Try to refresh if we have refresh token and keep logged in is enabled
           if (refreshToken && keepLoggedIn === 'true') {
-            await refreshAuthToken(refreshToken);
+            try {
+              await refreshAuthToken(refreshToken);
+              // refreshAuthToken will set isAuthenticated if successful
+            } catch {
+              // Refresh also failed, logout
+              await logout();
+            }
           } else {
             // No refresh token or keep logged in not enabled, logout
             await logout();
@@ -112,7 +123,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else if (refreshToken && keepLoggedIn === 'true') {
         // No access token but we have refresh token and keep logged in is enabled
         // Try to refresh the token
-        await refreshAuthToken(refreshToken);
+        try {
+          await refreshAuthToken(refreshToken);
+          // refreshAuthToken will set isAuthenticated if successful
+        } catch {
+          // Refresh failed, logout
+          await logout();
+        }
       } else {
         // No tokens or keep logged in not enabled
         setIsAuthenticated(false);
@@ -140,14 +157,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await SecureStore.setItemAsync('access_token', tokens.access);
     await SecureStore.setItemAsync('refresh_token', tokens.refresh);
     await SecureStore.setItemAsync('user_id', tokens.userId);
-    setIsAuthenticated(true);
     setUserId(tokens.userId);
     // Set onboarding status immediately if provided (from login response)
     if (tokens.onboardingComplete !== undefined) {
       setOnboardingComplete(tokens.onboardingComplete);
     }
     // Fetch user profile after login to get full user data
-    await fetchUserProfile();
+    try {
+      await fetchUserProfile();
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Error fetching user profile after login:', error);
+      // Profile fetch failed, but login succeeded
+      // Set authenticated anyway since we have valid tokens from login
+      setIsAuthenticated(true);
+    }
   };
 
   useEffect(() => {
