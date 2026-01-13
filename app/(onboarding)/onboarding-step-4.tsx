@@ -73,7 +73,7 @@ export default function OnboardingStep4Screen() {
     () => interestsData?.data?.results || [],
     [interestsData?.data?.results]
   );
-  
+
   // Debug: Log interests data
   useEffect(() => {
     if (interestsData) {
@@ -93,7 +93,7 @@ export default function OnboardingStep4Screen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View className="px-6 pb-3 pt-4">
+        <View className="mt-4 px-6 pb-3 pt-4">
           <LogoColor width={104} height={30} />
         </View>
 

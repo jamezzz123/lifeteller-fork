@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   ScrollView,
   View,
@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   TextInput,
   KeyboardAvoidingView,
-  Platform,
-  Keyboard,
 } from 'react-native';
 import {
   SafeAreaView,
@@ -27,6 +25,7 @@ import { LiftDetailContent } from '@/components/lift/LiftDetailContent';
 import { LiftDetailComments } from '@/components/lift/LiftDetailComments';
 import { LiftDetailBottomBar } from '@/components/lift/LiftDetailBottomBar';
 import { Button } from '@/components/ui/Button';
+import { useKeyboard } from '@/lib/hooks/useKeyboard';
 
 // Mock data - in production, this would come from an API
 const mockPosts: Record<string, any> = {
@@ -153,24 +152,8 @@ export default function LiftDetailScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [commentText, setCommentText] = useState('');
-  const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  const { isKeyboardVisible } = useKeyboard();
   const post = mockPosts[id || '1'];
-
-  useEffect(() => {
-    const keyboardWillShow = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
-      () => setIsKeyboardVisible(true)
-    );
-    const keyboardWillHide = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
-      () => setIsKeyboardVisible(false)
-    );
-
-    return () => {
-      keyboardWillShow.remove();
-      keyboardWillHide.remove();
-    };
-  }, []);
 
   if (!post) {
     return (
@@ -250,8 +233,6 @@ export default function LiftDetailScreen() {
                   placeholderTextColor={colors['grey-plain']['550']}
                   value={commentText}
                   onChangeText={setCommentText}
-                  onFocus={() => setIsKeyboardVisible(true)}
-                  onBlur={() => setIsKeyboardVisible(false)}
                   className="text-[14px] text-grey-alpha-500"
                   style={{
                     paddingVertical: 8,

@@ -32,18 +32,18 @@ export default function OnboardingStep1Screen() {
       return;
     }
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    
+
     // Split name into first and last name
     const nameParts = name.trim().split(/\s+/);
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
-    
+
     // Save to onboarding context
     updateData({
       firstName,
       lastName,
     });
-    
+
     router.push('/(onboarding)/onboarding-step-2');
   }
 
@@ -60,7 +60,7 @@ export default function OnboardingStep1Screen() {
           showsVerticalScrollIndicator={false}
         >
           {/* Header */}
-          <View className="px-6 pb-3 pt-4">
+          <View className="mt-4 px-6 pb-3 pt-4">
             <LogoColor width={104} height={30} />
           </View>
 

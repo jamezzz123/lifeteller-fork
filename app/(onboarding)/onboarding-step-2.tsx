@@ -22,8 +22,11 @@ export default function OnboardingStep2Screen() {
   const { data, updateData } = useOnboarding();
   const { user } = useAuth();
   const uploadAvatarMutation = useUploadAvatar();
-  
-  const userName = `${data.firstName || ''} ${data.lastName || ''}`.trim() || user?.username || 'User';
+
+  const userName =
+    `${data.firstName || ''} ${data.lastName || ''}`.trim() ||
+    user?.username ||
+    'User';
 
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -42,7 +45,7 @@ export default function OnboardingStep2Screen() {
 
   async function handleContinue() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    
+
     // Upload avatar if selected
     if (profileImageUri) {
       try {
@@ -58,11 +61,14 @@ export default function OnboardingStep2Screen() {
         });
       } catch (error) {
         console.error('Error uploading avatar:', error);
-        Alert.alert('Error', 'Failed to upload profile picture. Please try again.');
+        Alert.alert(
+          'Error',
+          'Failed to upload profile picture. Please try again.'
+        );
         return;
       }
     }
-    
+
     router.push('/(onboarding)/onboarding-step-3');
   }
 
@@ -74,7 +80,7 @@ export default function OnboardingStep2Screen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View className="px-6 pb-3 pt-4">
+        <View className="mt-4 px-6 pb-3 pt-4">
           <LogoColor width={104} height={30} />
         </View>
 

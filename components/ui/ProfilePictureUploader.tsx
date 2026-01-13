@@ -82,7 +82,7 @@ export function ProfilePictureUploader({
   return (
     <View className={className}>
       {/* Profile Picture */}
-      <View className="items-start">
+      <View className="mb-4 items-start">
         <Pressable
           onPress={handleImagePicker}
           className="relative"
