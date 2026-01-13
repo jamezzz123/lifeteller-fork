@@ -128,7 +128,7 @@ export default function OnboardingLoadingScreen() {
   const handleRaiseLift = () => {
     setShowSuccessSheet(false);
     // Navigate to raise/request lift screen
-    router.replace('/(tabs)');
+    router.replace('/screens/lifts/raise');
     // TODO: Navigate to specific raise lift screen when route is available
     // router.push('/request-lift');
   };
