@@ -1,5 +1,5 @@
-import { Modal, Text, View } from 'react-native';
-import { Button } from './Button';
+import { Modal, Text, View, TouchableOpacity } from 'react-native';
+import { colors } from '@/theme/colors';
 
 type ConfirmationModalProps = {
   visible: boolean;
@@ -7,6 +7,7 @@ type ConfirmationModalProps = {
   message: string;
   confirmText?: string;
   cancelText?: string;
+  destructive?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
 };
@@ -17,6 +18,7 @@ export function ConfirmationModal({
   message,
   confirmText = 'Yes',
   cancelText = 'Cancel',
+  destructive = false,
   onConfirm,
   onCancel,
 }: ConfirmationModalProps) {
@@ -37,23 +39,25 @@ export function ConfirmationModal({
           <View className="my-4 h-px bg-grey-plain-450/20" />
 
           {/* Action Buttons */}
-          <View className="mt-3 flex-row gap-3">
-            <View className="flex-1">
-              <Button
-                size="small"
-                title={cancelText}
-                variant="outline"
-                onPress={onCancel}
-              />
-            </View>
-            <View className="flex-1">
-              <Button
-                size="small"
-                title={confirmText}
-                variant="primary"
-                onPress={onConfirm}
-              />
-            </View>
+          <View className="mt-3 flex-row justify-end gap-4">
+            <TouchableOpacity onPress={onCancel}>
+              <Text
+                className="text-base font-semibold"
+                style={{ color: colors.primary.purple }}
+              >
+                {cancelText}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={onConfirm}>
+              <Text
+                className="text-base font-semibold"
+                style={{
+                  color: destructive ? colors.state.red : colors.primary.purple,
+                }}
+              >
+                {confirmText}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
       </View>

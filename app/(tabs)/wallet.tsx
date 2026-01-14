@@ -282,8 +282,8 @@ export default function WalletScreen() {
   };
 
   const handleWithdraw = () => {
-    // TODO: Navigate to withdraw screen
-    console.log('Withdraw');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/withdraw' as any);
   };
 
   const handleBuyAirtime = () => {

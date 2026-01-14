@@ -69,8 +69,7 @@ export const WalletSettingsBottomSheet = forwardRef<
       if (onWalletAnalytics) {
         onWalletAnalytics();
       } else {
-        // TODO: Navigate to wallet analytics screen
-        console.log('Wallet analytics');
+        router.push('/wallet-analytics' as any);
       }
       if (ref && typeof ref !== 'function' && ref.current) {
         ref.current.close();
