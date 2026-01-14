@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -20,6 +21,7 @@ import {
   ContactUsSheet,
   ContactUsSheetRef,
 } from '@/components/auth/ContactUsSheet';
+import { SuccessBottomSheet } from '@/components/ui/SuccessBottomSheet';
 import { colors } from '@/theme/colors';
 
 export default function ForgotPasswordScreen() {
@@ -27,6 +29,7 @@ export default function ForgotPasswordScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isMobileMode, setIsMobileMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [showSuccessSheet, setShowSuccessSheet] = useState(false);
   const contactSheetRef = useRef<ContactUsSheetRef>(null);
 
   function handleBack() {
@@ -74,12 +77,27 @@ export default function ForgotPasswordScreen() {
         usernameOrEmail: isMobileMode ? undefined : usernameOrEmail,
         phoneNumber: isMobileMode ? phoneNumber : undefined,
       });
-      // Navigate to reset link sent confirmation screen
+
+      // Show success bottom sheet
+      setShowSuccessSheet(true);
     } catch (error) {
       console.error('Send reset link error:', error);
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function handleLogInNow() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setShowSuccessSheet(false);
+    router.replace('/(auth)/login');
+  }
+
+  function handleOpenEmailApp() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setShowSuccessSheet(false);
+    // Open default email app
+    Linking.openURL('message:');
   }
 
   const hasEmail = !isMobileMode && usernameOrEmail.trim().length > 0;
@@ -191,6 +209,21 @@ export default function ForgotPasswordScreen() {
       </KeyboardAvoidingView>
 
       <ContactUsSheet ref={contactSheetRef} />
+
+      {/* Password Reset Success Bottom Sheet */}
+      <SuccessBottomSheet
+        visible={showSuccessSheet}
+        title="Password reset link sent"
+        description={
+          isMobileMode
+            ? 'We have sent a link to reset your password to your phone number.'
+            : 'We have sent a link to reset your password to your email.'
+        }
+        primaryActionText="Open email app"
+        secondaryActionText="Log in now"
+        onPrimaryAction={handleOpenEmailApp}
+        onSecondaryAction={handleLogInNow}
+      />
     </SafeAreaView>
   );
 }
