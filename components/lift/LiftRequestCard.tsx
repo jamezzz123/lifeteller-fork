@@ -16,6 +16,7 @@ import {
   ThumbsDown,
   HandMetal,
   Medal,
+  HandHelping,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/theme/colors';
@@ -141,7 +142,7 @@ export function LiftCard({
     switch (lift.cardType) {
       case 'lift-request':
         return {
-          icon: HandCoins,
+          icon: HandHelping,
           label: 'Lift request',
         };
       case 'lift-raised':

@@ -23,6 +23,7 @@ import {
   Tag,
   Flag,
   Ban,
+  ClockFading,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -36,6 +37,7 @@ import {
   BottomSheetComponent,
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 export default function LiftRequestDetailScreen() {
   const router = useRouter();
@@ -44,6 +46,7 @@ export default function LiftRequestDetailScreen() {
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const moreOptionsSheetRef = useRef<BottomSheetRef>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   // Get lift data from mockLifts
   const liftData = mockLifts.find((lift) => lift.id === id);
@@ -210,9 +213,8 @@ export default function LiftRequestDetailScreen() {
               </Text>
             </View>
           </View>
-
           {/* Status Badge */}
-          <View className="mt-3">
+          <View className="mt-5">
             <View
               className="flex-row items-center gap-1.5 self-start rounded-full px-3 py-1"
               style={{ backgroundColor: getStatusConfig().bg }}
@@ -248,7 +250,7 @@ export default function LiftRequestDetailScreen() {
             )}
             {liftData.timeRemaining && (
               <View className="flex-row items-center gap-1">
-                <View className="h-4 w-4 rounded-full bg-grey-plain-100" />
+                <ClockFading size={14} />
                 <Text className="text-sm text-grey-plain-550">
                   {liftData.timeRemaining}
                 </Text>
@@ -268,16 +270,16 @@ export default function LiftRequestDetailScreen() {
 
         {/* Title */}
         <View className="bg-white px-4 pb-2">
-          <Text className="text-xl font-bold text-grey-alpha-500">
+          <Text className="text-xl font-bold text-grey-alpha-550">
             {liftData.title}
           </Text>
         </View>
 
         {/* Description */}
         <View className="bg-white px-4 pb-4">
-          <Text className="text-[15px] leading-6 text-grey-alpha-500">
+          <Text className="text-[15px] font-normal leading-6 text-grey-alpha-500">
             {liftData.description}{' '}
-            <Text className="font-medium text-grey-alpha-500">see more</Text>
+            <Text className="font-bold text-grey-alpha-500">see more</Text>
           </Text>
         </View>
 
@@ -603,6 +605,7 @@ export default function LiftRequestDetailScreen() {
             <TouchableOpacity
               className="rounded-full border border-state-red px-6 py-3"
               activeOpacity={0.7}
+              onPress={() => setShowConfirmDialog(true)}
             >
               <Text className="text-sm font-semibold text-state-red">
                 Decline
@@ -649,6 +652,25 @@ export default function LiftRequestDetailScreen() {
           </TouchableOpacity>
         </View>
       </BottomSheetComponent>
+
+      <ConfirmDialog
+        visible={showConfirmDialog}
+        title="Decline lift request"
+        message="Are you sure you want to decline this lift request from Isaac Tolulope?"
+        confirmText="Yes, decline"
+        cancelText="No"
+        onConfirm={() => {
+          // TODO: Unhide all posts
+          console.log('Unhiding all hidden posts');
+          setShowConfirmDialog(false);
+          // TODO: Clear the hidden posts list or navigate back
+          router.back();
+        }}
+        onCancel={() => {
+          setShowConfirmDialog(false);
+        }}
+        cancelTextColor={colors.primary.purple}
+      />
     </SafeAreaView>
   );
 }

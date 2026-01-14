@@ -8,7 +8,7 @@ export function LiftHeader() {
     <View className="flex-row items-center justify-between  border-b border-grey-plain-300 bg-grey-plain-50 px-4 py-3">
       {/* Logo */}
       <View className="flex-row items-center gap-2">
-        <Text className="text-2xl"> Lift</Text>
+        <Text className="text-2xl font-semibold">Lifts</Text>
       </View>
 
       {/* Actions */}

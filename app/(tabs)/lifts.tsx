@@ -18,7 +18,7 @@ export default function LiftsScreen() {
   const customFilters = [
     { id: 'all', label: 'All', count: 10 },
     { id: 'pending', label: 'Pending', count: 3 },
-    // { id: 'clips', label: 'Clips', count: 9 },
+    { id: 'clips', label: 'Clips', count: 9 },
     { id: 'offered', label: 'Offered', count: 9 },
   ];
   const [activeFilter, setActiveFilter] = useState('all');
@@ -40,7 +40,7 @@ export default function LiftsScreen() {
   // Use mock data (replace with your API data later)
   const allLifts = mockLifts;
   const [visibleLifts, setVisibleLifts] = useState(() =>
-    allLifts.slice(0, PAGE_SIZE),
+    allLifts.slice(0, PAGE_SIZE)
   );
 
   const liftOptionsSheetRef = useRef<LiftOptionsBottomSheetRef>(null);
@@ -62,7 +62,7 @@ export default function LiftsScreen() {
       setVisibleLifts((currentLifts) => {
         const nextCount = Math.min(
           allLifts.length,
-          currentLifts.length + PAGE_SIZE,
+          currentLifts.length + PAGE_SIZE
         );
         return allLifts.slice(0, nextCount);
       });
