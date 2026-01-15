@@ -15,11 +15,18 @@ export type LiftItem = {
   quantity: number;
 };
 
+export const LiftType = {
+  Monetary: 'monetary',
+  NonMonetary: 'non-monetary',
+} as const;
+
+export type LiftTypeValue = (typeof LiftType)[keyof typeof LiftType];
+
 type LiftDraftContextType = {
   collaborators: User[];
   setCollaborators: (collaborators: User[]) => void;
-  liftType: string;
-  setLiftType: (type: string) => void;
+  liftType: LiftTypeValue;
+  setLiftType: (type: LiftTypeValue) => void;
   audienceType: AudienceOfferType;
   setAudienceType: (type: AudienceOfferType) => void;
   title: string;
@@ -47,7 +54,7 @@ const LiftDraftContext = createContext<LiftDraftContextType | undefined>(
 
 export function LiftDraftProvider({ children }: { children: ReactNode }) {
   const [collaborators, setCollaborators] = useState<User[]>([]);
-  const [liftType, setLiftType] = useState<string>('monetary');
+  const [liftType, setLiftType] = useState<LiftTypeValue>(LiftType.Monetary);
   const [audienceType, setAudienceType] =
     useState<AudienceOfferType>('everyone');
   const [title, setTitle] = useState<string>('');
@@ -61,7 +68,7 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
 
   const reset = () => {
     setCollaborators([]);
-    setLiftType('monetary');
+    setLiftType(LiftType.Monetary);
     setAudienceType('everyone');
     setTitle('');
     setDescription('');

@@ -9,13 +9,14 @@ import { TouchableOpacity, View, Text, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
+import { LiftProgressBar } from '@/components/ui/LiftProgressBar';
 import { router, Href } from 'expo-router';
 import { RequestSuccessBottomSheet } from '@/components/lift';
 import { useCallback, useRef, useState } from 'react';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import * as Haptics from 'expo-haptics';
 import { Image } from 'expo-image';
-import { useLiftDraft } from '@/context/LiftDraftContext';
+import { useLiftDraft, LiftType } from '@/context/LiftDraftContext';
 
 interface PreviewLiftScreenProps {
   onSuccess?: () => void;
@@ -35,6 +36,8 @@ export default function PreviewLiftScreen({
     description,
     liftAmount,
     audienceType,
+    liftType,
+    liftItems,
   } = useLiftDraft();
 
   function handleGoToFeeds() {
@@ -135,7 +138,7 @@ export default function PreviewLiftScreen({
             <View className="relative">
               <Image
                 source={{ uri: images[currentImageIndex] }}
-                style={{ width: '100%', height: 224, borderRadius: 16 }}
+                style={{ width: '100%', height: 280, borderRadius: 16 }}
                 contentFit="cover"
               />
 
@@ -211,7 +214,7 @@ export default function PreviewLiftScreen({
           </View>
         </View>
 
-        <View className="border-b border-grey-plain-150 px-4">
+        <View className=" px-4">
           {/* Title */}
           <Text className="mb-3 text-xl font-bold text-grey-alpha-500">
             {title || 'Untitled Lift'}
@@ -223,35 +226,57 @@ export default function PreviewLiftScreen({
           </Text>
         </View>
 
-        {/* Amount and Items Section */}
-        <View
-          className="mx-4 mb-6 rounded-2xl border p-4"
-          style={{
-            backgroundColor: colors['grey-plain']['50'],
-            borderColor: colors['grey-alpha']['150'],
-          }}
-        >
-          <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
-            ₦{(liftAmount || '0').toLocaleString()}
-          </Text>
+        <View className="my-5 border-y border-grey-plain-300 px-4 py-6">
+          {/* Amount and Items Section */}
+          {liftType === LiftType.Monetary && (
+            <View
+              className="mx-4  rounded-2xl border p-4"
+              style={{
+                backgroundColor: colors['grey-plain']['50'],
+                borderColor: colors['grey-plain']['300'],
+              }}
+            >
+              <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
+                ₦{(liftAmount || '0').toLocaleString()}
+              </Text>
 
-          {/* Progress Slider */}
-          <View className="relative w-full">
-            <View className="h-2 w-full overflow-hidden rounded-full bg-grey-alpha-150">
-              <View
-                className="h-full rounded-full"
-                style={{
-                  width: '0%',
-                  backgroundColor: colors.primary.purple,
-                }}
+              {/* Progress Bar */}
+              <LiftProgressBar
+                currentAmount={500}
+                targetAmount={Number(liftAmount)}
+                showAmount={false}
               />
             </View>
-            <View className="absolute -top-3 mb-2 w-auto flex-row items-center justify-between rounded-full border border-primary bg-white p-2">
-              <Text className="text-xs font-semibold text-grey-alpha-500">
-                0%
-              </Text>
+          )}
+          {liftType === LiftType.NonMonetary && (
+            <View
+              className="mx-4  rounded-2xl border p-4"
+              style={{
+                backgroundColor: colors['grey-plain']['50'],
+                borderColor: colors['grey-plain']['300'],
+              }}
+            >
+              <View className="mb-3 flex-row flex-wrap gap-2">
+                {liftItems.map((item) => (
+                  <View
+                    key={item.id}
+                    className="rounded-full px-3 py-1.5"
+                    style={{ backgroundColor: colors['grey-alpha']['150'] }}
+                  >
+                    <Text className="text-xs font-medium text-grey-alpha-500">
+                      {item.name} ({item.quantity})
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              {/* Progress Bar */}
+              <LiftProgressBar
+                currentAmount={1}
+                targetAmount={2}
+                showAmount={false}
+              />
             </View>
-          </View>
+          )}
         </View>
 
         {/* Who can offer you this lift */}

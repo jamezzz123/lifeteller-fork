@@ -16,6 +16,7 @@ import {
   Music2,
   Plus,
   EllipsisVertical,
+  Search,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Avatar } from '@/components/ui/Avatar';
@@ -150,7 +151,24 @@ export function LiftClipItem({
                   color={colors['grey-plain']['50']}
                 ></BadgeCheck>
               </View>
-              <Text className="text-sm text-white">@{clip.user.username}</Text>
+              <View className="flex-row items-center gap-1">
+                <Text className="text-sm text-white">
+                  @{clip.user.username}
+                </Text>
+                <View
+                  style={{
+                    height: 5,
+                    width: 5,
+                    backgroundColor: colors['grey-plain']['50'],
+                    borderRadius: 10,
+                    // color: colors['grey-plain']['50'],
+                  }}
+                ></View>
+                <Text className="text-sm text-white">Oct 22</Text>
+              </View>
+              {/* <Text className="text-sm text-white">
+                @{clip.user.username} . Oct 22
+              </Text> */}
             </View>
           </View>
 
@@ -303,20 +321,34 @@ export function LiftClipItem({
             </Text>
           </TouchableOpacity>
         </BlurView>
-
-        <BlurView
-          intensity={10}
-          tint="dark"
-          className="overflow-hidden rounded-full"
-        >
-          <TouchableOpacity
-            onPress={onOpenClipOptions}
-            style={{ backgroundColor: 'rgba(37, 42, 49, 0.7)' }}
-            className="flex-row items-center gap-2  rounded-full p-3 text-grey-plain-50"
+        <View className="flex-row gap-2">
+          <BlurView
+            intensity={10}
+            tint="dark"
+            className="overflow-hidden rounded-full"
           >
-            <EllipsisVertical color={colors['grey-plain']['50']} size={20} />
-          </TouchableOpacity>
-        </BlurView>
+            <TouchableOpacity
+              onPress={onOpenClipOptions}
+              style={{ backgroundColor: 'rgba(37, 42, 49, 0.7)' }}
+              className="flex-row items-center gap-2  rounded-full p-3 text-grey-plain-50"
+            >
+              <Search color={colors['grey-plain']['50']} size={20} />
+            </TouchableOpacity>
+          </BlurView>
+          <BlurView
+            intensity={10}
+            tint="dark"
+            className="overflow-hidden rounded-full"
+          >
+            <TouchableOpacity
+              onPress={onOpenClipOptions}
+              style={{ backgroundColor: 'rgba(37, 42, 49, 0.7)' }}
+              className="flex-row items-center gap-2  rounded-full p-3 text-grey-plain-50"
+            >
+              <EllipsisVertical color={colors['grey-plain']['50']} size={20} />
+            </TouchableOpacity>
+          </BlurView>
+        </View>
       </View>
     </View>
   );

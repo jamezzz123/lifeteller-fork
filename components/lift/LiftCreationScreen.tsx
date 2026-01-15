@@ -3,8 +3,9 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  KeyboardAvoidingView,
+  Platform,
   Switch,
-  Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, Href } from 'expo-router';
@@ -23,16 +24,16 @@ import {
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { useLiftDraft } from '@/context/LiftDraftContext';
+import { AudienceOfferType } from '@/context/request-lift';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { VisibilitySelector } from '@/components/ui/VisibilitySelector';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { ProfileStack } from '@/components/ui/ProfileStack';
-import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { AudienceBottomSheet } from '@/components/lift/AudienceBottomSheet';
 import { LiftAmountSelector } from '@/components/lift/LiftAmountSelector';
@@ -120,6 +121,7 @@ export default function LiftCreationScreen({
 }: LiftCreationScreenProps) {
   const {
     collaborators,
+    setCollaborators,
     liftType,
     setLiftType,
     audienceType,
@@ -133,54 +135,12 @@ export default function LiftCreationScreen({
     selectedMedia,
     setSelectedMedia,
     liftItems,
-    setCollaborators,
     setNumberOfRecipients,
     numberOfRecipients,
   } = useLiftDraft();
   const audienceSheetRef = useRef<BottomSheetRef>(null);
   const amountSheetRef = useRef<BottomSheetRef>(null);
   const numberOfRecipientSheetRef = useRef<BottomSheetRef>(null);
-  const [collaboratorsEnabled, setCollaboratorsEnabled] = useState(false);
-  const [showRemoveConfirm, setShowRemoveConfirm] = useState(false);
-
-  // Auto-navigate when toggle is turned on and no collaborators exist
-  useEffect(() => {
-    if (collaboratorsEnabled && collaborators.length === 0) {
-      const timer = setTimeout(() => {
-        router.push(collaboratorsRoute as Href);
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [collaboratorsEnabled, collaborators.length, collaboratorsRoute]);
-
-  // Set toggle to true if collaborators exist
-  useEffect(() => {
-    if (collaborators.length > 0) {
-      setCollaboratorsEnabled(true);
-    }
-  }, [collaborators.length]);
-
-  const handleToggleCollaborators = (enabled: boolean) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (!enabled && collaborators.length > 0) {
-      setShowRemoveConfirm(true);
-    } else {
-      setCollaboratorsEnabled(enabled);
-    }
-  };
-
-  const handleConfirmRemove = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setCollaborators([]);
-    setCollaboratorsEnabled(false);
-    setShowRemoveConfirm(false);
-    Alert.alert('Success', 'Collaborators removed successfully');
-  };
-
-  const handleCancelRemove = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setShowRemoveConfirm(false);
-  };
 
   const handleNavigateToCollaborators = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -235,13 +195,6 @@ export default function LiftCreationScreen({
       onBack();
     } else {
       router.back();
-    }
-  };
-
-  const handlePreview = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    if (onPreview) {
-      onPreview();
     }
   };
 
@@ -303,261 +256,301 @@ export default function LiftCreationScreen({
         </View>
       </View>
 
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Lift Type & Visibility */}
-        <View className="gap-4 border-b border-grey-plain-300 p-4">
-          <SegmentedControl
-            options={[
-              { label: 'Monetary', value: 'monetary' },
-              { label: 'Non-monetary', value: 'non-monetary' },
-            ]}
-            selectedValue={liftType}
-            onValueChange={setLiftType}
-          />
-
-          {showVisibilitySelector && (
-            <VisibilitySelector
-              selectedType={audienceType}
-              onPress={() => audienceSheetRef.current?.expand()}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        className="flex-1"
+      >
+        <ScrollView
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
+          {/* Lift Type & Visibility */}
+          <View className="gap-4 border-b border-grey-plain-300 p-4">
+            <SegmentedControl
+              options={[
+                { label: 'Monetary', value: 'monetary' },
+                { label: 'Non-monetary', value: 'non-monetary' },
+              ]}
+              selectedValue={liftType}
+              onValueChange={setLiftType}
             />
-          )}
-        </View>
 
-        <View className="gap-4 border-b border-grey-plain-300 py-4">
-          {/* Title */}
-          <View className=" px-4 py-2">
-            <MaterialInput
-              value={title}
-              onChangeText={setTitle}
-              placeholder="Enter a title for your lift"
-              maxLength={TITLE_MAX_LENGTH}
-              size="large"
-              showCharacterCount
-              maxCharacters={TITLE_MAX_LENGTH}
-              helperText="e.g., Medical bill, School fees, etc."
-            />
+            {showVisibilitySelector && (
+              <VisibilitySelector
+                selectedKey={audienceType}
+                title="Who can see the lift i am raising"
+                onPress={() => audienceSheetRef.current?.expand()}
+              />
+            )}
           </View>
 
-          {/* Description */}
-          <View className=" px-4 py-2">
-            <MaterialInput
-              value={description}
-              onChangeText={setDescription}
-              placeholder="Enter a description for your lift"
-              multiline
-              maxLength={DESCRIPTION_MAX_LENGTH}
-              size="medium"
-              showCharacterCount
-              maxCharacters={DESCRIPTION_MAX_LENGTH}
-            />
-            <InputActions />
+          <View className="gap-4 border-b border-grey-plain-300 py-4">
+            {/* Title */}
+            <View className=" px-4 py-2">
+              <MaterialInput
+                value={title}
+                onChangeText={setTitle}
+                placeholder="Enter a title for your lift"
+                maxLength={TITLE_MAX_LENGTH}
+                size="large"
+                showCharacterCount
+                maxCharacters={TITLE_MAX_LENGTH}
+                helperText="e.g., Medical bill, School fees, etc."
+              />
+            </View>
+
+            {/* Description */}
+            <View className=" px-4 py-2">
+              <MaterialInput
+                value={description}
+                onChangeText={setDescription}
+                placeholder="Enter a description for your lift"
+                multiline
+                maxLength={DESCRIPTION_MAX_LENGTH}
+                size="medium"
+                showCharacterCount
+                maxCharacters={DESCRIPTION_MAX_LENGTH}
+              />
+              <InputActions />
+            </View>
           </View>
-        </View>
 
-        {showRecipientNumberSelector && (
-          <View>
-            <RecipientNumberSelector
-              selectedAmount={numberOfRecipients}
-              onAmountChange={setNumberOfRecipients}
-              onCustomAmountPress={handleCustomAmountPressOnNR}
-            />
-          </View>
-        )}
-
-        {/* Lift Amount */}
-        {liftType === 'monetary' && (
-          <View>
-            <LiftAmountSelector
-              selectedAmount={liftAmount}
-              onAmountChange={setLiftAmount}
-              onCustomAmountPress={handleCustomAmountPress}
-            />
-          </View>
-        )}
-
-        {/* Non-Monetary Items */}
-        {liftType === 'non-monetary' && (
-          <NonMonetaryItemsSelector
-            items={liftItems}
-            onAddItemsPress={() => router.push(addItemsRoute as Href)}
-          />
-        )}
-
-        {/* Media Section */}
-        <View className=" px-4 py-4">
-          {selectedMedia.length > 0 && (
-            <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-sm text-grey-alpha-400">
-                {getMediaCountText()}
-              </Text>
-              <TouchableOpacity
-                onPress={() => setSelectedMedia([])}
-                hitSlop={10}
-              >
-                <Trash2 size={20} color={colors.state.red} strokeWidth={2} />
-              </TouchableOpacity>
+          {showRecipientNumberSelector && (
+            <View>
+              <RecipientNumberSelector
+                selectedAmount={numberOfRecipients}
+                onAmountChange={setNumberOfRecipients}
+                onCustomAmountPress={handleCustomAmountPressOnNR}
+              />
             </View>
           )}
 
-          {selectedMedia.length > 0 && (
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              className="mb-4"
-              contentContainerStyle={{ gap: 8 }}
-            >
-              {selectedMedia.map((item) => (
-                <View key={item.id} className="relative">
-                  <Image
-                    source={{ uri: item.uri }}
-                    style={{ width: 100, height: 100, borderRadius: 8 }}
-                    contentFit="cover"
-                  />
-                  <TouchableOpacity
-                    onPress={() => handleRemoveMedia(item.id)}
-                    className="absolute right-1 top-1 rounded-full bg-black/60 p-1"
-                  >
-                    <Trash2 size={14} color="white" strokeWidth={2} />
-                  </TouchableOpacity>
-                  {item.type === 'video' && (
-                    <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
-                      <Text className="text-xs text-white">Video</Text>
-                    </View>
-                  )}
-                </View>
-              ))}
-            </ScrollView>
+          {/* Lift Amount */}
+          {liftType === 'monetary' && (
+            <View>
+              <LiftAmountSelector
+                selectedAmount={liftAmount}
+                onAmountChange={setLiftAmount}
+                onCustomAmountPress={handleCustomAmountPress}
+              />
+            </View>
           )}
 
-          {
-            showMedia && (<View className="flex-row gap-3">
-            <MediaButton
-              onPress={handlePickImage}
-              icon={
-                <ImageIcon
-                  size={20}
-                  color={colors.primary.purple}
-                  strokeWidth={2}
-                />
-              }
-              label="Add image"
+          {/* Non-Monetary Items */}
+          {liftType === 'non-monetary' && (
+            <NonMonetaryItemsSelector
+              items={liftItems}
+              onAddItemsPress={() => router.push(addItemsRoute as Href)}
             />
+          )}
 
-            <MediaButton
-              onPress={handlePickVideo}
-              icon={
-                <Video
-                  size={20}
-                  color={colors.primary.purple}
-                  strokeWidth={2}
-                />
-              }
-              label="Add video"
-            />
-          </View>)
-          }
-          
-        </View>
-
-        {/* Collaborators */}
-        {showCollaboratorsSelector && (
+          {/* Media Section */}
           <View className=" px-4 py-4">
-            <View className="flex-row items-center justify-between">
-              <View className="flex-1 flex-row items-center gap-3">
-                <UserPlus
+            {selectedMedia.length > 0 && (
+              <View className="mb-4 flex-row items-center justify-between">
+                <Text className="text-sm text-grey-alpha-400">
+                  {getMediaCountText()}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => setSelectedMedia([])}
+                  hitSlop={10}
+                >
+                  <Trash2 size={20} color={colors.state.red} strokeWidth={2} />
+                </TouchableOpacity>
+              </View>
+            )}
+
+            {selectedMedia.length > 0 && (
+              <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                className="mb-4"
+                contentContainerStyle={{ gap: 8 }}
+              >
+                {selectedMedia.map((item) => (
+                  <View key={item.id} className="relative">
+                    <Image
+                      source={{ uri: item.uri }}
+                      style={{ width: 100, height: 100, borderRadius: 8 }}
+                      contentFit="cover"
+                    />
+                    <TouchableOpacity
+                      onPress={() => handleRemoveMedia(item.id)}
+                      className="absolute right-1 top-1 rounded-full bg-black/60 p-1"
+                    >
+                      <Trash2 size={14} color="white" strokeWidth={2} />
+                    </TouchableOpacity>
+                    {item.type === 'video' && (
+                      <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
+                        <Text className="text-xs text-white">Video</Text>
+                      </View>
+                    )}
+                  </View>
+                ))}
+              </ScrollView>
+            )}
+
+            {showMedia && (
+              <View className="flex-row gap-3">
+                <MediaButton
+                  onPress={handlePickImage}
+                  icon={
+                    <ImageIcon
+                      size={20}
+                      color={colors.primary.purple}
+                      strokeWidth={2}
+                    />
+                  }
+                  label="Add image"
+                />
+
+                <MediaButton
+                  onPress={handlePickVideo}
+                  icon={
+                    <Video
+                      size={20}
+                      color={colors.primary.purple}
+                      strokeWidth={2}
+                    />
+                  }
+                  label="Add video"
+                />
+              </View>
+            )}
+          </View>
+
+          {/* Collaborators */}
+          {showCollaboratorsSelector && (
+            <View className="px-4 py-4">
+              {collaborators.length === 0 ? (
+                <TouchableOpacity
+                  onPress={handleNavigateToCollaborators}
+                  className="flex-row items-center justify-between"
+                >
+                  <View className="flex-row items-center gap-3">
+                    <UserPlus
+                      size={20}
+                      color={colors['grey-alpha']['500']}
+                      strokeWidth={2}
+                    />
+                    <Text className="text-sm font-medium text-grey-alpha-500">
+                      Collaborators{' '}
+                      <Text className="text-grey-alpha-400">(optional)</Text>
+                    </Text>
+                  </View>
+                  <View className="flex-row items-center gap-1.5 rounded-lg border border-grey-plain-300 p-2">
+                    <UserPlus
+                      size={18}
+                      color={colors.primary.purple}
+                      strokeWidth={2}
+                    />
+                    <Text className="text-sm font-medium">Add</Text>
+                  </View>
+                </TouchableOpacity>
+              ) : (
+                <View className="flex-row items-center justify-between">
+                  <View className="flex-1 flex-row items-center gap-3">
+                    <UserPlus
+                      size={20}
+                      color={colors['grey-alpha']['500']}
+                      strokeWidth={2}
+                    />
+                    <View className="flex-1">
+                      <Text className="text-sm font-medium text-grey-alpha-500">
+                        Added collaborators
+                      </Text>
+                      <TouchableOpacity
+                        onPress={handleNavigateToCollaborators}
+                        className="mt-1 flex-row items-center gap-2"
+                      >
+                        <ProfileStack
+                          profiles={collaborators.map((c) => {
+                            if (typeof c.profileImage === 'string') {
+                              return c.profileImage;
+                            }
+                            return c.profileImage?.uri || '';
+                          })}
+                          size={24}
+                          overlap={10}
+                          maxVisible={1}
+                        />
+                        <Text className="text-sm text-grey-alpha-400">
+                          {collaborators[0]?.fullName}
+                          {collaborators.length > 1 && (
+                            <Text>
+                              {' '}
+                              and{' '}
+                              <Text className="text-grey-alpha-500">
+                                {collaborators.length - 1}
+                              </Text>
+                              {` other${collaborators.length - 1 === 1 ? '' : 's'}`}
+                            </Text>
+                          )}
+                        </Text>
+                        <ChevronRight
+                          size={16}
+                          color={colors['grey-alpha']['400']}
+                          strokeWidth={2}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <Switch
+                    value={true}
+                    onValueChange={(enabled) => {
+                      if (!enabled) {
+                        setCollaborators([]);
+                      }
+                    }}
+                    trackColor={{
+                      false: colors['grey-plain']['450'],
+                      true: colors.primary.purple,
+                    }}
+                    thumbColor={colors['grey-plain']['50']}
+                  />
+                </View>
+              )}
+            </View>
+          )}
+
+          {/* Explore More Options */}
+          <View className=" px-4 py-4">
+            <TouchableOpacity
+              onPress={() => router.push(moreOptionsRoute as Href)}
+              className="flex-row items-center justify-between"
+            >
+              <View className="flex-row items-center gap-3">
+                <MoreHorizontal
                   size={20}
                   color={colors['grey-alpha']['500']}
                   strokeWidth={2}
                 />
-                <View className="flex-1">
-                  <Text className="text-sm font-medium text-grey-alpha-500">
-                    Add collaborators
-                  </Text>
-                  {collaborators.length > 0 && (
-                    <TouchableOpacity
-                      onPress={handleNavigateToCollaborators}
-                      className="mt-1 flex-row items-center gap-2"
-                    >
-                      <ProfileStack
-                        profiles={collaborators.map((c) => {
-                          if (typeof c.profileImage === 'string') {
-                            return c.profileImage;
-                          }
-                          return c.profileImage?.uri || '';
-                        })}
-                        size={24}
-                        overlap={10}
-                        maxVisible={3}
-                      />
-                      <Text className="flex-1 text-sm text-grey-alpha-400">
-                        <Text className="font-semibold text-grey-alpha-500">
-                          {collaborators[0].fullName}
-                        </Text>
-                        {collaborators.length > 1 && (
-                          <>
-                            {' and '}
-                            <Text className="font-semibold text-grey-alpha-500">
-                              {collaborators.length - 1}
-                            </Text>
-                            {` ${collaborators.length - 1 === 1 ? 'other' : 'others'}`}
-                          </>
-                        )}
-                      </Text>
-                    </TouchableOpacity>
-                  )}
-                </View>
+                <Text className="text-sm font-medium text-grey-alpha-500">
+                  Explore more options
+                </Text>
               </View>
-              <Switch
-                value={collaboratorsEnabled}
-                onValueChange={handleToggleCollaborators}
-                trackColor={{
-                  false: colors['grey-plain']['450'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-              />
-            </View>
-          </View>
-        )}
-
-        {/* Explore More Options */}
-        <View className=" px-4 py-4">
-          <TouchableOpacity
-            onPress={() => router.push(moreOptionsRoute as Href)}
-            className="flex-row items-center justify-between"
-          >
-            <View className="flex-row items-center gap-3">
-              <MoreHorizontal
+              <ChevronRight
                 size={20}
-                color={colors['grey-alpha']['500']}
+                color={colors['grey-alpha']['400']}
                 strokeWidth={2}
               />
-              <Text className="text-sm font-medium text-grey-alpha-500">
-                Explore more options
-              </Text>
-            </View>
-            <ChevronRight
-              size={20}
-              color={colors['grey-alpha']['400']}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
 
       {/* Footer Buttons */}
       <View className="border-t border-grey-plain-150 bg-grey-alpha-100 px-4 py-3">
         <View className="flex-row gap-3">
-          {onPreview && (
-            <View className="flex-1">
-              <Button
-                title="Preview"
-                onPress={handlePreview}
-                variant="outline"
-                className="rounded-full"
-              />
-            </View>
-          )}
+          <View className="flex-1">
+            <Button
+              title="Preview"
+              onPress={handleSubmit}
+              variant="outline"
+              className="rounded-full"
+            />
+          </View>
 
           <View className="flex-1">
             <Button
@@ -570,25 +563,13 @@ export default function LiftCreationScreen({
         </View>
       </View>
 
-      {/* Remove Collaborators Confirmation */}
-      <ConfirmDialog
-        visible={showRemoveConfirm}
-        title="Are you sure you want to remove all collaborators?"
-        message='They can still request to join and support your lift if you enable the "Allow collaborators" settings.'
-        confirmText="Yes, remove"
-        cancelText="Cancel, go back"
-        onConfirm={handleConfirmRemove}
-        onCancel={handleCancelRemove}
-        destructive
-      />
-
       {showVisibilitySelector && (
         <AudienceBottomSheet
           ref={audienceSheetRef}
           variant="see"
-          selectedType={audienceType}
-          onSelectAudience={(type) => {
-            setAudienceType(type);
+          selectedKey={audienceType}
+          onSelectAudience={(key) => {
+            setAudienceType(key as AudienceOfferType);
             audienceSheetRef.current?.close();
           }}
         />

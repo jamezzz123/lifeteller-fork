@@ -21,7 +21,7 @@ export default function HomeScreen() {
     // Use setTimeout to ensure the component is rendered before calling open
     setTimeout(() => {
       liftOptionsSheetRef.current?.open();
-    }, 0);
+    }, 1000);
   };
 
   return (

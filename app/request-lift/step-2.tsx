@@ -474,8 +474,8 @@ export default function Step2Screen() {
         <AudienceBottomSheet
           ref={audienceBottomSheetRef}
           variant={audienceOfferType === 'everyone' ? 'see' : 'offer'}
-          selectedType={audienceOfferType}
-          onSelectAudience={handleSelectAudience}
+          selectedKey={audienceOfferType}
+          onSelectAudience={(key) => handleSelectAudience(key as AudienceOfferType)}
         />
 
         {/* Help Me Write Bottom Sheet */}

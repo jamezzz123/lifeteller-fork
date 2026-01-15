@@ -5,38 +5,42 @@ import {
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
-import { AudienceOfferType } from '@/context/request-lift';
 import { forwardRef } from 'react';
 
-type AudienceOption = {
-  type: AudienceOfferType;
+export type AudienceOption = {
+  key: string;
   label: string;
   description: string;
 };
 
 const SEE_AUDIENCE_OPTIONS: AudienceOption[] = [
   {
-    type: 'everyone',
+    key: 'everyone',
     label: 'Everyone',
     description: 'All users on Lifeteller can see this raised lift.',
   },
   {
-    type: 'friends',
+    key: 'friends',
     label: 'Friends (1.7k)',
     description: 'People I follow, and they follow back',
   },
   {
-    type: 'selected-people',
+    key: 'selected-people',
     label: 'Selected people',
     description: 'Choose specific people to see your raised lift.',
   },
   {
-    type: 'my-list',
+    key: 'my-list',
     label: 'My list',
     description: 'Choose from existing list or create a new one',
   },
   {
-    type: 'private',
+    key: 'friends-except',
+    label: 'Friends except',
+    description: 'Don`t show to some connections',
+  },
+  {
+    key: 'private',
     label: 'Private',
     description: 'You can still share the link with others.',
   },
@@ -44,122 +48,140 @@ const SEE_AUDIENCE_OPTIONS: AudienceOption[] = [
 
 const OFFER_AUDIENCE_OPTIONS: AudienceOption[] = [
   {
-    type: 'everyone',
+    key: 'everyone',
     label: 'Everyone',
     description:
       'Your request will be available on feeds and all users on Lifeteller can offer you this lift.',
   },
   {
-    type: 'friends',
+    key: 'friends',
     label: 'Friends (1.7k)',
     description:
       'Only people who follow me, and I follow back can see my request and offer me this lift.',
   },
   {
-    type: 'chat-direct',
+    key: 'chat-direct',
     label: 'Request via chat/direct message',
     description:
-      'Select a specific person or people to request from. It won’t appear on feeds.',
+      "Select a specific person or people to request from. It won't appear on feeds.",
   },
   {
-    type: 'my-list',
+    key: 'my-list',
     label: 'My list',
     description:
       'Choose from existing list or create a new one to see your request and offer you this lift.',
   },
   {
-    type: 'private',
+    key: 'private',
     label: 'Private',
     description: 'You can still share your request link with others.',
   },
 ];
 
 type AudienceBottomSheetProps = {
-  onSelectAudience: (type: AudienceOfferType) => void;
+  onSelectAudience: (key: string) => void;
+  selectedKey?: string;
+  title?: string;
+  options?: AudienceOption[];
   variant?: 'see' | 'offer';
-  selectedType?: AudienceOfferType;
 };
 
 export const AudienceBottomSheet = forwardRef<
   BottomSheetRef,
   AudienceBottomSheetProps
->(({ onSelectAudience, variant = 'see', selectedType }, ref) => {
-  function handleSelect(type: AudienceOfferType) {
-    onSelectAudience(type);
-  }
+>(
+  (
+    {
+      onSelectAudience,
+      selectedKey,
+      title: customTitle,
+      options: customOptions,
+      variant = 'see',
+    },
+    ref
+  ) => {
+    function handleSelect(key: string) {
+      onSelectAudience(key);
+    }
 
-  const options =
-    variant === 'offer' ? OFFER_AUDIENCE_OPTIONS : SEE_AUDIENCE_OPTIONS;
-  const title =
-    variant === 'offer'
-      ? 'Who can offer me this lift'
-      : 'Who can see the lift I am raising';
+    // Use custom options if provided, otherwise fall back to variant-based defaults
+    const options =
+      customOptions ||
+      (variant === 'offer' ? OFFER_AUDIENCE_OPTIONS : SEE_AUDIENCE_OPTIONS);
 
-  return (
-    <BottomSheetComponent ref={ref} snapPoints={['60%']}>
-      <View className="px-4 pb-4">
-        <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
-          {title}
-        </Text>
+    // Use custom title if provided, otherwise fall back to variant-based defaults
+    const title =
+      customTitle ||
+      (variant === 'offer'
+        ? 'Who can offer me this lift'
+        : 'Who can see the lift I am raising');
 
-        <View className="gap-4">
-          {options.map((option) => {
-            const isSelected = option.type === selectedType;
-            return (
-              <TouchableOpacity
-                key={option.type}
-                onPress={() => handleSelect(option.type)}
-                className="flex-row items-center"
-              >
-                <View
-                  className="mr-3 self-stretch rounded-xl"
-                  style={{
-                    width: 4,
-                    backgroundColor: isSelected
-                      ? colors.primary.purple
-                      : 'transparent',
-                  }}
-                />
-                <View className="flex-1 flex-row items-center justify-between">
-                  <View className="flex-1">
-                    <Text
-                      className="mb-1 text-base font-medium"
-                      style={{
-                        color: isSelected
-                          ? colors.primary.purple
-                          : colors['grey-alpha']['500'],
-                      }}
-                    >
-                      {option.label}
-                    </Text>
-                    <Text
-                      className="text-sm"
-                      style={{
-                        color: isSelected
-                          ? colors['grey-alpha']['500']
-                          : colors['grey-alpha']['400'],
-                      }}
-                    >
-                      {option.description}
-                    </Text>
-                  </View>
-                  <ChevronRight
-                    size={20}
-                    color={
-                      isSelected
+    return (
+      <BottomSheetComponent ref={ref} snapPoints={['60%']}>
+        <View className="px-4 pb-4">
+          <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+            {title}
+          </Text>
+
+          <View className="gap-4">
+            {options.map((option) => {
+              const isSelected = option.key === selectedKey;
+              return (
+                <TouchableOpacity
+                  key={option.key}
+                  onPress={() => handleSelect(option.key)}
+                  className="flex-row items-center border-b border-grey-plain-300 py-1"
+                >
+                  <View
+                    className="mr-3 self-stretch rounded-xl"
+                    style={{
+                      width: 4,
+                      backgroundColor: isSelected
                         ? colors.primary.purple
-                        : colors['grey-alpha']['400']
-                    }
-                    strokeWidth={2}
+                        : 'transparent',
+                    }}
                   />
-                </View>
-              </TouchableOpacity>
-            );
-          })}
+                  <View className="flex-1 flex-row items-center justify-between">
+                    <View className="flex-1">
+                      <Text
+                        className="mb-1 text-base font-medium"
+                        style={{
+                          color: isSelected
+                            ? colors.primary.purple
+                            : colors['grey-alpha']['500'],
+                        }}
+                      >
+                        {option.label}
+                      </Text>
+                      <Text
+                        className="text-sm"
+                        style={{
+                          color: isSelected
+                            ? colors['grey-alpha']['500']
+                            : colors['grey-alpha']['400'],
+                        }}
+                      >
+                        {option.description}
+                      </Text>
+                    </View>
+                    <ChevronRight
+                      size={20}
+                      color={
+                        isSelected
+                          ? colors.primary.purple
+                          : colors['grey-alpha']['400']
+                      }
+                      strokeWidth={2}
+                    />
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
         </View>
-      </View>
-    </BottomSheetComponent>
-  );
-});
+      </BottomSheetComponent>
+    );
+  }
+);
 
 AudienceBottomSheet.displayName = 'AudienceBottomSheet';
