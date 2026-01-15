@@ -28,7 +28,7 @@ import { useRef } from 'react';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
-import { useLiftDraft } from '@/context/LiftDraftContext';
+import { useLiftDraft, LiftTypeValue } from '@/context/LiftDraftContext';
 import { AudienceOfferType } from '@/context/request-lift';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { VisibilitySelector } from '@/components/ui/VisibilitySelector';
@@ -273,7 +273,7 @@ export default function LiftCreationScreen({
                 { label: 'Non-monetary', value: 'non-monetary' },
               ]}
               selectedValue={liftType}
-              onValueChange={setLiftType}
+              onValueChange={(value) => setLiftType(value as LiftTypeValue)}
             />
 
             {showVisibilitySelector && (

@@ -353,8 +353,8 @@ export default function PostLiftClipScreen() {
         {/* Audience Bottom Sheet */}
         <AudienceBottomSheet
           ref={audienceSheetRef}
-          selectedType={audienceOfferType}
-          onSelectAudience={handleAudienceSelect}
+          selectedKey={audienceOfferType}
+          onSelectAudience={(key) => handleAudienceSelect(key as AudienceOfferType)}
         />
 
         {/* Selected People Modal */}
