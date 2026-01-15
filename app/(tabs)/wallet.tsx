@@ -42,6 +42,7 @@ import { WalletSettingsBottomSheet } from '@/components/wallet/WalletSettingsBot
 import { TierBottomSheet } from '@/components/wallet/TierBottomSheet';
 import { DeactivateWalletConfirmationModal } from '@/components/wallet/DeactivateWalletConfirmationModal';
 import { FreezeWalletConfirmationModal } from '@/components/wallet/FreezeWalletConfirmationModal';
+import { FundWalletBottomSheet } from '@/components/wallet/FundWalletBottomSheet';
 import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { Button } from '@/components/ui/Button';
@@ -81,6 +82,7 @@ export default function WalletScreen() {
   const passcodeSheetRef = useRef<BottomSheetRef>(null);
   const settingsSheetRef = useRef<BottomSheetRef>(null);
   const tierSheetRef = useRef<BottomSheetRef>(null);
+  const fundWalletSheetRef = useRef<BottomSheetRef>(null);
   const deactivatePasscodeSheetRef = useRef<BottomSheetRef>(null);
   const freezePasscodeSheetRef = useRef<BottomSheetRef>(null);
 
@@ -153,7 +155,7 @@ export default function WalletScreen() {
       deactivatePasscodeSheetRef.current?.close();
       // Navigate to password verification screen after a short delay
       setTimeout(() => {
-        router.push('/verify-wallet-password');
+        router.push('/verify-wallet-password' as any);
       }, 300);
     } else {
       setDeactivatePasscodeError('Incorrect passcode. Please try again.');
@@ -162,7 +164,7 @@ export default function WalletScreen() {
 
   const handleDeactivateForgotPasscode = () => {
     deactivatePasscodeSheetRef.current?.close();
-    router.push('/verify-otp');
+    router.push('/verify-otp' as any);
   };
 
   const handleFreezeWallet = () => {
@@ -193,7 +195,7 @@ export default function WalletScreen() {
       freezePasscodeSheetRef.current?.close();
       // Navigate to password verification screen after a short delay
       setTimeout(() => {
-        router.push('/verify-wallet-password-freeze');
+        router.push('/verify-wallet-password-freeze' as any);
       }, 300);
     } else {
       setFreezePasscodeError('Incorrect passcode. Please try again.');
@@ -202,7 +204,7 @@ export default function WalletScreen() {
 
   const handleFreezeForgotPasscode = () => {
     freezePasscodeSheetRef.current?.close();
-    router.push('/verify-otp');
+    router.push('/verify-otp' as any);
   };
 
   const handleDoThisLater = () => {
@@ -247,8 +249,8 @@ export default function WalletScreen() {
   };
 
   const handleFundWallet = () => {
-    // TODO: Navigate to fund wallet screen
-    console.log('Fund wallet');
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    fundWalletSheetRef.current?.expand();
   };
 
   const handleViewHistory = () => {
@@ -831,6 +833,14 @@ export default function WalletScreen() {
         ref={tierSheetRef}
         currentTier={walletData.tier}
         onUpgrade={handleTierUpgrade}
+      />
+
+      {/* Fund Wallet Bottom Sheet */}
+      <FundWalletBottomSheet
+        ref={fundWalletSheetRef}
+        bankName={walletData.bankName}
+        accountNumber={walletData.accountNumber}
+        accountName={walletData.userName}
       />
 
       {/* Deactivate Wallet Confirmation Modal */}

@@ -240,19 +240,31 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
                 />
               </View>
             )}
-            {/* Online Status Dot - Upper Right */}
-            {message.isOnline && (
+            {/* Status Dot - Upper Right */}
+            {message.isOnline ? (
               <View
-                className="absolute rounded-full"
+                className="absolute rounded-full border-2 border-white"
                 style={{
-                  width: 12,
-                  height: 12,
+                  width: 14,
+                  height: 14,
                   backgroundColor: colors.state.green,
-                  top: -2,
-                  right: -2,
+                  top: message.hasStories ? -1 : 2,
+                  right: message.hasStories ? -1 : 2,
                 }}
               />
-            )}
+            ) : hasUnread ? (
+              // Show orange dot for inactive users with new messages
+              <View
+                className="absolute rounded-full border-2 border-white"
+                style={{
+                  width: 14,
+                  height: 14,
+                  backgroundColor: '#FF9500', // Orange color for inactive with new messages
+                  top: message.hasStories ? -1 : 2,
+                  right: message.hasStories ? -1 : 2,
+                }}
+              />
+            ) : null}
           </View>
         )}
       </View>
@@ -260,44 +272,64 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
       {/* Message Content */}
       <View className="flex-1">
         {/* Header Row */}
-        <View className="mb-1 flex-row items-center justify-between">
-          <View className="flex-1 flex-row items-center gap-1.5">
+        <View className="mb-0.5 flex-row items-center justify-between">
+          <View className="flex-1 flex-row items-center gap-1.5 pr-2">
             {isGroup ? (
-              <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
+              <Text className="flex-1 text-[15px] font-semibold text-grey-alpha-500">
                 {message.groupName || 'Group Chat'}
               </Text>
             ) : (
               <>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-[15px] font-semibold text-grey-alpha-500">
                   {message.contactName}
                 </Text>
                 {message.isVerified && (
                   <BadgeCheck color={colors.primary.purple} size={16} />
                 )}
-                <Text className="text-sm text-grey-plain-550">
+                <Text className="text-[13px] text-grey-plain-550">
                   @{message.contactUsername}
                 </Text>
               </>
             )}
           </View>
-          <Text className="text-xs text-grey-plain-550">{message.timestamp}</Text>
+          <Text className="text-[12px] text-grey-plain-550" numberOfLines={1}>
+            {message.timestamp}
+          </Text>
         </View>
 
         {/* Last Message Preview (shown for all types) */}
-        {message.lastMessage && (
-          <Text
-            className="mb-2 text-sm text-grey-plain-550"
-            numberOfLines={1}
-          >
-            {message.lastMessage}
-          </Text>
-        )}
+        <View className="flex-row items-center justify-between">
+          {message.lastMessage ? (
+            <Text
+              className="flex-1 pr-2 text-[13px] text-grey-plain-550"
+              numberOfLines={1}
+            >
+              {message.lastMessage}
+            </Text>
+          ) : (
+            <View className="flex-1" />
+          )}
+          {/* Unread Badge - Positioned at bottom right, aligned with timestamp */}
+          {hasUnread && (
+            <View
+              className="items-center justify-center rounded-full"
+              style={{
+                minWidth: 20,
+                height: 20,
+                paddingHorizontal: 6,
+                backgroundColor: colors.primary.purple,
+              }}
+            >
+              <Text className="text-[11px] font-bold text-white">
+                {message.unreadCount}
+              </Text>
+            </View>
+          )}
+        </View>
 
         {/* Lift Card (shown below message preview for lift messages) */}
         {(isLiftRequest || isLiftOffer) && (
-          <View
-            className="rounded-xl bg-white border border-grey-plain-300 px-3 py-2.5"
-          >
+          <View className="mt-1.5 rounded-xl border border-grey-plain-300 bg-white px-3 py-2.5">
             <View className="mb-1.5 flex-row items-center gap-2">
               {isLiftRequest ? (
                 <HandHelping
@@ -332,25 +364,6 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
           </View>
         )}
       </View>
-
-      {/* Unread Badge */}
-      {hasUnread && (
-        <View className="ml-2 items-center justify-center">
-          <View
-            className="items-center justify-center rounded-full"
-            style={{
-              minWidth: 24,
-              height: 24,
-              paddingHorizontal: 8,
-              backgroundColor: colors.primary.purple,
-            }}
-          >
-            <Text className="text-xs font-bold text-white">
-              {message.unreadCount}
-            </Text>
-          </View>
-        </View>
-      )}
     </TouchableOpacity>
   );
 }
@@ -374,4 +387,3 @@ const styles = StyleSheet.create({
     borderColor: colors['grey-plain']['50'],
   },
 });
-

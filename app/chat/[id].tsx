@@ -231,7 +231,7 @@ export default function ChatScreen() {
     router.push('/offer-lift' as any);
   };
 
-  const handleAvatarPress = () => {
+  const handleProfilePress = () => {
     // Navigate to user profile
     router.push(`/user/${contact.id}` as any);
   };
@@ -343,7 +343,7 @@ export default function ChatScreen() {
           {/* Contact Info */}
           <TouchableOpacity
             className="mr-3"
-            onPress={handleAvatarPress}
+            onPress={handleProfilePress}
             activeOpacity={0.7}
           >
             <Avatar
@@ -367,7 +367,11 @@ export default function ChatScreen() {
             />
           </TouchableOpacity>
 
-          <View className="flex-1">
+          <TouchableOpacity
+            className="flex-1"
+            onPress={handleProfilePress}
+            activeOpacity={0.7}
+          >
             <View className="mb-0.5 flex-row items-center gap-1.5">
               <Text className="text-base font-semibold text-grey-alpha-500">
                 {contact.name}
@@ -379,7 +383,7 @@ export default function ChatScreen() {
             <Text className="text-sm text-grey-plain-550">
               @{contact.username}
             </Text>
-          </View>
+          </TouchableOpacity>
 
           {/* Action Buttons */}
           <View className="flex-row items-center gap-4">

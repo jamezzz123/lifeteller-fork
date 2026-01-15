@@ -33,7 +33,7 @@ export default function VerifyWalletPasswordFreezeScreen() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       // Navigate to loading screen
-      router.push('/wallet-freeze-loading');
+      router.push('/wallet-freeze-loading' as any);
     } catch (error) {
       setError('Incorrect password. Please try again.');
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

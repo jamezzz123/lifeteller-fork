@@ -33,7 +33,7 @@ export default function VerifyWalletPasswordScreen() {
       await new Promise((resolve) => setTimeout(resolve, 500));
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       // Navigate to loading screen
-      router.push('/wallet-deactivation-loading');
+      router.push('/wallet-deactivation-loading' as any);
     } catch (error) {
       setError('Incorrect password. Please try again.');
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);

@@ -1,4 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import {
@@ -7,12 +12,15 @@ import {
   MessageSquareText,
   SquareUserRound,
   UserMinus,
+  UserPlus,
   Waypoints,
   EyeOff,
+  Eye,
   UserRoundCog,
   Ban,
   Flag,
   FlagOff,
+  CircleDashed,
 } from 'lucide-react-native';
 import {
   BottomSheetComponent,
@@ -20,19 +28,29 @@ import {
 } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
 import { router } from 'expo-router';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { Toast } from '@/components/ui/Toast';
 
 interface MoreOptionsBottomSheetProps {
   userId: string;
   username: string;
   isFollowing?: boolean;
+  isFollower?: boolean;
+  isMuted?: boolean;
+  isStoriesHidden?: boolean;
   onRequestLift?: () => void;
   onShareProfile?: () => void;
   onMessage?: () => void;
   onAddToList?: () => void;
   onSharedActivities?: () => void;
   onUnfollow?: () => void;
+  onAddAsFollower?: () => void;
+  onRemoveFollower?: () => void;
   onAboutAccount?: () => void;
   onMutePosts?: () => void;
+  onUnmutePosts?: () => void;
+  onHideStories?: () => void;
+  onUnhideStories?: () => void;
   onBlockUser?: () => void;
   onReportUser?: () => void;
   onReportAndBlock?: () => void;
@@ -47,14 +65,22 @@ export const MoreOptionsBottomSheet = forwardRef<
       userId,
       username,
       isFollowing = false,
+      isFollower = false,
+      isMuted = false,
+      isStoriesHidden = false,
       onRequestLift,
       onShareProfile,
       onMessage,
       onAddToList,
       onSharedActivities,
       onUnfollow,
+      onAddAsFollower,
+      onRemoveFollower,
       onAboutAccount,
       onMutePosts,
+      onUnmutePosts,
+      onHideStories,
+      onUnhideStories,
       onBlockUser,
       onReportUser,
       onReportAndBlock,
@@ -62,6 +88,17 @@ export const MoreOptionsBottomSheet = forwardRef<
     ref
   ) => {
     const bottomSheetRef = useRef<BottomSheetRef>(null);
+
+    // Confirmation dialog states
+    const [showRemoveFollowerConfirm, setShowRemoveFollowerConfirm] =
+      useState(false);
+    const [showHideStoriesConfirm, setShowHideStoriesConfirm] = useState(false);
+    const [showUnhideStoriesConfirm, setShowUnhideStoriesConfirm] =
+      useState(false);
+
+    // Toast states
+    const [showSuccessToast, setShowSuccessToast] = useState(false);
+    const [successMessage, setSuccessMessage] = useState('');
 
     useImperativeHandle(ref, () => ({
       expand: () => {
@@ -142,10 +179,66 @@ export const MoreOptionsBottomSheet = forwardRef<
     };
 
     const handleMutePosts = () => {
+      if (isMuted) {
+        handleAction(() => {
+          onUnmutePosts?.();
+          setSuccessMessage(`Posts from ${username} unmuted`);
+          setShowSuccessToast(true);
+        });
+      } else {
+        handleAction(() => {
+          onMutePosts?.();
+          setSuccessMessage(`Posts from ${username} muted`);
+          setShowSuccessToast(true);
+        });
+      }
+    };
+
+    const handleAddAsFollower = () => {
       handleAction(() => {
-        onMutePosts?.();
-        // TODO: Implement mute posts functionality
+        onAddAsFollower?.();
+        setSuccessMessage(`${username} added as follower`);
+        setShowSuccessToast(true);
       });
+    };
+
+    const handleRemoveFollower = () => {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      bottomSheetRef.current?.close();
+      setShowRemoveFollowerConfirm(true);
+    };
+
+    const confirmRemoveFollower = () => {
+      setShowRemoveFollowerConfirm(false);
+      onRemoveFollower?.();
+      setSuccessMessage(`${username} removed as follower`);
+      setShowSuccessToast(true);
+    };
+
+    const handleHideStories = () => {
+      if (isStoriesHidden) {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        bottomSheetRef.current?.close();
+        setShowUnhideStoriesConfirm(true);
+      } else {
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+        bottomSheetRef.current?.close();
+        setShowHideStoriesConfirm(true);
+      }
+    };
+
+    const confirmHideStories = () => {
+      setShowHideStoriesConfirm(false);
+      onHideStories?.();
+      setSuccessMessage(`Stories from ${username} hidden`);
+      setShowSuccessToast(true);
+    };
+
+    const confirmUnhideStories = () => {
+      setShowUnhideStoriesConfirm(false);
+      onUnhideStories?.();
+      setSuccessMessage(`Stories from ${username} unhidden`);
+      setShowSuccessToast(true);
     };
 
     const handleBlockUser = () => {
@@ -267,6 +360,40 @@ export const MoreOptionsBottomSheet = forwardRef<
               </>
             )}
 
+            {!isFollowing && (
+              <>
+                <TouchableOpacity
+                  onPress={handleAddAsFollower}
+                  className="flex-row items-center gap-3 py-4"
+                  activeOpacity={0.7}
+                >
+                  <UserPlus color={colors['grey-alpha']['500']} size={20} />
+                  <Text className="text-base text-grey-alpha-500">
+                    Add as follower
+                  </Text>
+                </TouchableOpacity>
+
+                <View className="h-px bg-grey-plain-150" />
+              </>
+            )}
+
+            {isFollower && (
+              <>
+                <TouchableOpacity
+                  onPress={handleRemoveFollower}
+                  className="flex-row items-center gap-3 py-4"
+                  activeOpacity={0.7}
+                >
+                  <UserMinus color={colors['grey-alpha']['500']} size={20} />
+                  <Text className="text-base text-grey-alpha-500">
+                    Remove user as follower
+                  </Text>
+                </TouchableOpacity>
+
+                <View className="h-px bg-grey-plain-150" />
+              </>
+            )}
+
             <TouchableOpacity
               onPress={handleAboutAccount}
               className="flex-row items-center gap-3 py-4"
@@ -285,9 +412,32 @@ export const MoreOptionsBottomSheet = forwardRef<
               className="flex-row items-center gap-3 py-4"
               activeOpacity={0.7}
             >
-              <EyeOff color={colors['grey-alpha']['500']} size={20} />
+              {isMuted ? (
+                <Eye color={colors['grey-alpha']['500']} size={20} />
+              ) : (
+                <EyeOff color={colors['grey-alpha']['500']} size={20} />
+              )}
               <Text className="text-base text-grey-alpha-500">
-                Mute posts from user
+                {isMuted ? 'Unmute posts from user' : 'Mute posts from user'}
+              </Text>
+            </TouchableOpacity>
+
+            <View className="h-px bg-grey-plain-150" />
+
+            <TouchableOpacity
+              onPress={handleHideStories}
+              className="flex-row items-center gap-3 py-4"
+              activeOpacity={0.7}
+            >
+              {isStoriesHidden ? (
+                <CircleDashed color={colors['grey-alpha']['500']} size={20} />
+              ) : (
+                <CircleDashed color={colors['grey-alpha']['500']} size={20} />
+              )}
+              <Text className="text-base text-grey-alpha-500">
+                {isStoriesHidden
+                  ? 'Unhide stories from user'
+                  : 'Hide stories from user'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -334,6 +484,46 @@ export const MoreOptionsBottomSheet = forwardRef<
             </TouchableOpacity>
           </View>
         </View>
+
+        {/* Confirmation Dialogs */}
+        <ConfirmationModal
+          visible={showRemoveFollowerConfirm}
+          title="Remove follower?"
+          message={`Are you sure you want to remove ${username} as a follower? They won't be able to see your posts unless you follow them back.`}
+          confirmText="Remove"
+          cancelText="Cancel"
+          destructive={true}
+          onConfirm={confirmRemoveFollower}
+          onCancel={() => setShowRemoveFollowerConfirm(false)}
+        />
+
+        <ConfirmationModal
+          visible={showHideStoriesConfirm}
+          title="Hide stories?"
+          message={`Hide ${username}'s stories? You won't see their stories in your feed.`}
+          confirmText="Hide"
+          cancelText="Cancel"
+          onConfirm={confirmHideStories}
+          onCancel={() => setShowHideStoriesConfirm(false)}
+        />
+
+        <ConfirmationModal
+          visible={showUnhideStoriesConfirm}
+          title="Unhide stories?"
+          message={`Unhide ${username}'s stories? You'll see their stories in your feed again.`}
+          confirmText="Unhide"
+          cancelText="Cancel"
+          onConfirm={confirmUnhideStories}
+          onCancel={() => setShowUnhideStoriesConfirm(false)}
+        />
+
+        {/* Success Toast */}
+        <Toast
+          visible={showSuccessToast}
+          message={successMessage}
+          duration={3000}
+          onHide={() => setShowSuccessToast(false)}
+        />
       </BottomSheetComponent>
     );
   }
