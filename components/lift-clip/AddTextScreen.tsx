@@ -4,8 +4,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   TextInput,
-  ScrollView,
-  Text,
+  // ScrollView, // Commented out - used in color picker panel
+  // Text, // Commented out - used in bottom toolbar
   Dimensions,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -15,9 +15,9 @@ import {
   AlignLeft,
   AlignCenter,
   AlignRight,
-  Minus,
-  Plus,
-  Palette,
+  // Minus, // Commented out - used in font size controls
+  // Plus, // Commented out - used in font size controls
+  // Palette, // Commented out - used in color picker toggle
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '../ui/Button';
@@ -37,32 +37,32 @@ interface TextStyle {
   backgroundColor?: string;
 }
 
-// Background color options
-const BACKGROUND_COLORS = [
-  { id: 'none', color: 'transparent', label: 'None' },
-  { id: 'black', color: 'rgba(0, 0, 0, 0.8)', label: 'Black' },
-  { id: 'white', color: 'rgba(255, 255, 255, 0.9)', label: 'White' },
-  { id: 'purple', color: 'rgba(139, 92, 246, 0.9)', label: 'Purple' },
-  { id: 'red', color: 'rgba(239, 68, 68, 0.9)', label: 'Red' },
-  { id: 'blue', color: 'rgba(59, 130, 246, 0.9)', label: 'Blue' },
-  { id: 'green', color: 'rgba(34, 197, 94, 0.9)', label: 'Green' },
-  { id: 'yellow', color: 'rgba(234, 179, 8, 0.9)', label: 'Yellow' },
-];
+// Background color options - Commented out for now
+// const BACKGROUND_COLORS = [
+//   { id: 'none', color: 'transparent', label: 'None' },
+//   { id: 'black', color: 'rgba(0, 0, 0, 0.8)', label: 'Black' },
+//   { id: 'white', color: 'rgba(255, 255, 255, 0.9)', label: 'White' },
+//   { id: 'purple', color: 'rgba(139, 92, 246, 0.9)', label: 'Purple' },
+//   { id: 'red', color: 'rgba(239, 68, 68, 0.9)', label: 'Red' },
+//   { id: 'blue', color: 'rgba(59, 130, 246, 0.9)', label: 'Blue' },
+//   { id: 'green', color: 'rgba(34, 197, 94, 0.9)', label: 'Green' },
+//   { id: 'yellow', color: 'rgba(234, 179, 8, 0.9)', label: 'Yellow' },
+// ];
 
-// Text color options
-const TEXT_COLORS = [
-  '#FFFFFF',
-  '#000000',
-  '#8B5CF6',
-  '#EF4444',
-  '#3B82F6',
-  '#22C55E',
-  '#EAB308',
-  '#EC4899',
-];
+// Text color options - Commented out for now
+// const TEXT_COLORS = [
+//   '#FFFFFF',
+//   '#000000',
+//   '#8B5CF6',
+//   '#EF4444',
+//   '#3B82F6',
+//   '#22C55E',
+//   '#EAB308',
+//   '#EC4899',
+// ];
 
-const MIN_FONT_SIZE = 20;
-const MAX_FONT_SIZE = 60;
+// const MIN_FONT_SIZE = 20;
+// const MAX_FONT_SIZE = 60;
 
 export function AddTextScreen({
   videoUri,
@@ -85,7 +85,8 @@ export function AddTextScreen({
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
     }
   );
-  const [showColorPicker, setShowColorPicker] = useState(false);
+  // Commented out - used in color picker panel
+  // const [showColorPicker, setShowColorPicker] = useState(false);
 
   const handleDone = () => {
     if (text.trim()) {
@@ -99,23 +100,24 @@ export function AddTextScreen({
     setTextStyle((prev) => ({ ...prev, textAlign: align }));
   };
 
-  const updateFontSize = (delta: number) => {
-    setTextStyle((prev) => ({
-      ...prev,
-      fontSize: Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, prev.fontSize + delta)),
-    }));
-  };
+  // Commented out - used in bottom toolbar
+  // const updateFontSize = (delta: number) => {
+  //   setTextStyle((prev) => ({
+  //     ...prev,
+  //     fontSize: Math.min(MAX_FONT_SIZE, Math.max(MIN_FONT_SIZE, prev.fontSize + delta)),
+  //   }));
+  // };
 
-  const updateTextColor = (color: string) => {
-    setTextStyle((prev) => ({ ...prev, color }));
-  };
+  // const updateTextColor = (color: string) => {
+  //   setTextStyle((prev) => ({ ...prev, color }));
+  // };
 
-  const updateBackgroundColor = (color: string) => {
-    setTextStyle((prev) => ({
-      ...prev,
-      backgroundColor: color === 'transparent' ? undefined : color,
-    }));
-  };
+  // const updateBackgroundColor = (color: string) => {
+  //   setTextStyle((prev) => ({
+  //     ...prev,
+  //     backgroundColor: color === 'transparent' ? undefined : color,
+  //   }));
+  // };
 
   const screenHeight = Dimensions.get('window').height;
 
