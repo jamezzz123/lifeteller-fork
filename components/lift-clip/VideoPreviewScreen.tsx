@@ -91,8 +91,6 @@ export function VideoPreviewScreen({
     };
   }, [selectedSong, audioPlayer]);
 
-  // Check if any items have been added
-  const hasAddedItems = linkedLiftName || selectedSong || textOverlay;
   return (
     <View style={styles.container}>
       {/* Video Player */}

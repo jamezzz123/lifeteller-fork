@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { X, Zap, Image, RotateCw } from 'lucide-react-native';
 import { CameraView, CameraType, useCameraPermissions, useMicrophonePermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
@@ -19,17 +19,18 @@ export function CameraScreen({ onClose, onVideoRecorded }: CameraScreenProps) {
   const cameraRef = useRef<CameraView>(null);
 
   // Request both permissions on mount
+  const requestPermissions = useCallback(async () => {
+    if (!cameraPermission?.granted) {
+      await requestCameraPermission();
+    }
+    if (!micPermission?.granted) {
+      await requestMicPermission();
+    }
+  }, [cameraPermission?.granted, micPermission?.granted, requestCameraPermission, requestMicPermission]);
+
   useEffect(() => {
-    const requestPermissions = async () => {
-      if (!cameraPermission?.granted) {
-        await requestCameraPermission();
-      }
-      if (!micPermission?.granted) {
-        await requestMicPermission();
-      }
-    };
     requestPermissions();
-  }, []);
+  }, [requestPermissions]);
 
   if (!cameraPermission || !micPermission) {
     return <View style={styles.container} />;
