@@ -99,10 +99,11 @@ const styles = StyleSheet.create({
   },
   filterText: {
     fontSize: 14,
-    fontWeight: '500',
+    fontWeight: '400',
   },
   filterTextActive: {
     color: colors.primary.purple,
+    fontWeight: '500',
   },
   filterTextInactive: {
     color: colors['grey-alpha']['500'],

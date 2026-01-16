@@ -18,7 +18,10 @@ export function FeedHeader() {
         <TouchableOpacity className="p-1">
           <Search color={colors['grey-plain']['550']} size={24} />
         </TouchableOpacity>
-        <TouchableOpacity className="p-1">
+        <TouchableOpacity
+          onPress={() => router.push('/account-notification')}
+          className="p-1"
+        >
           <View className="relative">
             <Bell color={colors['grey-plain']['550']} size={24} />
             <View className="absolute -right-1 -top-1 h-5 min-w-[20px] items-center justify-center rounded-[10px] bg-state-red px-1">

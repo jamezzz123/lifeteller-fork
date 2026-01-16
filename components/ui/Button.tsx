@@ -16,7 +16,7 @@ interface ButtonProps {
   children?: React.ReactNode;
   iconLeft?: React.ReactNode;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'outline' | 'gradient-border' | 'destructive';
+  variant?: 'primary' | 'secondary' | 'outline' | 'gradient-border' | 'destructive' | 'link' | 'link-destructive';
   size?: 'small' | 'medium' | 'large';
   loading?: boolean;
   disabled?: boolean;
@@ -136,6 +136,20 @@ export function Button({
           color: colors['grey-plain']['50'],
           textAlign: 'center',
         };
+      case 'link':
+        return {
+          fontSize,
+          fontWeight: '500',
+          color: colors.primary.purple,
+          textAlign: 'center',
+        };
+      case 'link-destructive':
+        return {
+          fontSize,
+          fontWeight: '500',
+          color: colors.state.red,
+          textAlign: 'center',
+        };
       default:
         return {
           fontSize,
@@ -227,6 +241,27 @@ export function Button({
           ${disabled ? 'opacity-50' : ''}
           ${className}
         `}
+      >
+        {buttonContent}
+      </Pressable>
+    );
+  }
+
+  if (variant === 'link' || variant === 'link-destructive') {
+    return (
+      <Pressable
+        onPress={onPress}
+        disabled={disabled || loading}
+        className={`
+          flex-row
+          items-center
+          justify-center
+          ${disabled ? 'opacity-50' : ''}
+          ${className}
+        `}
+        style={({ pressed }) => ({
+          opacity: pressed ? 0.7 : disabled ? 0.5 : 1,
+        })}
       >
         {buttonContent}
       </Pressable>
