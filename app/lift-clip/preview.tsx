@@ -11,6 +11,7 @@ interface Song {
   artist: string;
   duration: string;
   thumbnail: string;
+  audioUrl: string;
 }
 
 interface TextOverlay {
@@ -87,7 +88,7 @@ export default function PreviewScreen() {
       params: {
         videoUri,
         name: linkedLiftName,
-        songId: selectedSong?.id,
+        song: selectedSong ? JSON.stringify(selectedSong) : undefined,
         textOverlay: textOverlay ? JSON.stringify(textOverlay) : undefined,
       },
     });
@@ -114,6 +115,7 @@ export default function PreviewScreen() {
           <VideoPreviewScreen
             videoUri={videoUri}
             linkedLiftName={linkedLiftName}
+            selectedSong={selectedSong}
             textOverlay={textOverlay}
             onClose={handleClose}
             onLinkToExistingLift={handleLinkToExistingLift}

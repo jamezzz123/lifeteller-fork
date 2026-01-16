@@ -1,10 +1,15 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { X, Music, Type, HandHelping } from 'lucide-react-native';
+import {
+  X,
+  Music2,
+  HandHelping,
+  Check,
+  ChevronRight,
+} from 'lucide-react-native';
 import { VideoView, useVideoPlayer } from 'expo-video';
+import { useAudioPlayer } from 'expo-audio';
 import { colors } from '@/theme/colors';
-import { Button } from '../ui/Button';
-import { BlurView } from 'expo-blur';
 
 interface TextOverlay {
   text: string;
@@ -16,9 +21,19 @@ interface TextOverlay {
   };
 }
 
+interface Song {
+  id: string;
+  title: string;
+  artist: string;
+  duration: string;
+  thumbnail: string;
+  audioUrl: string;
+}
+
 interface VideoPreviewScreenProps {
   videoUri: string;
   linkedLiftName?: string;
+  selectedSong?: Song | null;
   textOverlay?: TextOverlay | null;
   onClose: () => void;
   onLinkToExistingLift: () => void;
@@ -30,6 +45,7 @@ interface VideoPreviewScreenProps {
 export function VideoPreviewScreen({
   videoUri,
   linkedLiftName,
+  selectedSong,
   textOverlay,
   onClose,
   onLinkToExistingLift,
@@ -39,14 +55,44 @@ export function VideoPreviewScreen({
 }: VideoPreviewScreenProps) {
   const player = useVideoPlayer(videoUri, (player) => {
     player.loop = true;
-    player.volume = 1.0;
+    // Mute video if song is selected (music will play instead)
+    player.volume = selectedSong ? 0 : 1.0;
     player.play();
   });
+
+  // Audio player for background music
+  const audioPlayer = useAudioPlayer(selectedSong?.audioUrl);
 
   useEffect(() => {
     // Auto-play video when URI changes
     player.play();
   }, [videoUri, player]);
+
+  // Mute/unmute video based on song selection
+  useEffect(() => {
+    player.volume = selectedSong ? 0 : 1.0;
+  }, [selectedSong, player]);
+
+  // Play/stop music based on song selection
+  useEffect(() => {
+    if (selectedSong?.audioUrl) {
+      try {
+        audioPlayer.play();
+      } catch {
+        // Ignore play errors
+      }
+    }
+    return () => {
+      try {
+        audioPlayer?.pause();
+      } catch {
+        // Ignore pause errors
+      }
+    };
+  }, [selectedSong, audioPlayer]);
+
+  // Check if any items have been added
+  const hasAddedItems = linkedLiftName || selectedSong || textOverlay;
   return (
     <View style={styles.container}>
       {/* Video Player */}
@@ -83,95 +129,74 @@ export function VideoPreviewScreen({
         </TouchableOpacity>
       </View>
 
-      {/* Info Text */}
-      {/* <View style={styles.infoContainer}>
-        <Text style={styles.infoText}>Video starts playing upon selection</Text>
-      </View> */}
-
-      {/* Linked Lift Display (if lift is linked) */}
-      {linkedLiftName && (
-        <View style={styles.linkedLiftContainer}>
-          <TouchableOpacity
-            onPress={onLinkToExistingLift}
-            style={styles.linkedLiftButton}
-          >
-            <Text style={styles.linkedLiftText}>
-              ✓ Linked lift - {linkedLiftName}
-            </Text>
-            <Text style={styles.linkedLiftSubtext}>Tap to change</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-
-      {/* Action Buttons */}
+      {/* Floating Action Cards */}
       <View style={styles.actionsContainer}>
-        {!linkedLiftName && (
-          <BlurView intensity={10}>
-            <TouchableOpacity
-              onPress={onLinkToExistingLift}
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 8,
-                flex: 1,
-                padding: 8,
-                borderRadius: 8,
-              }}
-            >
-              <HandHelping
-                size={18}
-                color={colors['grey-plain']['50']}
-              ></HandHelping>
-              <Text style={styles.actionText}>Link to existing lift</Text>
-            </TouchableOpacity>
-          </BlurView>
-        )}
+        {/* Linked Lift Card */}
+        <TouchableOpacity
+          style={[styles.actionCard, linkedLiftName && styles.actionCardActive]}
+          onPress={onLinkToExistingLift}
+        >
+          {linkedLiftName ? (
+            <View style={styles.checkIconContainer}>
+              <Check size={18} color={colors['grey-plain']['50']} />
+            </View>
+          ) : (
+            <View style={styles.iconPlaceholder}>
+              <HandHelping size={18} color={colors['grey-plain']['50']} />
+            </View>
+          )}
+          <Text style={styles.actionCardText} numberOfLines={1}>
+            {linkedLiftName
+              ? `Linked lift - ${linkedLiftName}`
+              : 'Link to existing lift'}
+          </Text>
+          <ChevronRight size={20} color={colors['grey-plain']['50']} />
+        </TouchableOpacity>
 
-        <BlurView intensity={10}>
-          <TouchableOpacity
-            onPress={onAddSong}
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              flex: 1,
-              padding: 8,
-              borderRadius: 8,
-            }}
-          >
-            <Music size={18} color={colors['grey-plain']['50']}></Music>
-            <Text style={styles.actionText}>Add song</Text>
-          </TouchableOpacity>
-        </BlurView>
+        {/* Song Card */}
+        <TouchableOpacity
+          style={[styles.actionCard, selectedSong && styles.actionCardActive]}
+          onPress={onAddSong}
+        >
+          {selectedSong ? (
+            <View style={styles.songThumbnail}>
+              <Music2 size={16} color={colors['grey-plain']['50']} />
+            </View>
+          ) : (
+            <View style={styles.iconPlaceholder}>
+              <Music2 size={18} color={colors['grey-plain']['50']} />
+            </View>
+          )}
+          <Text style={styles.actionCardText} numberOfLines={1}>
+            {selectedSong
+              ? `Song added - ${selectedSong.title} by ${selectedSong.artist}`
+              : 'Add sound'}
+          </Text>
+          <ChevronRight size={20} color={colors['grey-plain']['50']} />
+        </TouchableOpacity>
 
-        <BlurView intensity={10}>
-          <TouchableOpacity
-            onPress={onAddText}
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 8,
-              flex: 1,
-              padding: 8,
-              borderRadius: 8,
-            }}
-          >
-            <Type size={18} color={colors['grey-plain']['50']}></Type>
-            <Text style={styles.actionText}>
-              {textOverlay ? 'Edit Text' : 'Add Text'}
-            </Text>
-          </TouchableOpacity>
-        </BlurView>
+        {/* Text Card */}
+        <TouchableOpacity
+          style={[styles.actionCard, textOverlay && styles.actionCardActive]}
+          onPress={onAddText}
+        >
+          <View style={styles.iconPlaceholder}>
+            <Text style={styles.aaIcon}>Aa</Text>
+          </View>
+          <Text style={styles.actionCardText} numberOfLines={1}>
+            {textOverlay ? `Text added - ${textOverlay.text}` : 'Add text'}
+          </Text>
+          {(textOverlay || true) && (
+            <ChevronRight size={20} color={colors['grey-plain']['50']} />
+          )}
+        </TouchableOpacity>
       </View>
 
       {/* Proceed Button */}
-      <View className="flex items-end" style={styles.proceedContainer}>
-        <View className="w-1/2">
-          <Button title="Proceed" onPress={onProceed}></Button>
-        </View>
+      <View style={styles.proceedContainer}>
+        <TouchableOpacity style={styles.proceedButton} onPress={onProceed}>
+          <Text style={styles.proceedButtonText}>Proceed</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -205,104 +230,12 @@ const styles = StyleSheet.create({
     height: 40,
     justifyContent: 'center',
   },
-  infoContainer: {
-    position: 'absolute',
-    bottom: 200,
-    left: 0,
-    right: 0,
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    backgroundColor: 'rgba(37, 42, 49, 0.7)',
-  },
-  infoText: {
-    fontSize: 14,
-    color: colors['grey-plain']['300'],
-    textAlign: 'center',
-  },
-  actionsContainer: {
-    position: 'absolute',
-    bottom: 140,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    paddingHorizontal: 16,
-    paddingVertical: 20,
-    // backgroundColor: 'rgba(37, 42, 49, 0.7)',
-  },
-  actionButton: {
-    alignItems: 'center',
-    gap: 8,
-    flex: 1,
-  },
-  actionIcon: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(37, 42, 49, 0.7)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  actionText: {
-    fontSize: 12,
-    color: colors['grey-plain']['50'],
-    textAlign: 'center',
-  },
-  proceedContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    paddingHorizontal: 24,
-    paddingVertical: 24,
-    paddingBottom: 40,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  proceedButton: {
-    backgroundColor: colors.primary.purple,
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    alignSelf: 'center',
-    minWidth: 200,
-  },
-  proceedText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors['grey-plain']['50'],
-  },
-  linkedLiftContainer: {
-    position: 'absolute',
-    bottom: 220,
-    left: 16,
-    right: 16,
-    zIndex: 2,
-  },
-  linkedLiftButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  linkedLiftText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors['grey-plain']['50'],
-    marginBottom: 4,
-  },
-  linkedLiftSubtext: {
-    fontSize: 11,
-    color: colors['grey-plain']['300'],
-  },
   textOverlayContainer: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 250,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 24,
@@ -312,5 +245,83 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     paddingHorizontal: 16,
     paddingVertical: 12,
+    borderRadius: 4,
+  },
+  actionsContainer: {
+    position: 'absolute',
+    bottom: 150,
+    left: 16,
+    right: 16,
+    gap: 12,
+  },
+  actionCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 6,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    gap: 8,
+  },
+  actionCardActive: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+  },
+  checkIconContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    // backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  iconPlaceholder: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    // backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  songThumbnail: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: colors.primary.purple,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  aaIcon: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: colors['grey-plain']['50'],
+  },
+  actionCardText: {
+    flex: 1,
+    fontSize: 13,
+    fontWeight: '500',
+    color: colors['grey-plain']['50'],
+  },
+  proceedContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingHorizontal: 16,
+    paddingVertical: 20,
+    paddingBottom: 40,
+    backgroundColor: 'rgba(37, 42, 49, 0.7)',
+  },
+  proceedButton: {
+    backgroundColor: colors.primary.purple,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    borderRadius: 28,
+  },
+  proceedButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors['grey-plain']['50'],
   },
 });

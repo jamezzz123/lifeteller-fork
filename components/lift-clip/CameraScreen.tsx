@@ -1,7 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Alert, Platform } from 'react-native';
 import { X, Zap, Image, RotateCw } from 'lucide-react-native';
-import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
+import { CameraView, CameraType, useCameraPermissions, useMicrophonePermissions } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { colors } from '@/theme/colors';
 
@@ -14,25 +14,46 @@ export function CameraScreen({ onClose, onVideoRecorded }: CameraScreenProps) {
   const [facing, setFacing] = useState<CameraType>('back');
   const [isRecording, setIsRecording] = useState(false);
   const [flash, setFlash] = useState<'off' | 'on'>('off');
-  const [permission, requestPermission] = useCameraPermissions();
+  const [cameraPermission, requestCameraPermission] = useCameraPermissions();
+  const [micPermission, requestMicPermission] = useMicrophonePermissions();
   const cameraRef = useRef<CameraView>(null);
 
-  if (!permission) {
+  // Request both permissions on mount
+  useEffect(() => {
+    const requestPermissions = async () => {
+      if (!cameraPermission?.granted) {
+        await requestCameraPermission();
+      }
+      if (!micPermission?.granted) {
+        await requestMicPermission();
+      }
+    };
+    requestPermissions();
+  }, []);
+
+  if (!cameraPermission || !micPermission) {
     return <View style={styles.container} />;
   }
 
-  if (!permission.granted) {
+  if (!cameraPermission.granted || !micPermission.granted) {
     return (
       <View style={styles.container}>
         <View style={styles.permissionContainer}>
           <Text style={styles.permissionText}>
-            We need your permission to access the camera
+            We need your permission to access the camera and microphone to record videos
           </Text>
           <TouchableOpacity
-            onPress={requestPermission}
+            onPress={async () => {
+              if (!cameraPermission.granted) {
+                await requestCameraPermission();
+              }
+              if (!micPermission.granted) {
+                await requestMicPermission();
+              }
+            }}
             style={styles.permissionButton}
           >
-            <Text style={styles.permissionButtonText}>Grant Permission</Text>
+            <Text style={styles.permissionButtonText}>Grant Permissions</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -87,7 +108,7 @@ export function CameraScreen({ onClose, onVideoRecorded }: CameraScreenProps) {
       }
 
       const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ['videos'],
+        mediaTypes: ['videos', 'images'],
         allowsEditing: false,
         quality: 1,
         videoMaxDuration: 60,

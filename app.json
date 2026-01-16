@@ -61,7 +61,16 @@
           "cameraPermission": "Allow Lifteller to use your camera to take photos for your lift requests.",
           "microphonePermission": "Allow Lifteller to access your microphone to record videos for your lift requests."
         }
-      ]
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow Lifteller to use your camera to record lift clips.",
+          "microphonePermission": "Allow Lifteller to use your microphone to record audio with your lift clips.",
+          "recordAudioAndroid": true
+        }
+      ],
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true,

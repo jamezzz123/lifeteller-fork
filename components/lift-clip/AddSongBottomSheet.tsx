@@ -1,4 +1,4 @@
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef, useState, useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,15 +7,18 @@ import {
   TextInput,
   FlatList,
   Image,
+  Alert,
 } from 'react-native';
 import {
   X,
   Search,
   Trash2,
   Play,
+  Pause,
   ChevronRight,
   Check,
 } from 'lucide-react-native';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 import { colors } from '@/theme/colors';
 import {
   BottomSheetComponent,
@@ -29,7 +32,12 @@ interface Song {
   artist: string;
   duration: string;
   thumbnail: string;
+  audioUrl: string;
 }
+
+// Sample audio URL for demo purposes
+const SAMPLE_AUDIO_URL =
+  'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
 
 interface AddSongBottomSheetProps {
   selectedSongId?: string;
@@ -45,6 +53,7 @@ const MOCK_SONGS: Song[] = [
     artist: 'Ugoccie',
     duration: '2:09',
     thumbnail: 'https://i.pravatar.cc/100?img=1',
+    audioUrl: SAMPLE_AUDIO_URL,
   },
   {
     id: '2',
@@ -52,6 +61,7 @@ const MOCK_SONGS: Song[] = [
     artist: 'Ugoccie',
     duration: '2:09',
     thumbnail: 'https://i.pravatar.cc/100?img=2',
+    audioUrl: SAMPLE_AUDIO_URL,
   },
   {
     id: '3',
@@ -59,6 +69,7 @@ const MOCK_SONGS: Song[] = [
     artist: 'Ugoccie',
     duration: '2:09',
     thumbnail: 'https://i.pravatar.cc/100?img=3',
+    audioUrl: SAMPLE_AUDIO_URL,
   },
   {
     id: '4',
@@ -66,6 +77,7 @@ const MOCK_SONGS: Song[] = [
     artist: 'Ugoccie',
     duration: '2:09',
     thumbnail: 'https://i.pravatar.cc/100?img=4',
+    audioUrl: SAMPLE_AUDIO_URL,
   },
   {
     id: '5',
@@ -73,6 +85,7 @@ const MOCK_SONGS: Song[] = [
     artist: 'Ugoccie',
     duration: '2:09',
     thumbnail: 'https://i.pravatar.cc/100?img=5',
+    audioUrl: SAMPLE_AUDIO_URL,
   },
 ];
 
@@ -82,6 +95,96 @@ export const AddSongBottomSheet = forwardRef<
 >(({ selectedSongId, onSongSelect, onRemoveSong }, ref) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('all');
+  const [previewingSongId, setPreviewingSongId] = useState<string | null>(null);
+  const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
+
+  // Create audio player using expo-audio - always use the sample URL initially
+  // The player needs a valid source to be properly initialized
+  const audioPlayer = useAudioPlayer(currentAudioUrl || SAMPLE_AUDIO_URL);
+  const playerStatus = useAudioPlayerStatus(audioPlayer);
+
+  // Handle playback end - reset preview state when song finishes
+  useEffect(() => {
+    if (playerStatus.playing === false && previewingSongId && currentAudioUrl) {
+      // Check if playback finished (not just paused)
+      if (playerStatus.currentTime > 0 && playerStatus.duration && playerStatus.currentTime >= playerStatus.duration - 0.5) {
+        setPreviewingSongId(null);
+        setCurrentAudioUrl(null);
+      }
+    }
+  }, [playerStatus.playing, playerStatus.currentTime, playerStatus.duration, previewingSongId, currentAudioUrl]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      try {
+        audioPlayer?.pause();
+      } catch {
+        // Ignore errors during cleanup
+      }
+    };
+  }, [audioPlayer]);
+
+  const handlePreviewSong = useCallback(
+    (song: Song) => {
+      // If already previewing this song, stop it
+      if (previewingSongId === song.id) {
+        try {
+          audioPlayer.pause();
+        } catch {
+          // Ignore pause errors
+        }
+        setPreviewingSongId(null);
+        setCurrentAudioUrl(null);
+        return;
+      }
+
+      // Stop any current preview
+      try {
+        audioPlayer.pause();
+      } catch {
+        // Ignore pause errors
+      }
+
+      // Start previewing new song
+      setPreviewingSongId(song.id);
+      setCurrentAudioUrl(song.audioUrl);
+    },
+    [audioPlayer, previewingSongId]
+  );
+
+  // Play audio when URL changes
+  useEffect(() => {
+    if (currentAudioUrl && previewingSongId) {
+      // Small delay to let the player load the new source
+      const timer = setTimeout(() => {
+        try {
+          audioPlayer.play();
+        } catch {
+          // Ignore play errors
+        }
+      }, 200);
+      return () => clearTimeout(timer);
+    }
+  }, [currentAudioUrl, previewingSongId, audioPlayer]);
+
+  const handleRemoveSong = () => {
+    Alert.alert(
+      'Remove Song',
+      'Are you sure you want to remove this song from your clip?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Remove',
+          style: 'destructive',
+          onPress: onRemoveSong,
+        },
+      ]
+    );
+  };
 
   const filters: FilterTab[] = [
     { id: 'all', label: 'All' },
@@ -91,25 +194,40 @@ export const AddSongBottomSheet = forwardRef<
 
   const renderSongItem = ({ item }: { item: Song }) => {
     const isSelected = item.id === selectedSongId;
+    const isPreviewing = item.id === previewingSongId;
 
     return (
       <TouchableOpacity
         style={styles.songItem}
         onPress={() => onSongSelect(item)}
       >
-        {/* Thumbnail with play icon */}
-        <View style={styles.thumbnailContainer}>
+        {/* Thumbnail with play/pause icon - tappable for preview */}
+        <TouchableOpacity
+          style={styles.thumbnailContainer}
+          onPress={() => handlePreviewSong(item)}
+          activeOpacity={0.7}
+        >
           <Image source={{ uri: item.thumbnail }} style={styles.thumbnail} />
-          <View style={styles.playIconOverlay}>
-            <Play size={16} color={colors['grey-plain']['50']} fill="white" />
+          <View
+            style={[
+              styles.playIconOverlay,
+              isPreviewing && styles.playIconOverlayActive,
+            ]}
+          >
+            {isPreviewing ? (
+              <Pause size={16} color={colors['grey-plain']['50']} fill="white" />
+            ) : (
+              <Play size={16} color={colors['grey-plain']['50']} fill="white" />
+            )}
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Song info */}
         <View style={styles.songInfo}>
           <Text style={styles.songTitle}>{item.title}</Text>
           <Text style={styles.songDetails}>
             {item.artist} · {item.duration}
+            {isPreviewing && ' • Playing...'}
           </Text>
         </View>
 
@@ -167,7 +285,7 @@ export const AddSongBottomSheet = forwardRef<
 
         {/* Remove song option */}
         {selectedSongId && (
-          <TouchableOpacity style={styles.removeButton} onPress={onRemoveSong}>
+          <TouchableOpacity style={styles.removeButton} onPress={handleRemoveSong}>
             <Trash2 size={20} color={colors.state.red} />
             <Text style={styles.removeText}>Remove song</Text>
           </TouchableOpacity>
@@ -264,6 +382,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  playIconOverlayActive: {
+    backgroundColor: 'rgba(139, 92, 246, 0.6)',
   },
   songInfo: {
     flex: 1,
