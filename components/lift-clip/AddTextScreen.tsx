@@ -6,7 +6,9 @@ import {
   TextInput,
   ScrollView,
   Text,
+  Dimensions,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { VideoView, useVideoPlayer } from 'expo-video';
 import {
   X,
@@ -78,7 +80,7 @@ export function AddTextScreen({
   const [textStyle, setTextStyle] = useState<TextStyle>(
     initialStyle || {
       color: '#FFFFFF',
-      fontSize: 32,
+      fontSize: 20,
       textAlign: 'center',
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
     }
@@ -115,6 +117,8 @@ export function AddTextScreen({
     }));
   };
 
+  const screenHeight = Dimensions.get('window').height;
+
   return (
     <View style={styles.container}>
       {/* Video Background */}
@@ -125,210 +129,217 @@ export function AddTextScreen({
         nativeControls={false}
       />
 
-      {/* Top Bar */}
-      <View style={styles.topBar}>
-        <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-          <X size={24} color={colors['grey-plain']['50']} />
-        </TouchableOpacity>
-
-        <View style={styles.alignmentButtons}>
-          <TouchableOpacity
-            onPress={() => updateTextAlign('left')}
-            style={[
-              styles.alignButton,
-              textStyle.textAlign === 'left' && styles.alignButtonActive,
-            ]}
-          >
-            <AlignLeft
-              size={20}
-              color={
-                textStyle.textAlign === 'left'
-                  ? colors.primary.purple
-                  : colors['grey-plain']['50']
-              }
-            />
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={120}
+        extraHeight={140}
+        enableAutomaticScroll
+        enableResetScrollToCoords={false}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Top Bar */}
+        <View style={styles.topBar}>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
+            <X size={24} color={colors['grey-plain']['50']} />
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => updateTextAlign('center')}
-            style={[
-              styles.alignButton,
-              textStyle.textAlign === 'center' && styles.alignButtonActive,
-            ]}
-          >
-            <AlignCenter
-              size={20}
-              color={
-                textStyle.textAlign === 'center'
-                  ? colors.primary.purple
-                  : colors['grey-plain']['50']
-              }
-            />
-          </TouchableOpacity>
+          <View style={styles.alignmentButtons}>
+            <TouchableOpacity
+              onPress={() => updateTextAlign('left')}
+              style={[
+                styles.alignButton,
+                textStyle.textAlign === 'left' && styles.alignButtonActive,
+              ]}
+            >
+              <AlignLeft
+                size={20}
+                color={
+                  textStyle.textAlign === 'left'
+                    ? colors.primary.purple
+                    : colors['grey-plain']['50']
+                }
+              />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => updateTextAlign('right')}
-            style={[
-              styles.alignButton,
-              textStyle.textAlign === 'right' && styles.alignButtonActive,
-            ]}
-          >
-            <AlignRight
-              size={20}
-              color={
-                textStyle.textAlign === 'right'
-                  ? colors.primary.purple
-                  : colors['grey-plain']['50']
-              }
-            />
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => updateTextAlign('center')}
+              style={[
+                styles.alignButton,
+                textStyle.textAlign === 'center' && styles.alignButtonActive,
+              ]}
+            >
+              <AlignCenter
+                size={20}
+                color={
+                  textStyle.textAlign === 'center'
+                    ? colors.primary.purple
+                    : colors['grey-plain']['50']
+                }
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => updateTextAlign('right')}
+              style={[
+                styles.alignButton,
+                textStyle.textAlign === 'right' && styles.alignButtonActive,
+              ]}
+            >
+              <AlignRight
+                size={20}
+                color={
+                  textStyle.textAlign === 'right'
+                    ? colors.primary.purple
+                    : colors['grey-plain']['50']
+                }
+              />
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.doneButtonContainer}>
+            <Button title="Done" onPress={handleDone} size="small" />
+          </View>
         </View>
 
-        <View style={styles.doneButtonContainer}>
-          <Button title="Done" onPress={handleDone} size="small" />
-        </View>
-      </View>
-
-      {/* Text Input on Video */}
-      <View style={styles.textContainer}>
-        <View
-          style={[
-            styles.textInputWrapper,
-            textStyle.backgroundColor && {
-              backgroundColor: textStyle.backgroundColor,
-            },
-          ]}
-        >
-          <TextInput
+        {/* Text Input on Video */}
+        <View style={[styles.textContainer, { minHeight: screenHeight * 0.4 }]}>
+          <View
             style={[
-              styles.textInput,
-              {
-                color: textStyle.color,
-                fontSize: textStyle.fontSize,
-                textAlign: textStyle.textAlign,
+              styles.textInputWrapper,
+              textStyle.backgroundColor && {
+                backgroundColor: textStyle.backgroundColor,
               },
             ]}
-            value={text}
-            onChangeText={setText}
-            multiline
-            placeholder="Add text"
-            placeholderTextColor="rgba(255, 255, 255, 0.5)"
-            autoFocus
-          />
-        </View>
-      </View>
-
-      {/* Bottom Toolbar */}
-      <View style={styles.bottomToolbar}>
-        {/* Font Size Controls */}
-        <View style={styles.toolSection}>
-          <Text style={styles.toolLabel}>Size</Text>
-          <View style={styles.fontSizeControls}>
-            <TouchableOpacity
-              onPress={() => updateFontSize(-4)}
-              style={styles.fontSizeButton}
-              disabled={textStyle.fontSize <= MIN_FONT_SIZE}
-            >
-              <Minus
-                size={16}
-                color={
-                  textStyle.fontSize <= MIN_FONT_SIZE
-                    ? colors['grey-alpha']['400']
-                    : colors['grey-alpha']['550']
-                }
-              />
-            </TouchableOpacity>
-            <Text style={styles.fontSizeText}>{textStyle.fontSize}</Text>
-            <TouchableOpacity
-              onPress={() => updateFontSize(4)}
-              style={styles.fontSizeButton}
-              disabled={textStyle.fontSize >= MAX_FONT_SIZE}
-            >
-              <Plus
-                size={16}
-                color={
-                  textStyle.fontSize >= MAX_FONT_SIZE
-                    ? colors['grey-alpha']['400']
-                    : colors['grey-alpha']['550']
-                }
-              />
-            </TouchableOpacity>
-          </View>
-        </View>
-
-        {/* Color Picker Toggle */}
-        <TouchableOpacity
-          style={styles.colorPickerToggle}
-          onPress={() => setShowColorPicker(!showColorPicker)}
-        >
-          <Palette
-            size={20}
-            color={showColorPicker ? colors.primary.purple : colors['grey-alpha']['550']}
-          />
-          <Text
-            style={[
-              styles.toolLabel,
-              showColorPicker && { color: colors.primary.purple },
-            ]}
           >
-            Colors
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Color Picker Panel */}
-      {showColorPicker && (
-        <View style={styles.colorPickerPanel}>
-          {/* Text Color */}
-          <View style={styles.colorSection}>
-            <Text style={styles.colorSectionLabel}>Text Color</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.colorOptions}>
-                {TEXT_COLORS.map((color) => (
-                  <TouchableOpacity
-                    key={color}
-                    style={[
-                      styles.colorOption,
-                      { backgroundColor: color },
-                      textStyle.color === color && styles.colorOptionSelected,
-                    ]}
-                    onPress={() => updateTextColor(color)}
-                  />
-                ))}
-              </View>
-            </ScrollView>
-          </View>
-
-          {/* Background Color */}
-          <View style={styles.colorSection}>
-            <Text style={styles.colorSectionLabel}>Background</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.colorOptions}>
-                {BACKGROUND_COLORS.map((bg) => (
-                  <TouchableOpacity
-                    key={bg.id}
-                    style={[
-                      styles.colorOption,
-                      {
-                        backgroundColor: bg.color === 'transparent' ? '#E5E5E5' : bg.color,
-                      },
-                      bg.color === 'transparent' && styles.transparentOption,
-                      (textStyle.backgroundColor === bg.color ||
-                        (!textStyle.backgroundColor && bg.color === 'transparent')) &&
-                        styles.colorOptionSelected,
-                    ]}
-                    onPress={() => updateBackgroundColor(bg.color)}
-                  >
-                    {bg.color === 'transparent' && (
-                      <X size={16} color={colors['grey-alpha']['400']} />
-                    )}
-                  </TouchableOpacity>
-                ))}
-              </View>
-            </ScrollView>
+            <TextInput
+              style={[
+                styles.textInput,
+                {
+                  color: textStyle.color,
+                  fontSize: textStyle.fontSize,
+                  textAlign: textStyle.textAlign,
+                },
+              ]}
+              value={text}
+              onChangeText={setText}
+              multiline
+              placeholder="Add text"
+              placeholderTextColor="rgba(255, 255, 255, 0.5)"
+              autoFocus
+            />
           </View>
         </View>
-      )}
+
+        {/* Bottom Toolbar - Commented out for now */}
+        {/* <View style={styles.bottomToolbar}>
+          <View style={styles.toolSection}>
+            <Text style={styles.toolLabel}>Size</Text>
+            <View style={styles.fontSizeControls}>
+              <TouchableOpacity
+                onPress={() => updateFontSize(-4)}
+                style={styles.fontSizeButton}
+                disabled={textStyle.fontSize <= MIN_FONT_SIZE}
+              >
+                <Minus
+                  size={16}
+                  color={
+                    textStyle.fontSize <= MIN_FONT_SIZE
+                      ? colors['grey-alpha']['400']
+                      : colors['grey-alpha']['550']
+                  }
+                />
+              </TouchableOpacity>
+              <Text style={styles.fontSizeText}>{textStyle.fontSize}</Text>
+              <TouchableOpacity
+                onPress={() => updateFontSize(4)}
+                style={styles.fontSizeButton}
+                disabled={textStyle.fontSize >= MAX_FONT_SIZE}
+              >
+                <Plus
+                  size={16}
+                  color={
+                    textStyle.fontSize >= MAX_FONT_SIZE
+                      ? colors['grey-alpha']['400']
+                      : colors['grey-alpha']['550']
+                  }
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <TouchableOpacity
+            style={styles.colorPickerToggle}
+            onPress={() => setShowColorPicker(!showColorPicker)}
+          >
+            <Palette
+              size={20}
+              color={showColorPicker ? colors.primary.purple : colors['grey-alpha']['550']}
+            />
+            <Text
+              style={[
+                styles.toolLabel,
+                showColorPicker && { color: colors.primary.purple },
+              ]}
+            >
+              Colors
+            </Text>
+          </TouchableOpacity>
+        </View> */}
+
+        {/* Color Picker Panel - Commented out for now */}
+        {/* {showColorPicker && (
+          <View style={styles.colorPickerPanel}>
+            <View style={styles.colorSection}>
+              <Text style={styles.colorSectionLabel}>Text Color</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.colorOptions}>
+                  {TEXT_COLORS.map((color) => (
+                    <TouchableOpacity
+                      key={color}
+                      style={[
+                        styles.colorOption,
+                        { backgroundColor: color },
+                        textStyle.color === color && styles.colorOptionSelected,
+                      ]}
+                      onPress={() => updateTextColor(color)}
+                    />
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+
+            <View style={styles.colorSection}>
+              <Text style={styles.colorSectionLabel}>Background</Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View style={styles.colorOptions}>
+                  {BACKGROUND_COLORS.map((bg) => (
+                    <TouchableOpacity
+                      key={bg.id}
+                      style={[
+                        styles.colorOption,
+                        {
+                          backgroundColor: bg.color === 'transparent' ? '#E5E5E5' : bg.color,
+                        },
+                        bg.color === 'transparent' && styles.transparentOption,
+                        (textStyle.backgroundColor === bg.color ||
+                          (!textStyle.backgroundColor && bg.color === 'transparent')) &&
+                          styles.colorOptionSelected,
+                      ]}
+                      onPress={() => updateBackgroundColor(bg.color)}
+                    >
+                      {bg.color === 'transparent' && (
+                        <X size={16} color={colors['grey-alpha']['400']} />
+                      )}
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+          </View>
+        )} */}
+      </KeyboardAwareScrollView>
     </View>
   );
 }
@@ -344,6 +355,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   topBar: {
     flexDirection: 'row',

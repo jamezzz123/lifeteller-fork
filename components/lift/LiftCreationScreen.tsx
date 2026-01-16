@@ -1,13 +1,6 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-  KeyboardAvoidingView,
-  Platform,
-  Switch,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { router, Href } from 'expo-router';
 import {
   CornerUpLeft,
@@ -256,15 +249,15 @@ export default function LiftCreationScreen({
         </View>
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={120}
+        extraHeight={140}
+        enableAutomaticScroll
+        enableResetScrollToCoords={false}
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          className="flex-1"
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
           {/* Lift Type & Visibility */}
           <View className="gap-4 border-b border-grey-plain-300 p-4">
             <SegmentedControl
@@ -537,8 +530,7 @@ export default function LiftCreationScreen({
               />
             </TouchableOpacity>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
 
       {/* Footer Buttons */}
       <View className="border-t border-grey-plain-150 bg-grey-alpha-100 px-4 py-3">

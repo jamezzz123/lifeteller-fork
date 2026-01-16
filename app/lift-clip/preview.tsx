@@ -28,6 +28,7 @@ export default function PreviewScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
   const videoUri = params.videoUri as string;
+  const linkedLiftId = params.liftId as string;
   const linkedLiftName = params.name as string;
 
   const addSongBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -40,10 +41,10 @@ export default function PreviewScreen() {
   };
 
   const handleLinkToExistingLift = () => {
-    // Navigate to link-clip, passing current video URI
+    // Navigate to link-clip, passing current video URI and selected lift ID
     router.push({
       pathname: '/lift-clip/link-clip' as any,
-      params: { videoUri },
+      params: { videoUri, selectedLiftId: linkedLiftId || '' },
     });
   };
 
@@ -87,6 +88,7 @@ export default function PreviewScreen() {
       pathname: '/lift-clip/post' as any,
       params: {
         videoUri,
+        liftId: linkedLiftId,
         name: linkedLiftName,
         song: selectedSong ? JSON.stringify(selectedSong) : undefined,
         textOverlay: textOverlay ? JSON.stringify(textOverlay) : undefined,

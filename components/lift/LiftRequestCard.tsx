@@ -35,6 +35,8 @@ export interface LiftCardProps {
   onOfferLift?: () => void;
   onDecline?: () => void;
   onAccept?: () => void;
+
+  highlighted?: boolean;
 }
 
 export function LiftCard({
@@ -47,6 +49,7 @@ export function LiftCard({
   onOfferLift,
   onDecline,
   onAccept,
+  highlighted = false,
 }: LiftCardProps) {
   const formatCurrency = (amount: number) =>
     new Intl.NumberFormat('en-NG', {
@@ -380,17 +383,21 @@ export function LiftCard({
 
     return null;
   };
-
+  const headerBgClass = highlighted
+    ? 'bg-primary-tints-50'
+    : 'bg-grey-plain-150';
   return (
     <Pressable
       onPress={onCardPress}
-      className="mb-4 rounded-xl border border-grey-plain-300 bg-white"
+      className="rounded-xl border border-grey-plain-300 bg-white"
       style={({ pressed }) => ({
         opacity: pressed && onCardPress ? 0.95 : 1,
       })}
     >
       {/* Header: Card Type + Status */}
-      <View className="flex-row items-center justify-between rounded-t-xl bg-grey-plain-150 px-4 py-3">
+      <View
+        className={`flex-row items-center justify-between rounded-t-xl  px-4 py-3 ${headerBgClass}`}
+      >
         <View className="flex-row items-center gap-2">
           <HeaderIcon size={20} color={colors['grey-alpha']['500']} />
           <Text className="text-[15px] font-medium text-grey-alpha-500">
@@ -464,7 +471,7 @@ export function LiftCard({
             {lift.title}
           </Text>
           <Text
-            className="text-[15px] leading-5 text-grey-plain-550"
+            className="text-[14px] font-normal leading-5 text-grey-plain-550"
             numberOfLines={2}
             ellipsizeMode="tail"
           >

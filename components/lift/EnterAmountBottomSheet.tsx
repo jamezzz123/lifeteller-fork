@@ -1,5 +1,6 @@
 import { forwardRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import * as Haptics from 'expo-haptics';
 import {
   BottomSheetComponent,
@@ -56,7 +57,13 @@ export const EnterAmountBottomSheet = forwardRef<
       }).format(value);
 
     return (
-      <BottomSheetComponent ref={ref} snapPoints={['60%']}>
+      <BottomSheetComponent
+        ref={ref}
+        snapPoints={['60%', '90%']}
+        keyboardBehavior="extend"
+        android_keyboardInputMode="adjustResize"
+        scrollable
+      >
         <View className="px-4 pb-6">
           <Text className="mb-6 text-lg font-bold text-grey-alpha-500">
             {title}
@@ -70,7 +77,7 @@ export const EnterAmountBottomSheet = forwardRef<
               {enableFormattedDisplay && (
                 <Text className="mr-2 text-base text-grey-alpha-500">₦</Text>
               )}
-              <TextInput
+              <BottomSheetTextInput
                 value={amount}
                 onChangeText={setAmount}
                 placeholder="0"

@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { View, TouchableOpacity, Text, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { X, Search } from 'lucide-react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { X, Search, Trash2, CircleCheck } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { LiftCard } from '@/components/lift';
 import { mockLifts } from '@/data/mockLifts';
 
 export default function LinkClipScreen() {
+  const params = useLocalSearchParams();
+  const selectedLiftId = params.selectedLiftId as string | undefined;
+
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
   const PAGE_SIZE = 4;
 
@@ -51,6 +54,20 @@ export default function LinkClipScreen() {
     }, 800);
   };
 
+  const handleUnlinkLift = () => {
+    router.back();
+    setTimeout(() => {
+      router.setParams({ liftId: '', name: '' });
+    }, 100);
+  };
+
+  const handleSelectLift = (liftId: string, liftTitle: string) => {
+    router.back();
+    setTimeout(() => {
+      router.setParams({ liftId, name: liftTitle });
+    }, 100);
+  };
+
   const renderFooter = () => (
     <TouchableOpacity
       onPress={handleLoadMore}
@@ -85,6 +102,19 @@ export default function LinkClipScreen() {
         </TouchableOpacity>
       </View>
 
+      {/* Unlink Button - Only show when a lift is selected */}
+      {selectedLiftId && (
+        <TouchableOpacity
+          onPress={handleUnlinkLift}
+          className="flex-row items-center gap-2 bg-white px-4 py-3"
+        >
+          <Trash2 color={colors.state.red} size={20} />
+          <Text className="text-base font-medium text-state-red">
+            Unlink Lift from Clip
+          </Text>
+        </TouchableOpacity>
+      )}
+
       {/* Lifts List */}
       <FlatList
         data={visibleLifts}
@@ -94,32 +124,47 @@ export default function LinkClipScreen() {
           paddingHorizontal: 16,
           paddingTop: 16,
           paddingBottom: 100,
+          gap: 16,
         }}
-        renderItem={({ item }) => (
-          <LiftCard
-            lift={item}
-            isLiked={likedItems.has(item.id)}
-            onLike={() => handleLike(item.id)}
-            onOfferLift={() => {
-              // Navigate back to preview with selected lift name
-              router.back();
-              setTimeout(() => {
-                router.setParams({ name: item.title });
-              }, 100);
-            }}
-            onDecline={() => console.log('Decline:', item.id)}
-            onAccept={() => console.log('Accept:', item.id)}
-            onComment={() => console.log('Comment:', item.id)}
-            onShare={() => console.log('Share:', item.id)}
-            onCardPress={() => {
-              // Navigate back to preview with selected lift name
-              router.back();
-              setTimeout(() => {
-                router.setParams({ name: item.title });
-              }, 100);
-            }}
-          />
-        )}
+        renderItem={({ item }) => {
+          const isSelected = selectedLiftId === item.id;
+          return (
+            <View className="relative">
+              <LiftCard
+                lift={item}
+                highlighted={isSelected}
+                isLiked={likedItems.has(item.id)}
+                onLike={() => handleLike(item.id)}
+                onOfferLift={() => handleSelectLift(item.id, item.title)}
+                onDecline={() => console.log('Decline:', item.id)}
+                onAccept={() => console.log('Accept:', item.id)}
+                onComment={() => console.log('Comment:', item.id)}
+                onShare={() => console.log('Share:', item.id)}
+                onCardPress={() => handleSelectLift(item.id, item.title)}
+              />
+              {/* Green checkmark for selected lift */}
+              {isSelected && (
+                <View
+                  className="absolute right-6 top-16 h-8 w-8 items-center justify-center rounded-full"
+                  // style={{ backgroundColor: colors.state.green }}
+                >
+                  <CircleCheck
+                    color="#fff"
+                    size={25}
+                    fill={colors.state.green}
+                  />
+                </View>
+              )}
+              {/* Purple border for selected lift */}
+              {isSelected && (
+                <View
+                  className="pointer-events-none absolute inset-0 rounded-xl border-2"
+                  style={{ borderColor: colors.primary.purple }}
+                />
+              )}
+            </View>
+          );
+        }}
         showsVerticalScrollIndicator={false}
       />
     </SafeAreaView>

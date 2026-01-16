@@ -10,6 +10,7 @@ import {
 import { VideoView, useVideoPlayer } from 'expo-video';
 import { useAudioPlayer } from 'expo-audio';
 import { colors } from '@/theme/colors';
+import { Button } from '../ui/Button';
 
 interface TextOverlay {
   text: string;
@@ -192,9 +193,7 @@ export function VideoPreviewScreen({
 
       {/* Proceed Button */}
       <View style={styles.proceedContainer}>
-        <TouchableOpacity style={styles.proceedButton} onPress={onProceed}>
-          <Text style={styles.proceedButtonText}>Proceed</Text>
-        </TouchableOpacity>
+        <Button onPress={onProceed} title="Proceed"></Button>
       </View>
     </View>
   );

@@ -4,11 +4,10 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
   FlatList,
   Image,
-  Alert,
 } from 'react-native';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import {
   X,
   Search,
@@ -25,6 +24,7 @@ import {
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
 import { FilterTabs, FilterTab } from '@/components/ui/FilterTabs';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface Song {
   id: string;
@@ -97,6 +97,7 @@ export const AddSongBottomSheet = forwardRef<
   const [activeFilter, setActiveFilter] = useState('all');
   const [previewingSongId, setPreviewingSongId] = useState<string | null>(null);
   const [currentAudioUrl, setCurrentAudioUrl] = useState<string | null>(null);
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
 
   // Create audio player using expo-audio - always use the sample URL initially
   // The player needs a valid source to be properly initialized
@@ -169,21 +170,12 @@ export const AddSongBottomSheet = forwardRef<
   }, [currentAudioUrl, previewingSongId, audioPlayer]);
 
   const handleRemoveSong = () => {
-    Alert.alert(
-      'Remove Song',
-      'Are you sure you want to remove this song from your clip?',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'Remove',
-          style: 'destructive',
-          onPress: onRemoveSong,
-        },
-      ]
-    );
+    setShowRemoveDialog(true);
+  };
+
+  const handleConfirmRemove = () => {
+    setShowRemoveDialog(false);
+    onRemoveSong();
   };
 
   const filters: FilterTab[] = [
@@ -264,7 +256,7 @@ export const AddSongBottomSheet = forwardRef<
         {/* Search bar */}
         <View style={styles.searchContainer}>
           <Search size={20} color={colors['grey-alpha']['400']} />
-          <TextInput
+          <BottomSheetTextInput
             style={styles.searchInput}
             placeholder="Search songs"
             placeholderTextColor={colors['grey-alpha']['400']}
@@ -300,6 +292,17 @@ export const AddSongBottomSheet = forwardRef<
           contentContainerStyle={styles.listContent}
         />
       </View>
+
+      {/* Remove Song Confirmation Dialog */}
+      <ConfirmDialog
+        visible={showRemoveDialog}
+        title="Remove song"
+        message="Are you sure you want to remove this song from this lift clip?"
+        cancelText="Cancel"
+        confirmText="Yes, remove"
+        onCancel={() => setShowRemoveDialog(false)}
+        onConfirm={handleConfirmRemove}
+      />
     </BottomSheetComponent>
   );
 });

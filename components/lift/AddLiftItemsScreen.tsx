@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { X, Minus, Plus } from 'lucide-react-native';
@@ -113,15 +106,16 @@ export default function AddLiftItemsScreen() {
         />
       </View>
 
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
+      <KeyboardAwareScrollView
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={120}
+        extraHeight={140}
+        enableAutomaticScroll
+        enableResetScrollToCoords={false}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 40 }}
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          className="flex-1 px-4 pt-4"
-          contentContainerStyle={{ paddingBottom: 40 }}
-          keyboardShouldPersistTaps="handled"
-        >
         {/* Items Section */}
         <View>
           <Text className="text-sm text-grey-alpha-400">
@@ -233,8 +227,7 @@ export default function AddLiftItemsScreen() {
             </TouchableOpacity>
           )}
         </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }
