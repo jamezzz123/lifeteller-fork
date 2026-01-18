@@ -1,5 +1,5 @@
-import { forwardRef, useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { forwardRef, useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import * as Haptics from 'expo-haptics';
 import {
@@ -16,6 +16,7 @@ interface EnterAmountBottomSheetProps {
   hintText?: string;
   quickAmounts?: number[];
   enableFormattedDisplay?: boolean;
+  onClose?: () => void;
 }
 
 const QUICK_AMOUNTS = [5000, 10000, 20000, 30000, 50000, 100000];
@@ -32,10 +33,32 @@ export const EnterAmountBottomSheet = forwardRef<
       hintText = '',
       enableFormattedDisplay = true,
       quickAmounts = QUICK_AMOUNTS,
+      onClose,
     },
     ref
   ) => {
     const [amount, setAmount] = useState(initialAmount);
+    const inputRef = useRef<TextInput>(null);
+    const bottomSheetRef = useRef<BottomSheetRef>(null);
+
+    // Auto-expand bottom sheet when component mounts
+    useEffect(() => {
+      // Small delay to ensure bottom sheet is mounted
+      const expandTimer = setTimeout(() => {
+        bottomSheetRef.current?.expand();
+      }, 50);
+
+      return () => clearTimeout(expandTimer);
+    }, []);
+
+    // Focus input after bottom sheet expands (delay to allow animation to complete)
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 450); // Delay to ensure bottom sheet animation completes before focusing
+
+      return () => clearTimeout(timer);
+    }, []);
 
     const handleQuickAmount = (value: number) => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -58,11 +81,12 @@ export const EnterAmountBottomSheet = forwardRef<
 
     return (
       <BottomSheetComponent
-        ref={ref}
+        ref={bottomSheetRef}
         snapPoints={['60%', '90%']}
         keyboardBehavior="extend"
         android_keyboardInputMode="adjustResize"
         scrollable
+        onClose={onClose}
       >
         <View className="px-4 pb-6">
           <Text className="mb-6 text-lg font-bold text-grey-alpha-500">
@@ -78,13 +102,13 @@ export const EnterAmountBottomSheet = forwardRef<
                 <Text className="mr-2 text-base text-grey-alpha-500">₦</Text>
               )}
               <BottomSheetTextInput
+                ref={inputRef}
                 value={amount}
                 onChangeText={setAmount}
                 placeholder="0"
                 keyboardType="numeric"
                 placeholderTextColor={colors['grey-alpha']['250']}
                 className="flex-1 text-base text-grey-alpha-500"
-                autoFocus
               />
             </View>
           </View>
@@ -130,7 +154,5 @@ export const EnterAmountBottomSheet = forwardRef<
         </View>
       </BottomSheetComponent>
     );
-  }
+}
 );
-
-EnterAmountBottomSheet.displayName = 'EnterAmountBottomSheet';

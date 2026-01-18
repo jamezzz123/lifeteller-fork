@@ -29,7 +29,7 @@ export default function WalletActivationLoadingScreen() {
       // Navigate to success bottom sheet (will be shown via route params)
       router.replace({
         pathname: '/(tabs)/wallet',
-        params: { showSuccess: 'true' },
+        params: { showSuccess: 'true', walletActivated: 'true' },
       } as any);
     }, 3000);
 

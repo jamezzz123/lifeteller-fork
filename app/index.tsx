@@ -7,8 +7,8 @@ import { hasCompletedOnboarding } from '@/utils/onboardingStorage';
 import { useAuth } from '@/context/auth';
 
 export default function Index() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasCompleted, setHasCompleted] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasCompleted, setHasCompleted] = useState(true);
   const { isAuthenticated, isLoading: authLoading, onboardingComplete } = useAuth();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function Index() {
       }
     }
 
-    checkOnboardingStatus();
+    // checkOnboardingStatus();
   }, []);
 
   // Wait for auth to finish loading

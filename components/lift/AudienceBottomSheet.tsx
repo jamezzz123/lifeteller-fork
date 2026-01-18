@@ -118,8 +118,8 @@ export const AudienceBottomSheet = forwardRef<
 
     return (
       <BottomSheetComponent ref={ref} snapPoints={['60%']}>
-        <View className="px-4 pb-4">
-          <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+        <View className="pb-4">
+          <Text className="px-4 mb-4 text-lg font-bold text-grey-alpha-500">
             {title}
           </Text>
 
@@ -130,12 +130,14 @@ export const AudienceBottomSheet = forwardRef<
                 <TouchableOpacity
                   key={option.key}
                   onPress={() => handleSelect(option.key)}
-                  className="flex-row items-center border-b border-grey-plain-300 py-1"
+                  className="pr-4 flex-row items-center border-b border-grey-plain-300 py-1"
                 >
                   <View
-                    className="mr-3 self-stretch rounded-xl"
+                    className="mr-3 h-8"
                     style={{
-                      width: 4,
+                      width: 30,
+                      marginLeft: -20,
+                      borderRadius: isSelected ? 100 : 4,
                       backgroundColor: isSelected
                         ? colors.primary.purple
                         : 'transparent',

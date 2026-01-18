@@ -36,6 +36,8 @@ export default function CreateAccountScreen() {
   const emailVerificationSheetRef = useRef<BottomSheetRef>(null);
   const phoneVerificationSheetRef = useRef<BottomSheetRef>(null);
   const isSubmittingRef = useRef(false);
+  const [showEmailVerificationSheet, setShowEmailVerificationSheet] = useState(false);
+  const [showPhoneVerificationSheet, setShowPhoneVerificationSheet] = useState(false);
 
   // Username validation with debouncing
   const [usernameValidationStatus, setUsernameValidationStatus] = useState<
@@ -156,6 +158,26 @@ export default function CreateAccountScreen() {
     }
   }, [username]);
 
+  // Open email verification sheet when it mounts
+  useEffect(() => {
+    if (showEmailVerificationSheet && emailVerificationSheetRef.current) {
+      // Small delay to ensure the component is fully mounted
+      setTimeout(() => {
+        emailVerificationSheetRef.current?.expand();
+      }, 100);
+    }
+  }, [showEmailVerificationSheet]);
+
+  // Open phone verification sheet when it mounts
+  useEffect(() => {
+    if (showPhoneVerificationSheet && phoneVerificationSheetRef.current) {
+      // Small delay to ensure the component is fully mounted
+      setTimeout(() => {
+        phoneVerificationSheetRef.current?.expand();
+      }, 100);
+    }
+  }, [showPhoneVerificationSheet]);
+
   function handleBack() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.replace('/(auth)/get-started');
@@ -250,9 +272,9 @@ export default function CreateAccountScreen() {
       const needsPhoneVerification = !response.data.is_phone_verified;
 
       if (needsEmailVerification) {
-        emailVerificationSheetRef.current?.expand();
+        setShowEmailVerificationSheet(true);
       } else if (needsPhoneVerification) {
-        phoneVerificationSheetRef.current?.expand();
+        setShowPhoneVerificationSheet(true);
       } else {
         // Both verified, go to onboarding
         router.replace('/(onboarding)/onboarding-index');
@@ -338,6 +360,7 @@ export default function CreateAccountScreen() {
   ]);
 
   function handleEmailVerificationClose() {
+    setShowEmailVerificationSheet(false);
     emailVerificationSheetRef.current?.close();
     // Navigate to login or onboarding
     router.replace('/(auth)/login');
@@ -350,6 +373,7 @@ export default function CreateAccountScreen() {
 
       // For now, assume verification is successful
       // After successful verification, the user is already logged in from registration
+      setShowPhoneVerificationSheet(false);
       phoneVerificationSheetRef.current?.close();
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       router.replace('/(onboarding)/onboarding-index');
@@ -532,26 +556,31 @@ export default function CreateAccountScreen() {
       </KeyboardAvoidingView>
 
       {/* Email Verification Bottom Sheet */}
-      <EmailVerificationBottomSheet
-        ref={emailVerificationSheetRef}
-        email={email}
-        onLoginNow={handleEmailVerificationClose}
-        onOpenEmailApp={() => {
-          // Email app opened, user can verify
-        }}
-        onClose={handleEmailVerificationClose}
-      />
+      {showEmailVerificationSheet && (
+        <EmailVerificationBottomSheet
+          ref={emailVerificationSheetRef}
+          email={email}
+          onLoginNow={handleEmailVerificationClose}
+          onOpenEmailApp={() => {
+            // Email app opened, user can verify
+          }}
+          onClose={handleEmailVerificationClose}
+        />
+      )}
 
       {/* Phone Verification Bottom Sheet */}
-      <OTPVerificationBottomSheet
-        ref={phoneVerificationSheetRef}
-        phoneNumber={formatPhoneForDisplay(phoneNumber)}
-        onVerify={handlePhoneVerification}
-        onResendOTP={handleResendOTP}
-        onClose={() => {
-          phoneVerificationSheetRef.current?.close();
-        }}
-      />
+      {showPhoneVerificationSheet && (
+        <OTPVerificationBottomSheet
+          ref={phoneVerificationSheetRef}
+          phoneNumber={formatPhoneForDisplay(phoneNumber)}
+          onVerify={handlePhoneVerification}
+          onResendOTP={handleResendOTP}
+          onClose={() => {
+            setShowPhoneVerificationSheet(false);
+            phoneVerificationSheetRef.current?.close();
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 }

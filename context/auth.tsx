@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<UserProfileData | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
-  const [onboardingComplete, setOnboardingComplete] = useState(false);
+  const [onboardingComplete, setOnboardingComplete] = useState(true);
 
   const logout = useCallback(async () => {
     await SecureStore.deleteItemAsync('access_token');

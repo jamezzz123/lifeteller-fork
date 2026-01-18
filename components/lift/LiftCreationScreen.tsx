@@ -2,8 +2,10 @@ import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { router, Href } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import {
   CornerUpLeft,
+  X ,
   Hash,
   AtSign,
   SmilePlus,
@@ -17,7 +19,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -43,17 +45,17 @@ const DESCRIPTION_MAX_LENGTH = 500;
 function InputActions() {
   return (
     <View className="mt-2 flex-row gap-2">
-      <TouchableOpacity className="flex-row items-center gap-1.5 rounded bg-grey-plain-200 px-3 py-1.5">
+      <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
         <Hash size={14} color={colors['grey-alpha']['400']} strokeWidth={2} />
         <Text className="text-xs">hashtag</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity className="flex-row items-center gap-1.5 rounded bg-grey-plain-200 px-3 py-1.5">
+      <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
         <AtSign size={14} color={colors['grey-alpha']['400']} strokeWidth={2} />
         <Text className="text-xs">mentions</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity className="flex-row items-center gap-1.5 rounded bg-grey-plain-200 px-3 py-1.5">
+      <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
         <SmilePlus
           size={14}
           color={colors['grey-alpha']['400']}
@@ -132,8 +134,10 @@ export default function LiftCreationScreen({
     numberOfRecipients,
   } = useLiftDraft();
   const audienceSheetRef = useRef<BottomSheetRef>(null);
-  const amountSheetRef = useRef<BottomSheetRef>(null);
-  const numberOfRecipientSheetRef = useRef<BottomSheetRef>(null);
+  const navigation = useNavigation();
+  
+  const [isAmountSheetMounted, setIsAmountSheetMounted] = useState(false);
+  const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] = useState(false);
 
   const handleNavigateToCollaborators = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -187,7 +191,12 @@ export default function LiftCreationScreen({
     if (onBack) {
       onBack();
     } else {
-      router.back();
+      // Check if we can go back, otherwise navigate to home screen
+      if (navigation.canGoBack()) {
+        router.back();
+      } else {
+        router.replace('/(tabs)' as Href);
+      }
     }
   };
 
@@ -202,21 +211,29 @@ export default function LiftCreationScreen({
 
   const handleCustomAmountPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    amountSheetRef.current?.expand();
+    setIsAmountSheetMounted(true);
   };
   const handleCustomAmountPressOnNR = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    numberOfRecipientSheetRef.current?.expand();
+    setIsNumberOfRecipientSheetMounted(true);
   };
 
   const handleAmountDone = (amount: string) => {
     setLiftAmount(amount);
-    amountSheetRef.current?.close();
+    setIsAmountSheetMounted(false);
+  };
+
+  const handleAmountSheetClose = () => {
+    setIsAmountSheetMounted(false);
   };
 
   const handleNRDone = (amount: string) => {
     setNumberOfRecipients(amount);
-    numberOfRecipientSheetRef.current?.close();
+    setIsNumberOfRecipientSheetMounted(false);
+  };
+
+  const handleNumberOfRecipientSheetClose = () => {
+    setIsNumberOfRecipientSheetMounted(false);
   };
 
   const imageCount = selectedMedia.filter((m) => m.type === 'image').length;
@@ -237,9 +254,9 @@ export default function LiftCreationScreen({
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={handleGoBack}>
-            <CornerUpLeft
-              color={colors['grey-plain']['550']}
+            <X 
               size={24}
+              color={colors['grey-plain']['550']}
               strokeWidth={2}
             />
           </TouchableOpacity>
@@ -272,7 +289,7 @@ export default function LiftCreationScreen({
             {showVisibilitySelector && (
               <VisibilitySelector
                 selectedKey={audienceType}
-                title="Who can see the lift i am raising"
+                title=""
                 onPress={() => audienceSheetRef.current?.expand()}
               />
             )}
@@ -287,7 +304,7 @@ export default function LiftCreationScreen({
                 placeholder="Enter a title for your lift"
                 maxLength={TITLE_MAX_LENGTH}
                 size="large"
-                showCharacterCount
+                showCharacterCountBelow
                 maxCharacters={TITLE_MAX_LENGTH}
                 helperText="e.g., Medical bill, School fees, etc."
               />
@@ -302,7 +319,7 @@ export default function LiftCreationScreen({
                 multiline
                 maxLength={DESCRIPTION_MAX_LENGTH}
                 size="medium"
-                showCharacterCount
+                showCharacterCountBelow
                 maxCharacters={DESCRIPTION_MAX_LENGTH}
               />
               <InputActions />
@@ -568,22 +585,26 @@ export default function LiftCreationScreen({
       )}
 
       {/* Enter Amount Bottom Sheet */}
-      <EnterAmountBottomSheet
-        ref={amountSheetRef}
-        onDone={handleAmountDone}
-        initialAmount={liftAmount}
-      />
+      {isAmountSheetMounted && (
+        <EnterAmountBottomSheet
+          onDone={handleAmountDone}
+          initialAmount={liftAmount}
+          onClose={handleAmountSheetClose}
+        />
+      )}
 
       {/* Enter Recipient Bottom Sheet */}
-      <EnterAmountBottomSheet
-        title="Offer Lift to multiple people"
-        enableFormattedDisplay={false}
-        hintText="Enter the number of people you want to offer this Lift to."
-        ref={numberOfRecipientSheetRef}
-        onDone={handleNRDone}
-        initialAmount={numberOfRecipients}
-        quickAmounts={RNQuickAmount}
-      />
+      {isNumberOfRecipientSheetMounted && (
+        <EnterAmountBottomSheet
+          title="Offer Lift to multiple people"
+          enableFormattedDisplay={false}
+          hintText="Enter the number of people you want to offer this Lift to."
+          onDone={handleNRDone}
+          initialAmount={numberOfRecipients}
+          quickAmounts={RNQuickAmount}
+          onClose={handleNumberOfRecipientSheetClose}
+        />
+      )}
     </SafeAreaView>
   );
 }

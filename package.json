@@ -1,7 +1,7 @@
 {
   "name": "lifteller",
   "main": "expo-router/entry",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "start": "expo start --dev-client",
     "android": "expo run:android",
@@ -13,8 +13,8 @@
     "format": "pnpm exec prettier --check \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "format:fix": "pnpm exec prettier --write \"**/*.{ts,tsx,js,jsx,json,css,md}\"",
     "ios:pod-install": "cd ios && pod install && cd ..",
-    "ios:build": "cd ios && xcodebuild -workspace lifteller.xcworkspace -scheme lifteller -configuration Debug -sdk iphonesimulator -derivedDataPath build",
-    "ios:build-device": "cd ios && xcodebuild -workspace lifteller.xcworkspace -scheme lifteller -configuration Debug -sdk iphoneos -derivedDataPath build CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO",
+    "ios:build": "cd ios && xcodebuild -workspace lifteller.xcworkspace -scheme Lifteller -configuration Debug -sdk iphonesimulator -derivedDataPath build",
+    "ios:build-device": "cd ios && xcodebuild -workspace lifteller.xcworkspace -scheme Lifteller -configuration Debug -sdk iphoneos -derivedDataPath build CODE_SIGN_IDENTITY=\"\" CODE_SIGNING_REQUIRED=NO",
     "android:build": "cd android && ./gradlew assembleDebug",
     "android:build-device": "cd android && ./gradlew assembleRelease"
   },

@@ -86,7 +86,17 @@ export default function LoginScreen() {
   }
 
   async function handleLogin() {
-    if (!usernameOrEmail.trim() || !password.trim()) {
+    const trimmedLogin = usernameOrEmail.trim();
+
+    if (!trimmedLogin || !password.trim()) {
+      return;
+    }
+
+    if (/\s/.test(trimmedLogin)) {
+      Alert.alert(
+        'Invalid login',
+        'Spaces are not allowed in username, email, or mobile number.'
+      );
       return;
     }
 
@@ -94,7 +104,7 @@ export default function LoginScreen() {
 
     try {
       const response = await loginMutation.mutateAsync({
-        login: usernameOrEmail.trim(),
+        login: trimmedLogin,
         password: password.trim(),
       });
 

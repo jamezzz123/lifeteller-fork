@@ -126,8 +126,8 @@ export default function PreviewLiftScreen({
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-semibold text-grey-alpha-500">
-              Preview
+            <Text className="text-lg font-medium text-grey-alpha-500">
+              Preview lift
             </Text>
           </View>
         </View>
@@ -136,18 +136,25 @@ export default function PreviewLiftScreen({
         {images.length > 0 && (
           <View className="mb-4 mt-4 px-4">
             <View className="relative">
+              <View className="flex-row overflow-hidden">
               <Image
                 source={{ uri: images[currentImageIndex] }}
-                style={{ width: '100%', height: 280, borderRadius: 16 }}
+                style={{ width: '90%', height: 280, borderRadius: 16 }}
                 contentFit="cover"
               />
-
+              <Image
+                source={{ uri: images[(currentImageIndex + 1) % images.length] }}
+                style={{ width: '10%', height: 280, borderRadius: 16, position: 'absolute', marginLeft: '93%' }}
+                contentFit="cover"
+                />
+                </View>
+           
               {/* Navigation Arrows */}
               {images.length > 1 && (
                 <>
                   <TouchableOpacity
                     onPress={handlePreviousImage}
-                    className="absolute left-3 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
+                    className="absolute left-3 top-1/2 -mt-4 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
                     style={{ transform: [{ translateY: -20 }] }}
                   >
                     <ChevronLeft
@@ -159,7 +166,7 @@ export default function PreviewLiftScreen({
 
                   <TouchableOpacity
                     onPress={handleNextImage}
-                    className="absolute right-3 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
+                    className="absolute right-3 mr-[10%] -mt-4 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
                     style={{ transform: [{ translateY: -20 }] }}
                   >
                     <ChevronRight

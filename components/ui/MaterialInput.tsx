@@ -18,7 +18,9 @@ interface MaterialInputProps extends Omit<RNTextInputProps, 'style'> {
   containerClassName?: string;
   size?: 'small' | 'medium' | 'large' | 'xlarge';
   showCharacterCount?: boolean;
+  showCharacterCountBelow?: boolean;
   maxCharacters?: number;
+ 
 }
 
 export function MaterialInput({
@@ -31,6 +33,7 @@ export function MaterialInput({
   size = 'large',
   value,
   showCharacterCount = false,
+  showCharacterCountBelow = false,
   maxCharacters,
   multiline = false,
   ...props
@@ -161,11 +164,23 @@ export function MaterialInput({
           </Text>
         )}
       </View>
-
+  {showCharacterCountBelow && (
+          <Text
+            className={`-mb-5 text-xs mt-2 ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
+            style={{
+              alignSelf: 'flex-end',
+            }}
+          >
+            {
+              (showCharacterCountBelow && maxCharacters
+                ? `${value?.length || 0}/${maxCharacters}`
+                : '')}
+          </Text>
+        )}
       {/* Error or Helper Text */}
       {error && <Text className="mt-1.5 text-xs text-red-500">{error}</Text>}
       {helperText && !error && (
-        <Text className="mt-1.5 text-xs text-grey-alpha-400">{helperText}</Text>
+        <Text className="mt-1 text-xs text-grey-alpha-400">{helperText}</Text>
       )}
     </View>
   );

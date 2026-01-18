@@ -5,6 +5,7 @@ import { Check } from 'lucide-react-native';
 import { Button } from '@/components/ui/Button';
 import { formatAmount } from '@/utils/formatAmount';
 import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
 
 interface DailyLimitSuccessBottomSheetProps {
   visible: boolean;
@@ -26,7 +27,7 @@ export function DailyLimitSuccessBottomSheet({
   const handleGoToFeeds = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onClose();
-    // TODO: Navigate to feeds
+    router.push('/(tabs)/' as any);
   };
 
   const handleGoToWallet = () => {

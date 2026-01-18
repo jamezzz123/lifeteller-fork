@@ -51,6 +51,7 @@ import { colors } from '@/theme/colors';
 import { formatAmount } from '@/utils/formatAmount';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
+import WalletIllustration from '@/assets/images/wallet.svg';
 
 interface Transaction {
   id: string;
@@ -68,6 +69,7 @@ export default function WalletScreen() {
   const [showSuccessSheet, setShowSuccessSheet] = useState(false);
   const [showDeactivateToast, setShowDeactivateToast] = useState(false);
   const [showFreezeToast, setShowFreezeToast] = useState(false);
+  const [isWalletActivated, setIsWalletActivated] = useState(false);
   const [showDeactivateConfirmation, setShowDeactivateConfirmation] =
     useState(false);
   const [showFreezeConfirmation, setShowFreezeConfirmation] = useState(false);
@@ -110,6 +112,11 @@ export default function WalletScreen() {
       // Clear the param to avoid showing again on re-render
       router.setParams({ showSuccess: undefined } as any);
     }
+    if (params.walletActivated === 'true') {
+      setIsWalletActivated(true);
+      // Clear the param to avoid showing again on re-render
+      router.setParams({ walletActivated: undefined } as any);
+    }
     if (params.walletDeactivated === 'true') {
       setShowDeactivateToast(true);
       // Clear the param to avoid showing again on re-render
@@ -120,7 +127,12 @@ export default function WalletScreen() {
       // Clear the param to avoid showing again on re-render
       router.setParams({ walletFrozen: undefined } as any);
     }
-  }, [params.showSuccess, params.walletDeactivated, params.walletFrozen]);
+  }, [
+    params.showSuccess,
+    params.walletActivated,
+    params.walletDeactivated,
+    params.walletFrozen,
+  ]);
 
   const handleSettingsPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -211,6 +223,11 @@ export default function WalletScreen() {
     setShowSuccessSheet(false);
   };
 
+  const handleActivateWallet = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push('/wallet-activation' as any);
+  };
+
   const handleCreatePasscode = () => {
     setShowSuccessSheet(false);
     // Show passcode bottom sheet
@@ -223,6 +240,7 @@ export default function WalletScreen() {
     // TODO: Save passcode to backend
     console.log('Passcode created:', passcode);
     passcodeSheetRef.current?.close();
+    setIsWalletActivated(true);
     // Show success message or navigate
   };
 
@@ -394,418 +412,453 @@ export default function WalletScreen() {
       </View>
 
       {/* Wallet Content */}
-      <ScrollView
-        className="flex-1 bg-grey-plain-50"
-        contentContainerStyle={{ paddingBottom: bottomPadding }}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Wallet Card */}
-        <View
-          className="mx-4 mt-4 rounded-2xl border p-1"
-          style={{
-            backgroundColor: colors['grey-plain']['150'],
-            borderColor: colors['grey-plain']['300'],
-          }}
+      {isWalletActivated ? (
+        <ScrollView
+          className="flex-1 bg-grey-plain-50"
+          contentContainerStyle={{ paddingBottom: bottomPadding }}
+          showsVerticalScrollIndicator={false}
         >
-          {/* Bank Information - On Grey Background */}
+          {/* Wallet Card */}
           <View
-            className="flex-row items-center justify-between rounded-t-2xl px-3 py-3"
-            style={{ backgroundColor: colors['grey-plain']['150'] }}
+            className="mx-4 mt-4 rounded-2xl border p-1"
+            style={{
+              backgroundColor: colors['grey-plain']['150'],
+              borderColor: colors['grey-plain']['300'],
+            }}
           >
-            <View className="flex-1 flex-row items-center gap-2 text-base font-semibold">
-              <Text
-                className="text-sm"
-                style={{ color: colors['grey-alpha']['400'] }}
-              >
-                {walletData.bankName} •
-              </Text>
-              <Text className="text-sm font-medium">
-                {walletData.accountNumber}
-              </Text>
+            {/* Bank Information - On Grey Background */}
+            <View
+              className="flex-row items-center justify-between rounded-t-2xl px-3 py-3"
+              style={{ backgroundColor: colors['grey-plain']['150'] }}
+            >
+              <View className="flex-1 flex-row items-center gap-2 text-base font-semibold">
+                <Text
+                  className="text-sm"
+                  style={{ color: colors['grey-alpha']['400'] }}
+                >
+                  {walletData.bankName} •
+                </Text>
+                <Text className="text-sm font-medium">
+                  {walletData.accountNumber}
+                </Text>
+              </View>
+              <View className="flex-row items-center gap-4">
+                <TouchableOpacity onPress={handleShareAccount} hitSlop={8}>
+                  <Share2
+                    color={colors['grey-alpha']['500']}
+                    size={20}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={handleCopyAccount} hitSlop={8}>
+                  <Copy
+                    color={colors['grey-alpha']['500']}
+                    size={20}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-            <View className="flex-row items-center gap-4">
-              <TouchableOpacity onPress={handleShareAccount} hitSlop={8}>
-                <Share2
-                  color={colors['grey-alpha']['500']}
-                  size={20}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={handleCopyAccount} hitSlop={8}>
-                <Copy
-                  color={colors['grey-alpha']['500']}
-                  size={20}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
+
+            {/* Rest of Content - On White Background */}
+            <View className="rounded-xl rounded-b-2xl bg-white px-6 pb-6 pt-4">
+              {/* Wallet Status */}
+              <View className="mb-3 flex-row items-center justify-between">
+                <View className="flex-row items-center gap-2">
+                  <View className="size-2 rounded-full bg-state-green" />
+                  <Text
+                    className="text-sm font-medium"
+                    style={{ color: colors.state.green }}
+                  >
+                    {walletData.status}
+                  </Text>
+                </View>
+                <TouchableOpacity
+                  onPress={handleViewTier}
+                  className="flex-row items-center gap-1"
+                  hitSlop={8}
+                >
+                  <Text className="text-sm font-medium text-grey-alpha-500">
+                    {walletData.tier}
+                  </Text>
+                  <ChevronRight
+                    color={colors['grey-alpha']['500']}
+                    size={16}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+              </View>
+
+              {/* User Name */}
+              <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                {walletData.userName}
+              </Text>
+
+              {/* Balances */}
+              <View className="mb-6">
+                <Text className="text-3xl font-bold text-grey-alpha-500">
+                  {isBalanceVisible
+                    ? formatAmount(walletData.currentBalance, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })
+                    : '₦ •••,•••.••'}
+                </Text>
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-sm text-grey-plain-550">
+                    Book balance:{' '}
+                    {isBalanceVisible
+                      ? formatAmount(walletData.bookBalance, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })
+                      : '₦ •••,•••.••'}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={handleToggleBalanceVisibility}
+                    hitSlop={8}
+                  >
+                    {isBalanceVisible ? (
+                      <EyeOff
+                        color={colors['grey-plain']['550']}
+                        size={16}
+                        strokeWidth={2}
+                      />
+                    ) : (
+                      <Eye
+                        color={colors['grey-plain']['550']}
+                        size={16}
+                        strokeWidth={2}
+                      />
+                    )}
+                  </TouchableOpacity>
+                </View>
+              </View>
+
+              {/* Action Buttons */}
+              <View className="mb-4 flex-row gap-3">
+                <View className="flex-1">
+                  <Button
+                    title="Fund wallet"
+                    onPress={handleFundWallet}
+                    variant="primary"
+                    iconLeft={
+                      <Plus color="#FFFFFF" size={20} strokeWidth={2.5} />
+                    }
+                    className="w-full"
+                  />
+                </View>
+                <View className="flex-1">
+                  <Button
+                    title="History"
+                    onPress={handleViewHistory}
+                    variant="outline"
+                    iconLeft={
+                      <History
+                        color={colors.primary.purple}
+                        size={20}
+                        strokeWidth={2}
+                      />
+                    }
+                    className="w-full"
+                  />
+                </View>
+              </View>
+
+              {/* KYC Status Alert */}
+              {!walletData.isKycVerified && (
+                <View className="items-center">
+                  <View
+                    className="flex-row items-center gap-2 rounded-full px-3 py-1.5"
+                    style={{ backgroundColor: colors['yellow-tint']['50'] }}
+                  >
+                    <BadgeInfo
+                      size={14}
+                      color={colors.yellow['50']}
+                      strokeWidth={2}
+                    />
+                    <Text className="text-xs font-medium text-grey-alpha-500">
+                      KYC not verified
+                    </Text>
+                  </View>
+                </View>
+              )}
             </View>
           </View>
 
-          {/* Rest of Content - On White Background */}
-          <View className="rounded-xl rounded-b-2xl bg-white px-6 pb-6 pt-4">
-            {/* Wallet Status */}
-            <View className="mb-3 flex-row items-center justify-between">
-              <View className="flex-row items-center gap-2">
-                <View className="size-2 rounded-full bg-state-green" />
-                <Text
-                  className="text-sm font-medium"
-                  style={{ color: colors.state.green }}
+          {/* Upgrade Wallet Button */}
+          <View className="mx-4 mt-4">
+            <TouchableOpacity onPress={handleUpgradeWallet} activeOpacity={0.8}>
+              <LinearGradient
+                colors={['#7538BA', '#CF2586']}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 0 }}
+                style={{
+                  borderRadius: 9999,
+                  padding: 2,
+                }}
+              >
+                <View
+                  className="flex-row items-center justify-between rounded-full p-4"
+                  style={{
+                    backgroundColor: colors['primary-tints'].purple['50'],
+                  }}
                 >
-                  {walletData.status}
+                  <View className="flex-row items-center gap-2">
+                    <UserCheck
+                      color={colors.primary.purple}
+                      size={20}
+                      strokeWidth={2}
+                    />
+                    <Text className="text-base font-semibold text-grey-alpha-500">
+                      Click to upgrade wallet
+                    </Text>
+                  </View>
+                  <ChevronRight
+                    color={colors['grey-alpha']['500']}
+                    size={20}
+                    strokeWidth={2}
+                  />
+                </View>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
+
+          {/* Wallet Actions Grid */}
+          <View className="mx-4 mt-6">
+            <View className="flex-row justify-between gap-3">
+              {/* Row 1 */}
+              <View className="flex-1 items-center gap-2">
+                <TouchableOpacity
+                  onPress={handleWithdraw}
+                  className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
+                  activeOpacity={0.7}
+                >
+                  <CircleArrowOutDownLeft
+                    color={colors['grey-alpha']['500']}
+                    size={24}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <Text className="text-xs font-medium text-grey-alpha-500">
+                  Withdraw
                 </Text>
               </View>
+
+              <View className="flex-1 items-center gap-2">
+                <TouchableOpacity
+                  onPress={handleBuyAirtime}
+                  className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
+                  activeOpacity={0.7}
+                >
+                  <ArrowUpDown
+                    color={colors['grey-alpha']['500']}
+                    size={24}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <Text className="text-xs font-medium text-grey-alpha-500">
+                  Buy airtime
+                </Text>
+              </View>
+
+              <View className="flex-1 items-center gap-2">
+                <TouchableOpacity
+                  onPress={handleBuyData}
+                  className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
+                  activeOpacity={0.7}
+                >
+                  <Wifi
+                    color={colors['grey-alpha']['500']}
+                    size={24}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <Text className="text-xs font-medium text-grey-alpha-500">
+                  Buy data
+                </Text>
+              </View>
+            </View>
+
+            {/* Row 2 */}
+            <View className="mt-6 flex-row justify-between gap-3">
+              <View className="flex-1 items-center gap-2">
+                <TouchableOpacity
+                  onPress={handlePayBills}
+                  className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
+                  activeOpacity={0.7}
+                >
+                  <ReceiptText
+                    color={colors['grey-alpha']['500']}
+                    size={24}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <Text className="text-xs font-medium text-grey-alpha-500">
+                  Pay bills
+                </Text>
+              </View>
+
+              <View className="flex-1 items-center gap-2">
+                <TouchableOpacity
+                  onPress={handleMoreActions}
+                  className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
+                  activeOpacity={0.7}
+                >
+                  <MoreVertical
+                    color={colors['grey-alpha']['500']}
+                    size={24}
+                    strokeWidth={2}
+                  />
+                </TouchableOpacity>
+                <Text className="text-xs font-medium text-grey-alpha-500">
+                  More
+                </Text>
+              </View>
+
+              {/* Empty space for alignment */}
+              <View className="flex-1" />
+            </View>
+          </View>
+
+          {/* Recent Transactions */}
+          <View className="mt-10 border-t border-grey-plain-300 px-4 pt-8">
+            {/* Section Header */}
+            <View className="mb-4 flex-row items-center justify-between">
+              <Text className="text-lg font-semibold text-grey-alpha-500">
+                Recent transactions
+              </Text>
               <TouchableOpacity
-                onPress={handleViewTier}
+                onPress={handleSeeAllTransactions}
                 className="flex-row items-center gap-1"
-                hitSlop={8}
               >
-                <Text className="text-sm font-medium text-grey-alpha-500">
-                  {walletData.tier}
+                <Text className="text-sm font-medium text-primary">
+                  See all
                 </Text>
                 <ChevronRight
-                  color={colors['grey-alpha']['500']}
+                  color={colors.primary.purple}
                   size={16}
                   strokeWidth={2}
                 />
               </TouchableOpacity>
             </View>
 
-            {/* User Name */}
-            <Text className="mb-2 text-base font-medium text-grey-alpha-500">
-              {walletData.userName}
-            </Text>
-
-            {/* Balances */}
-            <View className="mb-6">
-              <Text className="text-3xl font-bold text-grey-alpha-500">
-                {isBalanceVisible
-                  ? formatAmount(walletData.currentBalance, {
-                      minimumFractionDigits: 2,
-                      maximumFractionDigits: 2,
-                    })
-                  : '₦ •••,•••.••'}
-              </Text>
-              <View className="flex-row items-center gap-2">
-                <Text className="text-sm text-grey-plain-550">
-                  Book balance:{' '}
-                  {isBalanceVisible
-                    ? formatAmount(walletData.bookBalance, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })
-                    : '₦ •••,•••.••'}
-                </Text>
-                <TouchableOpacity
-                  onPress={handleToggleBalanceVisibility}
-                  hitSlop={8}
-                >
-                  {isBalanceVisible ? (
-                    <EyeOff
-                      color={colors['grey-plain']['550']}
-                      size={16}
-                      strokeWidth={2}
-                    />
-                  ) : (
-                    <Eye
-                      color={colors['grey-plain']['550']}
-                      size={16}
-                      strokeWidth={2}
-                    />
-                  )}
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Action Buttons */}
-            <View className="mb-4 flex-row gap-3">
-              <View className="flex-1">
-                <Button
-                  title="Fund wallet"
-                  onPress={handleFundWallet}
-                  variant="primary"
-                  iconLeft={
-                    <Plus color="#FFFFFF" size={20} strokeWidth={2.5} />
-                  }
-                  className="w-full"
+            {/* Search and Filter */}
+            <View className="mb-4 flex-row items-center gap-3">
+              <View className="flex-1 flex-row items-center gap-3 rounded-full border border-grey-plain-300 bg-white px-4 py-3">
+                <Search
+                  size={20}
+                  color={colors['grey-alpha']['400']}
+                  strokeWidth={2}
+                />
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  placeholder="Search by title or description"
+                  placeholderTextColor={colors['grey-alpha']['400']}
+                  className="flex-1 text-base text-grey-alpha-500"
+                  style={{ fontSize: 16 }}
                 />
               </View>
-              <View className="flex-1">
-                <Button
-                  title="History"
-                  onPress={handleViewHistory}
-                  variant="outline"
-                  iconLeft={
-                    <History
-                      color={colors.primary.purple}
-                      size={20}
-                      strokeWidth={2}
-                    />
-                  }
-                  className="w-full"
-                />
-              </View>
-            </View>
-
-            {/* KYC Status Alert */}
-            {!walletData.isKycVerified && (
-              <View className="items-center">
-                <View
-                  className="flex-row items-center gap-2 rounded-full px-3 py-1.5"
-                  style={{ backgroundColor: colors['yellow-tint']['50'] }}
-                >
-                  <BadgeInfo
-                    size={14}
-                    color={colors.yellow['50']}
-                    strokeWidth={2}
-                  />
-                  <Text className="text-xs font-medium text-grey-alpha-500">
-                    KYC not verified
-                  </Text>
-                </View>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Upgrade Wallet Button */}
-        <View className="mx-4 mt-4">
-          <TouchableOpacity onPress={handleUpgradeWallet} activeOpacity={0.8}>
-            <LinearGradient
-              colors={['#7538BA', '#CF2586']}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 0 }}
-              style={{
-                borderRadius: 9999,
-                padding: 2,
-              }}
-            >
-              <View
-                className="flex-row items-center justify-between rounded-full p-4"
-                style={{
-                  backgroundColor: colors['primary-tints'].purple['50'],
-                }}
+              <TouchableOpacity
+                onPress={handleFilterTransactions}
+                className="size-12 items-center justify-center rounded-xl border border-grey-plain-300 bg-white"
+                activeOpacity={0.7}
               >
-                <View className="flex-row items-center gap-2">
-                  <UserCheck
-                    color={colors.primary.purple}
-                    size={20}
-                    strokeWidth={2}
-                  />
-                  <Text className="text-base font-semibold text-grey-alpha-500">
-                    Click to upgrade wallet
-                  </Text>
-                </View>
-                <ChevronRight
+                <SlidersHorizontal
                   color={colors['grey-alpha']['500']}
                   size={20}
                   strokeWidth={2}
                 />
-              </View>
-            </LinearGradient>
-          </TouchableOpacity>
-        </View>
-
-        {/* Wallet Actions Grid */}
-        <View className="mx-4 mt-6">
-          <View className="flex-row justify-between gap-3">
-            {/* Row 1 */}
-            <View className="flex-1 items-center gap-2">
-              <TouchableOpacity
-                onPress={handleWithdraw}
-                className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
-                activeOpacity={0.7}
-              >
-                <CircleArrowOutDownLeft
-                  color={colors['grey-alpha']['500']}
-                  size={24}
-                  strokeWidth={2}
-                />
               </TouchableOpacity>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                Withdraw
-              </Text>
             </View>
 
-            <View className="flex-1 items-center gap-2">
-              <TouchableOpacity
-                onPress={handleBuyAirtime}
-                className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
-                activeOpacity={0.7}
-              >
-                <ArrowUpDown
-                  color={colors['grey-alpha']['500']}
-                  size={24}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                Buy airtime
-              </Text>
-            </View>
-
-            <View className="flex-1 items-center gap-2">
-              <TouchableOpacity
-                onPress={handleBuyData}
-                className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
-                activeOpacity={0.7}
-              >
-                <Wifi
-                  color={colors['grey-alpha']['500']}
-                  size={24}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                Buy data
-              </Text>
-            </View>
-          </View>
-
-          {/* Row 2 */}
-          <View className="mt-6 flex-row justify-between gap-3">
-            <View className="flex-1 items-center gap-2">
-              <TouchableOpacity
-                onPress={handlePayBills}
-                className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
-                activeOpacity={0.7}
-              >
-                <ReceiptText
-                  color={colors['grey-alpha']['500']}
-                  size={24}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                Pay bills
-              </Text>
-            </View>
-
-            <View className="flex-1 items-center gap-2">
-              <TouchableOpacity
-                onPress={handleMoreActions}
-                className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
-                activeOpacity={0.7}
-              >
-                <MoreVertical
-                  color={colors['grey-alpha']['500']}
-                  size={24}
-                  strokeWidth={2}
-                />
-              </TouchableOpacity>
-              <Text className="text-xs font-medium text-grey-alpha-500">
-                More
-              </Text>
-            </View>
-
-            {/* Empty space for alignment */}
-            <View className="flex-1" />
-          </View>
-        </View>
-
-        {/* Recent Transactions */}
-        <View className="mt-10 border-t border-grey-plain-300 px-4 pt-8">
-          {/* Section Header */}
-          <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-lg font-semibold text-grey-alpha-500">
-              Recent transactions
+            {/* Today Section */}
+            <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
+              Today
             </Text>
-            <TouchableOpacity
-              onPress={handleSeeAllTransactions}
-              className="flex-row items-center gap-1"
-            >
-              <Text className="text-sm font-medium text-primary">See all</Text>
-              <ChevronRight
-                color={colors.primary.purple}
-                size={16}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          </View>
 
-          {/* Search and Filter */}
-          <View className="mb-4 flex-row items-center gap-3">
-            <View className="flex-1 flex-row items-center gap-3 rounded-full border border-grey-plain-300 bg-white px-4 py-3">
-              <Search
-                size={20}
-                color={colors['grey-alpha']['400']}
-                strokeWidth={2}
-              />
-              <TextInput
-                value={searchQuery}
-                onChangeText={setSearchQuery}
-                placeholder="Search by title or description"
-                placeholderTextColor={colors['grey-alpha']['400']}
-                className="flex-1 text-base text-grey-alpha-500"
-                style={{ fontSize: 16 }}
-              />
-            </View>
-            <TouchableOpacity
-              onPress={handleFilterTransactions}
-              className="size-12 items-center justify-center rounded-xl border border-grey-plain-300 bg-white"
-              activeOpacity={0.7}
-            >
-              <SlidersHorizontal
-                color={colors['grey-alpha']['500']}
-                size={20}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          </View>
+            {/* Transaction List */}
+            <View className="gap-3 pb-4">
+              {transactions.map((transaction) => (
+                <TouchableOpacity
+                  key={transaction.id}
+                  onPress={() => handleTransactionPress(transaction.id)}
+                  className="rounded-xl border border-grey-plain-300 bg-white p-4"
+                  activeOpacity={0.7}
+                >
+                  <View className="flex-row gap-3">
+                    {/* Transaction Icon */}
+                    {renderTransactionIcon(transaction.type)}
 
-          {/* Today Section */}
-          <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
-            Today
-          </Text>
-
-          {/* Transaction List */}
-          <View className="gap-3 pb-4">
-            {transactions.map((transaction) => (
-              <TouchableOpacity
-                key={transaction.id}
-                onPress={() => handleTransactionPress(transaction.id)}
-                className="rounded-xl border border-grey-plain-300 bg-white p-4"
-                activeOpacity={0.7}
-              >
-                <View className="flex-row gap-3">
-                  {/* Transaction Icon */}
-                  {renderTransactionIcon(transaction.type)}
-
-                  {/* Transaction Details */}
-                  <View className="flex-1">
-                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
-                      {transaction.title}
-                    </Text>
-                    <Text className="mb-1 text-sm text-grey-plain-550">
-                      {transaction.description}
-                    </Text>
-                    <Text className="text-xs text-grey-plain-550">
-                      {transaction.timestamp}
-                    </Text>
-                  </View>
-
-                  {/* Amount and Status */}
-                  <View className="items-end">
-                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
-                      {formatAmount(transaction.amount)}
-                    </Text>
-                    <View
-                      className="rounded-full px-2 py-0.5"
-                      style={{ backgroundColor: colors['green-tint']['200'] }}
-                    >
-                      <Text
-                        className="text-xs font-semibold"
-                        style={{ color: colors.state.green }}
-                      >
-                        Success
+                    {/* Transaction Details */}
+                    <View className="flex-1">
+                      <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                        {transaction.title}
+                      </Text>
+                      <Text className="mb-1 text-sm text-grey-plain-550">
+                        {transaction.description}
+                      </Text>
+                      <Text className="text-xs text-grey-plain-550">
+                        {transaction.timestamp}
                       </Text>
                     </View>
+
+                    {/* Amount and Status */}
+                    <View className="items-end">
+                      <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                        {formatAmount(transaction.amount)}
+                      </Text>
+                      <View
+                        className="rounded-full px-2 py-0.5"
+                        style={{ backgroundColor: colors['green-tint']['200'] }}
+                      >
+                        <Text
+                          className="text-xs font-semibold"
+                          style={{ color: colors.state.green }}
+                        >
+                          Success
+                        </Text>
+                      </View>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
-            ))}
+                </TouchableOpacity>
+              ))}
+            </View>
           </View>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      ) : (
+        <ScrollView
+          className="flex-1 bg-white"
+          contentContainerStyle={{
+            flexGrow: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingBottom: bottomPadding,
+            paddingHorizontal: 32,
+          }}
+          showsVerticalScrollIndicator={false}
+        >
+          <View className="items-center">
+            <WalletIllustration width={140} height={120} />
+            <Text className="mt-6 text-lg font-semibold text-grey-alpha-500">
+              Wallet not activated
+            </Text>
+            <Text className="mt-2 text-center text-sm text-grey-plain-550">
+              Activating your wallet will allow you offer and receive monetary
+              lifts.
+            </Text>
+            <View className="mt-6 w-full">
+              <Button
+                title="Activate wallet"
+                onPress={handleActivateWallet}
+                variant="primary"
+                className="w-full"
+              />
+            </View>
+          </View>
+        </ScrollView>
+      )}
 
       {/* Success Bottom Sheet */}
       <WalletSuccessBottomSheet

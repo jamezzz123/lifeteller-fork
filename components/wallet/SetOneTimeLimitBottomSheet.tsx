@@ -1,9 +1,19 @@
 import React, { useState, forwardRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+} from 'react-native';
 import { Check } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { formatAmount } from '@/utils/formatAmount';
+import {
+  formatCurrencyInput,
+  parseCurrencyInput,
+} from '@/utils/formatCurrencyInput';
 import {
   BottomSheetComponent,
   BottomSheetRef,
@@ -33,22 +43,17 @@ export const SetOneTimeLimitBottomSheet = forwardRef<
   const handleSelectAmount = (amount: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedAmount(amount);
-    setCustomAmount('');
+    setCustomAmount(String(amount));
   };
 
   const handleCustomAmountChange = (text: string) => {
-    // Remove non-numeric characters
-    const numericValue = text.replace(/[^0-9]/g, '');
+    const numericValue = parseCurrencyInput(text);
     setCustomAmount(numericValue);
-    if (numericValue) {
-      setSelectedAmount(null);
-    }
+    setSelectedAmount(null);
   };
 
   const handleDone = () => {
-    const amount = customAmount
-      ? parseInt(customAmount, 10)
-      : selectedAmount;
+    const amount = customAmount ? parseInt(customAmount, 10) : selectedAmount;
 
     if (!amount || amount <= 0) {
       // TODO: Show error message
@@ -59,13 +64,8 @@ export const SetOneTimeLimitBottomSheet = forwardRef<
     onDone(amount);
   };
 
-  const displayAmount = customAmount
-    ? formatAmount(parseInt(customAmount, 10) || 0)
-    : selectedAmount
-      ? formatAmount(selectedAmount)
-      : '₦';
-
-  const isDoneEnabled = selectedAmount !== null || (customAmount && parseInt(customAmount, 10) > 0);
+  const isDoneEnabled =
+    selectedAmount !== null || (customAmount && parseInt(customAmount, 10) > 0);
 
   return (
     <BottomSheetComponent ref={ref} snapPoints={['90%']} onClose={onClose}>
@@ -85,20 +85,16 @@ export const SetOneTimeLimitBottomSheet = forwardRef<
               Amount
             </Text>
             <View className="flex-row items-center border-b border-grey-plain-300 pb-3">
-              <Text className="text-2xl font-bold text-grey-alpha-500">
-                {displayAmount}
-              </Text>
-              {!selectedAmount && (
-                <TextInput
-                  value={customAmount}
-                  onChangeText={handleCustomAmountChange}
-                  placeholder="0"
-                  placeholderTextColor={colors['grey-alpha']['250']}
-                  keyboardType="numeric"
-                  className="ml-2 flex-1 text-2xl font-bold text-grey-alpha-500"
-                  autoFocus={false}
-                />
-              )}
+              <Text className="text-2xl font-bold text-grey-alpha-500">₦</Text>
+              <TextInput
+                value={formatCurrencyInput(customAmount)}
+                onChangeText={handleCustomAmountChange}
+                placeholder="0"
+                placeholderTextColor={colors['grey-alpha']['250']}
+                keyboardType="numeric"
+                className="ml-2 flex-1 text-2xl font-bold text-grey-alpha-500"
+                autoFocus={false}
+              />
             </View>
           </View>
 
@@ -129,9 +125,7 @@ export const SetOneTimeLimitBottomSheet = forwardRef<
                     )}
                     <Text
                       className={`text-sm font-medium ${
-                        isSelected
-                          ? 'text-primary'
-                          : 'text-grey-alpha-450'
+                        isSelected ? 'text-primary' : 'text-grey-alpha-450'
                       }`}
                     >
                       {formatAmount(amount)}

@@ -95,7 +95,7 @@ export function VisibilitySelector({
       )}
       <TouchableOpacity
         onPress={onPress}
-        className="flex-row items-center rounded-2xl bg-grey-plain-100 px-4 py-3"
+        className="flex-row items-center rounded-full bg-grey-plain-100 px-4 py-3"
         activeOpacity={0.7}
       >
         {/* Icon */}
