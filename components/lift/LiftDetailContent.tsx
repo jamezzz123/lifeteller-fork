@@ -162,7 +162,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
               activeOpacity={post.userId ? 0.7 : 1}
             >
               <View className="mb-0.5 flex-row items-center gap-1.5">
-                <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                   {post.username}
                 </Text>
                 <BadgeCheck color={colors.primary.purple} size={16} />
@@ -170,7 +170,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                   post.otherUsersCount > 0 && (
                     <Text className="text-[13px] text-grey-plain-550">
                       and{' '}
-                      <Text className="font-semibold">
+                      <Text className="font-inter-semibold">
                         +{post.otherUsersCount}
                       </Text>{' '}
                       others
@@ -205,7 +205,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
             {post.lift.category && (
               <View className="bg-primary-purple/10 flex-row items-center gap-1.5 rounded-full py-1.5 pr-3">
                 <Tag color={colors.primary.purple} size={14} />
-                <Text className="text-primary-purple text-[13px] font-medium">
+                <Text className="text-primary-purple text-[13px] font-inter-medium">
                   {post.lift.category}
                 </Text>
               </View>
@@ -233,7 +233,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
         )}
 
         {post.lift && (
-          <Text className="mb-3 text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-3 text-xl font-inter-bold text-grey-alpha-500">
             {post.lift.title}
           </Text>
         )}
@@ -261,7 +261,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                 onPress={() => setIsExpanded(true)}
                 className="mt-1"
               >
-                <Text className="text-primary-purple text-[15px] font-medium">
+                <Text className="text-primary-purple text-[15px] font-inter-medium">
                   see more
                 </Text>
               </TouchableOpacity>
@@ -337,8 +337,8 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
               overlap={16}
             />
             <Text className="text-[13px] text-grey-plain-550">
-              Lifted by <Text className="font-semibold">Seyi Makinde</Text> and{' '}
-              <Text className="font-semibold">15 others</Text>
+              Lifted by <Text className="font-inter-semibold">Seyi Makinde</Text> and{' '}
+              <Text className="font-inter-semibold">15 others</Text>
             </Text>
           </View>
           <ArrowRight color={colors.primary.purple} size={16} />
@@ -349,7 +349,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
       {post.type === 'lift' && (
         <View className="border-t border-grey-plain-150 bg-white px-4 py-4">
           {/* Header */}
-          <Text className="mb-4 text-xs font-medium uppercase tracking-wider text-grey-plain-550">
+          <Text className="mb-4 text-xs font-inter-medium uppercase tracking-wider text-grey-plain-550">
             RAISED BY
           </Text>
 
@@ -403,7 +403,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
               {/* User Info */}
               <View className="flex-1 justify-center">
                 <View className="mb-0.5 flex-row items-center gap-1.5">
-                  <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                  <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                     {post.username}
                   </Text>
                   <BadgeCheck color={colors.primary.purple} size={16} />
@@ -426,7 +426,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
               </Text>
               <View className="flex-row items-center gap-1.5">
                 <Medal color={colors.primary.purple} size={14} />
-                <Text className="text-[14px] font-semibold text-grey-alpha-500">
+                <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
                   Lift Captain
                 </Text>
               </View>
@@ -438,7 +438,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                 <Text className="mb-1 px-2 text-xs text-grey-plain-550">
                   Total Lifts
                 </Text>
-                <Text className="rounded bg-white px-2 py-1 text-2xl font-bold text-grey-alpha-500">
+                <Text className="rounded bg-white px-2 py-1 text-2xl font-inter-bold text-grey-alpha-500">
                   24
                 </Text>
               </View>
@@ -446,7 +446,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                 <Text className="mb-1 px-2 text-xs text-grey-plain-550">
                   Total Lift Raised
                 </Text>
-                <Text className="rounded bg-white px-2 py-1 text-2xl font-bold text-grey-alpha-500">
+                <Text className="rounded bg-white px-2 py-1 text-2xl font-inter-bold text-grey-alpha-500">
                   24
                 </Text>
               </View>
@@ -456,7 +456,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
             <View className="mb-3">
               <Text className="text-[12px] text-grey-alpha-500">
                 <Text>1,324 Following</Text>
-                <Text className="font-semibold"> 48.2k Followers</Text>
+                <Text className="font-inter-semibold"> 48.2k Followers</Text>
               </Text>
             </View>
 
@@ -473,10 +473,10 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                 overlap={16}
               />
               <Text className="flex-1 text-[13px] text-grey-plain-550">
-                Followed by <Text className="font-semibold">dareytemy</Text>,{' '}
-                <Text className="font-semibold">donJazzy</Text>,{' '}
-                <Text className="font-semibold">Olamibest</Text>, and{' '}
-                <Text className="font-semibold">21 others</Text>
+                Followed by <Text className="font-inter-semibold">dareytemy</Text>,{' '}
+                <Text className="font-inter-semibold">donJazzy</Text>,{' '}
+                <Text className="font-inter-semibold">Olamibest</Text>, and{' '}
+                <Text className="font-inter-semibold">21 others</Text>
               </Text>
             </View>
           </View>
@@ -488,11 +488,11 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
         <View className="border-t border-grey-plain-150 bg-white px-4 py-4">
           {/* Header */}
           <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-xs font-semibold uppercase tracking-wider text-grey-alpha-500">
-              LIFTED BY <Text className="font-normal">(12)</Text>
+            <Text className="text-xs font-inter-semibold uppercase tracking-wider text-grey-alpha-500">
+              LIFTED BY <Text className="font-inter">(12)</Text>
             </Text>
             <TouchableOpacity>
-              <Text className="text-[13px] font-medium text-primary">
+              <Text className="text-[13px] font-inter-medium text-primary">
                 See more
               </Text>
             </TouchableOpacity>
@@ -593,7 +593,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
                     {/* User Info */}
                     <View className="flex-1">
                       <View className="mb-0.5 flex-row items-center gap-1.5">
-                        <Text className="text-[14px] font-semibold text-grey-alpha-500">
+                        <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
                           {contributor.username}
                         </Text>
                         <BadgeCheck color={colors.primary.purple} size={14} />
@@ -611,7 +611,7 @@ export function LiftDetailContent({ post }: LiftDetailContentProps) {
 
                     {/* Amount */}
                     <View className="rounded-full bg-grey-plain-150 px-3 py-1.5">
-                      <Text className="text-[14px] font-semibold text-grey-alpha-500">
+                      <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
                         {formattedAmount}
                       </Text>
                     </View>

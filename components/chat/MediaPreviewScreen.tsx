@@ -99,7 +99,7 @@ export function MediaPreviewScreen({
           {/* Cancel Bar - White bar below status bar */}
           <View className="bg-white px-6 py-4">
             <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
-              <Text className="text-base font-medium text-grey-alpha-500">
+              <Text className="text-base font-inter-medium text-grey-alpha-500">
                 Cancel
               </Text>
             </TouchableOpacity>
@@ -129,7 +129,7 @@ export function MediaPreviewScreen({
                 className="absolute right-4 top-4 rounded-lg px-3 py-1.5"
                 style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
               >
-                <Text className="text-sm font-medium text-white">
+                <Text className="text-sm font-inter-medium text-white">
                   {currentIndex + 1} of {media.length}
                 </Text>
               </View>

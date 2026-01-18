@@ -108,7 +108,7 @@ export default function VerifyOTPPage() {
       <View className="flex-1 px-6">
         {/* Header */}
         <View className="mb-6 flex-row items-center justify-between py-4">
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Verify yourself
           </Text>
           <TouchableOpacity onPress={handleClose} className="p-1">
@@ -119,7 +119,7 @@ export default function VerifyOTPPage() {
         {/* Description */}
         <Text className="mb-6 text-sm leading-5 text-grey-alpha-400">
           Enter the OTP sent to your mobile number{' '}
-          <Text className="font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-grey-alpha-500">
             {phoneNumber}
           </Text>
           .
@@ -138,7 +138,7 @@ export default function VerifyOTPPage() {
               onKeyPress={(e) => handleKeyPress(e, index)}
               keyboardType="number-pad"
               maxLength={1}
-              className={`flex-1 rounded-lg border-2 bg-grey-plain-50 py-4 text-center text-xl font-semibold text-grey-alpha-500 ${
+              className={`flex-1 rounded-lg border-2 bg-grey-plain-50 py-4 text-center text-xl font-inter-semibold text-grey-alpha-500 ${
                 otp[index] ? 'border-primary' : 'border-grey-alpha-250'
               }`}
               style={{
@@ -151,7 +151,7 @@ export default function VerifyOTPPage() {
         {/* Clear & Resend */}
         <View className="mb-8 flex-row items-center justify-between">
           <Pressable onPress={handleClearInput}>
-            <Text className="text-sm font-medium text-grey-alpha-500">
+            <Text className="text-sm font-inter-medium text-grey-alpha-500">
               Clear input
             </Text>
           </Pressable>
@@ -171,7 +171,7 @@ export default function VerifyOTPPage() {
               strokeWidth={2}
             />
             <Text
-              className={`text-sm font-medium ${
+              className={`text-sm font-inter-medium ${
                 timeLeft > 0 ? 'text-grey-alpha-400' : 'text-primary'
               }`}
             >

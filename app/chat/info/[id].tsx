@@ -81,7 +81,7 @@ export default function ChatInfoScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Chat info
         </Text>
       </View>
@@ -116,7 +116,7 @@ export default function ChatInfoScreen() {
                   }}
                 >
                   <Text
-                    className="text-2xl font-bold"
+                    className="text-2xl font-inter-bold"
                     style={{ color: colors.primary.purple }}
                   >
                     {contact.name
@@ -140,7 +140,7 @@ export default function ChatInfoScreen() {
 
           {/* Name with Verified Badge */}
           <View className="mb-2 flex-row items-center gap-2">
-            <Text className="text-2xl font-bold text-grey-alpha-500">
+            <Text className="text-2xl font-inter-bold text-grey-alpha-500">
               {contact.name}
             </Text>
             {contact.verified && (
@@ -157,20 +157,20 @@ export default function ChatInfoScreen() {
           <View className="mb-6 w-full flex-row flex-wrap gap-3">
             {/* Lifts Card */}
             <View className="flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]">
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                 {userStats.lifts.toLocaleString()}
               </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
+              <Text className="text-xs font-inter-medium text-grey-plain-550">
                 Lifts
               </Text>
             </View>
 
             {/* Posts Card */}
             <View className="flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]">
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                 {userStats.posts.toLocaleString()}
               </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
+              <Text className="text-xs font-inter-medium text-grey-plain-550">
                 Posts
               </Text>
             </View>
@@ -197,10 +197,10 @@ export default function ChatInfoScreen() {
                   strokeWidth={2.5}
                 />
               </View>
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                 {userStats.following.toLocaleString()}
               </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
+              <Text className="text-xs font-inter-medium text-grey-plain-550">
                 Following
               </Text>
             </TouchableOpacity>
@@ -227,10 +227,10 @@ export default function ChatInfoScreen() {
                   strokeWidth={2.5}
                 />
               </View>
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                 {(userStats.followers / 1000).toFixed(1)}k
               </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
+              <Text className="text-xs font-inter-medium text-grey-plain-550">
                 Followers
               </Text>
             </TouchableOpacity>
@@ -248,7 +248,7 @@ export default function ChatInfoScreen() {
 
         {/* Settings Section */}
         <View className="mx-4 mt-6 rounded-2xl p-2" style={{ backgroundColor: colors['grey-plain']['150'] }}>
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Settings
           </Text>
 
@@ -266,7 +266,7 @@ export default function ChatInfoScreen() {
                 />
               </View>
               <View className="flex-1">
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="text-base font-inter-medium text-grey-alpha-500">
                   Notifications
                 </Text>
                 <Text className="text-sm text-grey-plain-550">
@@ -304,7 +304,7 @@ export default function ChatInfoScreen() {
             </View>
             <View className="flex-1">
               <Text
-                className="text-base font-medium"
+                className="text-base font-inter-medium"
                 style={{ color: colors.state.red }}
               >
                 Block user
@@ -336,7 +336,7 @@ export default function ChatInfoScreen() {
             </View>
             <View className="flex-1">
               <Text
-                className="text-base font-medium"
+                className="text-base font-inter-medium"
                 style={{ color: colors.state.red }}
               >
                 Delete conversation

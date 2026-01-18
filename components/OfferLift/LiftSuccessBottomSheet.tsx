@@ -32,14 +32,14 @@ export const LiftSuccessBottomSheet = forwardRef<
         </View>
 
         {/* Title */}
-        <Text className="mb-3 text-center text-2xl font-bold text-grey-alpha-500">
+        <Text className="mb-3 text-center text-2xl font-inter-bold text-grey-alpha-500">
           Lift successfully sent
         </Text>
 
         {/* Description */}
         <Text className="mb-8 text-center text-base leading-6 text-grey-alpha-400">
           Your lift has been sent to{' '}
-          <Text className="font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-grey-alpha-500">
             {recipientName}
           </Text>
           , and we have credited their lift wallet.

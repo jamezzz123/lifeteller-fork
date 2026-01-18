@@ -177,7 +177,7 @@ export function MediaSelectionScreen({
               className="absolute right-2 top-2 size-6 items-center justify-center rounded-full"
               style={{ backgroundColor: colors.primary.purple }}
             >
-              <Text className="text-xs font-semibold text-white">
+              <Text className="text-xs font-inter-semibold text-white">
                 {selectionIndex}
               </Text>
             </View>
@@ -207,7 +207,7 @@ export function MediaSelectionScreen({
       <SafeAreaView className="flex-1 bg-white" edges={['top']}>
         {/* Header */}
         <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Image Selection
           </Text>
           <TouchableOpacity onPress={onClose} className="p-1">
@@ -238,7 +238,7 @@ export function MediaSelectionScreen({
         <View className="bg-white px-4 py-3">
           <Text className="text-sm text-grey-alpha-500">
             You can select up to{' '}
-            <Text className="font-semibold">{maxSelection}</Text> media (images
+            <Text className="font-inter-semibold">{maxSelection}</Text> media (images
             and videos)
           </Text>
         </View>
@@ -310,7 +310,7 @@ export function MediaSelectionScreen({
         {selectedMedia.length > 0 && (
           <View className="absolute bottom-0 left-0 right-0 border-t border-grey-plain-150 bg-white px-4 py-4">
             <View className="flex-row items-center justify-between">
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 {selectedMedia.length} media selected
               </Text>
               <Button

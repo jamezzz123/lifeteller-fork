@@ -65,7 +65,7 @@ export const EnterAmountBottomSheet = forwardRef<
         scrollable
       >
         <View className="px-4 pb-6">
-          <Text className="mb-6 text-lg font-bold text-grey-alpha-500">
+          <Text className="mb-6 text-lg font-inter-bold text-grey-alpha-500">
             {title}
           </Text>
           <Text className="mb-4 text-sm text-grey-alpha-400">{hintText}</Text>
@@ -98,7 +98,7 @@ export const EnterAmountBottomSheet = forwardRef<
                   onPress={() => handleQuickAmount(value)}
                   className="flex-1 items-center rounded-lg bg-grey-plain-150 py-3"
                 >
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {enableFormattedDisplay ? formatCurrency(value) : value}
                   </Text>
                 </TouchableOpacity>
@@ -112,7 +112,7 @@ export const EnterAmountBottomSheet = forwardRef<
                   onPress={() => handleQuickAmount(value)}
                   className="flex-1 items-center rounded-lg bg-grey-plain-150 py-3"
                 >
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {enableFormattedDisplay ? formatCurrency(value) : value}
                   </Text>
                 </TouchableOpacity>

@@ -300,7 +300,7 @@ export default function Step2Screen() {
                 style={{ width: 16, height: 16 }}
                 contentFit="contain"
               />
-              <Text className="text-sm font-medium text-grey-alpha-500">
+              <Text className="text-sm font-inter-medium text-grey-alpha-500">
                 Help me write
               </Text>
             </TouchableOpacity>
@@ -325,10 +325,10 @@ export default function Step2Screen() {
                   accessibilityLabel="Edit lift details"
                 >
                   <View className="flex-1">
-                    <Text className="text-xs font-semibold text-grey-alpha-400">
+                    <Text className="text-xs font-inter-semibold text-grey-alpha-400">
                       Monetary and Non-monetary lift
                     </Text>
-                    <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
+                    <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
                       ₦{liftAmount.toLocaleString()} · {nonMonetarySummary}
                     </Text>
                   </View>
@@ -349,10 +349,10 @@ export default function Step2Screen() {
                       accessibilityLabel="Edit monetary lift amount"
                     >
                       <View className="flex-1">
-                        <Text className="text-xs font-semibold text-grey-alpha-400">
+                        <Text className="text-xs font-inter-semibold text-grey-alpha-400">
                           Monetary lift
                         </Text>
-                        <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
+                        <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
                           ₦{liftAmount.toLocaleString()}
                         </Text>
                       </View>
@@ -372,10 +372,10 @@ export default function Step2Screen() {
                       accessibilityLabel="Edit non-monetary lift items"
                     >
                       <View className="flex-1">
-                        <Text className="text-xs font-semibold text-grey-alpha-400">
+                        <Text className="text-xs font-inter-semibold text-grey-alpha-400">
                           Non-monetary lift
                         </Text>
-                        <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
+                        <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
                           {nonMonetarySummary || 'Add items'}
                         </Text>
                       </View>
@@ -397,7 +397,7 @@ export default function Step2Screen() {
               <View>
                 {/* Media Header */}
                 <View className="mb-3 flex-row items-center justify-between">
-                  <Text className="text-sm font-semibold text-grey-alpha-500">
+                  <Text className="text-sm font-inter-semibold text-grey-alpha-500">
                     {selectedMedia.length} media added
                   </Text>
                   <View className="flex-row items-center gap-4">
@@ -455,7 +455,7 @@ export default function Step2Screen() {
                   style={{ width: 40, height: 40 }}
                   contentFit="contain"
                 />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="text-base font-inter-medium text-grey-alpha-500">
                   Add Photos/Videos
                 </Text>
               </TouchableOpacity>

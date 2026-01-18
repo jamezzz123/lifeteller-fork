@@ -152,7 +152,7 @@ export default function OnboardingLoadingScreen() {
 
         {/* Content */}
         <View className="mt-16 flex-1">
-          <Text className="text-xl font-bold text-grey-alpha-500">
+          <Text className="text-xl font-inter-bold text-grey-alpha-500">
             Please be patient while we set up your profile
           </Text>
 
@@ -226,7 +226,7 @@ export default function OnboardingLoadingScreen() {
                 }}
               />
             </View>
-            <Text className="mt-3 text-center text-base font-medium text-grey-alpha-400">
+            <Text className="mt-3 text-center text-base font-inter-medium text-grey-alpha-400">
               {Math.round(progress)}%
             </Text>
           </View>

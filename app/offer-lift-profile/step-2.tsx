@@ -135,7 +135,7 @@ export default function Step2Screen() {
         >
           {/* Selected Recipient */}
           <View className="mt-5 px-4">
-            <Text className="text-sm font-semibold text-grey-alpha-450">
+            <Text className="text-sm font-inter-semibold text-grey-alpha-450">
               Offer to:
             </Text>
 
@@ -194,7 +194,7 @@ export default function Step2Screen() {
 
           {/* Amount Input */}
           <View className="mt-6 px-4">
-            <Text className="mb-3 text-sm font-semibold text-grey-alpha-450">
+            <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-450">
               Amount
             </Text>
             <MaterialInput
@@ -224,7 +224,7 @@ export default function Step2Screen() {
                   strokeWidth={2}
                 />
                 <View className="flex-1">
-                  <Text className="text-base font-semibold text-grey-alpha-500">
+                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
                     Offer lift anonymously
                   </Text>
                   <Text className="mt-1 text-sm text-grey-alpha-400">

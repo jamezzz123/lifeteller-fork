@@ -79,7 +79,7 @@ export const PasscodeBottomSheet = forwardRef<
       <BottomSheetComponent ref={ref}>
         <View className="px-6 pb-6">
           {/* Title */}
-          <Text className="mb-6 text-center text-lg font-semibold text-grey-alpha-500">
+          <Text className="mb-6 text-center text-lg font-inter-semibold text-grey-alpha-500">
             {title || defaultTitle}
           </Text>
 
@@ -123,7 +123,7 @@ export const PasscodeBottomSheet = forwardRef<
               onPress={onForgotPasscode}
               className="mb-6 items-center"
             >
-              <Text className="text-sm font-medium text-grey-alpha-500 underline">
+              <Text className="text-sm font-inter-medium text-grey-alpha-500 underline">
                 Forgot passcode?
               </Text>
             </Pressable>
@@ -141,7 +141,7 @@ export const PasscodeBottomSheet = forwardRef<
                     className="flex-1 items-center rounded-full bg-grey-alpha-150 py-5"
                     activeOpacity={0.7}
                   >
-                    <Text className="text-2xl font-semibold text-grey-alpha-500">
+                    <Text className="text-2xl font-inter-semibold text-grey-alpha-500">
                       {num}
                     </Text>
                   </TouchableOpacity>
@@ -175,7 +175,7 @@ export const PasscodeBottomSheet = forwardRef<
                 className="flex-1 items-center rounded-full bg-grey-alpha-150 py-5"
                 activeOpacity={0.7}
               >
-                <Text className="text-2xl font-semibold text-grey-alpha-500">
+                <Text className="text-2xl font-inter-semibold text-grey-alpha-500">
                   0
                 </Text>
               </TouchableOpacity>

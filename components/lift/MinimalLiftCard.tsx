@@ -22,7 +22,7 @@ export function MinimalLiftCard({
       <View className="mb-4 flex-row items-start justify-between">
         {/* Left Side - Amount Raised */}
         <View className="flex-1">
-          <Text className="text-2xl font-bold text-grey-alpha-500">
+          <Text className="text-2xl font-inter-bold text-grey-alpha-500">
             {formattedCurrent}
           </Text>
           <Text className="mt-1 text-sm text-grey-plain-550">
@@ -32,7 +32,7 @@ export function MinimalLiftCard({
 
         {/* Right Side - Percentage */}
         <View className="items-end">
-          <Text className="text-2xl font-bold text-grey-alpha-500">
+          <Text className="text-2xl font-inter-bold text-grey-alpha-500">
             {Math.round(progress)}%
           </Text>
           <Text className="mt-1 text-sm text-grey-plain-550">funded</Text>

@@ -71,7 +71,7 @@ export function InflowOutflowChart({
             right: chartSize / 2 - chartRadius + 10, // Position on the ring
           }}
         >
-          <Text className="text-xs font-semibold text-grey-alpha-500">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-500">
             {roundedInflowPercentage}%
           </Text>
         </View>
@@ -85,7 +85,7 @@ export function InflowOutflowChart({
             left: chartSize / 2 - chartRadius + 10, // Position on the ring
           }}
         >
-          <Text className="text-xs font-semibold text-grey-alpha-500">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-500">
             {roundedOutflowPercentage}%
           </Text>
         </View>
@@ -101,7 +101,7 @@ export function InflowOutflowChart({
           />
           <View className="flex-1">
             <Text className="text-sm text-grey-plain-550">Total inflow</Text>
-            <Text className="text-base font-bold text-grey-alpha-500">
+            <Text className="text-base font-inter-bold text-grey-alpha-500">
               {formatAmount(totalInflow, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -118,7 +118,7 @@ export function InflowOutflowChart({
           />
           <View className="flex-1">
             <Text className="text-sm text-grey-plain-550">Total outflow</Text>
-            <Text className="text-base font-bold text-grey-alpha-500">
+            <Text className="text-base font-inter-bold text-grey-alpha-500">
               {formatAmount(totalOutflow, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,

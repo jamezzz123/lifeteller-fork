@@ -89,7 +89,7 @@ export const WalletCreatePasscodeBottomSheet = forwardRef<
     <BottomSheetComponent ref={ref} snapPoints={['90%']} onClose={onClose}>
       <View className="px-6 pb-6">
         {/* Title */}
-        <Text className="mb-6 text-center text-lg font-semibold text-grey-alpha-500">
+        <Text className="mb-6 text-center text-lg font-inter-semibold text-grey-alpha-500">
           {isConfirming ? 'Enter your passcode again' : 'Create your passcode'}
         </Text>
 
@@ -165,7 +165,7 @@ export const WalletCreatePasscodeBottomSheet = forwardRef<
                   className="flex-1 items-center rounded-full bg-grey-alpha-150 py-5"
                   activeOpacity={0.7}
                 >
-                  <Text className="text-2xl font-semibold text-grey-alpha-500">
+                  <Text className="text-2xl font-inter-semibold text-grey-alpha-500">
                     {num}
                   </Text>
                 </TouchableOpacity>
@@ -199,7 +199,7 @@ export const WalletCreatePasscodeBottomSheet = forwardRef<
               className="flex-1 items-center rounded-full bg-grey-alpha-150 py-5"
               activeOpacity={0.7}
             >
-              <Text className="text-2xl font-semibold text-grey-alpha-500">
+              <Text className="text-2xl font-inter-semibold text-grey-alpha-500">
                 0
               </Text>
             </TouchableOpacity>

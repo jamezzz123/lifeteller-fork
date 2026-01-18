@@ -59,7 +59,7 @@ export default function WalletActivationScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Wallet activation
         </Text>
       </View>
@@ -70,7 +70,7 @@ export default function WalletActivationScreen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Title */}
-        <Text className="mb-4 text-2xl font-bold text-grey-alpha-500">
+        <Text className="mb-4 text-2xl font-inter-bold text-grey-alpha-500">
           Confirm identity and activate wallet
         </Text>
 

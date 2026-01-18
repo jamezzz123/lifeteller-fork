@@ -18,7 +18,7 @@ export function ContactChip({ contact, onRemove }: ContactChipProps) {
         style={{ width: 32, height: 32, borderRadius: 16 }}
         contentFit="cover"
       />
-      <Text className="text-sm font-medium text-grey-alpha-500">
+      <Text className="text-sm font-inter-medium text-grey-alpha-500">
         {contact.name}
       </Text>
       <TouchableOpacity

@@ -51,7 +51,7 @@ export function Dropdown({
       {...props}
     >
       <Text
-        className={`font-semibold ${currentVariant.textClass} ${currentSize.textClass}`}
+        className={`font-inter-semibold ${currentVariant.textClass} ${currentSize.textClass}`}
       >
         {label}
       </Text>

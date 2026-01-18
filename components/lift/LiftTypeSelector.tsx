@@ -23,7 +23,7 @@ export function LiftTypeSelector({
           color={colors['grey-alpha']['500']}
           strokeWidth={2}
         />
-        <Text className="text-base font-semibold text-grey-alpha-500">Type</Text>
+        <Text className="text-base font-inter-semibold text-grey-alpha-500">Type</Text>
       </View>
 
       <View className="flex-row gap-3">
@@ -37,7 +37,7 @@ export function LiftTypeSelector({
               accessibilityRole="button"
               accessibilityLabel={`Select ${type} type`}
             >
-              <Text className="text-sm font-medium text-grey-alpha-500">
+              <Text className="text-sm font-inter-medium text-grey-alpha-500">
                 {type}
               </Text>
             </TouchableOpacity>

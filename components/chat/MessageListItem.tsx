@@ -163,7 +163,7 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
                 }}
               >
                 <Text
-                  className="text-xs font-bold"
+                  className="text-xs font-inter-bold"
                   style={{ color: colors['grey-plain']['550'] }}
                 >
                   G
@@ -213,7 +213,7 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
                       fill="none"
                     />
                     <Text
-                      className="absolute text-[7px] font-bold"
+                      className="absolute text-[7px] font-inter-bold"
                       style={{
                         color: colors.primary.purple,
                         top: 2.5,
@@ -275,12 +275,12 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
         <View className="mb-0.5 flex-row items-center justify-between">
           <View className="flex-1 flex-row items-center gap-1.5 pr-2">
             {isGroup ? (
-              <Text className="flex-1 text-[15px] font-semibold text-grey-alpha-500">
+              <Text className="flex-1 text-[15px] font-inter-semibold text-grey-alpha-500">
                 {message.groupName || 'Group Chat'}
               </Text>
             ) : (
               <>
-                <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                   {message.contactName}
                 </Text>
                 {message.isVerified && (
@@ -320,7 +320,7 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
                 backgroundColor: colors.primary.purple,
               }}
             >
-              <Text className="text-[11px] font-bold text-white">
+              <Text className="text-[11px] font-inter-bold text-white">
                 {message.unreadCount}
               </Text>
             </View>
@@ -344,18 +344,18 @@ export function MessageListItem({ message, onPress }: MessageListItemProps) {
                   strokeWidth={2}
                 />
               )}
-              <Text className="text-sm font-semibold text-grey-alpha-500">
+              <Text className="text-sm font-inter-semibold text-grey-alpha-500">
                 {isLiftRequest ? 'Lift request' : 'Lift offer'}
               </Text>
             </View>
             {message.liftTitle && (
-              <Text className="mb-1.5 text-base font-semibold text-grey-alpha-500">
+              <Text className="mb-1.5 text-base font-inter-semibold text-grey-alpha-500">
                 {message.liftTitle}
               </Text>
             )}
             <View className="flex-row items-center justify-between">
               {message.liftAmount && (
-                <Text className="text-sm font-semibold text-grey-alpha-500">
+                <Text className="text-sm font-inter-semibold text-grey-alpha-500">
                   {formatAmount(message.liftAmount)}
                 </Text>
               )}

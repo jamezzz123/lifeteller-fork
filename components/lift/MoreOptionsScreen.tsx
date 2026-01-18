@@ -196,7 +196,7 @@ export default function MoreOptionsScreen({
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           More options
         </Text>
       </View>
@@ -214,7 +214,7 @@ export default function MoreOptionsScreen({
             >
               <View className="flex-row items-center gap-3">
                 <Tag size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="text-base font-inter-medium text-grey-alpha-500">
                   Select category
                 </Text>
               </View>
@@ -245,7 +245,7 @@ export default function MoreOptionsScreen({
                     }}
                   >
                     <Text
-                      className="text-sm font-medium"
+                      className="text-sm font-inter-medium"
                       style={{
                         color: isSelected
                           ? colors.primary.purple
@@ -270,7 +270,7 @@ export default function MoreOptionsScreen({
             >
               <View className="flex-row items-center gap-3">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="text-base font-inter-medium text-grey-alpha-500">
                   Location
                 </Text>
               </View>
@@ -327,11 +327,11 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Calendar size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                   Schedule lift
                 </Text>
                 {scheduleLift && scheduleDate ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {scheduleDate.toLocaleDateString('en-US', {
                       weekday: 'short',
                       month: 'short',
@@ -374,11 +374,11 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <CalendarX size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                   Lift end date
                 </Text>
                 {liftEndDate && endDate ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {endDate.toLocaleDateString('en-US', {
                       weekday: 'short',
                       month: 'short',
@@ -422,15 +422,15 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Users size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                   Allow collaborators
                 </Text>
                 {allowCollaborators && collaboratorLimit !== 'unlimited' ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {collaboratorLimit} →
                   </Text>
                 ) : allowCollaborators ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     {typeof collaboratorLimit === 'number'
                       ? collaboratorLimit
                       : '5'}{' '}
@@ -462,7 +462,7 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Hand size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                   Allow requesters
                 </Text>
                 <Text className="text-sm text-grey-alpha-400">
@@ -533,7 +533,7 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+            <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
               Choose category
             </Text>
 
@@ -574,7 +574,7 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+            <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
               Choose location
             </Text>
 
@@ -595,7 +595,7 @@ export default function MoreOptionsScreen({
               <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
               </View>
-              <Text className="text-base font-medium text-grey-alpha-500">
+              <Text className="text-base font-inter-medium text-grey-alpha-500">
                 Get my location on map
               </Text>
             </TouchableOpacity>

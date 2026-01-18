@@ -8,7 +8,7 @@ export function LiftHeader() {
     <View className="flex-row items-center justify-between  border-b border-grey-plain-300 bg-grey-plain-50 px-4 py-3">
       {/* Logo */}
       <View className="flex-row items-center gap-2">
-        <Text className="text-2xl font-semibold">Lifts</Text>
+        <Text className="text-2xl font-inter-semibold">Lifts</Text>
       </View>
 
       {/* Actions */}
@@ -20,7 +20,7 @@ export function LiftHeader() {
           <View className="relative">
             <Bell color={colors['grey-plain']['550']} size={24} />
             <View className="absolute -right-1 -top-1 h-5 min-w-[20px] items-center justify-center rounded-[10px] bg-state-red px-1">
-              <Text className="text-[10px] font-bold text-grey-plain-50">
+              <Text className="text-[10px] font-inter-bold text-grey-plain-50">
                 2
               </Text>
             </View>

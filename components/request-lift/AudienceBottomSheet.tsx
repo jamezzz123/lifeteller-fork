@@ -98,7 +98,7 @@ export const AudienceBottomSheet = forwardRef<
   return (
     <BottomSheetComponent ref={ref} snapPoints={['60%']}>
       <View className="px-4 pb-4">
-        <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+        <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
           {title}
         </Text>
 
@@ -123,7 +123,7 @@ export const AudienceBottomSheet = forwardRef<
                 <View className="flex-1 flex-row items-center justify-between">
                   <View className="flex-1">
                     <Text
-                      className="mb-1 text-base font-medium"
+                      className="mb-1 text-base font-inter-medium"
                       style={{
                         color: isSelected
                           ? colors.primary.purple

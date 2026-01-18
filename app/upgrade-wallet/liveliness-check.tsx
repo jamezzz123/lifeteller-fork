@@ -113,7 +113,7 @@ export default function LivelinessCheckScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Liveliness check
         </Text>
       </View>
@@ -121,7 +121,7 @@ export default function LivelinessCheckScreen() {
       {/* Main Content */}
       <View className="flex-1 px-4 pt-6">
         {/* Title */}
-        <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
+        <Text className="mb-3 text-2xl font-inter-bold text-grey-alpha-500">
           Take a lively selfie
         </Text>
 
@@ -176,7 +176,7 @@ export default function LivelinessCheckScreen() {
           </Animated.View>
 
           {/* Title */}
-          <Text className="mb-8 text-xl font-semibold text-grey-alpha-500">
+          <Text className="mb-8 text-xl font-inter-semibold text-grey-alpha-500">
             Verification in progress
           </Text>
 
@@ -258,7 +258,7 @@ const UpgradeSuccessBottomSheet = React.forwardRef<
           </View>
 
           {/* Title */}
-          <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
+          <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
             {title}
           </Text>
 

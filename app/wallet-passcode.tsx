@@ -82,7 +82,7 @@ export default function WalletPasscodeScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Wallet passcode
           </Text>
         </View>
@@ -95,7 +95,7 @@ export default function WalletPasscodeScreen() {
           <View className="px-4 pt-6">
             {/* Enter Current Passcode */}
             <View className="mb-6">
-              <Text className="mb-4 text-sm font-medium text-grey-alpha-400">
+              <Text className="mb-4 text-sm font-inter-medium text-grey-alpha-400">
                 Enter current passcode
               </Text>
               <PasscodeInput
@@ -115,7 +115,7 @@ export default function WalletPasscodeScreen() {
 
             {/* Create New Passcode */}
             <View className="mb-6">
-              <Text className="mb-4 text-sm font-medium text-grey-alpha-400">
+              <Text className="mb-4 text-sm font-inter-medium text-grey-alpha-400">
                 Create new passcode
               </Text>
               <PasscodeInput
@@ -127,7 +127,7 @@ export default function WalletPasscodeScreen() {
 
             {/* Confirm New Passcode */}
             <View className="mb-8">
-              <Text className="mb-4 text-sm font-medium text-grey-alpha-400">
+              <Text className="mb-4 text-sm font-inter-medium text-grey-alpha-400">
                 Type passcode again
               </Text>
               <PasscodeInput

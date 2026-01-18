@@ -59,7 +59,7 @@ function ProfileSection({
       <View className="mb-3 flex-row items-center justify-between">
         <View className="flex-row items-center gap-2">
           {icon}
-          <Text className="text-sm font-semibold text-grey-alpha-500">
+          <Text className="text-sm font-inter-semibold text-grey-alpha-500">
             {title}
           </Text>
         </View>
@@ -231,7 +231,7 @@ export default function EditDetailsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Edit details
           </Text>
         </View>
@@ -266,7 +266,7 @@ export default function EditDetailsScreen() {
               ) : initials ? (
                 <View className="bg-primary-tints-purple-100 h-full w-full items-center justify-center">
                   <Text
-                    className="text-2xl font-bold"
+                    className="text-2xl font-inter-bold"
                     style={{ color: colors.primary.purple }}
                   >
                     {initials}
@@ -300,7 +300,7 @@ export default function EditDetailsScreen() {
             disabled={uploadAvatarMutation.isPending}
           >
             <Text
-              className="text-sm font-medium"
+              className="text-sm font-inter-medium"
               style={{ color: colors.primary.purple }}
             >
               {uploadAvatarMutation.isPending ? 'Uploading...' : 'Change photo'}
@@ -329,7 +329,7 @@ export default function EditDetailsScreen() {
                     size={16}
                     strokeWidth={2}
                   />
-                  <Text className="text-sm font-semibold text-grey-alpha-500">
+                  <Text className="text-sm font-inter-semibold text-grey-alpha-500">
                     Name/username
                   </Text>
                 </View>
@@ -405,7 +405,7 @@ export default function EditDetailsScreen() {
                     className="px-2"
                   >
                     <Text
-                      className="text-sm font-medium underline"
+                      className="text-sm font-inter-medium underline"
                       style={{ color: colors.primary.purple }}
                     >
                       Edit
@@ -425,7 +425,7 @@ export default function EditDetailsScreen() {
                   className="px-2"
                 >
                   <Text
-                    className="text-sm font-medium"
+                    className="text-sm font-inter-medium"
                     style={{ color: colors.primary.purple }}
                   >
                     Edit
@@ -442,7 +442,7 @@ export default function EditDetailsScreen() {
                   className="px-2"
                 >
                   <Text
-                    className="text-sm font-medium"
+                    className="text-sm font-inter-medium"
                     style={{ color: colors.primary.purple }}
                   >
                     Edit
@@ -474,7 +474,7 @@ export default function EditDetailsScreen() {
             </Text>
           ) : (
             <>
-              <Text className="mb-2 text-sm font-medium text-grey-alpha-500">
+              <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-500">
                 Not added yet
               </Text>
               <Text className="mb-3 text-xs text-grey-plain-550">
@@ -491,7 +491,7 @@ export default function EditDetailsScreen() {
                 }}
               >
                 <Text
-                  className="text-sm font-medium"
+                  className="text-sm font-inter-medium"
                   style={{ color: colors.primary.purple }}
                 >
                   Add bio/tagline
@@ -529,7 +529,7 @@ export default function EditDetailsScreen() {
                     strokeWidth={2}
                   />
                   <Text
-                    className="text-xs font-medium"
+                    className="text-xs font-inter-medium"
                     style={{ color: colors.state.green }}
                   >
                     Verified
@@ -539,7 +539,7 @@ export default function EditDetailsScreen() {
             </View>
           ) : (
             <>
-              <Text className="mb-2 text-sm font-medium text-grey-alpha-500">
+              <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-500">
                 Not added yet
               </Text>
               <Text className="mb-3 text-xs text-grey-plain-550">
@@ -556,7 +556,7 @@ export default function EditDetailsScreen() {
                 }}
               >
                 <Text
-                  className="text-sm font-medium"
+                  className="text-sm font-inter-medium"
                   style={{ color: colors.primary.purple }}
                 >
                   Add mobile number
@@ -594,7 +594,7 @@ export default function EditDetailsScreen() {
                     strokeWidth={2}
                   />
                   <Text
-                    className="text-xs font-medium"
+                    className="text-xs font-inter-medium"
                     style={{ color: colors.state.green }}
                   >
                     Verified
@@ -604,7 +604,7 @@ export default function EditDetailsScreen() {
             </View>
           ) : (
             <>
-              <Text className="mb-2 text-sm font-medium text-grey-alpha-500">
+              <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-500">
                 Not added yet
               </Text>
               <Text className="mb-3 text-xs text-grey-plain-550">
@@ -621,7 +621,7 @@ export default function EditDetailsScreen() {
                 }}
               >
                 <Text
-                  className="text-sm font-medium"
+                  className="text-sm font-inter-medium"
                   style={{ color: colors.primary.purple }}
                 >
                   Add email address

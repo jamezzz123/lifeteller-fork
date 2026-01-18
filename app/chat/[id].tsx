@@ -373,7 +373,7 @@ export default function ChatScreen() {
             activeOpacity={0.7}
           >
             <View className="mb-0.5 flex-row items-center gap-1.5">
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 {contact.name}
               </Text>
               {contact.verified && (

@@ -68,7 +68,7 @@ export default function CreateGroupScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Create a message group
           </Text>
         </View>
@@ -95,7 +95,7 @@ export default function CreateGroupScreen() {
               style={{ backgroundColor: colors['primary-tints'].purple['100'] }}
             >
               <Text
-                className="text-sm font-medium"
+                className="text-sm font-inter-medium"
                 style={{ color: colors.primary.purple }}
               >
                 {selectedCount} {selectedCount === 1 ? 'person' : 'people'}{' '}
@@ -115,7 +115,7 @@ export default function CreateGroupScreen() {
         {/* Recently Contacted Section */}
         {!searchQuery && (
           <View className="mt-6">
-            <Text className="mb-4 px-4 text-sm font-semibold text-grey-alpha-400">
+            <Text className="mb-4 px-4 text-sm font-inter-semibold text-grey-alpha-400">
               Recently contacted
             </Text>
 

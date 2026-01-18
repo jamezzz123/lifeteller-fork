@@ -50,7 +50,7 @@ export function ContactListItem({
             }}
           >
             <Text
-              className="text-[10px] font-bold"
+              className="text-[10px] font-inter-bold"
               style={{ color: colors.primary.purple }}
             >
               P
@@ -62,7 +62,7 @@ export function ContactListItem({
       {/* Contact Info */}
       <View className="flex-1">
         <View className="mb-0.5 flex-row items-center gap-1.5">
-          <Text className="text-base font-semibold text-grey-alpha-500">
+          <Text className="text-base font-inter-semibold text-grey-alpha-500">
             {contact.name}
           </Text>
           {contact.verified && (

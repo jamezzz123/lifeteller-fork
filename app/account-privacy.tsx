@@ -38,7 +38,7 @@ export default function AccountPrivacyScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Account privacy
         </Text>
       </View>
@@ -53,7 +53,7 @@ export default function AccountPrivacyScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Account
           </Text>
 
@@ -74,7 +74,7 @@ export default function AccountPrivacyScreen() {
               />
             </View>
             <View className="flex-1">
-              <Text className="mb-1 text-[15px] font-semibold text-grey-alpha-500">
+              <Text className="mb-1 text-[15px] font-inter-semibold text-grey-alpha-500">
                 Private account
               </Text>
               <Text className="text-sm text-grey-plain-550">
@@ -99,7 +99,7 @@ export default function AccountPrivacyScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Who can see my lifts
           </Text>
 
@@ -147,7 +147,7 @@ export default function AccountPrivacyScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Who can tag me
           </Text>
 

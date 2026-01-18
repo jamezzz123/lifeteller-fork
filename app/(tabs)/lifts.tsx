@@ -77,7 +77,7 @@ export default function LiftsScreen() {
       className="items-center justify-center py-6"
       activeOpacity={0.7}
     >
-      <Text className="text-[15px] font-medium text-grey-plain-550">
+      <Text className="text-[15px] font-inter-medium text-grey-plain-550">
         {isLoadingMore
           ? 'Loading...'
           : hasMoreLifts
@@ -114,7 +114,7 @@ export default function LiftsScreen() {
                   // No functionality needed - UI only
                 }}
               >
-                <Text className="text-[15px] font-medium text-grey-plain-550">
+                <Text className="text-[15px] font-inter-medium text-grey-plain-550">
                   Most recent
                 </Text>
                 <ChevronDown size={20} color={colors['grey-plain']['550']} />

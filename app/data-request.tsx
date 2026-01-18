@@ -198,7 +198,7 @@ export default function DataRequestScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Data request
           </Text>
         </View>
@@ -222,7 +222,7 @@ export default function DataRequestScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
               No data request made yet
             </Text>
 
@@ -263,7 +263,7 @@ export default function DataRequestScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Data request
           </Text>
         </View>
@@ -284,7 +284,7 @@ export default function DataRequestScreen() {
               style={{ width: '33%' }}
             >
               <Text className="mb-1 text-sm text-white/80">Total requests</Text>
-              <Text className="text-3xl font-bold text-white">
+              <Text className="text-3xl font-inter-bold text-white">
                 {totalRequests}
               </Text>
             </View>
@@ -300,7 +300,7 @@ export default function DataRequestScreen() {
                   <Text className="mb-1 text-sm text-grey-plain-550">
                     Ready
                   </Text>
-                  <Text className="text-3xl font-bold text-grey-alpha-500">
+                  <Text className="text-3xl font-inter-bold text-grey-alpha-500">
                     {readyCount}
                   </Text>
                 </View>
@@ -319,7 +319,7 @@ export default function DataRequestScreen() {
                   <Text className="mb-1 text-sm text-grey-plain-550">
                     Processing
                   </Text>
-                  <Text className="text-3xl font-bold text-grey-alpha-500">
+                  <Text className="text-3xl font-inter-bold text-grey-alpha-500">
                     {processingCount}
                   </Text>
                 </View>
@@ -341,7 +341,7 @@ export default function DataRequestScreen() {
           {/* Data Requested Section */}
           <View className="mx-4 mt-6">
             <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-lg font-semibold text-grey-alpha-500">
+              <Text className="text-lg font-inter-semibold text-grey-alpha-500">
                 Data requested
               </Text>
               <TouchableOpacity
@@ -350,7 +350,7 @@ export default function DataRequestScreen() {
                 }}
                 className="flex-row items-center gap-1"
               >
-                <Text className="text-sm font-medium text-primary">
+                <Text className="text-sm font-inter-medium text-primary">
                   See all
                 </Text>
                 <ChevronRight
@@ -403,7 +403,7 @@ export default function DataRequestScreen() {
 
                     {/* Content */}
                     <View className="flex-1">
-                      <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                      <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                         {request.dataType}
                       </Text>
                       <Text className="mb-1 text-sm text-grey-plain-550">
@@ -416,7 +416,7 @@ export default function DataRequestScreen() {
 
                     {/* Right Side */}
                     <View className="items-end">
-                      <Text className="mb-2 text-xs font-medium text-grey-plain-550">
+                      <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
                         ID: {request.id}
                       </Text>
                       <View
@@ -424,7 +424,7 @@ export default function DataRequestScreen() {
                         style={{ backgroundColor: statusStyle.backgroundColor }}
                       >
                         <Text
-                          className="text-xs font-semibold capitalize"
+                          className="text-xs font-inter-semibold capitalize"
                           style={{ color: statusStyle.textColor }}
                         >
                           {request.status}
@@ -453,7 +453,7 @@ export default function DataRequestScreen() {
         >
           <X color={colors['grey-plain']['550']} size={24} strokeWidth={2} />
         </TouchableOpacity>
-        <Text className="flex-1 text-center text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-center text-lg font-inter-semibold text-grey-alpha-500">
           Request data
         </Text>
         <View style={{ width: 24 }} />
@@ -472,7 +472,7 @@ export default function DataRequestScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Data to download
           </Text>
           <View className="gap-1">
@@ -519,7 +519,7 @@ export default function DataRequestScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Data format
           </Text>
           <View className="gap-1">

@@ -32,7 +32,7 @@ export default function DeleteAccountScreen() {
         <TouchableOpacity onPress={() => router.back()} className="mr-3">
           <X color={colors['grey-plain']['550']} size={24} strokeWidth={2} />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Delete account
         </Text>
       </View>
@@ -44,13 +44,13 @@ export default function DeleteAccountScreen() {
       >
         <View className="px-4 pt-6">
           {/* Title */}
-          <Text className="mb-4 text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-4 text-xl font-inter-bold text-grey-alpha-500">
             Delete your Lifteller account
           </Text>
 
           {/* Warning */}
           <Text className="mb-4 text-base leading-6">
-            <Text style={{ color: colors.state.red }} className="font-bold">
+            <Text style={{ color: colors.state.red }} className="font-inter-bold">
               WARNING
             </Text>
             <Text style={{ color: colors.state.red }}>: </Text>
@@ -85,7 +85,7 @@ export default function DeleteAccountScreen() {
           </Text>
 
           {/* Question */}
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             Do you want to continue?
           </Text>
         </View>

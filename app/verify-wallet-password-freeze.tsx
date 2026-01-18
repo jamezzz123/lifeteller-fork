@@ -64,14 +64,14 @@ export default function VerifyWalletPasswordFreezeScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Verify your password
           </Text>
         </View>
 
         <View className="flex-1 px-6 pt-6">
           {/* Heading */}
-          <Text className="mb-6 text-base font-bold text-grey-alpha-500">
+          <Text className="mb-6 text-base font-inter-bold text-grey-alpha-500">
             Enter your Lifteller password
           </Text>
 
@@ -106,7 +106,7 @@ export default function VerifyWalletPasswordFreezeScreen() {
               className="flex-1 items-center justify-center py-3"
               activeOpacity={0.7}
             >
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 Cancel
               </Text>
             </TouchableOpacity>

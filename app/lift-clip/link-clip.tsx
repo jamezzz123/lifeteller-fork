@@ -75,7 +75,7 @@ export default function LinkClipScreen() {
       className="items-center justify-center py-6"
       activeOpacity={0.7}
     >
-      <Text className="text-[15px] font-medium text-grey-plain-550">
+      <Text className="text-[15px] font-inter-medium text-grey-plain-550">
         {isLoadingMore
           ? 'Loading...'
           : hasMoreLifts
@@ -93,7 +93,7 @@ export default function LinkClipScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <X color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-medium text-grey-plain-550">
+          <Text className="text-lg font-inter-medium text-grey-plain-550">
             Select a lift to link
           </Text>
         </View>
@@ -109,7 +109,7 @@ export default function LinkClipScreen() {
           className="flex-row items-center gap-2 bg-white px-4 py-3"
         >
           <Trash2 color={colors.state.red} size={20} />
-          <Text className="text-base font-medium text-state-red">
+          <Text className="text-base font-inter-medium text-state-red">
             Unlink Lift from Clip
           </Text>
         </TouchableOpacity>

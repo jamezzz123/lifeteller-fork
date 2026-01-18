@@ -242,7 +242,7 @@ export default function WalletSettingsScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Wallet settings
         </Text>
       </View>
@@ -257,14 +257,14 @@ export default function WalletSettingsScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             KYC status
           </Text>
 
           {kycItems.map((item, index) => (
             <View key={item.id}>
               <View className="flex-row items-center justify-between rounded-xl bg-white px-4 py-4">
-                <Text className="text-[15px] font-medium text-grey-alpha-500">
+                <Text className="text-[15px] font-inter-medium text-grey-alpha-500">
                   {item.label}
                 </Text>
                 {item.isVerified && (
@@ -283,7 +283,7 @@ export default function WalletSettingsScreen() {
                       />
                     </View>
                     <Text
-                      className="text-xs font-medium"
+                      className="text-xs font-inter-medium"
                       style={{ color: colors['grey-alpha']['500'] }}
                     >
                       Verified
@@ -311,7 +311,7 @@ export default function WalletSettingsScreen() {
                 size={24}
                 strokeWidth={2}
               />
-              <Text className="flex-1 text-sm font-medium text-grey-alpha-500">
+              <Text className="flex-1 text-sm font-inter-medium text-grey-alpha-500">
                 Daily cumulative transaction limit
               </Text>
             </View>
@@ -324,14 +324,14 @@ export default function WalletSettingsScreen() {
                     strokeWidth={2.5}
                   />
                   <Text
-                    className="text-xs font-medium"
+                    className="text-xs font-inter-medium"
                     style={{ color: colors.primary.purple }}
                   >
                     {formatAmount(dailyLimit)}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleRemoveDailyLimit}>
-                  <Text className="text-sm font-medium text-red-500">
+                  <Text className="text-sm font-inter-medium text-red-500">
                     Remove
                   </Text>
                 </TouchableOpacity>
@@ -361,7 +361,7 @@ export default function WalletSettingsScreen() {
                 size={24}
                 strokeWidth={2}
               />
-              <Text className="flex-1 text-sm font-medium text-grey-alpha-500">
+              <Text className="flex-1 text-sm font-inter-medium text-grey-alpha-500">
                 One-time transaction limit
               </Text>
             </View>
@@ -374,14 +374,14 @@ export default function WalletSettingsScreen() {
                     strokeWidth={2.5}
                   />
                   <Text
-                    className="text-xs font-medium"
+                    className="text-xs font-inter-medium"
                     style={{ color: colors.primary.purple }}
                   >
                     {formatAmount(oneTimeLimit)}
                   </Text>
                 </View>
                 <TouchableOpacity onPress={handleRemoveOneTimeLimit}>
-                  <Text className="text-sm font-medium text-red-500">
+                  <Text className="text-sm font-inter-medium text-red-500">
                     Remove
                   </Text>
                 </TouchableOpacity>
@@ -404,7 +404,7 @@ export default function WalletSettingsScreen() {
             Visit the{' '}
             <Text
               onPress={handleHelpCenter}
-              className="font-semibold"
+              className="font-inter-semibold"
               style={{ color: colors.primary.purple }}
             >
               wallet help center

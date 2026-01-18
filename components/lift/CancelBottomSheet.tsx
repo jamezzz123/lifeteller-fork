@@ -43,7 +43,7 @@ export function CancelBottomSheet({
     >
       <View className="px-6">
         {/* Title */}
-        {/* <Text className="mb-6 text-2xl font-bold text-grey-alpha-500">
+        {/* <Text className="mb-6 text-2xl font-inter-bold text-grey-alpha-500">
           Want to finish your request lift later?
         </Text> */}
 
@@ -63,7 +63,7 @@ export function CancelBottomSheet({
                 strokeWidth={2}
               />
             </View>
-            <Text className="text-lg font-medium text-grey-alpha-500">
+            <Text className="text-lg font-inter-medium text-grey-alpha-500">
               Save as draft
             </Text>
           </TouchableOpacity>
@@ -82,7 +82,7 @@ export function CancelBottomSheet({
                 strokeWidth={2}
               />
             </View>
-            <Text className="text-lg font-medium text-grey-alpha-500">
+            <Text className="text-lg font-inter-medium text-grey-alpha-500">
               Discard post
             </Text>
           </TouchableOpacity>
@@ -101,7 +101,7 @@ export function CancelBottomSheet({
                 strokeWidth={2}
               />
             </View>
-            <Text className="text-lg font-medium text-grey-alpha-500">
+            <Text className="text-lg font-inter-medium text-grey-alpha-500">
               Continue editing
             </Text>
           </TouchableOpacity>

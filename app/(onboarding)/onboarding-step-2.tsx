@@ -94,7 +94,7 @@ export default function OnboardingStep2Screen() {
 
         {/* Content */}
         <View className="mt-6 flex-1 px-6">
-          <Text className="text-xl font-bold text-grey-alpha-500">
+          <Text className="text-xl font-inter-bold text-grey-alpha-500">
             Update your profile picture
           </Text>
           <Text className="text-grey-alpha-400">

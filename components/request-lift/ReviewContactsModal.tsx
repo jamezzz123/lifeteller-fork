@@ -40,7 +40,7 @@ export function ReviewContactsModal({
         >
           {/* Header */}
           <View className="flex-row items-center justify-between rounded-t-3xl border-b border-grey-plain-450/20 bg-grey-alpha-150 px-4 py-4">
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
               Request from
             </Text>
             <TouchableOpacity
@@ -75,7 +75,7 @@ export function ReviewContactsModal({
                   />
                   <View className="flex-1">
                     <View className="flex-row items-center gap-2">
-                      <Text className="text-base font-medium text-grey-alpha-500">
+                      <Text className="text-base font-inter-medium text-grey-alpha-500">
                         {contact.name}
                       </Text>
                       {contact.verified && (

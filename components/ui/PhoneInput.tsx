@@ -63,7 +63,7 @@ export function PhoneInput({
     <>
       <View className={containerClassName}>
         {label && (
-          <Text className="mb-1.5 text-sm font-medium text-grey-alpha-400">
+          <Text className="mb-1.5 text-sm font-inter-medium text-grey-alpha-400">
             {label}
           </Text>
         )}

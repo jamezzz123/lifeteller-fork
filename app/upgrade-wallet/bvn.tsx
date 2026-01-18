@@ -52,7 +52,7 @@ export default function BVNFormScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Upgrade to tier 1
         </Text>
       </View>
@@ -66,7 +66,7 @@ export default function BVNFormScreen() {
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Enter your BVN number */}
           <View className="mb-6">
-            <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+            <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
               Enter your BVN number
             </Text>
 
@@ -115,7 +115,7 @@ export default function BVNFormScreen() {
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
         <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             Go back
           </Text>
         </TouchableOpacity>

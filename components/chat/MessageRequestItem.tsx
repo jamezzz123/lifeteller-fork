@@ -53,7 +53,7 @@ export function MessageRequestItem({
         {/* Header Row */}
         <View className="mb-1 flex-row items-center justify-between">
           <View className="flex-1 flex-row items-center gap-1.5">
-            <Text className="text-base font-semibold text-grey-alpha-500">
+            <Text className="text-base font-inter-semibold text-grey-alpha-500">
               {request.contactName}
             </Text>
             {request.isVerified && (

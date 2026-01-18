@@ -37,13 +37,13 @@ export const PaymentBottomSheet = forwardRef<
           <View className="rounded-lg bg-primary-tints-100 p-2">
             <Wallet size={24} color={colors.primary.purple} strokeWidth={2} />
           </View>
-          <Text className="text-2xl font-bold text-grey-alpha-500">
+          <Text className="text-2xl font-inter-bold text-grey-alpha-500">
             {formatCurrency(amount)}
           </Text>
         </View>
 
         {/* Lift With Section */}
-        <Text className="mb-3 text-sm font-semibold text-grey-alpha-450">
+        <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-450">
           Lift with
         </Text>
 
@@ -61,7 +61,7 @@ export const PaymentBottomSheet = forwardRef<
               />
             </View>
             <View>
-              <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+              <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                 My wallet {formatCurrency(walletBalance)}
               </Text>
               <Text className="text-xs text-grey-alpha-400">

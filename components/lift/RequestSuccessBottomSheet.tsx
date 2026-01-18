@@ -46,7 +46,7 @@ export const RequestSuccessBottomSheet = forwardRef<
           </View>
 
           {/* Title */}
-          <Text className="mb-3 text-center text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-3 text-center text-xl font-inter-bold text-grey-alpha-500">
             {title}
           </Text>
 

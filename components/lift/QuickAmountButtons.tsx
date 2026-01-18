@@ -53,7 +53,7 @@ export function QuickAmountButtons({
                     />
                   )}
                   <Text
-                    className={`text-sm font-medium ${
+                    className={`text-sm font-inter-medium ${
                       selectedAmount === amount
                         ? 'text-primary'
                         : 'text-grey-alpha-450'

@@ -59,7 +59,7 @@ function SettingsSectionComponent({ section }: { section: SettingsSection }) {
       className="mx-4 mt-6 rounded-2xl p-2"
       style={{ backgroundColor: colors['grey-plain']['150'] }}
     >
-      <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+      <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
         {section.title}
       </Text>
 
@@ -85,7 +85,7 @@ function SettingsSectionComponent({ section }: { section: SettingsSection }) {
                 <IconComponent color={iconColor} size={24} strokeWidth={2} />
               </View>
               <View className="flex-1">
-                <Text className="mb-1 text-[15px] font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-[15px] font-inter-semibold text-grey-alpha-500">
                   {option.title}
                 </Text>
                 <Text className="text-sm text-grey-plain-550">
@@ -364,7 +364,7 @@ export default function SettingsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Settings
           </Text>
         </View>
@@ -393,7 +393,7 @@ export default function SettingsScreen() {
             strokeWidth={2}
           />
           <Text
-            className="flex-1 text-sm font-medium"
+            className="flex-1 text-sm font-inter-medium"
             style={{ color: colors['green-shades']['150'] }}
           >
             Your account is fully protected
@@ -410,7 +410,7 @@ export default function SettingsScreen() {
             strokeWidth={2}
           />
           <Text
-            className="flex-1 text-sm font-medium"
+            className="flex-1 text-sm font-inter-medium"
             style={{ color: colors.state.yellow }}
           >
             Your account is not fully protected. Activate your two-factor

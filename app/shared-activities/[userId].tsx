@@ -111,7 +111,7 @@ export default function SharedActivitiesScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Shared activities - {fullName}
           </Text>
         </View>
@@ -140,7 +140,7 @@ export default function SharedActivitiesScreen() {
               {/* User Info */}
               <View className="flex-1">
                 <View className="mb-1 flex-row items-center gap-2">
-                  <Text className="text-base font-semibold text-grey-alpha-500">
+                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
                     {fullName}
                   </Text>
                   {isVerified && (

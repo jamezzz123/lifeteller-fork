@@ -139,7 +139,7 @@ Thank you.`,
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Logged issue
         </Text>
         <TouchableOpacity onPress={handleMoreOptions}>
@@ -164,7 +164,7 @@ Thank you.`,
               <Text className="text-sm text-grey-plain-550">
                 {issue.category}
               </Text>
-              <Text className="text-sm font-medium text-grey-alpha-500">
+              <Text className="text-sm font-inter-medium text-grey-alpha-500">
                 Issue ID: {issue.id}
               </Text>
             </View>
@@ -173,7 +173,7 @@ Thank you.`,
               style={{ backgroundColor: statusStyle.backgroundColor }}
             >
               <Text
-                className="text-sm font-semibold capitalize"
+                className="text-sm font-inter-semibold capitalize"
                 style={{ color: statusStyle.textColor }}
               >
                 {issue.status}
@@ -182,7 +182,7 @@ Thank you.`,
           </View>
 
           {/* Issue Title */}
-          <Text className="mb-4 text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-4 text-xl font-inter-bold text-grey-alpha-500">
             {issue.title}
           </Text>
 
@@ -256,7 +256,7 @@ Thank you.`,
         {/* Date Logged */}
         <View className="px-4">
           <Text className="mb-1 text-sm text-grey-plain-550">Date logged</Text>
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             {issue.date}
           </Text>
         </View>
@@ -270,7 +270,7 @@ Thank you.`,
         activeOpacity={0.8}
       >
         <MessageCircleQuestion color="white" size={20} strokeWidth={2} />
-        <Text className="text-base font-semibold text-white">Contact us</Text>
+        <Text className="text-base font-inter-semibold text-white">Contact us</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

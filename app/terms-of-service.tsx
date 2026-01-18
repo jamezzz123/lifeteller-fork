@@ -118,7 +118,7 @@ export default function TermsOfServiceScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Terms of Service
         </Text>
       </View>
@@ -143,7 +143,7 @@ export default function TermsOfServiceScreen() {
         <View className="px-4">
           {termsContent.map((section, index) => (
             <View key={index} className="mb-6">
-              <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
+              <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
                 {section.title}
               </Text>
               {section.content.map((paragraph, pIndex) => (

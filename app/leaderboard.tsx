@@ -128,7 +128,7 @@ function RankIcon({ rank }: { rank: number }) {
       className="h-6 w-6 items-center justify-center rounded-full"
       style={{ backgroundColor: colors['grey-plain']['150'] }}
     >
-      <Text className="text-xs font-semibold text-grey-plain-550">{rank}</Text>
+      <Text className="text-xs font-inter-semibold text-grey-plain-550">{rank}</Text>
     </View>
   );
 }
@@ -151,7 +151,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           size={56}
         />
         <View className="mt-2 flex-row items-center gap-1">
-          <Text className="text-xs font-semibold text-grey-alpha-500">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-500">
             {truncateName(users[1]?.name || '')}
           </Text>
           {users[1]?.isVerified && (
@@ -169,7 +169,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           }}
         >
           <Text
-            className="text-lg font-bold"
+            className="text-lg font-inter-bold"
             style={{ color: colors.primary.purple }}
           >
             2nd
@@ -186,7 +186,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           size={56}
         />
         <View className="mt-2 flex-row items-center gap-1">
-          <Text className="text-xs font-semibold text-grey-alpha-500">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-500">
             {truncateName(users[0]?.name || '')}
           </Text>
           {users[0]?.isVerified && (
@@ -204,7 +204,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           }}
         >
           <Text
-            className="text-lg font-bold"
+            className="text-lg font-inter-bold"
             style={{ color: colors.primary.purple }}
           >
             1st
@@ -220,7 +220,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           size={56}
         />
         <View className="mt-2 flex-row items-center gap-1">
-          <Text className="text-xs font-semibold text-grey-alpha-500">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-500">
             {truncateName(users[2]?.name || '')}
           </Text>
           {users[2]?.isVerified && (
@@ -238,7 +238,7 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
           }}
         >
           <Text
-            className="text-lg font-bold"
+            className="text-lg font-inter-bold"
             style={{ color: colors.primary.purple }}
           >
             3rd
@@ -261,7 +261,7 @@ function RankListItem({ user }: { user: LeaderboardUser }) {
       <Avatar profileImage={user.profileImage} name={user.name} size={40} />
       <View className="ml-3 flex-1">
         <View className="flex-row items-center gap-1.5">
-          <Text className="text-[15px] font-semibold text-grey-alpha-500">
+          <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
             {user.name}
           </Text>
           {user.isVerified && (
@@ -272,7 +272,7 @@ function RankListItem({ user }: { user: LeaderboardUser }) {
           @{user.username}
         </Text>
       </View>
-      <Text className="text-sm font-semibold text-grey-alpha-500">
+      <Text className="text-sm font-inter-semibold text-grey-alpha-500">
         {user.points} pts
       </Text>
     </TouchableOpacity>
@@ -295,7 +295,7 @@ export default function LeaderboardScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Leaderboard
         </Text>
       </View>
@@ -311,7 +311,7 @@ export default function LeaderboardScreen() {
             className="flex-1 flex-row items-center justify-between rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5"
             activeOpacity={0.7}
           >
-            <Text className="text-sm font-medium text-grey-alpha-500">
+            <Text className="text-sm font-inter-medium text-grey-alpha-500">
               {selectedFilter}
             </Text>
             <ChevronDown
@@ -324,7 +324,7 @@ export default function LeaderboardScreen() {
             className="flex-1 flex-row items-center justify-between rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5"
             activeOpacity={0.7}
           >
-            <Text className="text-sm font-medium text-grey-alpha-500">
+            <Text className="text-sm font-inter-medium text-grey-alpha-500">
               {selectedTime}
             </Text>
             <ChevronDown
@@ -351,18 +351,18 @@ export default function LeaderboardScreen() {
               {/* Top Section */}
               <View className="flex-row items-start justify-between pb-3">
                 <View>
-                  <Text className="mb-1 text-xs font-medium text-white">
+                  <Text className="mb-1 text-xs font-inter-medium text-white">
                     Your rank
                   </Text>
-                  <Text className="text-3xl font-bold text-white">
+                  <Text className="text-3xl font-inter-bold text-white">
                     #{currentUser.rank}
                   </Text>
                 </View>
                 <View className="items-end">
-                  <Text className="mb-1 text-xs font-medium text-white">
+                  <Text className="mb-1 text-xs font-inter-medium text-white">
                     Lift points
                   </Text>
-                  <Text className="text-3xl font-bold text-white">
+                  <Text className="text-3xl font-inter-bold text-white">
                     {currentUser.points.toLocaleString()}
                   </Text>
                 </View>
@@ -375,13 +375,13 @@ export default function LeaderboardScreen() {
               <View className="flex-row gap-6">
                 <View className="flex-row items-center gap-1.5">
                   <HandHeart color="#FFFFFF" size={16} />
-                  <Text className="text-sm font-medium text-white">
+                  <Text className="text-sm font-inter-medium text-white">
                     {currentUser.lifts} lifts
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1.5">
                   <Flame color="#FFFFFF" size={16} />
-                  <Text className="text-sm font-medium text-white">
+                  <Text className="text-sm font-inter-medium text-white">
                     {currentUser.streak} days streak
                   </Text>
                 </View>
@@ -396,7 +396,7 @@ export default function LeaderboardScreen() {
         {/* Ranks Section */}
         <View className="px-4">
           <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-base font-semibold text-grey-alpha-500">
+            <Text className="text-base font-inter-semibold text-grey-alpha-500">
               Ranks
             </Text>
             <TouchableOpacity
@@ -404,7 +404,7 @@ export default function LeaderboardScreen() {
               className="flex-row items-center gap-1"
             >
               <Text
-                className="text-sm font-medium"
+                className="text-sm font-inter-medium"
                 style={{ color: colors.primary.purple }}
               >
                 See all

@@ -39,7 +39,7 @@ export function PasswordStrengthIndicator({
       {/* Strength Label */}
       {label && (
         <Text
-          className="text-sm font-medium text-grey-alpha-500"
+          className="text-sm font-inter-medium text-grey-alpha-500"
           style={{
             color: color,
           }}

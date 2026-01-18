@@ -37,7 +37,7 @@ export const ListNameBottomSheet = React.forwardRef<
       >
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 pb-4">
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Give your list a name
         </Text>
         <TouchableOpacity
@@ -56,7 +56,7 @@ export const ListNameBottomSheet = React.forwardRef<
         <View className="flex-1 px-6 pt-6">
           {/* Name Input */}
           <View className="mb-6">
-            <Text className="mb-3 text-sm font-medium text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-inter-medium text-grey-alpha-500">
               Name of list
             </Text>
             <TextInput
@@ -72,7 +72,7 @@ export const ListNameBottomSheet = React.forwardRef<
 
           {/* Member Count and Add Member Link */}
           <View className="mb-6 flex-row items-center justify-between">
-            <Text className="text-sm font-medium text-primary">
+            <Text className="text-sm font-inter-medium text-primary">
               {memberCount} {memberCount === 1 ? 'person' : 'people'} added
             </Text>
             <TouchableOpacity
@@ -86,7 +86,7 @@ export const ListNameBottomSheet = React.forwardRef<
                 strokeWidth={2}
               />
               <Text
-                className="text-sm font-medium text-primary"
+                className="text-sm font-inter-medium text-primary"
                 style={{ textDecorationLine: 'underline' }}
               >
                 Add new member

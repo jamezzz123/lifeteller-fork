@@ -77,7 +77,7 @@ export function OneTimeLimitSuccessBottomSheet({
             </View>
 
             {/* Title */}
-            <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
+            <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
               One-time transaction limit set
             </Text>
 

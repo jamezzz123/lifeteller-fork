@@ -147,7 +147,7 @@ export default function ForgotPasswordScreen() {
 
           {/* Form Content */}
           <View className="flex-1 px-6">
-            <Text className="mb-2 text-2xl font-bold text-grey-alpha-550">
+            <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-550">
               Forgot Password
             </Text>
             <Text className="mb-8 text-base text-grey-alpha-400">

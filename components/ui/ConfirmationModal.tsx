@@ -27,7 +27,7 @@ export function ConfirmationModal({
       <View className="flex-1 items-center justify-center bg-black/50 px-6">
         <View className="w-full rounded-2xl bg-white p-6">
           {/* Title */}
-          <Text className="text-2xl font-semibold leading-8 text-grey-alpha-500">
+          <Text className="text-2xl font-inter-semibold leading-8 text-grey-alpha-500">
             {title}
           </Text>
 
@@ -42,7 +42,7 @@ export function ConfirmationModal({
           <View className="mt-3 flex-row justify-end gap-4">
             <TouchableOpacity onPress={onCancel}>
               <Text
-                className="text-base font-semibold"
+                className="text-base font-inter-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 {cancelText}
@@ -50,7 +50,7 @@ export function ConfirmationModal({
             </TouchableOpacity>
             <TouchableOpacity onPress={onConfirm}>
               <Text
-                className="text-base font-semibold"
+                className="text-base font-inter-semibold"
                 style={{
                   color: destructive ? colors.state.red : colors.primary.purple,
                 }}

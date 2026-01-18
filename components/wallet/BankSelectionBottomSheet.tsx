@@ -48,11 +48,11 @@ export const BankSelectionBottomSheet = forwardRef<
         className="flex-1 px-6"
         showsVerticalScrollIndicator={false}
       >
-        <Text className="mb-6 text-center text-lg font-bold text-grey-alpha-500">
+        <Text className="mb-6 text-center text-lg font-inter-bold text-grey-alpha-500">
           Choose an account
         </Text>
 
-        <Text className="mb-4 text-base font-semibold text-grey-alpha-500">
+        <Text className="mb-4 text-base font-inter-semibold text-grey-alpha-500">
           Choose an option
         </Text>
 
@@ -68,14 +68,14 @@ export const BankSelectionBottomSheet = forwardRef<
           >
             {/* Bank icon placeholder - using purple circle with bank initials */}
             <View className="size-12 items-center justify-center rounded-full bg-primary">
-              <Text className="text-xs font-bold text-white">
+              <Text className="text-xs font-inter-bold text-white">
                 {bank.bankName.substring(0, 4).toUpperCase()}
               </Text>
             </View>
 
             {/* Bank details */}
             <View className="flex-1">
-              <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+              <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                 {bank.accountName}
               </Text>
               <Text className="text-sm text-grey-plain-550">
@@ -106,7 +106,7 @@ export const BankSelectionBottomSheet = forwardRef<
           </View>
 
           <View className="flex-1">
-            <Text className="text-base font-semibold text-grey-alpha-500">
+            <Text className="text-base font-inter-semibold text-grey-alpha-500">
               Add a new account details
             </Text>
           </View>

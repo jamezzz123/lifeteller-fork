@@ -76,7 +76,7 @@ export default function BroadcastMessageScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="flex-1 px-4 text-lg font-semibold text-grey-alpha-500">
+          <Text className="flex-1 px-4 text-lg font-inter-semibold text-grey-alpha-500">
             Send broadcast message
           </Text>
 
@@ -101,7 +101,7 @@ export default function BroadcastMessageScreen() {
               overlap={16}
             />
             <Text className="text-base text-grey-alpha-500">
-              <Text className="font-semibold">
+              <Text className="font-inter-semibold">
                 {contributors[0]?.name || 'Lifter'}
               </Text>
               {totalLifters > 1 && (
@@ -133,7 +133,7 @@ export default function BroadcastMessageScreen() {
                 <Text className="text-xs text-grey-plain-550">≡</Text>
               </View> */}
               <MessageSquareText size={16} />
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 Templates
               </Text>
             </View>

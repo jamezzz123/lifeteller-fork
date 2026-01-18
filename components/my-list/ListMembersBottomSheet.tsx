@@ -27,7 +27,7 @@ export const ListMembersBottomSheet = React.forwardRef<
     >
       {/* Header */}
       <View className="flex-row items-center justify-between px-6 pb-4">
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           List members
         </Text>
         <TouchableOpacity
@@ -62,7 +62,7 @@ export const ListMembersBottomSheet = React.forwardRef<
               />
               <View className="flex-1">
                 <View className="flex-row items-center gap-2">
-                  <Text className="text-base font-semibold text-grey-alpha-500">
+                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
                     {member.name}
                   </Text>
                   {member.verified && (

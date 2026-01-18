@@ -107,7 +107,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
         activeOpacity={0.7}
       >
         <Text
-          className="text-sm font-medium"
+          className="text-sm font-inter-medium"
           style={{
             color: isSelected
               ? colors['primary-shades'].purple['200']
@@ -154,7 +154,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
       <View className="flex-1">
         {/* Header */}
         <View className="flex-row items-center justify-between border-b border-grey-plain-150 px-6 py-4">
-          <Text className="text-xl font-semibold text-grey-alpha-500">
+          <Text className="text-xl font-inter-semibold text-grey-alpha-500">
             Filter transactions
           </Text>
           <TouchableOpacity onPress={handleClose} hitSlop={8}>
@@ -170,7 +170,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
         >
           {/* Status Filter */}
           <View className="mb-8">
-            <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
               Status
             </Text>
             <View className="flex-row flex-wrap gap-2">
@@ -184,7 +184,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
 
           {/* Date Range Filter */}
           <View className="mb-8">
-            <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
               Date range
             </Text>
             <View className="mb-4 flex-row flex-wrap gap-2">
@@ -199,7 +199,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
             {filters.dateRange === 'Custom date range' && (
               <View className="gap-3">
                 <View>
-                  <Text className="mb-2 text-xs font-medium text-grey-plain-550">
+                  <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
                     Start date
                   </Text>
                   <View className="flex-row items-center gap-3 rounded-xl border border-grey-plain-300 bg-white px-4 py-3">
@@ -221,7 +221,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
                   </View>
                 </View>
                 <View>
-                  <Text className="mb-2 text-xs font-medium text-grey-plain-550">
+                  <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
                     End date
                   </Text>
                   <View className="flex-row items-center gap-3 rounded-xl border border-grey-plain-300 bg-white px-4 py-3">
@@ -248,7 +248,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
 
           {/* Transaction Type Filter */}
           <View className="mb-8">
-            <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
               Transaction type
             </Text>
             <View className="flex-row flex-wrap gap-2">
@@ -262,7 +262,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
 
           {/* Transaction Category Filter */}
           <View className="mb-8">
-            <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
               Transaction category
             </Text>
             <View className="flex-row flex-wrap gap-2">
@@ -280,7 +280,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
         {/* Footer */}
         <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-6 py-4">
           <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <Text className="text-base font-medium text-grey-alpha-500">
+            <Text className="text-base font-inter-medium text-grey-alpha-500">
               Go back
             </Text>
           </TouchableOpacity>

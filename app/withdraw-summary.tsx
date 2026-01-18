@@ -116,7 +116,7 @@ export default function WithdrawSummaryScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Summary
         </Text>
       </View>
@@ -130,7 +130,7 @@ export default function WithdrawSummaryScreen() {
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Amount */}
           <View className="mb-6 items-center">
-            <Text className="text-4xl font-bold text-grey-alpha-500">
+            <Text className="text-4xl font-inter-bold text-grey-alpha-500">
               {formatAmount(amount, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -140,21 +140,21 @@ export default function WithdrawSummaryScreen() {
 
           {/* Destination */}
           <View className="mb-6">
-            <Text className="mb-3 text-sm font-medium text-grey-alpha-400">
+            <Text className="mb-3 text-sm font-inter-medium text-grey-alpha-400">
               Destination
             </Text>
 
             <View className="flex-row items-center gap-3 rounded-xl bg-white p-4">
               {/* Bank icon */}
               <View className="size-12 items-center justify-center rounded-full bg-primary">
-                <Text className="text-xs font-bold text-white">
+                <Text className="text-xs font-inter-bold text-white">
                   {bankAccount.bankName.substring(0, 4).toUpperCase()}
                 </Text>
               </View>
 
               {/* Bank details */}
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                   {bankAccount.accountName}
                 </Text>
                 <Text className="text-sm text-grey-plain-550">
@@ -174,7 +174,7 @@ export default function WithdrawSummaryScreen() {
             <Text className="text-sm text-grey-alpha-500">
               Available balance:{' '}
               <Text
-                className="font-semibold"
+                className="font-inter-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 {formatAmount(MOCK_AVAILABLE_BALANCE, {
@@ -188,7 +188,7 @@ export default function WithdrawSummaryScreen() {
           {/* Narration (if provided) */}
           {params.narration && (
             <View className="mb-6">
-              <Text className="mb-2 text-sm font-medium text-grey-alpha-400">
+              <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-400">
                 Narration
               </Text>
               <Text className="text-base text-grey-alpha-500">
@@ -218,7 +218,7 @@ export default function WithdrawSummaryScreen() {
           className="items-center justify-center rounded-xl bg-primary py-4"
           activeOpacity={0.8}
         >
-          <Text className="text-base font-semibold text-white">Withdraw</Text>
+          <Text className="text-base font-inter-semibold text-white">Withdraw</Text>
         </TouchableOpacity>
       </View>
 

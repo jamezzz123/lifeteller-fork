@@ -188,7 +188,7 @@ export default function AddBankAccountScreen() {
           <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
             <X size={24} color={colors['grey-alpha']['500']} strokeWidth={2} />
           </TouchableOpacity>
-          <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+          <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
             Add a bank
           </Text>
         </View>
@@ -213,7 +213,7 @@ export default function AddBankAccountScreen() {
                 style={{ marginTop: 2 }}
               />
               <Text
-                className="flex-1 text-sm font-medium"
+                className="flex-1 text-sm font-inter-medium"
                 style={{ color: colors.primary.purple }}
               >
                 Please enter an account number that is yours.
@@ -222,7 +222,7 @@ export default function AddBankAccountScreen() {
 
             {/* Account Number Input */}
             <View className="mb-6">
-              <Text className="mb-2 text-base font-semibold text-grey-alpha-500">
+              <Text className="mb-2 text-base font-inter-semibold text-grey-alpha-500">
                 Account number
               </Text>
               <View className="flex-row items-center border-b border-grey-plain-300 pb-2">
@@ -251,7 +251,7 @@ export default function AddBankAccountScreen() {
                   activeOpacity={0.7}
                 >
                   <Text
-                    className="text-sm font-semibold"
+                    className="text-sm font-inter-semibold"
                     style={{ color: colors.primary.purple }}
                   >
                     Paste
@@ -282,7 +282,7 @@ export default function AddBankAccountScreen() {
                         strokeWidth={2}
                       />
                     )}
-                    <Text className="text-base font-semibold text-grey-alpha-500">
+                    <Text className="text-base font-inter-semibold text-grey-alpha-500">
                       {selectedBank
                         ? selectedBank.name
                         : isLoadingBanks
@@ -327,7 +327,7 @@ export default function AddBankAccountScreen() {
                     >
                       <Check size={16} color="#FFFFFF" strokeWidth={3} />
                     </View>
-                    <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
+                    <Text className="flex-1 text-base font-inter-semibold text-grey-alpha-500">
                       {accountName}
                     </Text>
                   </View>
@@ -340,7 +340,7 @@ export default function AddBankAccountScreen() {
         {/* Footer */}
         <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
           <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <Text className="text-base font-medium text-grey-alpha-500">
+            <Text className="text-base font-inter-medium text-grey-alpha-500">
               Go back
             </Text>
           </TouchableOpacity>

@@ -44,7 +44,7 @@ function ArticleCard({ article }: { article: Article }) {
         />
       </View>
       <View className="flex-1">
-        <Text className="mb-1 text-[15px] font-semibold text-grey-alpha-500">
+        <Text className="mb-1 text-[15px] font-inter-semibold text-grey-alpha-500">
           {article.title}
         </Text>
         <Text className="text-sm text-grey-plain-550" numberOfLines={2}>
@@ -208,7 +208,7 @@ export default function TopicArticlesScreen() {
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
               {topicData.title}
             </Text>
           </View>
@@ -238,7 +238,7 @@ export default function TopicArticlesScreen() {
       >
         {/* Article Count */}
         <View className="px-4 py-4">
-          <Text className="text-base font-semibold text-grey-alpha-500">
+          <Text className="text-base font-inter-semibold text-grey-alpha-500">
             {topicData.count} {topicData.count === 1 ? 'article' : 'articles'}
           </Text>
         </View>

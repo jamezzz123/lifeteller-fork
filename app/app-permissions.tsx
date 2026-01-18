@@ -75,7 +75,7 @@ export default function AppPermissionsScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           App permissions
         </Text>
       </View>
@@ -95,7 +95,7 @@ export default function AppPermissionsScreen() {
           className="mx-4 mt-8 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Granted ({GRANTED_PERMISSIONS.length})
           </Text>
           <View className="gap-1">
@@ -115,7 +115,7 @@ export default function AppPermissionsScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
             Not granted ({NOT_GRANTED_PERMISSIONS.length})
           </Text>
           <View className="gap-1">

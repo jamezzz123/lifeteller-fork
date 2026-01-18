@@ -79,14 +79,14 @@ export const WithdrawSuccessBottomSheet = forwardRef<
             </View>
 
             {/* Title */}
-            <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
+            <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
               Withdraw successful
             </Text>
 
             {/* Description */}
             <Text className="mb-8 text-center text-base text-grey-plain-550">
               We have sent{' '}
-              <Text className="font-semibold text-grey-alpha-500">
+              <Text className="font-inter-semibold text-grey-alpha-500">
                 {formatAmount(amount, {
                   minimumFractionDigits: 2,
                   maximumFractionDigits: 2,
@@ -108,7 +108,7 @@ export const WithdrawSuccessBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
                 <Text
-                  className="text-base font-semibold"
+                  className="text-base font-inter-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   Share receipt
@@ -126,7 +126,7 @@ export const WithdrawSuccessBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
                 <Text
-                  className="text-base font-semibold"
+                  className="text-base font-inter-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   Download receipt

@@ -108,7 +108,7 @@ export const OTPVerificationBottomSheet = forwardRef<
         <View className="flex-1 px-6">
           {/* Header */}
           <View className="mb-6 flex-row items-center justify-between">
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
               Verify yourself
             </Text>
             <TouchableOpacity onPress={onClose} className="p-1">
@@ -119,7 +119,7 @@ export const OTPVerificationBottomSheet = forwardRef<
           {/* Description */}
           <Text className="mb-6 text-sm leading-5 text-grey-alpha-400">
             Enter the OTP sent to your mobile number{' '}
-            <Text className="font-semibold text-grey-alpha-500">
+            <Text className="font-inter-semibold text-grey-alpha-500">
               {phoneNumber}
             </Text>
             .
@@ -136,7 +136,7 @@ export const OTPVerificationBottomSheet = forwardRef<
                 onKeyPress={(e) => handleKeyPress(e, index)}
                 keyboardType="number-pad"
                 maxLength={1}
-                className={`flex-1 rounded-lg border-2 bg-grey-plain-50 py-4 text-center text-xl font-semibold text-grey-alpha-500 ${
+                className={`flex-1 rounded-lg border-2 bg-grey-plain-50 py-4 text-center text-xl font-inter-semibold text-grey-alpha-500 ${
                   otp[index]
                     ? 'border-primary'
                     : 'border-grey-alpha-250'
@@ -151,7 +151,7 @@ export const OTPVerificationBottomSheet = forwardRef<
           {/* Clear & Resend */}
           <View className="mb-8 flex-row items-center justify-between">
             <Pressable onPress={handleClearInput}>
-              <Text className="text-sm font-medium text-grey-alpha-500">
+              <Text className="text-sm font-inter-medium text-grey-alpha-500">
                 Clear input
               </Text>
             </Pressable>
@@ -171,7 +171,7 @@ export const OTPVerificationBottomSheet = forwardRef<
                 strokeWidth={2}
               />
               <Text
-                className={`text-sm font-medium ${
+                className={`text-sm font-inter-medium ${
                   timeLeft > 0 ? 'text-grey-alpha-400' : 'text-primary'
                 }`}
               >

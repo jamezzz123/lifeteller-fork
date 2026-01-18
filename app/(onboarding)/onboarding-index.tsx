@@ -52,7 +52,7 @@ export default function OnboardingWelcomeScreen() {
         <View className="mb-8">
           <Text className="text-base text-grey-alpha-400">Hi {username},</Text>
           <View className="mt-2">
-            <Text className="text-4xl font-black text-grey-alpha-500">
+            <Text className="text-4xl font-inter-black text-grey-alpha-500">
               Welcome to
             </Text>
             <View>

@@ -193,7 +193,7 @@ export function LiftCard({
         </View>
         <Text className="text-[13px] text-grey-plain-550">
           Co-raised by{' '}
-          <Text className="font-semibold">{firstCoRaiser.name}</Text>
+          <Text className="font-inter-semibold">{firstCoRaiser.name}</Text>
           {othersCount > 0 && (
             <Text>
               {' '}
@@ -217,7 +217,7 @@ export function LiftCard({
             key={item.id}
             className="rounded-full bg-grey-plain-150 px-4 py-2"
           >
-            <Text className="text-[14px] font-medium text-grey-alpha-500">
+            <Text className="text-[14px] font-inter-medium text-grey-alpha-500">
               {item.name}
               {item.quantity && item.quantity > 1 ? ` (${item.quantity})` : ''}
             </Text>
@@ -249,7 +249,7 @@ export function LiftCard({
     return (
       <View className="mb-4">
         <Text className="mb-2 text-[13px] text-grey-plain-550">
-          <Text className="font-semibold">{formatCurrency(currentAmount)}</Text>{' '}
+          <Text className="font-inter-semibold">{formatCurrency(currentAmount)}</Text>{' '}
           of {formatCurrency(targetAmount)} raised
         </Text>
 
@@ -275,7 +275,7 @@ export function LiftCard({
                   marginLeft: pillPosition.marginLeft,
                 }}
               >
-                <Text className="text-xs font-medium text-grey-alpha-500">
+                <Text className="text-xs font-inter-medium text-grey-alpha-500">
                   {Math.round(progress)}%
                 </Text>
               </View>
@@ -311,7 +311,7 @@ export function LiftCard({
     return (
       <View className="mb-4">
         <Text className="text-[14px] text-grey-plain-550">
-          <Text className="font-semibold">Offered:</Text> {parts.join(' • ')}
+          <Text className="font-inter-semibold">Offered:</Text> {parts.join(' • ')}
         </Text>
       </View>
     );
@@ -328,7 +328,7 @@ export function LiftCard({
             className="flex-1 items-start rounded-full  border-grey-alpha-250 bg-white py-3"
             activeOpacity={0.7}
           >
-            <Text className="text-sm font-semibold text-state-red">
+            <Text className="text-sm font-inter-semibold text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -360,7 +360,7 @@ export function LiftCard({
           >
             <View className="flex-row items-center gap-2">
               <XCircle size={18} color={colors.state.red} />
-              <Text className="text-[15px] font-semibold text-state-red">
+              <Text className="text-[15px] font-inter-semibold text-state-red">
                 Decline
               </Text>
             </View>
@@ -400,7 +400,7 @@ export function LiftCard({
       >
         <View className="flex-row items-center gap-2">
           <HeaderIcon size={20} color={colors['grey-alpha']['500']} />
-          <Text className="text-[15px] font-medium text-grey-alpha-500">
+          <Text className="text-[15px] font-inter-medium text-grey-alpha-500">
             {headerConfig.label}
           </Text>
         </View>
@@ -410,7 +410,7 @@ export function LiftCard({
         >
           {statusConfig.icon}
           <Text
-            className="px-1 text-[13px] font-semibold"
+            className="px-1 text-[13px] font-inter-semibold"
             style={{ color: statusConfig.text }}
           >
             {statusConfig.label}
@@ -439,7 +439,7 @@ export function LiftCard({
           </View>
           <View className="flex-1">
             <View className="flex-row items-center gap-1">
-              <Text className="text-[15px] font-semibold text-grey-alpha-500">
+              <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                 {lift.owner.name}
               </Text>
               {lift.owner.verified && (
@@ -467,11 +467,11 @@ export function LiftCard({
 
         {/* Title & Description */}
         <View className="mb-3">
-          <Text className="mb-2 text-[17px] font-semibold text-grey-alpha-500">
+          <Text className="mb-2 text-[17px] font-inter-semibold text-grey-alpha-500">
             {lift.title}
           </Text>
           <Text
-            className="text-[14px] font-normal leading-5 text-grey-plain-550"
+            className="text-[14px] font-inter leading-5 text-grey-plain-550"
             numberOfLines={2}
             ellipsizeMode="tail"
           >

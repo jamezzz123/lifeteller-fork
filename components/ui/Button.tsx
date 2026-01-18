@@ -102,21 +102,21 @@ export function Button({
       case 'primary':
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: colors['grey-plain']['50'],
           textAlign: 'center',
         };
       case 'secondary':
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: colors['grey-plain']['550'],
           textAlign: 'center',
         };
       case 'outline':
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: hasWhiteBorder
             ? colors['grey-plain']['50']
             : colors.primary.purple,
@@ -125,35 +125,35 @@ export function Button({
       case 'gradient-border':
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: colors.primary.purple,
           textAlign: 'center',
         };
       case 'destructive':
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: colors['grey-plain']['50'],
           textAlign: 'center',
         };
       case 'link':
         return {
           fontSize,
-          fontWeight: '500',
+          fontFamily: 'interMedium',
           color: colors.primary.purple,
           textAlign: 'center',
         };
       case 'link-destructive':
         return {
           fontSize,
-          fontWeight: '500',
+          fontFamily: 'interMedium',
           color: colors.state.red,
           textAlign: 'center',
         };
       default:
         return {
           fontSize,
-          fontWeight: '600',
+          fontFamily: 'interSemiBold',
           color: colors['grey-plain']['50'],
           textAlign: 'center',
         };

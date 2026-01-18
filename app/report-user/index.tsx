@@ -98,7 +98,7 @@ export default function ReportUserScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Report user
           </Text>
         </View>
@@ -109,7 +109,7 @@ export default function ReportUserScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="px-4 pt-6">
-            <Text className="mb-6 text-lg font-semibold text-grey-alpha-500">
+            <Text className="mb-6 text-lg font-inter-semibold text-grey-alpha-500">
               What type of issue are you reporting?
             </Text>
 
@@ -128,7 +128,7 @@ export default function ReportUserScreen() {
                       onPress={() => handleIssueTypeSelect(issue.id)}
                     />
                     <View className="flex-1">
-                      <Text className="mb-1 text-base font-medium text-grey-alpha-500">
+                      <Text className="mb-1 text-base font-inter-medium text-grey-alpha-500">
                         {issue.label}
                       </Text>
                       <Text className="text-sm text-grey-plain-550">
@@ -147,7 +147,7 @@ export default function ReportUserScreen() {
           <View className="flex-row items-center justify-between">
             <TouchableOpacity onPress={handleGoBack}>
               <Text
-                className="text-base font-medium"
+                className="text-base font-inter-medium"
                 style={{ color: colors.primary.purple }}
               >
                 Go back
@@ -178,7 +178,7 @@ export default function ReportUserScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Describe issue
         </Text>
       </View>
@@ -190,7 +190,7 @@ export default function ReportUserScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View className="px-4 pt-6">
-          <Text className="mb-4 text-lg font-semibold text-grey-alpha-500">
+          <Text className="mb-4 text-lg font-inter-semibold text-grey-alpha-500">
             Describe the issue
           </Text>
 
@@ -217,7 +217,7 @@ export default function ReportUserScreen() {
         <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={handleGoBack}>
             <Text
-              className="text-base font-medium"
+              className="text-base font-inter-medium"
               style={{ color: colors.primary.purple }}
             >
               Go back

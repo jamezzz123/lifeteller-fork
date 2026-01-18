@@ -95,7 +95,7 @@ export default function WalletAnalyticsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Wallet analytics
           </Text>
         </View>
@@ -119,7 +119,7 @@ export default function WalletAnalyticsScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
               No analytics available
             </Text>
 
@@ -155,7 +155,7 @@ export default function WalletAnalyticsScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Wallet analytics
         </Text>
       </View>
@@ -169,10 +169,10 @@ export default function WalletAnalyticsScreen() {
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Current Balance Section */}
           <View className="mb-6">
-            <Text className="mb-2 text-xs font-semibold uppercase tracking-wider text-grey-plain-550">
+            <Text className="mb-2 text-xs font-inter-semibold uppercase tracking-wider text-grey-plain-550">
               Current Balance
             </Text>
-            <Text className="mb-2 text-3xl font-bold text-grey-alpha-500">
+            <Text className="mb-2 text-3xl font-inter-bold text-grey-alpha-500">
               {formatAmount(analyticsData.currentBalance, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -196,7 +196,7 @@ export default function WalletAnalyticsScreen() {
                 strokeWidth={2}
               />
               <Text
-                className="text-sm font-semibold"
+                className="text-sm font-inter-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 Wallet statement
@@ -211,7 +211,7 @@ export default function WalletAnalyticsScreen() {
               className="flex-row items-center justify-between rounded-xl border border-grey-plain-300 bg-white px-4 py-3"
               activeOpacity={0.7}
             >
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 {selectedPeriod}
               </Text>
               <ChevronDown
@@ -235,7 +235,7 @@ export default function WalletAnalyticsScreen() {
             className="mb-6 rounded-2xl p-2"
             style={{ backgroundColor: colors['grey-plain']['150'] }}
           >
-            <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+            <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
               IMPORTANT NUMBERS
             </Text>
             <View className="gap-1">
@@ -244,7 +244,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Number of transactions
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {analyticsData.numberOfTransactions}
                 </Text>
               </View>
@@ -254,7 +254,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Number of inflows
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {analyticsData.numberOfInflows}
                 </Text>
               </View>
@@ -264,7 +264,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Number of outflows
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {analyticsData.numberOfOutflows}
                 </Text>
               </View>
@@ -274,7 +274,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Lift offered
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {analyticsData.liftOffered}
                 </Text>
               </View>
@@ -284,7 +284,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Lift offered amount
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {formatAmount(analyticsData.liftOfferedAmount, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -297,7 +297,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Lift received
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {analyticsData.liftReceived}
                 </Text>
               </View>
@@ -307,7 +307,7 @@ export default function WalletAnalyticsScreen() {
                 <Text className="text-base text-grey-alpha-500">
                   Lift received amount
                 </Text>
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   {formatAmount(analyticsData.liftReceivedAmount, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -322,7 +322,7 @@ export default function WalletAnalyticsScreen() {
       {/* Time Period Selection Bottom Sheet */}
       <BottomSheetComponent ref={periodSheetRef} snapPoints={['40%']}>
         <View className="px-6">
-          <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+          <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
             Select time period
           </Text>
           <View className="gap-2">
@@ -338,7 +338,7 @@ export default function WalletAnalyticsScreen() {
                 activeOpacity={0.7}
               >
                 <Text
-                  className={`text-base font-semibold ${
+                  className={`text-base font-inter-semibold ${
                     selectedPeriod === period
                       ? 'text-primary'
                       : 'text-grey-alpha-500'

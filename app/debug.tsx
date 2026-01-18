@@ -69,7 +69,7 @@ export default function DebugScreen() {
               size={24}
               strokeWidth={2}
             />
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
               Debug Menu
             </Text>
           </View>
@@ -101,7 +101,7 @@ export default function DebugScreen() {
               >
                 <View className="flex-row items-center justify-between">
                   <View className="flex-1">
-                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                    <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
                       {option.title}
                     </Text>
                     {option.description && (
@@ -118,7 +118,7 @@ export default function DebugScreen() {
                       }}
                     >
                       <Text
-                        className="text-xs font-semibold"
+                        className="text-xs font-inter-semibold"
                         style={{ color: colors.primary.purple }}
                       >
                         New
@@ -132,7 +132,7 @@ export default function DebugScreen() {
 
           {/* Info Section */}
           <View className="mt-8 rounded-xl border bg-grey-plain-100 p-4">
-            <Text className="mb-2 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-2 text-sm font-inter-semibold text-grey-alpha-500">
               Debug Information
             </Text>
             <Text className="text-xs leading-4 text-grey-plain-550">

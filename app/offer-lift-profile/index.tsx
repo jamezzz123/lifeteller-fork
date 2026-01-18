@@ -74,7 +74,7 @@ export default function SelectRecipientScreen() {
           showsVerticalScrollIndicator={false}
         >
           <View className="px-4 pt-5">
-            <Text className="text-sm font-semibold text-grey-alpha-450">
+            <Text className="text-sm font-inter-semibold text-grey-alpha-450">
               Offer to:
             </Text>
 

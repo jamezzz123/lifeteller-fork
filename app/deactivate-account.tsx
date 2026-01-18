@@ -35,7 +35,7 @@ export default function DeactivateAccountScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           Deactivate account
         </Text>
       </View>
@@ -47,7 +47,7 @@ export default function DeactivateAccountScreen() {
       >
         <View className="px-4 pt-6">
           {/* Title */}
-          <Text className="mb-4 text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-4 text-xl font-inter-bold text-grey-alpha-500">
             Deactivate your Lifteller account
           </Text>
 
@@ -59,7 +59,7 @@ export default function DeactivateAccountScreen() {
           </Text>
 
           {/* What Happens Next */}
-          <Text className="mb-4 text-base font-semibold text-grey-alpha-500">
+          <Text className="mb-4 text-base font-inter-semibold text-grey-alpha-500">
             What Happens Next:
           </Text>
 
@@ -76,7 +76,7 @@ export default function DeactivateAccountScreen() {
           </View>
 
           {/* Question */}
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             Do you want to continue?
           </Text>
         </View>

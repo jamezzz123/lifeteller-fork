@@ -195,7 +195,7 @@ export default function Tier3UpgradeScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Upgrade to tier 3
         </Text>
       </View>
@@ -209,7 +209,7 @@ export default function Tier3UpgradeScreen() {
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Select an option */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-medium text-grey-alpha-500">
               Select an option
             </Text>
 
@@ -242,7 +242,7 @@ export default function Tier3UpgradeScreen() {
 
           {/* Enter your meter number */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-medium text-grey-alpha-500">
               Enter your meter number
             </Text>
 
@@ -264,7 +264,7 @@ export default function Tier3UpgradeScreen() {
 
           {/* Upload selected utility bill */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-medium text-grey-alpha-500">
               Upload selected utility bill
             </Text>
 
@@ -275,7 +275,7 @@ export default function Tier3UpgradeScreen() {
             >
               {uploadedFile ? (
                 <View className="items-center justify-center py-6">
-                  <Text className="mb-2 text-base font-medium text-primary">
+                  <Text className="mb-2 text-base font-inter-medium text-primary">
                     Document uploaded
                   </Text>
                   <Text className="text-sm text-grey-alpha-400">
@@ -290,7 +290,7 @@ export default function Tier3UpgradeScreen() {
                     strokeWidth={2}
                   />
                   <Text
-                    className="mt-3 text-base font-medium"
+                    className="mt-3 text-base font-inter-medium"
                     style={{ color: colors.primary.purple }}
                   >
                     Capture
@@ -331,7 +331,7 @@ export default function Tier3UpgradeScreen() {
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
         <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             Go back
           </Text>
         </TouchableOpacity>
@@ -347,7 +347,7 @@ export default function Tier3UpgradeScreen() {
       {/* Utility Options Bottom Sheet */}
       <BottomSheetComponent ref={utilitySheetRef} snapPoints={['40%']}>
         <View className="px-6 pb-8">
-          <Text className="mb-6 text-lg font-bold text-grey-alpha-500">
+          <Text className="mb-6 text-lg font-inter-bold text-grey-alpha-500">
             Select an option
           </Text>
 
@@ -363,7 +363,7 @@ export default function Tier3UpgradeScreen() {
               activeOpacity={0.7}
             >
               <Text
-                className="text-base font-medium"
+                className="text-base font-inter-medium"
                 style={{
                   color:
                     selectedUtility === option.value
@@ -439,7 +439,7 @@ const UtilityBillSuccessBottomSheet = React.forwardRef<
         </View>
 
         {/* Title */}
-        <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
+        <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
           Utility bill submitted successfully
         </Text>
 

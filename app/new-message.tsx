@@ -46,7 +46,7 @@ export default function NewMessageScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
           New message
         </Text>
       </View>
@@ -80,7 +80,7 @@ export default function NewMessageScreen() {
             <Users color={colors.primary.purple} size={24} strokeWidth={2} />
           </View>
           <Text
-            className="flex-1 text-base font-medium"
+            className="flex-1 text-base font-inter-medium"
             style={{ color: colors.primary.purple }}
           >
             Create a new group
@@ -90,7 +90,7 @@ export default function NewMessageScreen() {
         {/* Recently Contacted Section */}
         {!searchQuery && (
           <View className="mt-2">
-            <Text className="mb-4 px-4 text-sm font-semibold text-grey-alpha-400">
+            <Text className="mb-4 px-4 text-sm font-inter-semibold text-grey-alpha-400">
               Recently contacted
             </Text>
 

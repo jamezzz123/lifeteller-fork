@@ -68,7 +68,7 @@ export default function BadgesInfoScreen() {
               strokeWidth={2.6}
             />
           </TouchableOpacity>
-          <Text className="text-base font-semibold text-grey-alpha-500">
+          <Text className="text-base font-inter-semibold text-grey-alpha-500">
             How badges work
           </Text>
         </View>
@@ -100,10 +100,10 @@ export default function BadgesInfoScreen() {
                   borderBottomColor: colors['grey-plain']['300'],
                 }}
               >
-                <Text className="flex-1 text-xs font-semibold uppercase text-grey-plain-550">
+                <Text className="flex-1 text-xs font-inter-semibold uppercase text-grey-plain-550">
                   Activity
                 </Text>
-                <Text className="text-xs font-semibold uppercase text-grey-plain-550">
+                <Text className="text-xs font-inter-semibold uppercase text-grey-plain-550">
                   Lift Points
                 </Text>
               </View>
@@ -121,7 +121,7 @@ export default function BadgesInfoScreen() {
                   <Text className="flex-1 text-sm text-grey-alpha-500">
                     {item.activity}
                   </Text>
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="text-sm font-inter-medium text-grey-alpha-500">
                     +{item.points} points
                   </Text>
                 </View>
@@ -158,7 +158,7 @@ export default function BadgesInfoScreen() {
                         }}
                       >
                         <Text
-                          className="text-xs font-semibold"
+                          className="text-xs font-inter-semibold"
                           style={{ color: colors.primary.purple }}
                         >
                           Current
@@ -171,7 +171,7 @@ export default function BadgesInfoScreen() {
                     >
                       <BadgeIcon width={80} height={80} />
                     </View>
-                    <Text className="mb-1 text-xs font-medium text-grey-alpha-500">
+                    <Text className="mb-1 text-xs font-inter-medium text-grey-alpha-500">
                       {badge.name}
                     </Text>
                     <Text className="text-xs text-grey-plain-550">

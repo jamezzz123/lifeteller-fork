@@ -58,7 +58,7 @@ export const LanguageBottomSheet = forwardRef<
   return (
     <BottomSheetComponent ref={ref} snapPoints={['70%']}>
       <View className="px-6 pb-4">
-        <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+        <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
           Choose preferred language
         </Text>
 

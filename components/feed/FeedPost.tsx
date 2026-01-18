@@ -170,14 +170,14 @@ export function FeedPost({
                 activeOpacity={userId ? 0.7 : 1}
               >
                 <View className="mb-0.5 flex-row items-center gap-1.5">
-                  <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                  <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                     {username}
                   </Text>
                   <BadgeCheck color={colors.primary.purple} size={16} />
                   {otherUsersCount !== undefined && otherUsersCount > 0 && (
                     <Text className="text-[13px] text-grey-plain-550">
                       and{' '}
-                      <Text className="font-semibold">+{otherUsersCount}</Text>{' '}
+                      <Text className="font-inter-semibold">+{otherUsersCount}</Text>{' '}
                       others
                     </Text>
                   )}

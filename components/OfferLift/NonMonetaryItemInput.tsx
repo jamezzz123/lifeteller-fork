@@ -62,13 +62,13 @@ export function NonMonetaryItemInput({
     >
       {showLabel && (
         <View className="flex-row items-center justify-between">
-          <Text className="text-sm font-semibold text-grey-alpha-500">
+          <Text className="text-sm font-inter-semibold text-grey-alpha-500">
             Item #{itemIndex + 1}
           </Text>
           {onRemove && itemIndex > 0 && (
             <TouchableOpacity onPress={() => onRemove(item.id)}>
               <Text
-                className="text-sm font-semibold"
+                className="text-sm font-inter-semibold"
                 style={{ color: colors.state.red }}
               >
                 Remove item
@@ -83,7 +83,7 @@ export function NonMonetaryItemInput({
       >
         {/* Item Name Dropdown */}
         <View className="mt-4">
-          <Text className="text-xs font-semibold text-grey-alpha-400">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-400">
             Item name
           </Text>
           <TouchableOpacity
@@ -108,7 +108,7 @@ export function NonMonetaryItemInput({
 
         {/* Quantity Input */}
         <View className="mt-4">
-          <Text className="text-xs font-semibold text-grey-alpha-400">
+          <Text className="text-xs font-inter-semibold text-grey-alpha-400">
             Quantity needed
           </Text>
           <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">

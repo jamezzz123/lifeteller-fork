@@ -32,12 +32,12 @@ export function LiftCard({
   return (
     <View className="mb-6 rounded-2xl border border-grey-alpha-250 bg-white p-4">
       <View>
-        <Text className="mb-2 text-base font-semibold text-grey-alpha-500">
+        <Text className="mb-2 text-base font-inter-semibold text-grey-alpha-500">
           {title}
         </Text>
 
         <Text className="mb-2 text-sm text-grey-plain-550">
-          <Text className="font-semibold">{formatCurrency(currentAmount)}</Text>{' '}
+          <Text className="font-inter-semibold">{formatCurrency(currentAmount)}</Text>{' '}
           of {formatCurrency(targetAmount)} raised
         </Text>
 
@@ -62,7 +62,7 @@ export function LiftCard({
                   marginLeft: -20, // Half of min-width to center on edge
                 }}
               >
-                <Text className="text-xs font-medium text-grey-alpha-500">
+                <Text className="text-xs font-inter-medium text-grey-alpha-500">
                   {Math.round(progress)}%
                 </Text>
               </View>

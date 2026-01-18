@@ -111,7 +111,7 @@ export const AttachmentBottomSheet = forwardRef<
     >
       <BottomSheetView style={styles.contentContainer}>
         <View className="px-6 pb-6">
-          <Text className="mb-6 text-lg font-bold text-grey-alpha-550">
+          <Text className="mb-6 text-lg font-inter-bold text-grey-alpha-550">
             Attachment
           </Text>
 
@@ -139,7 +139,7 @@ export const AttachmentBottomSheet = forwardRef<
                       strokeWidth={2}
                     />
                   </View>
-                  <Text className="mt-3 text-sm font-medium text-grey-plain-550">
+                  <Text className="mt-3 text-sm font-inter-medium text-grey-plain-550">
                     {option.label}
                   </Text>
                 </TouchableOpacity>

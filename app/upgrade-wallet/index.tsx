@@ -126,7 +126,7 @@ export default function UpgradeWalletScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
           Upgrade to {targetTier}
         </Text>
       </View>
@@ -140,7 +140,7 @@ export default function UpgradeWalletScreen() {
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Choose an option */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-medium text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-medium text-grey-alpha-500">
               Choose an option
             </Text>
 
@@ -167,7 +167,7 @@ export default function UpgradeWalletScreen() {
                     />
                   )}
                   <Text
-                    className="text-sm font-medium"
+                    className="text-sm font-inter-medium"
                     style={{
                       color:
                         selectedOption === 'bvn'
@@ -201,7 +201,7 @@ export default function UpgradeWalletScreen() {
                     />
                   )}
                   <Text
-                    className="text-sm font-medium"
+                    className="text-sm font-inter-medium"
                     style={{
                       color:
                         selectedOption === 'nin'
@@ -219,7 +219,7 @@ export default function UpgradeWalletScreen() {
           {/* BVN Form */}
           {selectedOption === 'bvn' && (
             <View className="mb-6">
-              <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+              <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                 Enter your BVN number
               </Text>
 
@@ -258,7 +258,7 @@ export default function UpgradeWalletScreen() {
             <View className="mb-6">
               {/* NIN */}
               <View className="mb-4">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                   NIN (National identity number)
                 </Text>
 
@@ -293,7 +293,7 @@ export default function UpgradeWalletScreen() {
 
               {/* First name */}
               <View className="mb-4">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                   First name
                 </Text>
 
@@ -327,7 +327,7 @@ export default function UpgradeWalletScreen() {
 
               {/* Last name */}
               <View className="mb-4">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                   Last name
                 </Text>
 
@@ -349,7 +349,7 @@ export default function UpgradeWalletScreen() {
 
               {/* Other name (optional) */}
               <View className="mb-4">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                   Other name (optional)
                 </Text>
 
@@ -371,7 +371,7 @@ export default function UpgradeWalletScreen() {
 
               {/* Date of birth */}
               <View className="mb-6">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
+                <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
                   Date of birth
                 </Text>
 
@@ -419,7 +419,7 @@ export default function UpgradeWalletScreen() {
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
         <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-          <Text className="text-base font-medium text-grey-alpha-500">
+          <Text className="text-base font-inter-medium text-grey-alpha-500">
             Go back
           </Text>
         </TouchableOpacity>

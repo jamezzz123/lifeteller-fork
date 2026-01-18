@@ -83,7 +83,7 @@ const HelpMeWriteBottomSheet = forwardRef<
             style={{ width: 24, height: 24 }}
             contentFit="contain"
           />
-          <Text className="text-xl font-bold text-grey-alpha-500">
+          <Text className="text-xl font-inter-bold text-grey-alpha-500">
             Write with ai
           </Text>
         </View>
@@ -96,7 +96,7 @@ const HelpMeWriteBottomSheet = forwardRef<
         >
           {/* Original Text Section */}
           <View className="mb-6 border-b border-grey-plain-300 pb-3">
-            <Text className="mb-2 text-xs font-semibold uppercase tracking-wide text-grey-alpha-400">
+            <Text className="mb-2 text-xs font-inter-semibold uppercase tracking-wide text-grey-alpha-400">
               Your Text
             </Text>
             <View className="rounded-2xl">
@@ -126,7 +126,7 @@ const HelpMeWriteBottomSheet = forwardRef<
                     className="rounded-2xl p-4"
                     style={{ backgroundColor: colors['grey-alpha']['150'] }}
                   >
-                    <Text className="mb-2 text-sm font-semibold uppercase tracking-wide text-grey-alpha-400">
+                    <Text className="mb-2 text-sm font-inter-semibold uppercase tracking-wide text-grey-alpha-400">
                       Revised Text #{index + 1}
                     </Text>
                     <Text className="text-base leading-6 text-grey-alpha-500">

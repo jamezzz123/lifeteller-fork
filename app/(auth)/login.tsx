@@ -197,7 +197,7 @@ export default function LoginScreen() {
 
           {/* Form Content */}
           <View className="flex-1 px-6">
-            <Text className="text-2xl font-bold text-grey-alpha-550">
+            <Text className="text-2xl font-inter-bold text-grey-alpha-550">
               Login
             </Text>
             <Text className="mb-8 text-base text-grey-alpha-400">

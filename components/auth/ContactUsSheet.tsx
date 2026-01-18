@@ -183,12 +183,12 @@ export const ContactUsSheet = forwardRef<
                         color={colors['grey-alpha']['500']}
                         strokeWidth={3}
                       />
-                      <Text className="ml-1 text-sm font-medium text-grey-alpha-500">
+                      <Text className="ml-1 text-sm font-inter-medium text-grey-alpha-500">
                         Copied
                       </Text>
                     </View>
                   ) : (
-                    <Text className="text-sm font-medium text-grey-alpha-500">
+                    <Text className="text-sm font-inter-medium text-grey-alpha-500">
                       Copy
                     </Text>
                   )}

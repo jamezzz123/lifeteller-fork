@@ -131,7 +131,7 @@ export const LiftOptionsBottomSheet = forwardRef<
                 {option.icon}
               </View>
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-550">
+                <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-550">
                   {option.title}
                 </Text>
                 <Text className="text-sm text-grey-alpha-400">

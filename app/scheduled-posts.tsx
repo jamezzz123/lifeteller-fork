@@ -123,7 +123,7 @@ export default function ScheduledPostsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Scheduled posts
           </Text>
         </View>
@@ -231,7 +231,7 @@ export default function ScheduledPostsScreen() {
             <View className="flex-row items-center">
               <Check size={18} color={colors.primary.purple} />
               <View style={{ marginLeft: 12 }}>
-                <Text className="text-base font-semibold text-grey-alpha-550">
+                <Text className="text-base font-inter-semibold text-grey-alpha-550">
                   Post now
                 </Text>
               </View>
@@ -248,7 +248,7 @@ export default function ScheduledPostsScreen() {
             <View className="flex-row items-center">
               <Pen size={18} color={colors['grey-alpha']['400']} />
               <View style={{ marginLeft: 12 }}>
-                <Text className="text-base font-semibold text-grey-alpha-550">
+                <Text className="text-base font-inter-semibold text-grey-alpha-550">
                   Edit post
                 </Text>
               </View>
@@ -266,7 +266,7 @@ export default function ScheduledPostsScreen() {
               <Trash2 size={18} color={colors.state.red} />
               <View style={{ marginLeft: 12 }}>
                 <Text
-                  className="text-base font-semibold text-grey-alpha-550"
+                  className="text-base font-inter-semibold text-grey-alpha-550"
                   style={{ color: colors.state.red }}
                 >
                   Delete post

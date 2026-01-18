@@ -88,7 +88,7 @@ export function PasscodeInput({
             onBlur={handleBlur}
             keyboardType="number-pad"
             maxLength={1}
-            className="flex-1 rounded-lg border-2 bg-white text-xl font-bold"
+            className="flex-1 rounded-lg border-2 bg-white text-xl font-inter-bold"
             style={{
               aspectRatio: 1,
               borderColor:

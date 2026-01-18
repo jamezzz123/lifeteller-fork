@@ -28,7 +28,7 @@ export function FreezeWalletConfirmationModal({
         <TouchableOpacity activeOpacity={1} onPress={() => {}}>
           <View className="w-full rounded-2xl bg-white p-6">
             {/* Title */}
-            <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
+            <Text className="mb-3 text-2xl font-inter-bold text-grey-alpha-500">
               Freeze wallet
             </Text>
 
@@ -46,7 +46,7 @@ export function FreezeWalletConfirmationModal({
             <View className="flex-row justify-end gap-4">
               <TouchableOpacity onPress={onCancel}>
                 <Text
-                  className="text-base font-semibold"
+                  className="text-base font-inter-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   No
@@ -54,7 +54,7 @@ export function FreezeWalletConfirmationModal({
               </TouchableOpacity>
               <TouchableOpacity onPress={onConfirm}>
                 <Text
-                  className="text-base font-semibold"
+                  className="text-base font-inter-semibold"
                   style={{ color: colors.state.red }}
                 >
                   Yes, freeze

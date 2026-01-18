@@ -236,7 +236,7 @@ function LiftClipsTab() {
                   backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 }}
               >
-                <Text className="text-[10px] font-semibold text-white">
+                <Text className="text-[10px] font-inter-semibold text-white">
                   {formatDuration(clip.duration)}
                 </Text>
               </View>
@@ -265,7 +265,7 @@ function SectionHeader({
     <View className="mb-3 flex-row items-center justify-between">
       <View className="flex-row items-center gap-2">
         {icon}
-        <Text className="text-sm font-semibold text-grey-alpha-500">
+        <Text className="text-sm font-inter-semibold text-grey-alpha-500">
           {title}
         </Text>
       </View>
@@ -389,7 +389,7 @@ function AboutTab({ user }: { user: OtherUser }) {
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
           {/* Current Badge */}
           <View className="items-center">
-            <Text className="mb-2 text-xs font-medium text-grey-plain-550">
+            <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
               Current
             </Text>
             <View className="mb-2 h-20 w-20 items-center justify-center">
@@ -398,7 +398,7 @@ function AboutTab({ user }: { user: OtherUser }) {
                 height: 80,
               })}
             </View>
-            <Text className="text-xs font-medium text-grey-alpha-500">
+            <Text className="text-xs font-inter-medium text-grey-alpha-500">
               {aboutData.badges.currentBadge.name}
             </Text>
           </View>
@@ -544,7 +544,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
               <TouchableOpacity onPress={() => router.back()}>
                 <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
               </TouchableOpacity>
-              <Text className="text-lg font-semibold text-grey-alpha-500">
+              <Text className="text-lg font-inter-semibold text-grey-alpha-500">
                 {user.fullName}
               </Text>
             </View>
@@ -582,7 +582,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
                     ) : (
                       <View className="bg-primary-tints-purple-100 h-full w-full items-center justify-center">
                         <Text
-                          className="text-2xl font-bold"
+                          className="text-2xl font-inter-bold"
                           style={{ color: colors.primary.purple }}
                         >
                           {user.fullName
@@ -598,7 +598,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
                 {/* User Details */}
                 <View className="flex-1">
                   <View className="mb-1.5 flex-row items-center gap-2">
-                    <Text className="text-xl font-bold text-grey-alpha-500">
+                    <Text className="text-xl font-inter-bold text-grey-alpha-500">
                       {user.fullName}
                     </Text>
                     {user.isVerified && (
@@ -618,7 +618,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
                       <View className="flex-row items-center gap-1.5">
                         <Medal color={colors.primary.purple} size={12} />
                         <Text
-                          className="text-xs font-semibold"
+                          className="text-xs font-inter-semibold"
                           style={{ color: colors['grey-alpha']['550'] }}
                         >
                           {user.badge || 'Lift Captain'}
@@ -689,10 +689,10 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
             <View className="flex-row gap-3">
               {/* Lifts Card */}
               <View className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
-                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                   {(user.liftsCount || 0).toLocaleString()}
                 </Text>
-                <Text className="text-xs font-medium text-grey-plain-550">
+                <Text className="text-xs font-inter-medium text-grey-plain-550">
                   Lifts
                 </Text>
               </View>
@@ -719,10 +719,10 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
                     strokeWidth={2.5}
                   />
                 </View>
-                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                   {(user.followingCount || 0).toLocaleString()}
                 </Text>
-                <Text className="text-xs font-medium text-grey-plain-550">
+                <Text className="text-xs font-inter-medium text-grey-plain-550">
                   Following
                 </Text>
               </TouchableOpacity>
@@ -749,10 +749,10 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
                     strokeWidth={2.5}
                   />
                 </View>
-                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
                   {(user.followersCount || 0).toLocaleString()}
                 </Text>
-                <Text className="text-xs font-medium text-grey-plain-550">
+                <Text className="text-xs font-inter-medium text-grey-plain-550">
                   Followers
                 </Text>
               </TouchableOpacity>

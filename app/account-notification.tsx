@@ -57,8 +57,8 @@ const RequestedLiftCard = ({
 }) => (
   <View className="border-grey-plain-300 gap-1 border rounded-lg p-4">
     <View className="flex-row justify-between mb-2">
-      <Text className="text-sm font-medium">{title}</Text>
-      <Text className="text-sm font-medium text-primary">₦{amount.toLocaleString()}</Text>
+      <Text className="text-sm font-inter-medium">{title}</Text>
+      <Text className="text-sm font-inter-medium text-primary">₦{amount.toLocaleString()}</Text>
     </View>
     <LiftProgressBar amountTextSize="sm" currentAmount={currentAmount} targetAmount={targetAmount} />
   </View>
@@ -77,8 +77,8 @@ const OfferLiftCard = ({
 }) => (
   <View className="border-grey-plain-300 gap-1 rounded-lg">
     <View className="flex-row justify-between p-4 border border-grey-plain-300 rounded-lg items-center">
-      <Text className="text-sm font-medium">{title}</Text>
-      <Text className="text-sm font-medium text-primary">₦{amount.toLocaleString()}</Text>
+      <Text className="text-sm font-inter-medium">{title}</Text>
+      <Text className="text-sm font-inter-medium text-primary">₦{amount.toLocaleString()}</Text>
     </View>
     <View className="flex-row items-center justify-between">
       <Button
@@ -109,10 +109,10 @@ const EmptyState = ({
       width: 150,
       height: 150
     }} source={require('@/assets/images/empty-state.png')} ></Image>
-    <Text className="text-lg font-semibold text-grey-alpha-550 mb-2">
+    <Text className="text-lg font-inter-semibold text-grey-alpha-550 mb-2">
       No lift notifications yet
     </Text>
-    <Text className="text-sm text-grey-alpha-400 text-center mb-6">
+    <Text className="text-sm font-inter text-grey-alpha-400 text-center mb-6">
       When you have lift notifications, they will appear here.
     </Text>
     <View className="flex-row gap-3">
@@ -154,8 +154,8 @@ const NotificationItem = ({
         className="mr-3"
       />
       <View className="flex-1 gap-1 pb-4">
-        <Text className="text-[15px] font-normal leading-5 text-grey-alpha-400">
-          <Text className="font-semibold text-grey-alpha-550">{actorName}</Text>{' '}
+        <Text className="text-[15px] font-inter leading-5 text-grey-alpha-400">
+          <Text className="font-inter-semibold text-grey-alpha-550">{actorName}</Text>{' '}
           {actionText}
         </Text>
 
@@ -392,7 +392,7 @@ export default function AccountNotificationScreen() {
   const renderItem = ({ item }: { item: NotificationListItem }) => {
     if (item.type === 'header') {
       return (
-        <Text className="text-sm font-semibold text-grey-alpha-450 mb-2 mt-4">
+        <Text className="text-sm font-inter-semibold text-grey-alpha-450 mb-2 mt-4">
           {item.title}
         </Text>
       );
@@ -414,7 +414,7 @@ export default function AccountNotificationScreen() {
       className="items-center justify-center py-6"
       activeOpacity={0.7}
     >
-      <Text className="text-[15px] font-medium text-grey-plain-550">
+      <Text className="text-[15px] font-inter-medium text-grey-plain-550">
         {isLoadingMore
           ? 'Loading...'
           : hasMore
@@ -432,7 +432,7 @@ export default function AccountNotificationScreen() {
           <TouchableOpacity onPress={() => router.back()} className="mr-3">
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-450">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-450">
             Notifications
           </Text>
         </View>

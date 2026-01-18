@@ -54,7 +54,7 @@ function ThemeCard({
       >
         <Preview width={previewSize} height={previewSize * 0.96} />
       </View>
-      <Text className="mt-3 text-sm font-semibold text-grey-alpha-500">
+      <Text className="mt-3 text-sm font-inter-semibold text-grey-alpha-500">
         {label}
       </Text>
       <View className="mt-2 items-center">
@@ -92,7 +92,7 @@ export default function ThemeScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">Theme</Text>
+        <Text className="text-lg font-inter-semibold text-grey-alpha-500">Theme</Text>
       </View>
 
       <ScrollView

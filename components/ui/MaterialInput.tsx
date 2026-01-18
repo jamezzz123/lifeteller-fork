@@ -74,7 +74,7 @@ export function MaterialInput({
       {/* Floating Label */}
       {label && (
         <Text
-          className={`mb-2 text-xs font-semibold transition-all ${
+          className={`mb-2 text-xs font-inter-semibold transition-all ${
             isFocused
               ? 'text-primary'
               : error

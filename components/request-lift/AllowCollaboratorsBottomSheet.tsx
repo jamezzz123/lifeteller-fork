@@ -38,7 +38,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
   return (
     <BottomSheetComponent ref={ref} snapPoints={['60%']}>
       <View className="px-4 pb-4">
-        <Text className="mb-2 text-lg font-bold text-grey-alpha-500">
+        <Text className="mb-2 text-lg font-inter-bold text-grey-alpha-500">
           Allow collaborators
         </Text>
         <Text className="mb-6 text-sm text-grey-alpha-400">
@@ -59,7 +59,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
             }}
           >
             <Text
-              className="text-base font-medium"
+              className="text-base font-inter-medium"
               style={{
                 color:
                   selectedMode === 'unlimited'
@@ -82,7 +82,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
             }}
           >
             <Text
-              className="text-base font-medium"
+              className="text-base font-inter-medium"
               style={{
                 color:
                   selectedMode === 'limited'
@@ -116,7 +116,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
                   onPress={() => handlePresetSelect(num)}
                   className="rounded-lg bg-grey-plain-150 px-6 py-3"
                 >
-                  <Text className="text-base font-medium text-grey-alpha-500">
+                  <Text className="text-base font-inter-medium text-grey-alpha-500">
                     {num}
                   </Text>
                 </TouchableOpacity>
@@ -134,7 +134,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
             className="rounded-full px-8 py-3"
             style={{ backgroundColor: colors.primary.purple }}
           >
-            <Text className="text-base font-semibold text-white">Done</Text>
+            <Text className="text-base font-inter-semibold text-white">Done</Text>
           </View>
         </TouchableOpacity>
       </View>

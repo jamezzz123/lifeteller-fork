@@ -456,7 +456,7 @@ function ArticleSectionComponent({ section }: { section: ArticleSection }) {
   switch (section.type) {
     case 'title':
       return (
-        <Text className="mb-6 mt-6 text-3xl font-bold text-grey-alpha-500">
+        <Text className="mb-6 mt-6 text-3xl font-inter-bold text-grey-alpha-500">
           {section.content}
         </Text>
       );
@@ -468,7 +468,7 @@ function ArticleSectionComponent({ section }: { section: ArticleSection }) {
       );
     case 'heading':
       return (
-        <Text className="mb-4 mt-6 text-xl font-bold text-grey-alpha-500">
+        <Text className="mb-4 mt-6 text-xl font-inter-bold text-grey-alpha-500">
           {section.content}
         </Text>
       );
@@ -527,7 +527,7 @@ export default function ArticleDetailScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="ml-4 flex-1 text-lg font-semibold text-grey-alpha-500">
+          <Text className="ml-4 flex-1 text-lg font-inter-semibold text-grey-alpha-500">
             Help article
           </Text>
           <View className="flex-row items-center gap-4">
@@ -557,7 +557,7 @@ export default function ArticleDetailScreen() {
         {/* Article Content */}
         <View className="px-4 py-6">
           {/* Title */}
-          <Text className="mb-6 text-3xl font-bold text-grey-alpha-500">
+          <Text className="mb-6 text-3xl font-inter-bold text-grey-alpha-500">
             {article.title}
           </Text>
 

@@ -117,7 +117,7 @@ export const WithdrawFormBottomSheet = forwardRef<
         >
           {/* Amount to withdraw section */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
               Amount to withdraw
             </Text>
 
@@ -129,7 +129,7 @@ export const WithdrawFormBottomSheet = forwardRef<
                 placeholder="₦"
                 placeholderTextColor={colors['grey-alpha']['400']}
                 keyboardType="numeric"
-                className="text-3xl font-bold text-grey-alpha-500"
+                className="text-3xl font-inter-bold text-grey-alpha-500"
                 style={{ fontSize: 32 }}
               />
             </View>
@@ -138,7 +138,7 @@ export const WithdrawFormBottomSheet = forwardRef<
             <View className="mb-4 flex-row items-center gap-2">
               <Info size={16} color={colors.primary.purple} strokeWidth={2} />
               <Text
-                className="text-sm font-medium"
+                className="text-sm font-inter-medium"
                 style={{ color: colors.primary.purple }}
               >
                 Available balance:{' '}
@@ -168,7 +168,7 @@ export const WithdrawFormBottomSheet = forwardRef<
                     activeOpacity={0.7}
                   >
                     <Text
-                      className={`text-sm font-semibold ${
+                      className={`text-sm font-inter-semibold ${
                         isSelected
                           ? 'text-primary'
                           : 'text-grey-alpha-500'
@@ -195,7 +195,7 @@ export const WithdrawFormBottomSheet = forwardRef<
                   color={colors['grey-alpha']['500']}
                   strokeWidth={2}
                 />
-                <Text className="text-base font-semibold text-grey-alpha-500">
+                <Text className="text-base font-inter-semibold text-grey-alpha-500">
                   Select destination bank
                 </Text>
               </View>
@@ -234,7 +234,7 @@ export const WithdrawFormBottomSheet = forwardRef<
                         )}
                       </View>
                       <View className="flex-1">
-                        <Text className="text-base font-semibold text-grey-alpha-500">
+                        <Text className="text-base font-inter-semibold text-grey-alpha-500">
                           {bank.accountName} - {bank.bankName} (
                           {bank.maskedAccountNumber})
                         </Text>
@@ -255,7 +255,7 @@ export const WithdrawFormBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
                 <Text
-                  className="text-base font-semibold"
+                  className="text-base font-inter-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   Add a bank
@@ -266,7 +266,7 @@ export const WithdrawFormBottomSheet = forwardRef<
 
           {/* Optional narration section */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
               Optional narration
             </Text>
             <TextInput
@@ -295,7 +295,7 @@ export const WithdrawFormBottomSheet = forwardRef<
               className="flex-1 items-center justify-center rounded-xl bg-grey-plain-150 py-4"
               activeOpacity={0.7}
             >
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 Go back
               </Text>
             </TouchableOpacity>
@@ -311,7 +311,7 @@ export const WithdrawFormBottomSheet = forwardRef<
               activeOpacity={0.7}
             >
               <Text
-                className={`text-base font-semibold ${
+                className={`text-base font-inter-semibold ${
                   canProceed ? 'text-white' : 'text-grey-alpha-400'
                 }`}
               >

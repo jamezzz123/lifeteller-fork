@@ -36,10 +36,10 @@ export function TextButton({
     >
       {underline ? (
         <View style={containerStyle}>
-          <Text className="text-sm font-medium text-primary">{title}</Text>
+          <Text className="text-sm font-inter-medium text-primary">{title}</Text>
         </View>
       ) : (
-      <Text className="text-sm font-medium text-primary">{title}</Text>
+      <Text className="text-sm font-inter-medium text-primary">{title}</Text>
       )}
     </TouchableOpacity>
   );

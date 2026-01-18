@@ -24,7 +24,7 @@ export default function ImpactCard({ handlePress }: ImpactCardProps) {
         >
           <View className="flex-row items-center justify-between p-4">
             <View className="flex-1">
-              <Text className="text-base font-semibold text-white">
+              <Text className="text-base font-inter-semibold text-white">
                 Multiply your impact. Reach more people
               </Text>
               <Text className="mt-1 text-sm text-white/90">
