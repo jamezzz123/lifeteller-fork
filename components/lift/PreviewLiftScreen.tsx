@@ -126,7 +126,7 @@ export default function PreviewLiftScreen({
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="text-lg font-semibold text-grey-alpha-500">
               Preview
             </Text>
           </View>
@@ -197,7 +197,7 @@ export default function PreviewLiftScreen({
           {category && (
             <View className="flex-row items-center gap-1.5">
               <Tag size={16} color={colors.primary.purple} strokeWidth={2.5} />
-              <Text className="text-sm font-inter-medium text-grey-alpha-500">
+              <Text className="text-sm font-medium text-grey-alpha-500">
                 {category}
               </Text>
             </View>
@@ -208,7 +208,7 @@ export default function PreviewLiftScreen({
               color={colors['grey-alpha']['400']}
               strokeWidth={2.5}
             />
-            <Text className="text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="text-sm font-medium text-grey-alpha-500">
               7 days
             </Text>
           </View>
@@ -216,7 +216,7 @@ export default function PreviewLiftScreen({
 
         <View className=" px-4">
           {/* Title */}
-          <Text className="mb-3 text-xl font-inter-bold text-grey-alpha-500">
+          <Text className="mb-3 text-xl font-bold text-grey-alpha-500">
             {title || 'Untitled Lift'}
           </Text>
 
@@ -236,7 +236,7 @@ export default function PreviewLiftScreen({
                 borderColor: colors['grey-plain']['300'],
               }}
             >
-              <Text className="mb-3 text-2xl font-inter-bold text-grey-alpha-500">
+              <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
                 ₦{(liftAmount || '0').toLocaleString()}
               </Text>
 
@@ -263,7 +263,7 @@ export default function PreviewLiftScreen({
                     className="rounded-full px-3 py-1.5"
                     style={{ backgroundColor: colors['grey-alpha']['150'] }}
                   >
-                    <Text className="text-xs font-inter-medium text-grey-alpha-500">
+                    <Text className="text-xs font-medium text-grey-alpha-500">
                       {item.name} ({item.quantity})
                     </Text>
                   </View>
@@ -284,7 +284,7 @@ export default function PreviewLiftScreen({
           <Text className="mb-1 text-sm text-grey-alpha-400">
             Who can offer you this lift?
           </Text>
-          <Text className="text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="text-base font-semibold text-grey-alpha-500">
             {getAudienceDisplayText()}
           </Text>
         </View>
@@ -292,7 +292,7 @@ export default function PreviewLiftScreen({
         {/* Start date */}
         <View className="mb-6 px-4">
           <Text className="mb-1 text-sm text-grey-alpha-400">Start date</Text>
-          <Text className="text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="text-base font-semibold text-grey-alpha-500">
             {new Date().toLocaleDateString('en-US', {
               day: 'numeric',
               month: 'long',

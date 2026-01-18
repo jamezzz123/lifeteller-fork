@@ -67,7 +67,7 @@ export default function WalletDeactivationLoadingScreen() {
         </Animated.View>
 
         {/* Title */}
-        <Text className="mb-8 text-xl font-inter-semibold text-grey-alpha-500">
+        <Text className="mb-8 text-xl font-semibold text-grey-alpha-500">
           Wallet deactivation in progress
         </Text>
 

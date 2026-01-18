@@ -154,7 +154,7 @@ export function AddCollaboratorsModal({
                     />
                     <View className="flex-1">
                       <View className="flex-row items-center gap-2">
-                        <Text className="text-base font-inter-medium text-grey-alpha-500">
+                        <Text className="text-base font-medium text-grey-alpha-500">
                           {contact.name}
                         </Text>
                         {contact.verified && (

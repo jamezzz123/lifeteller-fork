@@ -253,7 +253,7 @@ export default function OfferLiftPage() {
           {/* Lift Type Selector */}
           {/* TODO: Replace with correct LiftTypeSelector component that matches these props */}
           <View className="mb-6">
-            <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
               Lift Type
             </Text>
             <View className="flex-row gap-3">
@@ -264,7 +264,7 @@ export default function OfferLiftPage() {
                   className={`rounded-lg px-5 py-2.5 ${selectedLiftType === type ? 'bg-primary-purple' : 'bg-grey-plain-50'}`}
                 >
                   <Text
-                    className={`text-sm font-inter-medium ${selectedLiftType === type ? 'text-white' : 'text-grey-alpha-500'}`}
+                    className={`text-sm font-medium ${selectedLiftType === type ? 'text-white' : 'text-grey-alpha-500'}`}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
                   </Text>

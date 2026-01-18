@@ -96,7 +96,7 @@ export default function BankAccountsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Bank accounts
           </Text>
         </View>
@@ -120,7 +120,7 @@ export default function BankAccountsScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
               No bank accounts
             </Text>
 
@@ -157,7 +157,7 @@ export default function BankAccountsScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+        <Text className="text-lg font-semibold text-grey-alpha-500">
           Bank accounts
         </Text>
       </View>
@@ -173,7 +173,7 @@ export default function BankAccountsScreen() {
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
           {/* Header */}
-          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
             {bankAccounts.length} bank account
             {bankAccounts.length !== 1 ? 's' : ''} added
           </Text>
@@ -187,14 +187,14 @@ export default function BankAccountsScreen() {
               >
                 {/* Bank Icon */}
                 <View className="h-12 w-12 items-center justify-center rounded-full bg-primary">
-                  <Text className="text-xs font-inter-bold text-white">
+                  <Text className="text-xs font-bold text-white">
                     {getBankInitials(account.bank_name)}
                   </Text>
                 </View>
 
                 {/* Account Details */}
                 <View className="flex-1">
-                  <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                     {account.account_name}
                   </Text>
                   <Text className="text-sm text-grey-plain-550">
@@ -231,7 +231,7 @@ export default function BankAccountsScreen() {
                 />
               </View>
               <View className="flex-1">
-                <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="text-base font-semibold text-grey-alpha-500">
                   Add a new account details
                 </Text>
               </View>

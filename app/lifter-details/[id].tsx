@@ -111,7 +111,7 @@ export default function LifterDetailsScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Lift details
           </Text>
         </View>
@@ -130,7 +130,7 @@ export default function LifterDetailsScreen() {
             </View>
             <View className="flex-1">
               <View className="mb-1 flex-row items-center gap-1.5">
-                <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="text-base font-semibold text-grey-alpha-500">
                   {lifter.name}
                 </Text>
                 <BadgeCheck color={colors.primary.purple} size={16} />
@@ -154,7 +154,7 @@ export default function LifterDetailsScreen() {
               <Text
                 className={`text-base ${
                   activeTab === 'monetary'
-                    ? 'font-inter-semibold text-grey-alpha-500'
+                    ? 'font-semibold text-grey-alpha-500'
                     : 'text-grey-plain-550'
                 }`}
               >
@@ -175,7 +175,7 @@ export default function LifterDetailsScreen() {
               <Text
                 className={`text-base ${
                   activeTab === 'non-monetary'
-                    ? 'font-inter-semibold text-grey-alpha-500'
+                    ? 'font-semibold text-grey-alpha-500'
                     : 'text-grey-plain-550'
                 }`}
               >
@@ -197,7 +197,7 @@ export default function LifterDetailsScreen() {
                 <Text className="mb-2 text-sm text-grey-plain-550">
                   Total lift amount
                 </Text>
-                <Text className="text-2xl font-inter-bold text-grey-alpha-500">
+                <Text className="text-2xl font-bold text-grey-alpha-500">
                   {formatAmount(totalAmount)}
                 </Text>
               </View>
@@ -209,7 +209,7 @@ export default function LifterDetailsScreen() {
                     key={contribution.id}
                     className="flex-row items-center justify-between"
                   >
-                    <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                    <Text className="text-base font-semibold text-grey-alpha-500">
                       {formatAmount(contribution.amount)}
                     </Text>
                     <Text className="text-xs text-grey-plain-550">
@@ -231,9 +231,9 @@ export default function LifterDetailsScreen() {
                   }`}
                 >
                   <View className="flex-1">
-                    <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                    <Text className="text-base font-semibold text-grey-alpha-500">
                       {item.name}{' '}
-                      <Text className="font-inter">({item.quantity})</Text>
+                      <Text className="font-normal">({item.quantity})</Text>
                     </Text>
                     <Text className="mt-1 text-xs text-grey-plain-550">
                       {item.date}
@@ -254,7 +254,7 @@ export default function LifterDetailsScreen() {
         {/* Uplifting Message */}
         <View className="mt-2 bg-white px-4 py-4">
           <View className="mb-2 flex-row items-center justify-between">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               Uplifting message
             </Text>
             <Text className="text-xs text-grey-plain-550">
@@ -275,12 +275,12 @@ export default function LifterDetailsScreen() {
                 color={colors['grey-alpha']['500']}
                 size={20}
               />
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 Message {lifter.name.split(' ')[0]}
               </Text>
             </View>
             <TouchableOpacity>
-              <Text className="text-primary-purple text-sm font-inter-semibold">
+              <Text className="text-primary-purple text-sm font-semibold">
                 →
               </Text>
             </TouchableOpacity>

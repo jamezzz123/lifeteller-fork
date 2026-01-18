@@ -196,7 +196,7 @@ export default function MessagesScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Messages
           </Text>
         </View>
@@ -220,7 +220,7 @@ export default function MessagesScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
               No messages yet
             </Text>
 
@@ -275,7 +275,7 @@ export default function MessagesScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Messages
           </Text>
         </View>
@@ -327,7 +327,7 @@ export default function MessagesScreen() {
             ))
           ) : (
             <View className="flex-1 items-center justify-center px-6 py-12">
-              <Text className="mb-2 text-center text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-2 text-center text-base font-semibold text-grey-alpha-500">
                 No message requests
               </Text>
               <Text className="text-center text-sm text-grey-plain-550">
@@ -345,7 +345,7 @@ export default function MessagesScreen() {
           ))
         ) : (
           <View className="flex-1 items-center justify-center px-6 py-12">
-            <Text className="mb-2 text-center text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-2 text-center text-base font-semibold text-grey-alpha-500">
               No messages
             </Text>
             <Text className="text-center text-sm text-grey-plain-550">

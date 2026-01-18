@@ -354,7 +354,7 @@ export default function AllTransactionsScreen() {
           <TouchableOpacity onPress={handleBack} hitSlop={8}>
             <CornerUpLeft color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
-          <Text className="flex-1 text-xl font-inter-semibold text-grey-alpha-500">
+          <Text className="flex-1 text-xl font-semibold text-grey-alpha-500">
             All transactions
           </Text>
         </View>
@@ -412,7 +412,7 @@ export default function AllTransactionsScreen() {
             <View className="mb-4 items-center">
               <Text className="mb-2 text-center text-base text-grey-alpha-500">
                 We couldn&apos;t find any results for{' '}
-                <Text className="font-inter-semibold">&quot;{searchQuery}&quot;</Text>
+                <Text className="font-semibold">&quot;{searchQuery}&quot;</Text>
                 .
               </Text>
               <Text className="mb-6 text-center text-sm leading-5 text-grey-plain-550">
@@ -422,7 +422,7 @@ export default function AllTransactionsScreen() {
                 You can view all transactions{' '}
                 <Text
                   onPress={handleViewAllTransactions}
-                  className="font-inter-medium underline"
+                  className="font-medium underline"
                   style={{ color: colors.primary.purple }}
                 >
                   here
@@ -441,7 +441,7 @@ export default function AllTransactionsScreen() {
           filteredAndGroupedTransactions.map(({ date, transactions }) => (
             <View key={date} className="mb-6">
               {/* Date Header */}
-              <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
                 {formatDateLabel(date)}
               </Text>
 
@@ -460,7 +460,7 @@ export default function AllTransactionsScreen() {
 
                       {/* Transaction Details */}
                       <View className="flex-1">
-                        <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                        <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                           {transaction.title}
                         </Text>
                         <Text className="mb-1 text-sm text-grey-plain-550">
@@ -473,7 +473,7 @@ export default function AllTransactionsScreen() {
 
                       {/* Amount and Status */}
                       <View className="items-end">
-                        <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                        <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                           {formatAmount(transaction.amount)}
                         </Text>
                         <View
@@ -483,7 +483,7 @@ export default function AllTransactionsScreen() {
                           }}
                         >
                           <Text
-                            className="text-xs font-inter-semibold"
+                            className="text-xs font-semibold"
                             style={{ color: colors.state.green }}
                           >
                             Success

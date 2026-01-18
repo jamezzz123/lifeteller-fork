@@ -35,7 +35,7 @@ export function RemoveLimitConfirmationModal({
         <TouchableOpacity activeOpacity={1} onPress={() => {}}>
           <View className="w-full rounded-2xl bg-white p-6">
             {/* Title */}
-            <Text className="mb-3 text-2xl font-inter-bold text-grey-alpha-500">
+            <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
               Remove transaction limit
             </Text>
 
@@ -51,7 +51,7 @@ export function RemoveLimitConfirmationModal({
             <View className="flex-row justify-end gap-4">
               <TouchableOpacity onPress={onCancel}>
                 <Text
-                  className="text-base font-inter-semibold"
+                  className="text-base font-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   No
@@ -59,7 +59,7 @@ export function RemoveLimitConfirmationModal({
               </TouchableOpacity>
               <TouchableOpacity onPress={onConfirm}>
                 <Text
-                  className="text-base font-inter-semibold"
+                  className="text-base font-semibold"
                   style={{ color: colors.state.red }}
                 >
                   Yes, remove

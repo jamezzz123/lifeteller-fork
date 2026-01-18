@@ -25,7 +25,7 @@ export function InterestChip({
       }}
     >
       <Text
-        className="text-xs font-inter-medium"
+        className="text-xs font-medium"
         style={{
           color: selected
             ? colors.primary.purple

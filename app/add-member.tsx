@@ -148,7 +148,7 @@ export default function AddMemberScreen() {
                 strokeWidth={2.6}
               />
             </TouchableOpacity>
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               Add member
             </Text>
           </View>
@@ -169,7 +169,7 @@ export default function AddMemberScreen() {
         >
           <View className="px-4 pt-4">
             {/* Find User Label */}
-            <Text className="mb-3 text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="mb-3 text-sm font-medium text-grey-alpha-500">
               Find user
             </Text>
 

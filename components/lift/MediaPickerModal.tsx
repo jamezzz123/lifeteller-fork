@@ -109,7 +109,7 @@ export const MediaPickerBottomSheet = forwardRef<
         <View className="px-4">
           {/* Header */}
           <View className="mb-4">
-            <Text className="text-center text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-center text-base font-semibold text-grey-alpha-500">
               Select Media
             </Text>
           </View>
@@ -117,7 +117,7 @@ export const MediaPickerBottomSheet = forwardRef<
           {/* Info Text */}
           <View className="mb-4">
             <Text className="text-sm text-grey-alpha-500">
-              You can select up to <Text className="font-inter-semibold">10</Text>{' '}
+              You can select up to <Text className="font-semibold">10</Text>{' '}
               media (images and videos)
             </Text>
           </View>
@@ -192,7 +192,7 @@ export const MediaPickerBottomSheet = forwardRef<
                     className="absolute right-2 top-2 size-6 items-center justify-center rounded-full"
                     style={{ backgroundColor: colors.primary.purple }}
                   >
-                    <Text className="text-xs font-inter-semibold text-white">
+                    <Text className="text-xs font-semibold text-white">
                       {index + 1}
                     </Text>
                   </View>
@@ -213,7 +213,7 @@ export const MediaPickerBottomSheet = forwardRef<
         {/* Bottom Bar - Fixed at bottom */}
         <View className="border-t border-grey-plain-450/40 bg-grey-plain-50 px-4 py-4">
           <View className="flex-row items-center justify-between">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               {selectedMedia.length} media selected
             </Text>
             <Button

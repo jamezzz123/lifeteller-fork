@@ -31,7 +31,7 @@ export function ContactRow({
       />
       <View className="ml-3 flex-1">
         <View className="flex-row items-center gap-1">
-          <Text className="text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="text-base font-semibold text-grey-alpha-500">
             {contact.name}
           </Text>
           {contact.verified ? (

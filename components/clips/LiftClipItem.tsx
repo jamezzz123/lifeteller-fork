@@ -143,7 +143,7 @@ export function LiftClipItem({
             ></Avatar>
             <View className="flex-1">
               <View className="flex-row items-center gap-2">
-                <Text className="text-base font-inter-medium text-grey-plain-50">
+                <Text className="text-base font-medium text-grey-plain-50">
                   {clip.user.name}
                 </Text>
                 <BadgeCheck
@@ -188,8 +188,8 @@ export function LiftClipItem({
               overlap={16}
             />
             <Text className="text-sm text-grey-plain-50">
-              Liked by <Text className="font-inter-semibold">Seyi Makinde</Text> and{' '}
-              <Text className="font-inter-semibold">15 others</Text>
+              Liked by <Text className="font-semibold">Seyi Makinde</Text> and{' '}
+              <Text className="font-semibold">15 others</Text>
             </Text>
           </View>
 
@@ -204,7 +204,7 @@ export function LiftClipItem({
 
             {clip.liftDetails && (
               <TouchableOpacity onPress={onViewLiftDetails}>
-                <Text className="text-xs font-inter-semibold text-grey-plain-50">
+                <Text className="text-xs font-semibold text-grey-plain-50">
                   See details
                 </Text>
               </TouchableOpacity>
@@ -223,7 +223,7 @@ export function LiftClipItem({
               size={20}
             />
             {/* rgba(37, 42, 49, 0.7) */}
-            <Text className="text-sm font-inter-semibold text-grey-plain-50">
+            <Text className="text-sm font-semibold text-grey-plain-50">
               {formatCount(likesCount)}
             </Text>
           </TouchableOpacity>
@@ -235,7 +235,7 @@ export function LiftClipItem({
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
           >
             <MessageCircleMore color={colors['grey-plain']['50']} size={20} />
-            <Text className="text-sm font-inter-semibold text-grey-plain-50">
+            <Text className="text-sm font-semibold text-grey-plain-50">
               {formatCount(clip.comments)}
             </Text>
           </TouchableOpacity>
@@ -246,7 +246,7 @@ export function LiftClipItem({
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
           >
             <Repeat2 color={colors['grey-plain']['50']} size={20} />
-            <Text className="text-sm font-inter-semibold text-grey-plain-50">12</Text>
+            <Text className="text-sm font-semibold text-grey-plain-50">12</Text>
           </TouchableOpacity>
 
           {/* Chat Button */}
@@ -255,7 +255,7 @@ export function LiftClipItem({
             style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
           >
             <MessageSquare color={colors['grey-plain']['50']} size={20} />
-            <Text className="text-sm font-inter-semibold text-grey-plain-50">
+            <Text className="text-sm font-semibold text-grey-plain-50">
               Chat
             </Text>
           </TouchableOpacity>
@@ -289,7 +289,7 @@ export function LiftClipItem({
             style={{ backgroundColor: colors.primary.purple }}
           >
             <HandHeart color="rgba(37, 42, 49, 0.7)" size={20} />
-            <Text className="text-sm font-inter-bold text-grey-plain-50">
+            <Text className="text-sm font-bold text-grey-plain-50">
               Offer lift
             </Text>
           </TouchableOpacity> */}
@@ -316,7 +316,7 @@ export function LiftClipItem({
             className="flex-row items-center gap-2  rounded-full p-3 text-grey-plain-50"
           >
             <Plus color={colors['grey-plain']['50']} size={20} />
-            <Text className="text-sm font-inter-semibold text-grey-plain-50">
+            <Text className="text-sm font-semibold text-grey-plain-50">
               Create
             </Text>
           </TouchableOpacity>

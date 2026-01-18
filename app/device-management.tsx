@@ -66,7 +66,7 @@ function DeviceItem({
         <View className="flex-1 flex-row items-center gap-3">
           <View className="flex-1">
             <View className="mb-1 flex-row items-center gap-2">
-              <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
+              <Text className="text-[15px] font-semibold text-grey-alpha-500">
                 {device.name}
               </Text>
               {device.isCurrent && (
@@ -74,7 +74,7 @@ function DeviceItem({
                   className="rounded-full px-2 py-0.5"
                   style={{ backgroundColor: colors.primary.purple }}
                 >
-                  <Text className="text-xs font-inter-medium text-white">
+                  <Text className="text-xs font-medium text-white">
                     Current device
                   </Text>
                 </View>
@@ -116,7 +116,7 @@ function DeviceItem({
             activeOpacity={0.7}
           >
             <Text
-              className="text-sm font-inter-medium"
+              className="text-sm font-medium"
               style={{ color: colors.state.red }}
             >
               Remove device
@@ -175,7 +175,7 @@ export default function DeviceManagementScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+        <Text className="text-lg font-semibold text-grey-alpha-500">
           Device management
         </Text>
       </View>

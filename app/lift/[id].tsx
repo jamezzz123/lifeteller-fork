@@ -177,7 +177,7 @@ export default function LiftDetailScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             {title}
           </Text>
         </View>

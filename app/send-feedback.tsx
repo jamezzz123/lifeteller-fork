@@ -36,7 +36,7 @@ export default function SendFeedbackScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Send feedback
           </Text>
         </View>

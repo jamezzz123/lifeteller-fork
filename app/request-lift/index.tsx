@@ -190,7 +190,7 @@ export default function SelectContactsScreen() {
         >
           <View className="px-4 pt-5">
             <View className="flex-row items-center justify-between">
-              <Text className="text-sm font-inter-semibold text-grey-alpha-450">
+              <Text className="text-sm font-semibold text-grey-alpha-450">
                 Request from:
               </Text>
             </View>
@@ -205,7 +205,7 @@ export default function SelectContactsScreen() {
               ))}
               {selectedContacts.length > 3 ? (
                 <View className="h-3 w-3 flex-row items-center justify-center rounded-full border border-primary">
-                  <Text className="text-sm font-inter-semibold text-primary">
+                  <Text className="text-sm font-semibold text-primary">
                     +{selectedContacts.length - 3}
                   </Text>
                 </View>

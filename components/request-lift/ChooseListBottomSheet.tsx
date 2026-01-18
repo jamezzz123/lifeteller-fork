@@ -23,7 +23,7 @@ export const ChooseListBottomSheet = forwardRef<
   return (
     <BottomSheetComponent ref={ref} snapPoints={['50%']}>
       <View className="px-4 pb-4">
-        <Text className="mb-6 text-2xl font-inter-bold text-grey-alpha-500">
+        <Text className="mb-6 text-2xl font-bold text-grey-alpha-500">
           Choose a list
         </Text>
 
@@ -36,7 +36,7 @@ export const ChooseListBottomSheet = forwardRef<
               className="flex-row items-center justify-between border-b border-grey-plain-450/20 pb-4"
             >
               <View className="flex-1">
-                <Text className="mb-1 text-lg font-inter-bold text-grey-alpha-500">
+                <Text className="mb-1 text-lg font-bold text-grey-alpha-500">
                   {list.name}
                 </Text>
                 <Text className="text-sm text-grey-alpha-400">
@@ -59,7 +59,7 @@ export const ChooseListBottomSheet = forwardRef<
             className="flex-row items-center justify-between pt-2"
           >
             <View className="flex-1">
-              <Text className="mb-1 text-lg font-inter-bold text-grey-alpha-500">
+              <Text className="mb-1 text-lg font-bold text-grey-alpha-500">
                 Create new list
               </Text>
               <Text className="text-sm text-grey-alpha-400">

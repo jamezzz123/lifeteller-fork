@@ -387,7 +387,7 @@ export default function WalletScreen() {
     <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
-        <Text className="text-2xl font-inter-bold text-grey-alpha-500">Wallet</Text>
+        <Text className="text-2xl font-bold text-grey-alpha-500">Wallet</Text>
         <TouchableOpacity onPress={handleSettingsPress}>
           <Settings color={colors['grey-alpha']['500']} size={24} />
         </TouchableOpacity>
@@ -412,14 +412,14 @@ export default function WalletScreen() {
             className="flex-row items-center justify-between rounded-t-2xl px-3 py-3"
             style={{ backgroundColor: colors['grey-plain']['150'] }}
           >
-            <View className="flex-1 flex-row items-center gap-2 text-base font-inter-semibold">
+            <View className="flex-1 flex-row items-center gap-2 text-base font-semibold">
               <Text
                 className="text-sm"
                 style={{ color: colors['grey-alpha']['400'] }}
               >
                 {walletData.bankName} •
               </Text>
-              <Text className="text-sm font-inter-medium">
+              <Text className="text-sm font-medium">
                 {walletData.accountNumber}
               </Text>
             </View>
@@ -448,7 +448,7 @@ export default function WalletScreen() {
               <View className="flex-row items-center gap-2">
                 <View className="size-2 rounded-full bg-state-green" />
                 <Text
-                  className="text-sm font-inter-medium"
+                  className="text-sm font-medium"
                   style={{ color: colors.state.green }}
                 >
                   {walletData.status}
@@ -459,7 +459,7 @@ export default function WalletScreen() {
                 className="flex-row items-center gap-1"
                 hitSlop={8}
               >
-                <Text className="text-sm font-inter-medium text-grey-alpha-500">
+                <Text className="text-sm font-medium text-grey-alpha-500">
                   {walletData.tier}
                 </Text>
                 <ChevronRight
@@ -471,13 +471,13 @@ export default function WalletScreen() {
             </View>
 
             {/* User Name */}
-            <Text className="mb-2 text-base font-inter-medium text-grey-alpha-500">
+            <Text className="mb-2 text-base font-medium text-grey-alpha-500">
               {walletData.userName}
             </Text>
 
             {/* Balances */}
             <View className="mb-6">
-              <Text className="text-3xl font-inter-bold text-grey-alpha-500">
+              <Text className="text-3xl font-bold text-grey-alpha-500">
                 {isBalanceVisible
                   ? formatAmount(walletData.currentBalance, {
                       minimumFractionDigits: 2,
@@ -558,7 +558,7 @@ export default function WalletScreen() {
                     color={colors.yellow['50']}
                     strokeWidth={2}
                   />
-                  <Text className="text-xs font-inter-medium text-grey-alpha-500">
+                  <Text className="text-xs font-medium text-grey-alpha-500">
                     KYC not verified
                   </Text>
                 </View>
@@ -591,7 +591,7 @@ export default function WalletScreen() {
                     size={20}
                     strokeWidth={2}
                   />
-                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="text-base font-semibold text-grey-alpha-500">
                     Click to upgrade wallet
                   </Text>
                 </View>
@@ -621,7 +621,7 @@ export default function WalletScreen() {
                   strokeWidth={2}
                 />
               </TouchableOpacity>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Withdraw
               </Text>
             </View>
@@ -638,7 +638,7 @@ export default function WalletScreen() {
                   strokeWidth={2}
                 />
               </TouchableOpacity>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Buy airtime
               </Text>
             </View>
@@ -655,7 +655,7 @@ export default function WalletScreen() {
                   strokeWidth={2}
                 />
               </TouchableOpacity>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Buy data
               </Text>
             </View>
@@ -675,7 +675,7 @@ export default function WalletScreen() {
                   strokeWidth={2}
                 />
               </TouchableOpacity>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Pay bills
               </Text>
             </View>
@@ -692,7 +692,7 @@ export default function WalletScreen() {
                   strokeWidth={2}
                 />
               </TouchableOpacity>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 More
               </Text>
             </View>
@@ -706,14 +706,14 @@ export default function WalletScreen() {
         <View className="mt-10 border-t border-grey-plain-300 px-4 pt-8">
           {/* Section Header */}
           <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="text-lg font-semibold text-grey-alpha-500">
               Recent transactions
             </Text>
             <TouchableOpacity
               onPress={handleSeeAllTransactions}
               className="flex-row items-center gap-1"
             >
-              <Text className="text-sm font-inter-medium text-primary">See all</Text>
+              <Text className="text-sm font-medium text-primary">See all</Text>
               <ChevronRight
                 color={colors.primary.purple}
                 size={16}
@@ -753,7 +753,7 @@ export default function WalletScreen() {
           </View>
 
           {/* Today Section */}
-          <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-3 text-sm font-semibold text-grey-alpha-500">
             Today
           </Text>
 
@@ -772,7 +772,7 @@ export default function WalletScreen() {
 
                   {/* Transaction Details */}
                   <View className="flex-1">
-                    <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                       {transaction.title}
                     </Text>
                     <Text className="mb-1 text-sm text-grey-plain-550">
@@ -785,7 +785,7 @@ export default function WalletScreen() {
 
                   {/* Amount and Status */}
                   <View className="items-end">
-                    <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                       {formatAmount(transaction.amount)}
                     </Text>
                     <View
@@ -793,7 +793,7 @@ export default function WalletScreen() {
                       style={{ backgroundColor: colors['green-tint']['200'] }}
                     >
                       <Text
-                        className="text-xs font-inter-semibold"
+                        className="text-xs font-semibold"
                         style={{ color: colors.state.green }}
                       >
                         Success

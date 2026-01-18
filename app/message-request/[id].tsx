@@ -142,7 +142,7 @@ export default function MessageRequestDetailScreen() {
 
         <View className="flex-1">
           <View className="mb-0.5 flex-row items-center gap-1.5">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               {messageRequest.contactName}
             </Text>
             {messageRequest.isVerified && (
@@ -219,7 +219,7 @@ export default function MessageRequestDetailScreen() {
               strokeWidth={2}
             />
             <Text
-              className="mt-2 text-center text-sm font-inter-medium"
+              className="mt-2 text-center text-sm font-medium"
               style={{ color: colors['grey-alpha']['500'] }}
               numberOfLines={2}
             >
@@ -238,7 +238,7 @@ export default function MessageRequestDetailScreen() {
               strokeWidth={2}
             />
             <Text
-              className="mt-2 text-center text-sm font-inter-medium"
+              className="mt-2 text-center text-sm font-medium"
               style={{ color: colors['grey-alpha']['500'] }}
               numberOfLines={2}
             >
@@ -257,7 +257,7 @@ export default function MessageRequestDetailScreen() {
               strokeWidth={2}
             />
             <Text
-              className="mt-2 text-center text-sm font-inter-medium"
+              className="mt-2 text-center text-sm font-medium"
               style={{ color: colors['grey-alpha']['500'] }}
               numberOfLines={2}
             >
@@ -277,7 +277,7 @@ export default function MessageRequestDetailScreen() {
               activeOpacity={0.7}
             >
               <Text
-                className="text-base font-inter-semibold"
+                className="text-base font-semibold"
                 style={{ color: colors.state.red }}
               >
                 Decline
@@ -310,7 +310,7 @@ export default function MessageRequestDetailScreen() {
         <View className="flex-1 items-center justify-center bg-black/50 px-6">
           <View className="w-full rounded-2xl bg-white p-6">
             {/* Title */}
-            <Text className="text-2xl font-inter-semibold leading-8 text-grey-alpha-500">
+            <Text className="text-2xl font-semibold leading-8 text-grey-alpha-500">
               Delete conversation
             </Text>
 
@@ -328,7 +328,7 @@ export default function MessageRequestDetailScreen() {
                 className="px-4 py-2"
               >
                 <Text
-                  className="text-base font-inter-semibold"
+                  className="text-base font-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   Cancel
@@ -339,7 +339,7 @@ export default function MessageRequestDetailScreen() {
                 className="px-4 py-2"
               >
                 <Text
-                  className="text-base font-inter-semibold"
+                  className="text-base font-semibold"
                   style={{ color: colors.state.red }}
                 >
                   Yes, delete

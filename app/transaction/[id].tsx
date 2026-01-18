@@ -160,7 +160,7 @@ export default function TransactionDetailScreen() {
             <TouchableOpacity onPress={handleBack} hitSlop={8}>
               <CornerUpLeft color={colors['grey-alpha']['500']} size={24} />
             </TouchableOpacity>
-            <Text className="text-xl font-inter-semibold text-grey-alpha-500">
+            <Text className="text-xl font-semibold text-grey-alpha-500">
               Transaction details
             </Text>
           </View>
@@ -179,7 +179,7 @@ export default function TransactionDetailScreen() {
         {/* Amount and Status */}
         <View className="border-b border-grey-plain-150 px-4 py-6">
           <View className="flex-row items-center justify-between">
-            <Text className="text-3xl font-inter-bold text-grey-alpha-500">
+            <Text className="text-3xl font-bold text-grey-alpha-500">
               {formatAmount(transaction.amount, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -190,7 +190,7 @@ export default function TransactionDetailScreen() {
               style={{ backgroundColor: colors['green-tint']['200'] }}
             >
               <Text
-                className="text-sm font-inter-semibold"
+                className="text-sm font-semibold"
                 style={{ color: colors.state.green }}
               >
                 Success
@@ -208,7 +208,7 @@ export default function TransactionDetailScreen() {
                 <Text className="mb-1 text-sm text-grey-plain-550">
                   Transaction type
                 </Text>
-                <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="text-base font-semibold text-grey-alpha-500">
                   {transaction.type}
                 </Text>
               </View>
@@ -216,7 +216,7 @@ export default function TransactionDetailScreen() {
                 <Text className="mb-1 text-sm text-grey-plain-550">
                   Transaction mode
                 </Text>
-                <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="text-base font-semibold text-grey-alpha-500">
                   {transaction.mode === 'inflow' ? 'Inflow' : 'Outflow'}
                 </Text>
               </View>
@@ -228,7 +228,7 @@ export default function TransactionDetailScreen() {
                 <Text className="mb-1 text-sm text-grey-plain-550">
                   Beneficiary details
                 </Text>
-                <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="text-base font-semibold text-grey-alpha-500">
                   {transaction.beneficiary.name}
                 </Text>
               </View>
@@ -237,7 +237,7 @@ export default function TransactionDetailScreen() {
             {/* Date */}
             <View>
               <Text className="mb-1 text-sm text-grey-plain-550">Date</Text>
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 {transaction.date}
               </Text>
             </View>
@@ -248,7 +248,7 @@ export default function TransactionDetailScreen() {
                 Transaction reference
               </Text>
               <View className="flex-row items-center gap-2">
-                <Text className="flex-1 text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
                   {transaction.reference}
                 </Text>
                 <TouchableOpacity
@@ -270,7 +270,7 @@ export default function TransactionDetailScreen() {
         {/* Lift Summary */}
         {transaction.liftSummary && (
           <View className="border-b border-grey-plain-150 px-4 py-6">
-            <Text className="mb-4 text-sm font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-sm font-semibold text-grey-alpha-500">
               Lift summary
             </Text>
             <View className="flex-row items-center gap-3">
@@ -294,7 +294,7 @@ export default function TransactionDetailScreen() {
                       }}
                     >
                       <Text
-                        className="text-base font-inter-bold"
+                        className="text-base font-bold"
                         style={{ color: colors.primary.purple }}
                       >
                         {getInitials(transaction.liftSummary.user.name)}
@@ -307,7 +307,7 @@ export default function TransactionDetailScreen() {
               {/* User Info */}
               <View className="flex-1">
                 <View className="flex-row items-center gap-1">
-                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="text-base font-semibold text-grey-alpha-500">
                     {transaction.liftSummary.user.name}
                   </Text>
                   {transaction.liftSummary.user.verified && (
@@ -326,7 +326,7 @@ export default function TransactionDetailScreen() {
                 hitSlop={8}
               >
                 <Text
-                  className="text-sm font-inter-medium"
+                  className="text-sm font-medium"
                   style={{ color: colors.primary.purple }}
                 >
                   Go to lift
@@ -356,7 +356,7 @@ export default function TransactionDetailScreen() {
               size={24}
               strokeWidth={2}
             />
-            <Text className="text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="text-sm font-medium text-grey-alpha-500">
               Share receipt
             </Text>
           </TouchableOpacity>
@@ -372,7 +372,7 @@ export default function TransactionDetailScreen() {
               size={24}
               strokeWidth={2}
             />
-            <Text className="text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="text-sm font-medium text-grey-alpha-500">
               Download receipt
             </Text>
           </TouchableOpacity>

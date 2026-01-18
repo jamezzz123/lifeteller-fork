@@ -55,7 +55,7 @@ export function SharedActivityCard({
         {/* Content */}
         <View className="flex-1">
           {/* Title */}
-          <Text className="mb-2 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-2 text-base font-semibold text-grey-alpha-500">
             {activity.title}
           </Text>
 
@@ -66,7 +66,7 @@ export function SharedActivityCard({
 
           {/* Additional Info (Amount or Message Count) */}
           {(activity.amount || activity.messageCount) && (
-            <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="mb-2 text-sm font-medium text-grey-alpha-500">
               {activity.amount || `${activity.messageCount} messages`}
             </Text>
           )}

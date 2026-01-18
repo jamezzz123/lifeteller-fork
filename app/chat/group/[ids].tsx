@@ -202,7 +202,7 @@ export default function GroupChatScreen() {
                   }}
                 >
                   <Text
-                    className="text-xs font-inter-bold"
+                    className="text-xs font-bold"
                     style={{ color: colors['grey-plain']['550'] }}
                   >
                     G
@@ -214,7 +214,7 @@ export default function GroupChatScreen() {
 
           {/* Group Info */}
           <View className="flex-1">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               {groupName}
             </Text>
             <Text className="text-sm text-grey-plain-550">

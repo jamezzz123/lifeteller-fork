@@ -51,10 +51,10 @@ export function WelcomeSlide({
       </View>
 
       <View className="w-full pb-4 mt-2">
-        <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-450">
+        <Text className="mb-2 text-2xl font-bold text-grey-alpha-450">
           {title}
         </Text>
-        <Text className="font-inter-medium text-grey-alpha-400">{description}</Text>
+        <Text className="font-medium text-grey-alpha-400">{description}</Text>
       </View>
     </View>
   );

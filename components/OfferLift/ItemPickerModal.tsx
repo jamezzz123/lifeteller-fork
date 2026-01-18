@@ -42,7 +42,7 @@ export function ItemPickerModal({
           <View className="max-h-96">
             {/* Header */}
             <View className="flex-row items-center justify-between border-b border-grey-alpha-250 px-4 py-4">
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 Select an item
               </Text>
               <TouchableOpacity onPress={onClose} hitSlop={10}>
@@ -68,7 +68,7 @@ export function ItemPickerModal({
                     <Text
                       className={`text-base ${
                         isSelected
-                          ? 'font-inter-semibold text-primary'
+                          ? 'font-semibold text-primary'
                           : 'text-grey-alpha-500'
                       }`}
                     >

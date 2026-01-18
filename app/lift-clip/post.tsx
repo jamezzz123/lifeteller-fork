@@ -173,7 +173,7 @@ export default function PostLiftClipScreen() {
             className="flex-row items-center gap-2"
           >
             <CornerUpLeft size={24} color={colors['grey-plain']['550']} />
-            <Text className="text-lg font-inter-medium text-grey-plain-550">
+            <Text className="text-lg font-medium text-grey-plain-550">
               New lift clip
             </Text>
           </TouchableOpacity>
@@ -235,7 +235,7 @@ export default function PostLiftClipScreen() {
               onPress={handleLinkExistingLift}
               className="border-t border-grey-plain-150 px-4 py-4"
             >
-              <Text className="text-primary-purple text-sm font-inter-medium">
+              <Text className="text-primary-purple text-sm font-medium">
                 ✓ Linked to: {linkedLiftName}
               </Text>
               <Text className="mt-1 text-xs text-grey-alpha-400">
@@ -247,7 +247,7 @@ export default function PostLiftClipScreen() {
               onPress={handleLinkExistingLift}
               className="border-t border-grey-plain-150 px-4 py-4"
             >
-              <Text className="text-sm font-inter-medium text-grey-alpha-500">
+              <Text className="text-sm font-medium text-grey-alpha-500">
                 Link an existing lift
               </Text>
             </TouchableOpacity>
@@ -257,7 +257,7 @@ export default function PostLiftClipScreen() {
             <TouchableOpacity className="mb-3 flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-inter-medium text-grey-alpha-500">
+                <Text className="text-base font-medium text-grey-alpha-500">
                   Location
                 </Text>
               </View>
@@ -313,7 +313,7 @@ export default function PostLiftClipScreen() {
                   <MapPin size={14} color={colors['grey-alpha']['500']} />
                 </View>
                 <View className="flex-1">
-                  <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                     Request lift
                   </Text>
                   <Text className="text-sm text-grey-alpha-400">
@@ -337,7 +337,7 @@ export default function PostLiftClipScreen() {
             <TouchableOpacity className="flex-row items-center justify-between">
               <View className="flex-row items-center gap-3">
                 <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-inter-medium text-grey-alpha-500">
+                <Text className="text-base font-medium text-grey-alpha-500">
                   More options
                 </Text>
               </View>

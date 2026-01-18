@@ -46,7 +46,7 @@ export function UserHeader({
       </View>
       <View className="flex-1">
         <View className="flex-row items-center gap-1">
-          <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
+          <Text className="text-[15px] font-semibold text-grey-alpha-500">
             {name}
           </Text>
           {verified && <BadgeCheck color={colors.primary.purple} size={16} />}

@@ -85,7 +85,7 @@ export function StatusBadge({
     >
       {statusConfig.icon}
       <Text
-        className={`${textSizeClass} font-inter-medium`}
+        className={`${textSizeClass} font-medium`}
         style={{ color: statusConfig.text }}
       >
         {statusConfig.label}

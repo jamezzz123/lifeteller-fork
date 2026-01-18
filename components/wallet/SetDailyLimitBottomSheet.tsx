@@ -75,17 +75,17 @@ export const SetDailyLimitBottomSheet = forwardRef<
       >
         <View className="px-6">
           {/* Title */}
-          <Text className="mb-6 text-xl font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-6 text-xl font-semibold text-grey-alpha-500">
             Set wallet daily cumulative limit
           </Text>
 
           {/* Amount Input Field */}
           <View className="mb-6">
-            <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-400">
+            <Text className="mb-2 text-sm font-medium text-grey-alpha-400">
               Amount
             </Text>
             <View className="flex-row items-center border-b border-grey-plain-300 pb-3">
-              <Text className="text-2xl font-inter-bold text-grey-alpha-500">
+              <Text className="text-2xl font-bold text-grey-alpha-500">
                 {displayAmount}
               </Text>
               {!selectedAmount && (
@@ -95,7 +95,7 @@ export const SetDailyLimitBottomSheet = forwardRef<
                   placeholder="0"
                   placeholderTextColor={colors['grey-alpha']['250']}
                   keyboardType="numeric"
-                  className="ml-2 flex-1 text-2xl font-inter-bold text-grey-alpha-500"
+                  className="ml-2 flex-1 text-2xl font-bold text-grey-alpha-500"
                   autoFocus={false}
                 />
               )}
@@ -128,7 +128,7 @@ export const SetDailyLimitBottomSheet = forwardRef<
                       />
                     )}
                     <Text
-                      className={`text-sm font-inter-medium ${
+                      className={`text-sm font-medium ${
                         isSelected
                           ? 'text-primary'
                           : 'text-grey-alpha-450'

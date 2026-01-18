@@ -69,7 +69,7 @@ export const EmailVerificationBottomSheet = forwardRef<
           </View>
 
           {/* Title */}
-          <Text className="mb-3 text-center text-2xl font-inter-bold text-grey-alpha-500">
+          <Text className="mb-3 text-center text-2xl font-bold text-grey-alpha-500">
             Email verification sent
           </Text>
 
@@ -85,7 +85,7 @@ export const EmailVerificationBottomSheet = forwardRef<
               size={18}
               strokeWidth={2}
             />
-            <Text className="text-sm font-inter-medium text-grey-alpha-500">
+            <Text className="text-sm font-medium text-grey-alpha-500">
               {email}
             </Text>
           </View>

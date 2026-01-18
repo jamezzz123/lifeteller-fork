@@ -101,13 +101,13 @@ export default function EarnedBadgeScreen() {
               </View>
 
               {/* Badge Name */}
-              <Text className="mt-4 text-lg font-inter-semibold text-grey-alpha-500">
+              <Text className="mt-4 text-lg font-semibold text-grey-alpha-500">
                 {badgeName}
               </Text>
             </View>
 
             {/* Heading */}
-            <Text className="mb-3 text-2xl font-inter-bold text-grey-alpha-500">
+            <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
               You earned a badge!
             </Text>
 

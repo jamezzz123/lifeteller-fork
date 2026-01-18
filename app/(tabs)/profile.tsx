@@ -155,17 +155,17 @@ function LiftHistoryCard({
     >
       <View>
         {/* Title at the top */}
-        <Text className="px-2 py-1 text-xs font-inter-medium text-grey-plain-550">
+        <Text className="px-2 py-1 text-xs font-medium text-grey-plain-550">
           {title}
         </Text>
         <View className="flex-row items-center justify-between rounded-lg bg-white px-2 py-2">
           <View>
             {/* Large count number */}
-            <Text className="text-2xl font-inter-bold text-grey-alpha-550">
+            <Text className="text-2xl font-bold text-grey-alpha-550">
               {count.toLocaleString()}
             </Text>
             {/* Currency amount */}
-            <Text className="text-base font-inter-medium text-grey-alpha-450">
+            <Text className="text-base font-medium text-grey-alpha-450">
               {formatCurrency(amount)}
             </Text>
           </View>
@@ -406,7 +406,7 @@ function LiftClipsTab() {
                   backgroundColor: 'rgba(0, 0, 0, 0.7)',
                 }}
               >
-                <Text className="text-[10px] font-inter-semibold text-white">
+                <Text className="text-[10px] font-semibold text-white">
                   {formatDuration(clip.duration)}
                 </Text>
               </View>
@@ -435,7 +435,7 @@ function SectionHeader({
     <View className="mb-3 flex-row items-center justify-between">
       <View className="flex-row items-center gap-2">
         {icon}
-        <Text className="text-sm font-inter-semibold text-grey-alpha-500">
+        <Text className="text-sm font-semibold text-grey-alpha-500">
           {title}
         </Text>
       </View>
@@ -537,7 +537,7 @@ function AboutTab({
             </Text>
             <TouchableOpacity onPress={() => router.push('/leaderboard')}>
               <Text
-                className="border-b border-primary text-sm font-inter-medium"
+                className="border-b border-primary text-sm font-medium"
                 style={{ color: colors.primary.purple }}
               >
                 Leaderboard
@@ -549,26 +549,26 @@ function AboutTab({
           <View className="mb-4 flex-row gap-4">
             {/* Current Badge */}
             <View className="flex-1 items-center">
-              <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                 Current
               </Text>
               <View className="mb-2 h-20 w-20 items-center justify-center">
                 <LifterBadge width={80} height={80} />
               </View>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 {aboutData.badges.currentBadge.name}
               </Text>
             </View>
 
             {/* Next Badge */}
             <View className="flex-1 items-center">
-              <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                 Next
               </Text>
               <View className="mb-2 h-20 w-20 items-center justify-center opacity-60">
                 <LiftCaptainBadge width={80} height={80} />
               </View>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 {aboutData.badges.nextBadge.name}
               </Text>
             </View>
@@ -642,7 +642,7 @@ function AboutTab({
         <View className="mt-3 border-t border-grey-plain-300 pt-3">
           <TouchableOpacity>
             <Text
-              className="text-sm font-inter-medium underline"
+              className="text-sm font-medium underline"
               style={{ color: colors.primary.purple }}
             >
               {aboutData.dateOfBirth}
@@ -804,7 +804,7 @@ export default function ProfileScreen() {
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
       {/* Fixed Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
-        <Text className="text-2xl font-inter-bold text-grey-alpha-500">Profile</Text>
+        <Text className="text-2xl font-bold text-grey-alpha-500">Profile</Text>
         <View className="flex-row items-center gap-4">
           <TouchableOpacity>
             <Search color={colors['grey-alpha']['500']} size={24} />
@@ -838,7 +838,7 @@ export default function ProfileScreen() {
                     ) : initials ? (
                       <View className="bg-primary-tints-purple-100 h-full w-full items-center justify-center">
                         <Text
-                          className="text-2xl font-inter-bold"
+                          className="text-2xl font-bold"
                           style={{ color: colors.primary.purple }}
                         >
                           {initials}
@@ -879,7 +879,7 @@ export default function ProfileScreen() {
                 {/* User Details */}
                 <View className="flex-1">
                   <View className="mb-1.5 flex-row items-center gap-2">
-                    <Text className="text-xl font-inter-bold text-grey-alpha-500">
+                    <Text className="text-xl font-bold text-grey-alpha-500">
                       {fullName || 'User'}
                     </Text>
                     {isVerified && (
@@ -899,7 +899,7 @@ export default function ProfileScreen() {
                       <View className="flex-row items-center gap-1.5">
                         <Medal color={colors.primary.purple} size={12} />
                         <Text
-                          className="text-xs font-inter-semibold"
+                          className="text-xs font-semibold"
                           style={{ color: colors['grey-alpha']['550'] }}
                         >
                           Lift Captain
@@ -944,10 +944,10 @@ export default function ProfileScreen() {
             <View className="flex-row gap-3">
               {/* Lifts Card */}
               <TouchableOpacity className="relative flex-1 rounded-xl border border-grey-plain-300 bg-grey-plain-50 p-4">
-                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
                   {liftsCount.toLocaleString()}
                 </Text>
-                <Text className="text-xs font-inter-medium text-grey-plain-550">
+                <Text className="text-xs font-medium text-grey-plain-550">
                   Lifts
                 </Text>
               </TouchableOpacity>
@@ -972,10 +972,10 @@ export default function ProfileScreen() {
                     strokeWidth={2.5}
                   />
                 </View>
-                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
                   {followingCount.toLocaleString()}
                 </Text>
-                <Text className="text-xs font-inter-medium text-grey-plain-550">
+                <Text className="text-xs font-medium text-grey-plain-550">
                   Following
                 </Text>
               </TouchableOpacity>
@@ -1000,12 +1000,12 @@ export default function ProfileScreen() {
                     strokeWidth={2.5}
                   />
                 </View>
-                <Text className="mb-1 text-2xl font-inter-bold text-grey-alpha-500">
+                <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
                   {followersCount >= 1000
                     ? `${(followersCount / 1000).toFixed(1)}k`
                     : followersCount.toLocaleString()}
                 </Text>
-                <Text className="text-xs font-inter-medium text-grey-plain-550">
+                <Text className="text-xs font-medium text-grey-plain-550">
                   Followers
                 </Text>
               </TouchableOpacity>

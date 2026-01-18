@@ -85,7 +85,7 @@ export default function MyListScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             My list
           </Text>
         </View>
@@ -109,7 +109,7 @@ export default function MyListScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
               No list available
             </Text>
 
@@ -146,7 +146,7 @@ export default function MyListScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             My list
           </Text>
         </View>
@@ -168,8 +168,8 @@ export default function MyListScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
-            You have <Text className="font-inter-bold">{lists.length}</Text> lists
+          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
+            You have <Text className="font-bold">{lists.length}</Text> lists
           </Text>
 
           {/* Lists */}
@@ -182,7 +182,7 @@ export default function MyListScreen() {
                 activeOpacity={0.7}
               >
                 <View className="flex-1">
-                  <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                     {list.title}
                   </Text>
                   <Text className="text-sm text-grey-plain-550">

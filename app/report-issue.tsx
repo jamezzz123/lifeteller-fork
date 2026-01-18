@@ -172,7 +172,7 @@ export default function ReportIssueScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Report issue
           </Text>
         </View>
@@ -196,7 +196,7 @@ export default function ReportIssueScreen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-4 text-center text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-center text-lg font-semibold text-grey-alpha-500">
               No issues reported yet
             </Text>
 
@@ -237,7 +237,7 @@ export default function ReportIssueScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Report issue
           </Text>
         </View>
@@ -258,7 +258,7 @@ export default function ReportIssueScreen() {
               style={{ width: '33%' }}
             >
               <Text className="mb-1 text-sm text-white/80">Total issues</Text>
-              <Text className="text-3xl font-inter-bold text-white">
+              <Text className="text-3xl font-bold text-white">
                 {totalIssues}
               </Text>
             </View>
@@ -274,7 +274,7 @@ export default function ReportIssueScreen() {
                   <Text className="mb-1 text-sm text-grey-plain-550">
                     Resolved
                   </Text>
-                  <Text className="text-3xl font-inter-bold text-grey-alpha-500">
+                  <Text className="text-3xl font-bold text-grey-alpha-500">
                     {resolvedCount}
                   </Text>
                 </View>
@@ -293,7 +293,7 @@ export default function ReportIssueScreen() {
                   <Text className="mb-1 text-sm text-grey-plain-550">
                     Pending
                   </Text>
-                  <Text className="text-3xl font-inter-bold text-grey-alpha-500">
+                  <Text className="text-3xl font-bold text-grey-alpha-500">
                     {pendingCount}
                   </Text>
                 </View>
@@ -315,14 +315,14 @@ export default function ReportIssueScreen() {
           {/* Logged Issues Section */}
           <View className="mx-4 mt-6">
             <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+              <Text className="text-lg font-semibold text-grey-alpha-500">
                 Logged issues
               </Text>
               <TouchableOpacity
                 onPress={() => router.push('/all-issues')}
                 className="flex-row items-center gap-1"
               >
-                <Text className="text-sm font-inter-medium text-primary">
+                <Text className="text-sm font-medium text-primary">
                   See all
                 </Text>
                 <ChevronRight
@@ -377,7 +377,7 @@ export default function ReportIssueScreen() {
 
                     {/* Content */}
                     <View className="flex-1">
-                      <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                      <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                         {issue.title}
                       </Text>
                       <Text
@@ -393,7 +393,7 @@ export default function ReportIssueScreen() {
 
                     {/* Right Side */}
                     <View className="items-end">
-                      <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+                      <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                         ID: {issue.id}
                       </Text>
                       <View
@@ -403,7 +403,7 @@ export default function ReportIssueScreen() {
                         }}
                       >
                         <Text
-                          className="text-xs font-inter-semibold capitalize"
+                          className="text-xs font-semibold capitalize"
                           style={{ color: statusStyle?.textColor }}
                         >
                           {issue.status}
@@ -443,7 +443,7 @@ export default function ReportIssueScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="ml-3 text-lg font-inter-semibold text-grey-alpha-500">
+        <Text className="ml-3 text-lg font-semibold text-grey-alpha-500">
           Report new issue
         </Text>
       </View>
@@ -465,7 +465,7 @@ export default function ReportIssueScreen() {
               size={20}
               strokeWidth={2}
             />
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               Type
             </Text>
           </View>
@@ -497,7 +497,7 @@ export default function ReportIssueScreen() {
                     />
                   )}
                   <Text
-                    className="text-sm font-inter-medium"
+                    className="text-sm font-medium"
                     style={{
                       color: isSelected
                         ? colors.primary.purple
@@ -588,7 +588,7 @@ export default function ReportIssueScreen() {
           activeOpacity={0.7}
         >
           <ImageIcon color={colors.primary.purple} size={24} strokeWidth={2} />
-          <Text className="text-base font-inter-medium text-grey-alpha-500">
+          <Text className="text-base font-medium text-grey-alpha-500">
             Add Photos/Videos
           </Text>
         </TouchableOpacity>

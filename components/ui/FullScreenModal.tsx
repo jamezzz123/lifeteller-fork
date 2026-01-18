@@ -51,7 +51,7 @@ export function FullScreenModal({
                   strokeWidth={2.6}
                 />
               </TouchableOpacity>
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 {title}
               </Text>
             </View>
@@ -69,7 +69,7 @@ export function FullScreenModal({
                 accessibilityLabel={rightButton.label}
               >
                 <Text
-                  className="text-sm font-inter-semibold"
+                  className="text-sm font-semibold"
                   style={{
                     color: rightButton.disabled
                       ? colors['grey-alpha']['400']

@@ -132,7 +132,7 @@ export const SocialOptionsSheet = forwardRef<
                   )}
 
                   <Text
-                    className={`text-sm font-inter-semibold ${
+                    className={`text-sm font-semibold ${
                       isSelected ? 'text-primary' : 'text-grey-alpha-500'
                     }`}
                   >

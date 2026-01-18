@@ -34,7 +34,7 @@ export function LiftTypeSelector({
 
   return (
     <View className="mb-6">
-      <Text className="mb-3 text-sm font-inter-semibold text-grey-alpha-450">
+      <Text className="mb-3 text-sm font-semibold text-grey-alpha-450">
         Select an option
       </Text>
       <View className="flex-row gap-3">
@@ -59,7 +59,7 @@ export function LiftTypeSelector({
                   strokeWidth={3}
                 />
               )}
-              <Text className="text-sm font-inter-semibold text-grey-alpha-450">
+              <Text className="text-sm font-semibold text-grey-alpha-450">
                 {option.label}
               </Text>
             </TouchableOpacity>

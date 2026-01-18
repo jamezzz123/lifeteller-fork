@@ -173,7 +173,7 @@ export function ProfilePictureUploader({
       {/* Choose Another Link */}
       {imageUri && (
         <Pressable onPress={handleImagePicker} className="mt-4 self-start">
-          <Text className="text-sm font-inter-medium text-primary">
+          <Text className="text-sm font-medium text-primary">
             Choose another profile picture
           </Text>
         </Pressable>

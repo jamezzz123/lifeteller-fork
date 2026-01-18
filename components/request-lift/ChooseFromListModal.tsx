@@ -56,7 +56,7 @@ export function ChooseFromListModal({
       }}
     >
       <View className="flex-1 px-4 pt-4">
-        <Text className="mb-3 text-base font-inter-medium text-grey-alpha-500">
+        <Text className="mb-3 text-base font-medium text-grey-alpha-500">
           Choose a list
         </Text>
 

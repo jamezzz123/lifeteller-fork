@@ -130,7 +130,7 @@ export const ShareProfileBottomSheet = forwardRef<
           {/* QR Code */}
           <View className="items-center">
             <QRCodePlaceholder size={200} />
-            <Text className="mt-4 text-base font-inter-medium text-grey-alpha-500">
+            <Text className="mt-4 text-base font-medium text-grey-alpha-500">
               @{username}
             </Text>
           </View>
@@ -153,7 +153,7 @@ export const ShareProfileBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
               </View>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Share profile
               </Text>
             </TouchableOpacity>
@@ -174,7 +174,7 @@ export const ShareProfileBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
               </View>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Copy link
               </Text>
             </TouchableOpacity>
@@ -195,7 +195,7 @@ export const ShareProfileBottomSheet = forwardRef<
                   strokeWidth={2}
                 />
               </View>
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 Download
               </Text>
             </TouchableOpacity>

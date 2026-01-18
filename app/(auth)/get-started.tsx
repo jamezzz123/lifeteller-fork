@@ -135,7 +135,7 @@ export default function GetStartedScreen() {
             <LogoLight width={104} height={30} />
           </View>
           <Animated.View style={animatedStyle}>
-            <Text className="mt-4 text-[2.6rem] font-inter-black leading-[1.1] tracking-tighter text-white">
+            <Text className="mt-4 text-[2.6rem] font-black leading-[1.1] tracking-tighter text-white">
               <Text className="text-grey-plain-450">Where</Text> Connection
               {'\n'}
               <Text className="text-grey-plain-450">meets</Text> Compassion

@@ -99,7 +99,7 @@ export default function FinalPreviewScreen() {
           className="flex-row items-center gap-2"
         >
           <CornerUpLeft size={24} color={colors['grey-plain']['550']} />
-          <Text className="text-lg font-inter-medium text-grey-plain-550">
+          <Text className="text-lg font-medium text-grey-plain-550">
             Preview lift clip
           </Text>
         </TouchableOpacity>
@@ -151,10 +151,10 @@ export default function FinalPreviewScreen() {
 
         {/* Who can see my request */}
         <View className="px-4 py-3">
-          <Text className="mb-2 text-sm font-inter-semibold text-grey-alpha-450">
+          <Text className="mb-2 text-sm font-semibold text-grey-alpha-450">
             Who can see my request?
           </Text>
-          <Text className="text-base font-inter-medium text-grey-alpha-550">
+          <Text className="text-base font-medium text-grey-alpha-550">
             {getAudienceLabel()}
           </Text>
         </View>
@@ -166,7 +166,7 @@ export default function FinalPreviewScreen() {
             <Text className="mb-2 text-sm text-grey-alpha-450">
               Added collaborators
             </Text>
-            <Text className="text-base font-inter-semibold text-grey-alpha-550">
+            <Text className="text-base font-semibold text-grey-alpha-550">
               {collaborators.length}
             </Text>
           </View>
@@ -176,7 +176,7 @@ export default function FinalPreviewScreen() {
             <Text className="mb-2 text-sm text-grey-alpha-450">
               Allow collaborators
             </Text>
-            <Text className="text-base font-inter-semibold text-grey-alpha-550">
+            <Text className="text-base font-semibold text-grey-alpha-550">
               {allowCollaborators ? 'Yes' : 'No'} (Unlimited)
             </Text>
           </View>
@@ -186,7 +186,7 @@ export default function FinalPreviewScreen() {
             <Text className="mb-2 text-sm text-grey-alpha-450">
               Allow requesters
             </Text>
-            <Text className="text-base font-inter-semibold text-grey-alpha-550">
+            <Text className="text-base font-semibold text-grey-alpha-550">
               {allowRequesters ? 'Yes' : 'No'} ({maxRequesters})
             </Text>
           </View>
@@ -201,7 +201,7 @@ export default function FinalPreviewScreen() {
           onPress={handleEditDetails}
           className="flex-1 items-center justify-center rounded-full border border-grey-plain-300 py-3"
         >
-          <Text className="text-base font-inter-semibold text-grey-alpha-550">
+          <Text className="text-base font-semibold text-grey-alpha-550">
             Edit details
           </Text>
         </TouchableOpacity>

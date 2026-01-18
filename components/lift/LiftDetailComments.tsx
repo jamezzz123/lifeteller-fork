@@ -107,7 +107,7 @@ export function LiftDetailComments({ postId }: LiftDetailCommentsProps) {
             setSortBy(sortBy === 'most-relevant' ? 'newest' : 'most-relevant');
           }}
         >
-          <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
+          <Text className="text-[15px] font-semibold text-grey-alpha-500">
             {sortBy === 'most-relevant' ? 'Most relevant' : 'Newest'}
           </Text>
           <ChevronDown color={colors['grey-plain']['550']} size={16} />
@@ -182,7 +182,7 @@ export function LiftDetailComments({ postId }: LiftDetailCommentsProps) {
                     activeOpacity={comment.userId ? 0.7 : 1}
                   >
                     <View className="mb-0.5 flex-row items-center gap-1.5">
-                      <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
+                      <Text className="text-[14px] font-semibold text-grey-alpha-500">
                         {comment.username}
                       </Text>
                       <BadgeCheck color={colors.primary.purple} size={14} />

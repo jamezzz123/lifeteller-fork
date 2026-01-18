@@ -20,7 +20,7 @@ export function BlockUserConfirmationModal({
       <View className="flex-1 items-center justify-center bg-black/50 px-6">
         <View className="w-full rounded-2xl bg-white p-6">
           {/* Title */}
-          <Text className="text-2xl font-inter-semibold leading-8 text-grey-alpha-500">
+          <Text className="text-2xl font-semibold leading-8 text-grey-alpha-500">
             Block @{username}?
           </Text>
 
@@ -38,7 +38,7 @@ export function BlockUserConfirmationModal({
           <View className="flex-row justify-end gap-4">
             <TouchableOpacity onPress={onCancel} className="px-4 py-2">
               <Text
-                className="text-base font-inter-semibold"
+                className="text-base font-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 Cancel
@@ -46,7 +46,7 @@ export function BlockUserConfirmationModal({
             </TouchableOpacity>
             <TouchableOpacity onPress={onConfirm} className="px-4 py-2">
               <Text
-                className="text-base font-inter-semibold"
+                className="text-base font-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 Block user

@@ -78,7 +78,7 @@ function MediaButton({ onPress, icon, label }: MediaButtonProps) {
       className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border-grey-plain-300 bg-primary-tints-50 py-3"
     >
       {icon}
-      <Text className="text-sm font-inter-medium text-grey-alpha-500">{label}</Text>
+      <Text className="text-sm font-medium text-grey-alpha-500">{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -243,7 +243,7 @@ export default function LiftCreationScreen({
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             {headerTitle}
           </Text>
         </View>
@@ -427,7 +427,7 @@ export default function LiftCreationScreen({
                       color={colors['grey-alpha']['500']}
                       strokeWidth={2}
                     />
-                    <Text className="text-sm font-inter-medium text-grey-alpha-500">
+                    <Text className="text-sm font-medium text-grey-alpha-500">
                       Collaborators{' '}
                       <Text className="text-grey-alpha-400">(optional)</Text>
                     </Text>
@@ -438,7 +438,7 @@ export default function LiftCreationScreen({
                       color={colors.primary.purple}
                       strokeWidth={2}
                     />
-                    <Text className="text-sm font-inter-medium">Add</Text>
+                    <Text className="text-sm font-medium">Add</Text>
                   </View>
                 </TouchableOpacity>
               ) : (
@@ -450,7 +450,7 @@ export default function LiftCreationScreen({
                       strokeWidth={2}
                     />
                     <View className="flex-1">
-                      <Text className="text-sm font-inter-medium text-grey-alpha-500">
+                      <Text className="text-sm font-medium text-grey-alpha-500">
                         Added collaborators
                       </Text>
                       <TouchableOpacity
@@ -519,7 +519,7 @@ export default function LiftCreationScreen({
                   color={colors['grey-alpha']['500']}
                   strokeWidth={2}
                 />
-                <Text className="text-sm font-inter-medium text-grey-alpha-500">
+                <Text className="text-sm font-medium text-grey-alpha-500">
                   Explore more options
                 </Text>
               </View>

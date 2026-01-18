@@ -37,7 +37,7 @@ export const BankSuggestionsBottomSheet = forwardRef<
         className="flex-1 px-4"
         showsVerticalScrollIndicator={false}
       >
-        <Text className="mb-4 text-center text-lg font-inter-bold text-grey-alpha-500">
+        <Text className="mb-4 text-center text-lg font-bold text-grey-alpha-500">
           Select bank
         </Text>
 
@@ -53,14 +53,14 @@ export const BankSuggestionsBottomSheet = forwardRef<
           >
             {/* Bank icon */}
             <View className="size-12 items-center justify-center rounded-full bg-primary">
-              <Text className="text-xs font-inter-bold text-white">
+              <Text className="text-xs font-bold text-white">
                 {bank.name.substring(0, 4).toUpperCase()}
               </Text>
             </View>
 
             {/* Bank name */}
             <View className="flex-1">
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 {bank.name}
               </Text>
             </View>
@@ -87,7 +87,7 @@ export const BankSuggestionsBottomSheet = forwardRef<
           </View>
 
           <View className="flex-1">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               See all banks
             </Text>
           </View>

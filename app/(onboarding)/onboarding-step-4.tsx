@@ -107,7 +107,7 @@ export default function OnboardingStep4Screen() {
 
         {/* Content */}
         <View className="mt-6 flex-1 px-6">
-          <Text className="text-xl font-inter-bold text-grey-alpha-500">
+          <Text className="text-xl font-bold text-grey-alpha-500">
             What are the things that interest you?
           </Text>
           <Text className="mt-1 text-grey-alpha-400">
@@ -155,7 +155,7 @@ export default function OnboardingStep4Screen() {
                         )}
 
                         <Text
-                          className="text-sm font-inter-medium"
+                          className="text-sm font-medium"
                           style={{
                             color: colors['grey-alpha']['450'],
                           }}
@@ -173,7 +173,7 @@ export default function OnboardingStep4Screen() {
             <View className="mt-6">
               <Text className="text-sm text-grey-alpha-500">
                 You can select up to{' '}
-                <Text className="font-inter-bold">{MAX_INTERESTS}</Text> interests.
+                <Text className="font-bold">{MAX_INTERESTS}</Text> interests.
               </Text>
             </View>
           </View>

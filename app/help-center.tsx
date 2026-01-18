@@ -66,7 +66,7 @@ function TopicCard({ topic }: { topic: HelpTopic }) {
         />
       </View>
       <View className="flex-1">
-        <Text className="mb-1 text-[15px] font-inter-semibold text-grey-alpha-500">
+        <Text className="mb-1 text-[15px] font-semibold text-grey-alpha-500">
           {topic.title}
         </Text>
         <Text className="text-xs text-grey-plain-550">
@@ -100,7 +100,7 @@ function FAQItem({
         activeOpacity={0.7}
       >
         <View className="flex-1 pr-4">
-          <Text className="text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="text-base font-semibold text-grey-alpha-500">
             {faq.question}
           </Text>
         </View>
@@ -294,7 +294,7 @@ export default function HelpCenterScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Help center
           </Text>
         </View>
@@ -377,7 +377,7 @@ export default function HelpCenterScreen() {
           activeOpacity={0.8}
         >
           <HelpCircle color="white" size={20} strokeWidth={2} />
-          <Text className="text-base font-inter-semibold text-white">Contact us</Text>
+          <Text className="text-base font-semibold text-white">Contact us</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

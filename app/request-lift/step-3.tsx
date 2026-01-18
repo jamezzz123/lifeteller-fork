@@ -279,7 +279,7 @@ export default function Step3Screen() {
             </View>
 
             {/* Title */}
-            <Text className="mb-2 text-xl font-inter-bold text-grey-alpha-500">
+            <Text className="mb-2 text-xl font-bold text-grey-alpha-500">
               {liftTitle || 'Untitled'}
             </Text>
 
@@ -299,7 +299,7 @@ export default function Step3Screen() {
                   className="rounded-full px-3 py-1"
                   style={{ backgroundColor: '#F8F8F8' }}
                 >
-                  <Text className="text-xs font-inter-medium text-black">
+                  <Text className="text-xs font-medium text-black">
                     4 Images/Videos
                   </Text>
                 </View>
@@ -308,7 +308,7 @@ export default function Step3Screen() {
                     className="rounded-full px-3 py-1"
                     style={{ backgroundColor: '#F8F8F8' }}
                   >
-                    <Text className="text-xs font-inter-medium text-black">
+                    <Text className="text-xs font-medium text-black">
                       ₦{liftAmount.toLocaleString()}
                     </Text>
                   </View>
@@ -319,7 +319,7 @@ export default function Step3Screen() {
                     className="rounded-full px-3 py-1"
                     style={{ backgroundColor: '#F8F8F8' }}
                   >
-                    <Text className="text-xs font-inter-medium text-black">
+                    <Text className="text-xs font-medium text-black">
                       {item.name || `Item ${index + 1}`} ({item.quantity})
                     </Text>
                   </View>
@@ -336,7 +336,7 @@ export default function Step3Screen() {
             >
               <View className="flex-row items-center gap-3">
                 <Tag size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-inter-medium text-grey-alpha-500">
+                <Text className="text-base font-medium text-grey-alpha-500">
                   Select category
                 </Text>
               </View>
@@ -367,7 +367,7 @@ export default function Step3Screen() {
                     }}
                   >
                     <Text
-                      className="text-sm font-inter-medium"
+                      className="text-sm font-medium"
                       style={{
                         color: isSelected
                           ? colors.primary.purple
@@ -390,7 +390,7 @@ export default function Step3Screen() {
             >
               <View className="flex-row items-center gap-3">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-inter-medium text-grey-alpha-500">
+                <Text className="text-base font-medium text-grey-alpha-500">
                   Location
                 </Text>
               </View>
@@ -443,7 +443,7 @@ export default function Step3Screen() {
                 <View className="flex-1 flex-row gap-3">
                   <UserPlus size={20} color={colors['grey-alpha']['500']} />
                   <View className="flex-1">
-                    <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                    <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                       Add collaborators
                     </Text>
                     <Text className="text-sm text-grey-alpha-400">
@@ -475,7 +475,7 @@ export default function Step3Screen() {
                       style={{ width: 32, height: 32, borderRadius: 16 }}
                       contentFit="cover"
                     />
-                    <Text className="flex-1 text-base font-inter-medium text-grey-alpha-500">
+                    <Text className="flex-1 text-base font-medium text-grey-alpha-500">
                       {getCollaboratorsDisplay()}
                     </Text>
                   </View>
@@ -503,7 +503,7 @@ export default function Step3Screen() {
           >
             <View className="flex-row items-center gap-3">
               <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
-              <Text className="text-base font-inter-medium text-grey-alpha-500">
+              <Text className="text-base font-medium text-grey-alpha-500">
                 More options (Audience)
               </Text>
             </View>
@@ -523,7 +523,7 @@ export default function Step3Screen() {
             >
               <View className="flex-row items-center gap-3">
                 <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-inter-medium text-grey-alpha-500">
+                <Text className="text-base font-medium text-grey-alpha-500">
                   More options
                 </Text>
               </View>
@@ -539,7 +539,7 @@ export default function Step3Screen() {
         {/* Category Bottom Sheet */}
         <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
+            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
               Choose category
             </Text>
 
@@ -578,7 +578,7 @@ export default function Step3Screen() {
         {/* Location Bottom Sheet */}
         <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-inter-bold text-grey-alpha-500">
+            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
               Choose location
             </Text>
 
@@ -599,7 +599,7 @@ export default function Step3Screen() {
               <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
               </View>
-              <Text className="text-base font-inter-medium text-grey-alpha-500">
+              <Text className="text-base font-medium text-grey-alpha-500">
                 Get my location on map
               </Text>
             </TouchableOpacity>

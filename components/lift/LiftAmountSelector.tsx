@@ -52,7 +52,7 @@ export function LiftAmountSelector({
             color={colors['grey-alpha']['500']}
             strokeWidth={2}
           />
-          <Text className="text-base font-inter-medium text-grey-alpha-500">
+          <Text className="text-base font-medium text-grey-alpha-500">
             Lift amount
           </Text>
         </View>
@@ -62,7 +62,7 @@ export function LiftAmountSelector({
               className="border border-grey-plain-300"
               onPress={handleCustomAmount}
             >
-              <Text className="rounded-sm p-2 text-sm font-inter-medium text-grey-alpha-450">
+              <Text className="rounded-sm p-2 text-sm font-medium text-grey-alpha-450">
                 Custom amount
               </Text>
             </TouchableOpacity>
@@ -78,7 +78,7 @@ export function LiftAmountSelector({
         >
           <View className="flex-row items-center gap-1.5  rounded-lg bg-primary-tints-100 px-4 py-2">
             <Check size={16} color={colors.primary.purple} strokeWidth={2.5} />
-            <Text className="text-base font-inter-medium text-primary">
+            <Text className="text-base font-medium text-primary">
               {formatCurrency(parseInt(selectedAmount))}
             </Text>
           </View>
@@ -114,7 +114,7 @@ export function LiftAmountSelector({
                   />
                 )}
                 <Text
-                  className={`text-sm font-inter-medium ${
+                  className={`text-sm font-medium ${
                     isSelected ? 'text-primary' : 'text-grey-alpha-500'
                   }`}
                 >

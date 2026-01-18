@@ -86,11 +86,11 @@ export const FundWalletBottomSheet = forwardRef<
           >
             {/* Bank Name */}
             <View className="mb-4">
-              <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                 Bank Name
               </Text>
               <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
                   {bankName}
                 </Text>
                 <TouchableOpacity
@@ -115,11 +115,11 @@ export const FundWalletBottomSheet = forwardRef<
 
             {/* Account Number */}
             <View className="mb-4">
-              <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                 Account Number
               </Text>
               <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
                   {accountNumber}
                 </Text>
                 <TouchableOpacity
@@ -144,11 +144,11 @@ export const FundWalletBottomSheet = forwardRef<
 
             {/* Account Name */}
             <View>
-              <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                 Account Name
               </Text>
               <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
                   {accountName}
                 </Text>
                 <TouchableOpacity

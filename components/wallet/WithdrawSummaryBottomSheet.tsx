@@ -40,7 +40,7 @@ export const WithdrawSummaryBottomSheet = forwardRef<
       <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
         {/* Amount */}
         <View className="mb-6 mt-4">
-          <Text className="text-4xl font-inter-bold text-grey-alpha-500">
+          <Text className="text-4xl font-bold text-grey-alpha-500">
             {formatAmount(amount, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -50,21 +50,21 @@ export const WithdrawSummaryBottomSheet = forwardRef<
 
         {/* Destination */}
         <View className="mb-6">
-          <Text className="mb-3 text-sm font-inter-medium text-grey-alpha-400">
+          <Text className="mb-3 text-sm font-medium text-grey-alpha-400">
             Destination
           </Text>
 
           <View className="flex-row items-center gap-3 rounded-xl bg-white p-4">
             {/* Bank icon */}
             <View className="size-12 items-center justify-center rounded-full bg-primary">
-              <Text className="text-xs font-inter-bold text-white">
+              <Text className="text-xs font-bold text-white">
                 {bankAccount.bankName.substring(0, 4).toUpperCase()}
               </Text>
             </View>
 
             {/* Bank details */}
             <View className="flex-1">
-              <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                 {bankAccount.accountName}
               </Text>
               <Text className="text-sm text-grey-plain-550">
@@ -80,7 +80,7 @@ export const WithdrawSummaryBottomSheet = forwardRef<
           <Text className="text-sm text-grey-alpha-500">
             Available balance:{' '}
             <Text
-              className="font-inter-semibold"
+              className="font-semibold"
               style={{ color: colors.primary.purple }}
             >
               {formatAmount(availableBalance, {
@@ -94,7 +94,7 @@ export const WithdrawSummaryBottomSheet = forwardRef<
         {/* Narration (if provided) */}
         {narration && (
           <View className="mb-6">
-            <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-400">
+            <Text className="mb-2 text-sm font-medium text-grey-alpha-400">
               Narration
             </Text>
             <Text className="text-base text-grey-alpha-500">{narration}</Text>

@@ -25,7 +25,7 @@ export function ChatStarterCard({
     >
       <Icon color={colors.primary.purple} size={24} strokeWidth={2} />
       <Text
-        className="mt-2 text-base font-inter-semibold"
+        className="mt-2 text-base font-semibold"
         style={{ color: colors['grey-alpha']['500'] }}
       >
         {title}

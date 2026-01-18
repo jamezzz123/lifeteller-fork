@@ -61,7 +61,7 @@ function UserListItemComponent({ user, onFollowPress }: UserListItemProps) {
       {/* User Info */}
       <View className="flex-1">
         <View className="mb-0.5 flex-row items-center gap-1.5">
-          <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
+          <Text className="text-[15px] font-semibold text-grey-alpha-500">
             {user.name}
           </Text>
           {user.isVerified && (
@@ -116,7 +116,7 @@ function FollowingTab({
                 size={16}
                 strokeWidth={2}
               />
-              <Text className="text-sm font-inter-semibold text-grey-alpha-500">
+              <Text className="text-sm font-semibold text-grey-alpha-500">
                 Follows you
               </Text>
             </View>
@@ -157,7 +157,7 @@ function FollowersTab({
                 size={16}
                 strokeWidth={2}
               />
-              <Text className="text-sm font-inter-semibold text-grey-alpha-500">
+              <Text className="text-sm font-semibold text-grey-alpha-500">
                 Follows you
               </Text>
             </View>
@@ -243,7 +243,7 @@ export default function FollowersFollowingScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             {userName}
           </Text>
         </View>

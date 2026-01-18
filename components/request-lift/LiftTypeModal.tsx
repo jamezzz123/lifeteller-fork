@@ -141,7 +141,7 @@ export function LiftTypeModal({
                 strokeWidth={2.6}
               />
             </TouchableOpacity>
-            <Text className="mx-3 text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="mx-3 text-base font-semibold text-grey-alpha-500">
               Lift type
             </Text>
           </View>
@@ -175,7 +175,7 @@ export function LiftTypeModal({
                         strokeWidth={3}
                       />
                     )}
-                    <Text className="text-sm font-inter-semibold text-grey-alpha-450">
+                    <Text className="text-sm font-semibold text-grey-alpha-450">
                       {label}
                     </Text>
                   </TouchableOpacity>
@@ -186,12 +186,12 @@ export function LiftTypeModal({
             {/* Amount Section - Only show for Monetary or Both */}
             {(selectedType === 'Monetary' || selectedType === 'Both') && (
               <>
-                <Text className="mt-6 text-base font-inter-semibold text-grey-alpha-500">
+                <Text className="mt-6 text-base font-semibold text-grey-alpha-500">
                   Amount
                 </Text>
 
                 <View className="flex-row items-center gap-2 border-b border-grey-plain-450/60 pb-2">
-                  <Text className="text-2xl font-inter-bold text-grey-alpha-500">
+                  <Text className="text-2xl font-bold text-grey-alpha-500">
                     ₦
                   </Text>
                   <TextInput
@@ -200,7 +200,7 @@ export function LiftTypeModal({
                     placeholder="5,000"
                     placeholderTextColor={colors['grey-alpha']['250']}
                     keyboardType="numeric"
-                    className="flex-1 text-2xl font-inter-bold text-grey-alpha-500"
+                    className="flex-1 text-2xl font-bold text-grey-alpha-500"
                   />
                 </View>
 
@@ -227,7 +227,7 @@ export function LiftTypeModal({
                         accessibilityLabel={`Select ${presetAmount} naira`}
                       >
                         <Text
-                          className="text-base font-inter-semibold"
+                          className="text-base font-semibold"
                           style={{
                             color: isSelected
                               ? colors.primary.purple
@@ -262,7 +262,7 @@ export function LiftTypeModal({
                       }}
                     >
                       <View className="flex-row items-center justify-between">
-                        <Text className="text-sm font-inter-semibold text-grey-alpha-500">
+                        <Text className="text-sm font-semibold text-grey-alpha-500">
                           Item #{index + 1}
                         </Text>
                         <TouchableOpacity
@@ -271,7 +271,7 @@ export function LiftTypeModal({
                           accessibilityLabel={`Remove item ${index + 1}`}
                         >
                           <Text
-                            className="text-sm font-inter-semibold"
+                            className="text-sm font-semibold"
                             style={{ color: colors.state.red }}
                           >
                             Remove item
@@ -281,7 +281,7 @@ export function LiftTypeModal({
 
                       <View className="mt-3 rounded-lg bg-white p-2">
                         <View className="mt-4">
-                          <Text className="text-xs font-inter-semibold text-grey-alpha-400">
+                          <Text className="text-xs font-semibold text-grey-alpha-400">
                             Item name
                           </Text>
                           <TextInput
@@ -296,7 +296,7 @@ export function LiftTypeModal({
                         </View>
 
                         <View className="mt-4">
-                          <Text className="text-xs font-inter-semibold text-grey-alpha-400">
+                          <Text className="text-xs font-semibold text-grey-alpha-400">
                             Quantity needed
                           </Text>
                           <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">
@@ -353,7 +353,7 @@ export function LiftTypeModal({
                     }}
                   >
                     <Text
-                      className="text-base font-inter-semibold"
+                      className="text-base font-semibold"
                       style={{ color: colors.primary.purple }}
                     >
                       Add item

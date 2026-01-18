@@ -75,14 +75,14 @@ export default function WithdrawSuccessScreen() {
           </View>
 
           {/* Title */}
-          <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
+          <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
             Withdraw successful
           </Text>
 
           {/* Description */}
           <Text className="mb-8 text-center text-base text-grey-plain-550">
             We have sent{' '}
-            <Text className="font-inter-semibold text-grey-alpha-500">
+            <Text className="font-semibold text-grey-alpha-500">
               {formatAmount(amount, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2,
@@ -104,7 +104,7 @@ export default function WithdrawSuccessScreen() {
                 strokeWidth={2}
               />
               <Text
-                className="text-base font-inter-semibold"
+                className="text-base font-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 Share receipt
@@ -122,7 +122,7 @@ export default function WithdrawSuccessScreen() {
                 strokeWidth={2}
               />
               <Text
-                className="text-base font-inter-semibold"
+                className="text-base font-semibold"
                 style={{ color: colors.primary.purple }}
               >
                 Download receipt
@@ -140,7 +140,7 @@ export default function WithdrawSuccessScreen() {
                 activeOpacity={0.7}
               >
                 <Text
-                  className="text-base font-inter-semibold"
+                  className="text-base font-semibold"
                   style={{ color: colors.primary.purple }}
                 >
                   Go to feeds
@@ -155,7 +155,7 @@ export default function WithdrawSuccessScreen() {
                 className="items-center justify-center rounded-xl bg-primary py-4"
                 activeOpacity={0.7}
               >
-                <Text className="text-base font-inter-semibold text-white">
+                <Text className="text-base font-semibold text-white">
                   Go to wallet
                 </Text>
               </TouchableOpacity>

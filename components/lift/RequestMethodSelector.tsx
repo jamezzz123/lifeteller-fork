@@ -32,7 +32,7 @@ export function RequestMethodSelector({
         accessibilityRole="button"
         accessibilityLabel={`Request via chat, ${selectedCount} contacts selected`}
       >
-        <Text className="text-sm font-inter-semibold text-primary">
+        <Text className="text-sm font-semibold text-primary">
           Request via chat ({selectedCount})
         </Text>
         <ChevronDown

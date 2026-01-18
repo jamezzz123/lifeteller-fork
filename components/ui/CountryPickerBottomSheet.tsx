@@ -153,7 +153,7 @@ export const CountryPickerBottomSheet = forwardRef<
     <View style={{ paddingBottom: 16 }}>
       {/* Title */}
       <View className="px-6 pb-4">
-        <Text className="text-grey-alpha-550 text-lg font-inter-bold">
+        <Text className="text-grey-alpha-550 text-lg font-bold">
           Select Country
         </Text>
       </View>

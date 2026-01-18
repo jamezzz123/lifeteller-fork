@@ -87,7 +87,7 @@ export function LiftMessageCard({
             activeOpacity={0.7}
             className="flex-1"
           >
-            <Text className="text-sm font-inter-semibold text-state-red">
+            <Text className="text-sm font-semibold text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -114,7 +114,7 @@ export function LiftMessageCard({
             activeOpacity={0.7}
             className="flex-1"
           >
-            <Text className="text-sm font-inter-semibold text-state-red">
+            <Text className="text-sm font-semibold text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -141,7 +141,7 @@ export function LiftMessageCard({
             activeOpacity={0.7}
             className="flex-1"
           >
-            <Text className="text-sm font-inter-semibold text-state-red">
+            <Text className="text-sm font-semibold text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -168,7 +168,7 @@ export function LiftMessageCard({
             activeOpacity={0.7}
             className="items-start"
           >
-            <Text className="text-sm font-inter-semibold text-state-red">
+            <Text className="text-sm font-semibold text-state-red">
               Cancel offer
             </Text>
           </TouchableOpacity>
@@ -201,7 +201,7 @@ export function LiftMessageCard({
           <View className="mb-3 flex-row items-center gap-2">
             {headerConfig.icon}
             <Text
-              className="text-sm font-inter-medium"
+              className="text-sm font-medium"
               style={{ color: colors['grey-alpha']['500'] }}
             >
               {headerConfig.label}
@@ -209,7 +209,7 @@ export function LiftMessageCard({
           </View>
           {/* Title */}
           <Text
-            className="mb-3 text-base font-inter-semibold"
+            className="mb-3 text-base font-semibold"
             style={{ color: colors['grey-alpha']['500'] }}
           >
             {title}
@@ -217,7 +217,7 @@ export function LiftMessageCard({
           {/* Amount and Status */}
           <View className="mb-2 flex-row items-center justify-between">
             <Text
-              className="text-base font-inter-semibold"
+              className="text-base font-semibold"
               style={{ color: colors['grey-alpha']['500'] }}
             >
               {formatAmount(amount)}

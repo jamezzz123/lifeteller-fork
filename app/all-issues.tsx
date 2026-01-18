@@ -109,7 +109,7 @@ export default function AllIssuesScreen() {
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+        <Text className="text-lg font-semibold text-grey-alpha-500">
           All issues
         </Text>
       </View>
@@ -163,7 +163,7 @@ export default function AllIssuesScreen() {
 
                 {/* Content */}
                 <View className="flex-1">
-                  <Text className="mb-1 text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
                     {issue.title}
                   </Text>
                   <Text
@@ -179,7 +179,7 @@ export default function AllIssuesScreen() {
 
                 {/* Right Side */}
                 <View className="items-end">
-                  <Text className="mb-2 text-xs font-inter-medium text-grey-plain-550">
+                  <Text className="mb-2 text-xs font-medium text-grey-plain-550">
                     ID: {issue.id}
                   </Text>
                   <View
@@ -189,7 +189,7 @@ export default function AllIssuesScreen() {
                     }}
                   >
                     <Text
-                      className="text-xs font-inter-semibold capitalize"
+                      className="text-xs font-semibold capitalize"
                       style={{ color: statusStyle.textColor }}
                     >
                       {issue.status}

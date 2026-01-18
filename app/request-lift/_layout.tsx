@@ -127,7 +127,7 @@ function LayoutContent() {
                   strokeWidth={2.6}
                 />
               </TouchableOpacity>
-              <Text className="text-base font-inter-semibold text-grey-alpha-450">
+              <Text className="text-base font-semibold text-grey-alpha-450">
                 {headerTitle}
               </Text>
             </View>

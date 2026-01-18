@@ -53,7 +53,7 @@ export function LiftProgressBar({
                 marginLeft: -20, // Half of min-width to center on edge
               }}
             >
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 {Math.round(progress)}%
               </Text>
             </View>
@@ -64,7 +64,7 @@ export function LiftProgressBar({
       {/* Amount Display */}
       {showAmount && (
         <Text className={`${textSizeClass} text-grey-plain-550`}>
-          <Text className="font-inter-semibold">{formattedCurrent}</Text> of{' '}
+          <Text className="font-semibold">{formattedCurrent}</Text> of{' '}
           {formattedTarget}
         </Text>
       )}

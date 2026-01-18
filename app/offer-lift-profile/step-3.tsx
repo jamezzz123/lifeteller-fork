@@ -79,7 +79,7 @@ export default function Step3Screen() {
       >
         {/* Offer To */}
         <View className="px-4 pt-5">
-          <Text className="mb-3 text-sm font-inter-medium text-grey-alpha-400">
+          <Text className="mb-3 text-sm font-medium text-grey-alpha-400">
             Offer to:
           </Text>
           {selectedRecipient && (
@@ -105,7 +105,7 @@ export default function Step3Screen() {
         {/* Amount */}
         <View className="mt-6 px-4">
           <Text className="text-sm text-grey-alpha-400">Amount</Text>
-          <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
             ₦{offerAmount.toLocaleString()}
           </Text>
         </View>
@@ -113,7 +113,7 @@ export default function Step3Screen() {
         {/* Lift Settings */}
         <View className="mt-8 px-4">
           <Text className="text-sm text-grey-alpha-400">Lift settings</Text>
-          <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
             One-to-one
           </Text>
         </View>
@@ -123,7 +123,7 @@ export default function Step3Screen() {
           <Text className="text-sm text-grey-alpha-400">
             Lift configuration
           </Text>
-          <Text className="mt-1 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mt-1 text-base font-semibold text-grey-alpha-500">
             {isAnonymous ? 'Anonymous' : 'Public'}
           </Text>
         </View>

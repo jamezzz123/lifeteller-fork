@@ -47,7 +47,7 @@ function HelpOptionItem({ option }: { option: HelpOption }) {
         />
       </View>
       <View className="flex-1">
-        <Text className="mb-1 text-[15px] font-inter-semibold text-grey-alpha-500">
+        <Text className="mb-1 text-[15px] font-semibold text-grey-alpha-500">
           {option.title}
         </Text>
         <Text className="text-sm text-grey-plain-550">
@@ -124,7 +124,7 @@ export default function HelpAndFeedbackScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Help and feedback
           </Text>
         </View>
@@ -140,7 +140,7 @@ export default function HelpAndFeedbackScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
             Help and feedback
           </Text>
 
@@ -165,7 +165,7 @@ export default function HelpAndFeedbackScreen() {
           activeOpacity={0.8}
         >
           <MessageCircleQuestionMark color="white" size={20} />
-          <Text className="text-base font-inter-semibold text-white">Contact us</Text>
+          <Text className="text-base font-semibold text-white">Contact us</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

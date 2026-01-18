@@ -108,7 +108,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
         <View className="flex-1">
           {/* Title */}
           <View className="px-6 pb-4">
-            <Text className="text-xl font-inter-semibold text-grey-alpha-500">
+            <Text className="text-xl font-semibold text-grey-alpha-500">
               Level features
             </Text>
           </View>
@@ -161,7 +161,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
                           }}
                         />
                       </View>
-                      <Text className="text-base font-inter-medium text-grey-alpha-500">
+                      <Text className="text-base font-medium text-grey-alpha-500">
                         {tier.name}
                       </Text>
                       {tier.isCurrent && (
@@ -171,7 +171,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
                             backgroundColor: colors['grey-plain']['150'],
                           }}
                         >
-                          <Text className="text-xs font-inter-medium text-grey-plain-550">
+                          <Text className="text-xs font-medium text-grey-plain-550">
                             Current level
                           </Text>
                         </View>
@@ -193,7 +193,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
                       }}
                     >
                       <View className="mb-3">
-                        <Text className="mb-1 text-sm font-inter-semibold text-grey-alpha-500">
+                        <Text className="mb-1 text-sm font-semibold text-grey-alpha-500">
                           Feature:
                         </Text>
                         <Text className="text-sm leading-5 text-grey-plain-550">
@@ -201,7 +201,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
                         </Text>
                       </View>
                       <View>
-                        <Text className="mb-1 text-sm font-inter-semibold text-grey-alpha-500">
+                        <Text className="mb-1 text-sm font-semibold text-grey-alpha-500">
                           Requirement:
                         </Text>
                         <Text className="text-sm leading-5 text-grey-plain-550">

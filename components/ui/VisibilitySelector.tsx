@@ -89,7 +89,7 @@ export function VisibilitySelector({
   return (
     <View>
       {title && (
-        <Text className="mb-2 text-sm font-inter-medium text-grey-alpha-400">
+        <Text className="mb-2 text-sm font-medium text-grey-alpha-400">
           {title}
         </Text>
       )}
@@ -105,7 +105,7 @@ export function VisibilitySelector({
 
         {/* Text Content */}
         <View className="flex-1">
-          <Text className="text-sm font-inter-semibold text-grey-alpha-500">
+          <Text className="text-sm font-semibold text-grey-alpha-500">
             {selectedOption?.label || 'Select visibility'}
           </Text>
           <Text className="text-xs text-grey-alpha-400">

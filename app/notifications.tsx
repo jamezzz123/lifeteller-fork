@@ -83,7 +83,7 @@ export default function NotificationsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Notifications
           </Text>
         </View>
@@ -95,7 +95,7 @@ export default function NotificationsScreen() {
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
           <View className="mb-4 ml-3 mt-2 flex-row items-center justify-between pr-3">
-            <Text className="text-base font-inter-semibold text-grey-alpha-500">
+            <Text className="text-base font-semibold text-grey-alpha-500">
               Email notification
             </Text>
             <Switch
@@ -152,7 +152,7 @@ export default function NotificationsScreen() {
           className="mx-4 mt-6 rounded-2xl p-2"
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
-          <Text className="mb-4 ml-3 mt-2 text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-4 ml-3 mt-2 text-base font-semibold text-grey-alpha-500">
             Push notifications
           </Text>
 

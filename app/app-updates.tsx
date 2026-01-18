@@ -25,7 +25,7 @@ export default function AppUpdatesScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             App updates
           </Text>
         </View>
@@ -37,7 +37,7 @@ export default function AppUpdatesScreen() {
         </View>
 
         <View className="items-center pb-8">
-          <Text className="mb-2 text-2xl font-inter-semibold text-grey-alpha-500">
+          <Text className="mb-2 text-2xl font-semibold text-grey-alpha-500">
             Update available
           </Text>
           <Text className="mb-6 px-6 text-center text-base text-grey-alpha-400">

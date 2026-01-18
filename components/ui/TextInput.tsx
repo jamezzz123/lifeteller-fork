@@ -44,7 +44,7 @@ export function TextInput({
   return (
     <View className={containerClassName}>
       {label && (
-        <Text className="mb-1.5 text-sm font-inter-medium text-grey-alpha-400">
+        <Text className="mb-1.5 text-sm font-medium text-grey-alpha-400">
           {label}
         </Text>
       )}
@@ -105,7 +105,7 @@ export function TextInput({
         {showPasswordToggle && !showLoading && !rightIcon && (
           <Pressable onPress={togglePasswordVisibility} className="ml-2">
             <Text
-              className="text-sm font-inter-medium text-primary"
+              className="text-sm font-medium text-primary"
               style={{
                 color: colors.primary.purple,
                 fontFamily: themeConfig.typography.primary.semiBold,

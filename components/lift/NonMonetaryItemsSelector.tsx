@@ -35,7 +35,7 @@ export function NonMonetaryItemsSelector({
             color={colors['grey-alpha']['500']}
             strokeWidth={2}
           />
-          <Text className="text-base font-inter-medium text-grey-alpha-500">
+          <Text className="text-base font-medium text-grey-alpha-500">
             Lift items
           </Text>
         </View>
@@ -45,7 +45,7 @@ export function NonMonetaryItemsSelector({
             className="flex-row items-center gap-1.5"
           >
             <Plus size={16} color={colors.primary.purple} strokeWidth={2.5} />
-            <Text className="text-sm font-inter-medium text-primary">Add item</Text>
+            <Text className="text-sm font-medium text-primary">Add item</Text>
           </TouchableOpacity>
         )}
       </View>

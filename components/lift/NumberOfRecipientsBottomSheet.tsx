@@ -64,7 +64,7 @@ export const NumberOfRecipientsBottomSheet = forwardRef<
       <BottomSheetComponent ref={bottomSheetRef}>
         <View className="px-6">
           {/* Title */}
-          <Text className="text-2xl font-inter-bold text-grey-alpha-500">
+          <Text className="text-2xl font-bold text-grey-alpha-500">
             Offer lift to multiple people
           </Text>
 
@@ -99,7 +99,7 @@ export const NumberOfRecipientsBottomSheet = forwardRef<
                 >
                   <View className="relative items-center">
                     <Text
-                      className="text-2xl font-inter-semibold"
+                      className="text-2xl font-semibold"
                       style={{
                         color: isSelected
                           ? colors.primary.purple

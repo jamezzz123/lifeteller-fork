@@ -225,7 +225,7 @@ export default function WithdrawScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="flex-1 text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
             Withdraw
           </Text>
         </View>
@@ -240,14 +240,14 @@ export default function WithdrawScreen() {
           <View className="rounded-t-3xl bg-white px-4 pt-6">
             {/* Amount to withdraw section */}
             <View className="mb-6">
-              <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
                 Amount to withdraw
               </Text>
 
               {/* Amount input */}
               <View className="mb-3 border-b border-grey-plain-300 pb-3">
                 <View className="flex-row items-center">
-                  <Text className="text-3xl font-inter-bold text-grey-alpha-500">
+                  <Text className="text-3xl font-bold text-grey-alpha-500">
                     ₦{' '}
                   </Text>
                   <TextInput
@@ -256,7 +256,7 @@ export default function WithdrawScreen() {
                     placeholder="0"
                     placeholderTextColor={colors['grey-alpha']['400']}
                     keyboardType="numeric"
-                    className="flex-1 text-3xl font-inter-bold text-grey-alpha-500"
+                    className="flex-1 text-3xl font-bold text-grey-alpha-500"
                     style={{
                       fontSize: 32,
                       lineHeight: 38,
@@ -276,7 +276,7 @@ export default function WithdrawScreen() {
               <View className="mb-4 flex-row items-center gap-2">
                 <Info size={16} color={colors.primary.purple} strokeWidth={2} />
                 <Text
-                  className="text-sm font-inter-medium"
+                  className="text-sm font-medium"
                   style={{ color: colors.primary.purple }}
                 >
                   Available balance:{' '}
@@ -311,7 +311,7 @@ export default function WithdrawScreen() {
                       activeOpacity={0.7}
                     >
                       <Text
-                        className={`text-sm font-inter-semibold ${
+                        className={`text-sm font-semibold ${
                           isSelected || matchesBalance
                             ? 'text-primary'
                             : 'text-grey-alpha-500'
@@ -338,7 +338,7 @@ export default function WithdrawScreen() {
                     color={colors['grey-alpha']['500']}
                     strokeWidth={2}
                   />
-                  <Text className="text-base font-inter-semibold text-grey-alpha-500">
+                  <Text className="text-base font-semibold text-grey-alpha-500">
                     Select destination bank
                   </Text>
                 </View>
@@ -375,7 +375,7 @@ export default function WithdrawScreen() {
                             />
                           )}
                           <Text
-                            className="flex-1 text-base font-inter-semibold"
+                            className="flex-1 text-base font-semibold"
                             style={{
                               color: colors['grey-alpha']['450'],
                             }}
@@ -393,7 +393,7 @@ export default function WithdrawScreen() {
 
             {/* Optional narration section */}
             <View className="mb-6">
-              <Text className="mb-3 text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
                 Optional narration
               </Text>
               <TextInput
@@ -416,7 +416,7 @@ export default function WithdrawScreen() {
         {/* Footer */}
         <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
           <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <Text className="text-base font-inter-medium text-grey-alpha-500">
+            <Text className="text-base font-medium text-grey-alpha-500">
               Go back
             </Text>
           </TouchableOpacity>

@@ -45,7 +45,7 @@ export const LiftSettingsBottomSheet = forwardRef<
             activeOpacity={0.7}
           >
             <View className="flex-1">
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 One-to-one
               </Text>
               <Text className="mt-1 text-sm text-grey-alpha-400">
@@ -62,7 +62,7 @@ export const LiftSettingsBottomSheet = forwardRef<
             activeOpacity={0.7}
           >
             <View className="flex-1">
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 One-to-many
               </Text>
               <Text className="mt-1 text-sm text-grey-alpha-400">

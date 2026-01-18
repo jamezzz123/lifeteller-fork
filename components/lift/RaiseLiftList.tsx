@@ -57,7 +57,7 @@ export function RaiseLiftList({
             {/* User Info */}
             <View className="flex-1">
               <View className="mb-0.5 flex-row items-center gap-1.5">
-                <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
+                <Text className="text-[14px] font-semibold text-grey-alpha-500">
                   {contributor.username}
                 </Text>
                 <BadgeCheck color={colors.primary.purple} size={14} />
@@ -75,7 +75,7 @@ export function RaiseLiftList({
 
             {/* Amount */}
             <View className="rounded-full bg-grey-plain-150 px-3 py-1.5">
-              <Text className="text-[14px] font-inter-semibold text-grey-alpha-500">
+              <Text className="text-[14px] font-semibold text-grey-alpha-500">
                 {formattedAmount}
               </Text>
             </View>

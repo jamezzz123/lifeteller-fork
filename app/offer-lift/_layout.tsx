@@ -28,7 +28,7 @@ function LayoutContent() {
               color={colors['grey-alpha']['450']}
               strokeWidth={2.6}
             />
-            <Text className="text-base font-inter-medium text-grey-alpha-450 mx-2">
+            <Text className="text-base font-medium text-grey-alpha-450 mx-2">
               {headerTitle}
             </Text>
           </TouchableOpacity>

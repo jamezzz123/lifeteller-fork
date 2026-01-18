@@ -80,7 +80,7 @@ function PickerModal({
           <View className="max-h-96">
             {/* Header */}
             <View className="flex-row items-center justify-between border-b border-grey-alpha-250 px-4 py-4">
-              <Text className="text-base font-inter-semibold text-grey-alpha-500">
+              <Text className="text-base font-semibold text-grey-alpha-500">
                 {title}
               </Text>
               <TouchableOpacity onPress={onClose} hitSlop={10}>
@@ -106,7 +106,7 @@ function PickerModal({
                     <Text
                       className={`text-base ${
                         isSelected
-                          ? 'font-inter-semibold text-primary'
+                          ? 'font-semibold text-primary'
                           : 'text-grey-alpha-500'
                       }`}
                     >
@@ -173,7 +173,7 @@ export default function EditDateOfBirthScreen() {
           className="flex-row items-center gap-2"
         >
           <X color={colors['grey-alpha']['500']} size={20} strokeWidth={2.5} />
-          <Text className="text-base font-inter-semibold text-grey-alpha-500">
+          <Text className="text-base font-semibold text-grey-alpha-500">
             Cancel
           </Text>
         </TouchableOpacity>
@@ -194,7 +194,7 @@ export default function EditDateOfBirthScreen() {
       >
         <View className="px-4 pt-6">
           {/* Title */}
-          <Text className="mb-2 text-2xl font-inter-bold text-grey-alpha-500">
+          <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
             Date of birth
           </Text>
 
@@ -208,7 +208,7 @@ export default function EditDateOfBirthScreen() {
           <View className="gap-4">
             {/* Month Field */}
             <View>
-              <Text className="mb-2 text-xs font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-2 text-xs font-semibold text-grey-alpha-500">
                 Month
               </Text>
               <Pressable
@@ -235,7 +235,7 @@ export default function EditDateOfBirthScreen() {
 
             {/* Day Field */}
             <View>
-              <Text className="mb-2 text-xs font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-2 text-xs font-semibold text-grey-alpha-500">
                 Day
               </Text>
               <Pressable
@@ -262,7 +262,7 @@ export default function EditDateOfBirthScreen() {
 
             {/* Year Field */}
             <View>
-              <Text className="mb-2 text-xs font-inter-semibold text-grey-alpha-500">
+              <Text className="mb-2 text-xs font-semibold text-grey-alpha-500">
                 Year
               </Text>
               <Pressable

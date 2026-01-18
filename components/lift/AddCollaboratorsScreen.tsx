@@ -106,7 +106,7 @@ function UserListItem({ user, isSelected, onToggle }: UserListItemProps) {
       {/* User Info */}
       <View className="flex-1">
         <View className="mb-0.5 flex-row items-center gap-1.5">
-          <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
+          <Text className="text-[15px] font-semibold text-grey-alpha-500">
             {user.fullName}
           </Text>
           {user.isVerified && (
@@ -192,7 +192,7 @@ export default function AddCollaboratorsScreen() {
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+            <Text className="text-lg font-semibold text-grey-alpha-500">
               Add collaborators
             </Text>
           </View>

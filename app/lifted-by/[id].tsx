@@ -50,7 +50,7 @@ export default function LiftedByScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
+          <Text className="text-lg font-semibold text-grey-alpha-500">
             Lifted by
           </Text>
         </View>
@@ -69,8 +69,8 @@ export default function LiftedByScreen() {
       {/* Count */}
       <View className="bg-white px-4 py-4">
         <Text className="text-base text-grey-alpha-500">
-          <Text className="font-inter-bold">{totalLifters}</Text>{' '}
-          <Text className="font-inter text-grey-plain-550">Lifters</Text>
+          <Text className="font-bold">{totalLifters}</Text>{' '}
+          <Text className="font-normal text-grey-plain-550">Lifters</Text>
         </Text>
       </View>
 

@@ -101,7 +101,7 @@ export const BottomSheetComponent = forwardRef<
           >
             {title && (
               <View className="px-6 pb-4">
-                <Text className="text-grey-alpha-550 text-lg font-inter-bold">
+                <Text className="text-grey-alpha-550 text-lg font-bold">
                   {title}
                 </Text>
               </View>
@@ -117,7 +117,7 @@ export const BottomSheetComponent = forwardRef<
           >
             {title && (
               <View className="px-6 pb-4">
-                <Text className="text-grey-alpha-550 text-lg font-inter-bold">
+                <Text className="text-grey-alpha-550 text-lg font-bold">
                   {title}
                 </Text>
               </View>

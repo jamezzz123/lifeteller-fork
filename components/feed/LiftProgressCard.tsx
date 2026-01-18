@@ -32,7 +32,7 @@ export function LiftProgressCard({
     <View className="mt-3 rounded-xl border border-grey-plain-300 bg-white p-4">
       {/* Header */}
       <View className="mb-3 flex-row items-center justify-between">
-        <Text className="flex-1 text-[15px] font-inter-semibold text-grey-alpha-500">
+        <Text className="flex-1 text-[15px] font-semibold text-grey-alpha-500">
           {title}
         </Text>
         <TouchableOpacity
@@ -40,7 +40,7 @@ export function LiftProgressCard({
           activeOpacity={0.7}
           style={styles.offerButton}
         >
-          <Text className="text-[13px] font-inter-medium text-primary">
+          <Text className="text-[13px] font-medium text-primary">
             Offer lift
           </Text>
         </TouchableOpacity>
@@ -68,7 +68,7 @@ export function LiftProgressCard({
                 marginLeft: -20, // Half of min-width to center on edge
               }}
             >
-              <Text className="text-xs font-inter-medium text-grey-alpha-500">
+              <Text className="text-xs font-medium text-grey-alpha-500">
                 {Math.round(progress)}%
               </Text>
             </View>
@@ -78,7 +78,7 @@ export function LiftProgressCard({
 
       {/* Amount Display */}
       <Text className="text-[13px] text-grey-plain-550">
-        <Text className="font-inter-semibold">{formattedCurrent}</Text> of{' '}
+        <Text className="font-semibold">{formattedCurrent}</Text> of{' '}
         {formattedTarget}
       </Text>
     </View>

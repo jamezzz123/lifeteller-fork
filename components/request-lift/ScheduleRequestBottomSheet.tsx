@@ -179,7 +179,7 @@ export const ScheduleRequestBottomSheet = forwardRef<
       <View className="px-4">
         {/* Header */}
         <View className="mb-2">
-          <Text className="text-center text-lg font-inter-bold text-grey-alpha-500">
+          <Text className="text-center text-lg font-bold text-grey-alpha-500">
             Schedule request
           </Text>
           <Text className="mt-1 text-center text-sm text-grey-alpha-400">
@@ -190,17 +190,17 @@ export const ScheduleRequestBottomSheet = forwardRef<
         {/* Column Headers */}
         <View className="mb-2 flex-row items-center justify-between px-2">
           <View style={{ flex: 1.5 }}>
-            <Text className="text-center text-sm font-inter-semibold text-grey-alpha-400">
+            <Text className="text-center text-sm font-semibold text-grey-alpha-400">
               Date
             </Text>
           </View>
           <View style={{ flex: 1 }}>
-            <Text className="text-center text-sm font-inter-semibold text-grey-alpha-400">
+            <Text className="text-center text-sm font-semibold text-grey-alpha-400">
               Hour
             </Text>
           </View>
           <View style={{ flex: 0.8 }}>
-            <Text className="text-center text-sm font-inter-semibold text-grey-alpha-400">
+            <Text className="text-center text-sm font-semibold text-grey-alpha-400">
               Minute
             </Text>
           </View>
