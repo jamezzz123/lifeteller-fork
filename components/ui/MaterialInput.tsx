@@ -77,7 +77,7 @@ export function MaterialInput({
       {/* Floating Label */}
       {label && (
         <Text
-          className={`mb-2 text-xs font-semibold transition-all ${
+          className={`font-inter-semibold mb-2 text-xs transition-all ${
             isFocused
               ? 'text-primary'
               : error
@@ -105,7 +105,7 @@ export function MaterialInput({
         {/* Prefix */}
         {prefix && (
           <Text
-            className={`mr-3 ${currentSize.prefixClass} ${multiline ? 'pt-0.5' : ''} ${
+            className={`font-inter mr-3 ${currentSize.prefixClass} ${multiline ? 'pt-0.5' : ''} ${
               isFocused || hasValue
                 ? 'text-grey-alpha-500'
                 : 'text-grey-alpha-400'
@@ -129,7 +129,7 @@ export function MaterialInput({
             props.onBlur?.(e);
           }}
           placeholderTextColor={colors['grey-alpha']['250']}
-          className={`flex-1 ${currentSize.textClass} text-grey-plain-300`}
+          className={`font-inter flex-1 ${currentSize.textClass} text-grey-plain-300`}
           style={{
             fontSize: currentSize.fontSize,
             color: colors['grey-alpha']['500'],
@@ -151,7 +151,7 @@ export function MaterialInput({
         {/* Suffix (Character Count or Custom) */}
         {(suffix || showCharacterCount) && (
           <Text
-            className={`ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
+            className={`font-inter ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
             style={{
               alignSelf: 'flex-end',
               paddingBottom: 2,
@@ -166,7 +166,7 @@ export function MaterialInput({
       </View>
   {showCharacterCountBelow && (
           <Text
-            className={`-mb-5 text-xs mt-2 ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
+            className={`font-inter -mb-5 text-xs mt-2 ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
             style={{
               alignSelf: 'flex-end',
             }}
@@ -178,9 +178,9 @@ export function MaterialInput({
           </Text>
         )}
       {/* Error or Helper Text */}
-      {error && <Text className="mt-1.5 text-xs text-red-500">{error}</Text>}
+      {error && <Text className="font-inter mt-1.5 text-xs text-red-500">{error}</Text>}
       {helperText && !error && (
-        <Text className="mt-1 text-xs text-grey-alpha-400">{helperText}</Text>
+        <Text className="font-inter mt-1 text-xs text-grey-alpha-400">{helperText}</Text>
       )}
     </View>
   );
