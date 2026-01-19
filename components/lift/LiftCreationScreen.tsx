@@ -56,12 +56,12 @@ function InputActions() {
     <View className="mt-2 flex-row gap-2">
       <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
         <Hash size={14} color={colors['grey-alpha']['400']} strokeWidth={2} />
-        <Text className="text-xs">hashtag</Text>
+        <Text className="font-inter text-xs">hashtag</Text>
       </TouchableOpacity>
 
       <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
         <AtSign size={14} color={colors['grey-alpha']['400']} strokeWidth={2} />
-        <Text className="text-xs">mentions</Text>
+        <Text className="font-inter text-xs">mentions</Text>
       </TouchableOpacity>
 
       <TouchableOpacity className="flex-row items-center gap-1.5 rounded-md bg-grey-plain-200 px-3 py-1.5">
@@ -70,7 +70,7 @@ function InputActions() {
           color={colors['grey-alpha']['400']}
           strokeWidth={2}
         />
-        <Text className="text-xs">Emoji</Text>
+        <Text className="font-inter text-xs">Emoji</Text>
       </TouchableOpacity>
     </View>
   );
@@ -89,7 +89,7 @@ function MediaButton({ onPress, icon, label }: MediaButtonProps) {
       className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border-grey-plain-300 bg-primary-tints-50 py-3"
     >
       {icon}
-      <Text className="text-sm font-medium text-grey-alpha-500">{label}</Text>
+      <Text className="font-inter-medium text-sm text-grey-alpha-500">{label}</Text>
     </TouchableOpacity>
   );
 }
@@ -271,7 +271,7 @@ export default function LiftCreationScreen({
           <TouchableOpacity onPress={handleGoBack}>
             <X size={24} color={colors['grey-plain']['550']} strokeWidth={2} />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-lg text-grey-alpha-500">
             {headerTitle}
           </Text>
         </View>
@@ -381,7 +381,7 @@ export default function LiftCreationScreen({
                 >
                   <Trash size={20} color={colors.state.red} strokeWidth={2} />
                 </TouchableOpacity>
-                <Text className="text-sm text-grey-alpha-400">
+                <Text className="font-inter text-sm text-grey-alpha-400">
                   {getMediaCountText()}
                 </Text>
               </View>
@@ -409,7 +409,7 @@ export default function LiftCreationScreen({
                     </TouchableOpacity>
                     {item.type === 'video' && (
                       <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
-                        <Text className="text-xs text-white">Video</Text>
+                        <Text className="font-inter text-xs text-white">Video</Text>
                       </View>
                     )}
                   </View>
@@ -460,9 +460,9 @@ export default function LiftCreationScreen({
                       color={colors['grey-alpha']['500']}
                       strokeWidth={2}
                     />
-                    <Text className="text-sm font-medium text-grey-alpha-500">
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
                       Collaborators{' '}
-                      <Text className="text-grey-alpha-400">(optional)</Text>
+                      <Text className="font-inter text-grey-alpha-400">(optional)</Text>
                     </Text>
                   </View>
                   <View className="flex-row items-center gap-1.5 rounded-lg border border-grey-plain-300 p-2">
@@ -471,7 +471,7 @@ export default function LiftCreationScreen({
                       color={colors.primary.purple}
                       strokeWidth={2}
                     />
-                    <Text className="text-sm font-medium">Add</Text>
+                    <Text className="font-inter-medium text-sm">Add</Text>
                   </View>
                 </TouchableOpacity>
               ) : (
@@ -483,7 +483,7 @@ export default function LiftCreationScreen({
                       strokeWidth={2}
                     />
                     <View className="flex-1">
-                      <Text className="text-sm font-medium text-grey-alpha-500">
+                      <Text className="font-inter-medium text-sm text-grey-alpha-500">
                         Added collaborators
                       </Text>
                       <TouchableOpacity
@@ -501,13 +501,13 @@ export default function LiftCreationScreen({
                           overlap={10}
                           maxVisible={1}
                         />
-                        <Text className="text-sm text-grey-alpha-400">
+                        <Text className="font-inter text-sm text-grey-alpha-400">
                           {collaborators[0]?.fullName}
                           {collaborators.length > 1 && (
-                            <Text>
+                            <Text className="font-inter">
                               {' '}
                               and{' '}
-                              <Text className="text-grey-alpha-500">
+                              <Text className="font-inter text-grey-alpha-500">
                                 {collaborators.length - 1}
                               </Text>
                               {` other${collaborators.length - 1 === 1 ? '' : 's'}`}
@@ -552,7 +552,7 @@ export default function LiftCreationScreen({
                   color={colors['grey-alpha']['500']}
                   strokeWidth={2}
                 />
-                <Text className="text-sm font-medium text-grey-alpha-500">
+                <Text className="font-inter-medium text-sm text-grey-alpha-500">
                   Explore more options
                 </Text>
               </View>
@@ -562,7 +562,7 @@ export default function LiftCreationScreen({
                     style={{ backgroundColor: '#CF2586' }}
                     className="h-6 min-w-6 items-center justify-center rounded-full px-2"
                   >
-                    <Text className="text-xs font-semibold text-white">
+                    <Text className="font-inter-semibold text-xs text-white">
                       {moreOptionsCount}
                     </Text>
                   </View>

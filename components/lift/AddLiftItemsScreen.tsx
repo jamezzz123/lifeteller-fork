@@ -92,7 +92,7 @@ export default function AddLiftItemsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-lg text-grey-alpha-500">
             Add items
           </Text>
         </View>
@@ -118,7 +118,7 @@ export default function AddLiftItemsScreen() {
       >
         {/* Items Section */}
         <View>
-          <Text className="text-sm text-grey-alpha-400">
+          <Text className="font-inter text-sm text-grey-alpha-400">
             You can add up to 5 items.
           </Text>
 
@@ -132,7 +132,7 @@ export default function AddLiftItemsScreen() {
                 }}
               >
                 <View className="flex-row items-center justify-between">
-                  <Text className="text-sm font-semibold text-grey-alpha-500">
+                  <Text className="font-inter-semibold text-sm text-grey-alpha-500">
                     Item #{index + 1}
                   </Text>
                   <TouchableOpacity
@@ -141,7 +141,7 @@ export default function AddLiftItemsScreen() {
                     accessibilityLabel={`Remove item ${index + 1}`}
                   >
                     <Text
-                      className="text-sm font-semibold"
+                      className="font-inter-semibold text-sm"
                       style={{ color: colors.state.red }}
                     >
                       Remove item
@@ -151,7 +151,7 @@ export default function AddLiftItemsScreen() {
 
                 <View className="mt-3 rounded-lg bg-white p-2">
                   <View className="mt-4">
-                    <Text className="text-xs font-semibold text-grey-alpha-400">
+                    <Text className="font-inter-semibold text-xs text-grey-alpha-400">
                       Item name
                     </Text>
                     <TextInput
@@ -161,12 +161,12 @@ export default function AddLiftItemsScreen() {
                       }
                       placeholder="Laptop"
                       placeholderTextColor={colors['grey-alpha']['250']}
-                      className="mt-2 h-12 rounded-xl border border-grey-alpha-250 bg-grey-plain-150 px-3 text-base text-grey-alpha-500"
+                      className="font-inter mt-2 h-12 rounded-xl border border-grey-alpha-250 bg-grey-plain-150 px-3 text-base text-grey-alpha-500"
                     />
                   </View>
 
                   <View className="mt-4">
-                    <Text className="text-xs font-semibold text-grey-alpha-400">
+                    <Text className="font-inter-semibold text-xs text-grey-alpha-400">
                       Quantity needed
                     </Text>
                     <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">
@@ -176,7 +176,7 @@ export default function AddLiftItemsScreen() {
                           handleItemQuantityInputChange(item.id, text)
                         }
                         keyboardType="numeric"
-                        className="w-16 flex-1 px-3 py-3 text-base text-grey-alpha-500"
+                        className="font-inter w-16 flex-1 px-3 py-3 text-base text-grey-alpha-500"
                       />
                       <View className="h-12 w-px bg-grey-plain-450/60" />
                       <TouchableOpacity
@@ -219,7 +219,7 @@ export default function AddLiftItemsScreen() {
               }}
             >
               <Text
-                className="text-base font-semibold"
+                className="font-inter-semibold text-base"
                 style={{ color: colors.primary.purple }}
               >
                 Add item

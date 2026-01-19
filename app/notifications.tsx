@@ -42,9 +42,9 @@ function NotificationRow({
         ) : null}
 
         <View className="flex-1">
-          <Text className="text-base text-grey-alpha-500">{title}</Text>
+          <Text className="font-inter text-base text-grey-alpha-500">{title}</Text>
           {description ? (
-            <Text className="text-sm text-grey-plain-550">{description}</Text>
+            <Text className="font-inter text-sm text-grey-plain-550">{description}</Text>
           ) : null}
         </View>
       </View>
@@ -83,7 +83,7 @@ export default function NotificationsScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-lg text-grey-alpha-500">
             Notifications
           </Text>
         </View>
@@ -95,7 +95,7 @@ export default function NotificationsScreen() {
           style={{ backgroundColor: colors['grey-plain']['150'] }}
         >
           <View className="mb-4 ml-3 mt-2 flex-row items-center justify-between pr-3">
-            <Text className="text-base font-semibold text-grey-alpha-500">
+            <Text className="font-inter-semibold text-base text-grey-alpha-500">
               Email notification
             </Text>
             <Switch

@@ -106,20 +106,20 @@ function UserListItem({ user, isSelected, onToggle }: UserListItemProps) {
       {/* User Info */}
       <View className="flex-1">
         <View className="mb-0.5 flex-row items-center gap-1.5">
-          <Text className="text-[15px] font-semibold text-grey-alpha-500">
+          <Text className="font-inter-semibold text-[15px] text-grey-alpha-500">
             {user.fullName}
           </Text>
           {user.isVerified && (
             <BadgeCheck color={colors.primary.purple} size={16} />
           )}
         </View>
-        <Text className="text-[13px] text-grey-plain-550">@{user.handle}</Text>
+        <Text className="font-inter text-[13px] text-grey-plain-550">@{user.handle}</Text>
       </View>
 
       {/* Already Added Indicator */}
       {isSelected && (
         <View>
-          <Text className="text-[13px] text-grey-plain-550">Already added</Text>
+          <Text className="font-inter text-[13px] text-grey-plain-550">Already added</Text>
         </View>
       )}
     </TouchableOpacity>
@@ -192,7 +192,7 @@ export default function AddCollaboratorsScreen() {
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="font-inter-semibold text-lg text-grey-alpha-500">
               Add collaborators
             </Text>
           </View>
@@ -208,7 +208,7 @@ export default function AddCollaboratorsScreen() {
 
         {/* Search Section */}
         <View className="border-b border-grey-plain-150 bg-white px-4 py-4">
-          <Text className="mb-3 text-sm text-grey-alpha-400">
+          <Text className="font-inter mb-3 text-sm text-grey-alpha-400">
             Search by username or name of user
           </Text>
 
@@ -259,7 +259,7 @@ export default function AddCollaboratorsScreen() {
           keyboardShouldPersistTaps="handled"
           ListEmptyComponent={
             <View className="px-4 py-8">
-              <Text className="text-center text-sm text-grey-alpha-400">
+              <Text className="font-inter text-center text-sm text-grey-alpha-400">
                 No users found
               </Text>
             </View>

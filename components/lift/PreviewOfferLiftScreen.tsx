@@ -116,7 +116,7 @@ export default function PreviewOfferLiftScreen({
                 strokeWidth={2}
               />
             </TouchableOpacity>
-            <Text className="text-lg font-semibold text-grey-alpha-500">
+            <Text className="font-inter-semibold text-lg text-grey-alpha-500">
               Preview Lift
             </Text>
           </View>
@@ -126,11 +126,11 @@ export default function PreviewOfferLiftScreen({
         <View className="px-5 pt-6">
           {/* Offer to Section */}
           <View className="mb-6">
-            <Text className="mb-2 text-sm font-medium text-grey-alpha-450">
+            <Text className="font-inter-medium mb-2 text-sm text-grey-alpha-450">
               Offer to:
             </Text>
             <View className="h-10 w-10 items-center justify-center rounded-full bg-grey-plain-150">
-              <Text className="text-base">
+              <Text className="font-inter text-base">
                 {numberOfRecipients}
               </Text>
             </View>
@@ -138,8 +138,8 @@ export default function PreviewOfferLiftScreen({
 
           {/* Title & Description */}
           <View className="mb-6">
-            <Text className="mb-2 text-2xl font-semibold text-grey-alpha-550">{title}</Text>
-            <Text className="text-base leading-snug text-grey-alpha-450">
+            <Text className="font-inter-semibold mb-2 text-2xl text-grey-alpha-550">{title}</Text>
+            <Text className="font-inter text-base leading-snug text-grey-alpha-450">
               {description}
             </Text>
           </View>
@@ -148,8 +148,8 @@ export default function PreviewOfferLiftScreen({
 
           {/* Amount Section */}
           <View className="mb-6">
-            <Text className="mb-1 text-sm text-grey-plain-500">Amount</Text>
-            <Text className="mb-2 text-xl text-grey-alpha-550 font-bold text-black">
+            <Text className="font-inter mb-1 text-sm text-grey-plain-500">Amount</Text>
+            <Text className="font-inter-bold mb-2 text-xl text-grey-alpha-550 text-black">
               {new Intl.NumberFormat('en-NG', {
                 style: 'currency',
                 currency: 'NGN',
@@ -157,7 +157,7 @@ export default function PreviewOfferLiftScreen({
             </Text>
             <View className="flex-row items-center gap-2">
               <Info size={16} color={colors['grey-plain']['600']} />
-              <Text className="text-sm text-grey-plain-500">
+              <Text className="font-inter text-sm text-grey-plain-500">
                 Each recipients will get{' '}
                 {new Intl.NumberFormat('en-NG', {
                   style: 'currency',
@@ -172,20 +172,20 @@ export default function PreviewOfferLiftScreen({
 
           {/* Settings */}
           <View className="mb-6">
-            <Text className="mb-1 text-sm text-grey-plain-500">
+            <Text className="font-inter mb-1 text-sm text-grey-plain-500">
               Lift settings
             </Text>
-            <Text className="text-base text-grey-alpha-550 font-semibold text-black">
+            <Text className="font-inter-semibold text-base text-grey-alpha-550 text-black">
               One-to-many
             </Text>
           </View>
 
           {/* Configuration */}
           <View className="mb-6">
-            <Text className="mb-1 text-sm text-grey-plain-500">
+            <Text className="font-inter mb-1 text-sm text-grey-plain-500">
               Lift configuration
             </Text>
-            <Text className="text-base text-grey-alpha-550 font-semibold text-black">
+            <Text className="font-inter-semibold text-base text-grey-alpha-550 text-black">
               Anonymous
             </Text>
           </View>

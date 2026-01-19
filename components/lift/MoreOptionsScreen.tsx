@@ -196,7 +196,7 @@ export default function MoreOptionsScreen({
             strokeWidth={2}
           />
         </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
+        <Text className="font-inter-semibold text-lg text-grey-alpha-500">
           More options
         </Text>
       </View>
@@ -214,7 +214,7 @@ export default function MoreOptionsScreen({
             >
               <View className="flex-row items-center gap-3">
                 <Tag size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="font-inter-medium text-base text-grey-alpha-500">
                   Select category
                 </Text>
               </View>
@@ -245,7 +245,7 @@ export default function MoreOptionsScreen({
                     }}
                   >
                     <Text
-                      className="text-sm font-medium"
+                      className="font-inter-medium text-sm"
                       style={{
                         color: isSelected
                           ? colors.primary.purple
@@ -270,7 +270,7 @@ export default function MoreOptionsScreen({
             >
               <View className="flex-row items-center gap-3">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="font-inter-medium text-base text-grey-alpha-500">
                   Location
                 </Text>
               </View>
@@ -301,7 +301,7 @@ export default function MoreOptionsScreen({
                     }}
                   >
                     <Text
-                      className="text-sm"
+                      className="font-inter text-sm"
                       style={{
                         color: isSelected
                           ? colors.primary.purple
@@ -327,11 +327,11 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Calendar size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
                   Schedule lift
                 </Text>
                 {scheduleLift && scheduleDate ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
                     {scheduleDate.toLocaleDateString('en-US', {
                       weekday: 'short',
                       month: 'short',
@@ -347,7 +347,7 @@ export default function MoreOptionsScreen({
                     →
                   </Text>
                 ) : (
-                  <Text className="text-sm text-grey-alpha-400">
+                  <Text className="font-inter text-sm text-grey-alpha-400">
                     Choose a start date for your lift.
                   </Text>
                 )}
@@ -374,11 +374,11 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <CalendarX size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
                   Lift end date
                 </Text>
                 {liftEndDate && endDate ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
                     {endDate.toLocaleDateString('en-US', {
                       weekday: 'short',
                       month: 'short',
@@ -394,7 +394,7 @@ export default function MoreOptionsScreen({
                     →
                   </Text>
                 ) : (
-                  <Text className="text-sm text-grey-alpha-400">
+                  <Text className="font-inter text-sm text-grey-alpha-400">
                     This will end the lift even when the target is not met.
                   </Text>
                 )}
@@ -422,22 +422,22 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Users size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
                   Allow collaborators
                 </Text>
                 {allowCollaborators && collaboratorLimit !== 'unlimited' ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
                     {collaboratorLimit} →
                   </Text>
                 ) : allowCollaborators ? (
-                  <Text className="text-sm font-medium text-grey-alpha-500">
+                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
                     {typeof collaboratorLimit === 'number'
                       ? collaboratorLimit
                       : '5'}{' '}
                     →
                   </Text>
                 ) : (
-                  <Text className="text-sm text-grey-alpha-400">
+                  <Text className="font-inter text-sm text-grey-alpha-400">
                     Approve people&apos;s request to join you in supporting and
                     raising the lift.
                   </Text>
@@ -462,10 +462,10 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Hand size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
                   Allow requesters
                 </Text>
-                <Text className="text-sm text-grey-alpha-400">
+                <Text className="font-inter text-sm text-grey-alpha-400">
                   Approve people&apos;s request to join and benefit from the
                   lift you are raising.
                 </Text>
@@ -533,7 +533,7 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+            <Text className="font-inter-bold mb-4 text-lg text-grey-alpha-500">
               Choose category
             </Text>
 
@@ -545,7 +545,7 @@ export default function MoreOptionsScreen({
                 onChangeText={setCategorySearch}
                 placeholder="Search for category"
                 placeholderTextColor={colors['grey-alpha']['400']}
-                className="flex-1 text-base text-grey-alpha-500"
+                className="font-inter flex-1 text-base text-grey-alpha-500"
               />
             </View>
 
@@ -557,7 +557,7 @@ export default function MoreOptionsScreen({
                   onPress={() => handleCategorySelect(cat)}
                   className="flex-row items-center justify-between border-b border-grey-plain-450/20 py-4"
                 >
-                  <Text className="text-base text-grey-alpha-500">{cat}</Text>
+                  <Text className="font-inter text-base text-grey-alpha-500">{cat}</Text>
                   <ChevronRight
                     size={20}
                     color={colors['grey-alpha']['400']}
@@ -574,7 +574,7 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="mb-4 text-lg font-bold text-grey-alpha-500">
+            <Text className="font-inter-bold mb-4 text-lg text-grey-alpha-500">
               Choose location
             </Text>
 
@@ -586,7 +586,7 @@ export default function MoreOptionsScreen({
                 onChangeText={setLocationSearch}
                 placeholder="Search for location"
                 placeholderTextColor={colors['grey-alpha']['400']}
-                className="flex-1 text-base text-grey-alpha-500"
+                className="font-inter flex-1 text-base text-grey-alpha-500"
               />
             </View>
 
@@ -595,7 +595,7 @@ export default function MoreOptionsScreen({
               <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
               </View>
-              <Text className="text-base font-medium text-grey-alpha-500">
+              <Text className="font-inter-medium text-base text-grey-alpha-500">
                 Get my location on map
               </Text>
             </TouchableOpacity>
@@ -608,7 +608,7 @@ export default function MoreOptionsScreen({
                   onPress={() => handleLocationSelect(loc)}
                   className="bg-grey-plain-200 rounded-lg px-4 py-2.5"
                 >
-                  <Text className="text-sm text-grey-alpha-500">{loc}</Text>
+                  <Text className="font-inter text-sm text-grey-alpha-500">{loc}</Text>
                 </TouchableOpacity>
               ))}
             </View>

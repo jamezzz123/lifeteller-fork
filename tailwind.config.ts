@@ -9,6 +9,20 @@ const config: Config = {
   presets: [nativewindPreset],
   theme: {
     extend: {
+      fontFamily: {
+        // Inter font variants - use with font-inter, font-inter-medium, etc.
+        inter: ['interRegular'],
+        'inter-thin': ['interThin'],
+        'inter-extralight': ['interExtraLight'],
+        'inter-light': ['interLight'],
+        'inter-medium': ['interMedium'],
+        'inter-semibold': ['interSemiBold'],
+        'inter-bold': ['interBold'],
+        'inter-extrabold': ['interExtraBold'],
+        'inter-black': ['interBlack'],
+        // Default sans uses Inter Regular
+        sans: ['interRegular'],
+      },
       colors: {
         primary: colors.primary.purple,
         'primary-purple-light': colors.primary['purple-light'],
