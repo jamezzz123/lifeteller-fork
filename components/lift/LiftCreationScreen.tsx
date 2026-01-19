@@ -1,11 +1,19 @@
-import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Switch,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { router, Href } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import {
   CornerUpLeft,
-  X ,
+  X,
   Hash,
   AtSign,
   SmilePlus,
@@ -15,6 +23,7 @@ import {
   UserPlus,
   MoreHorizontal,
   ChevronRight,
+  Trash,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
@@ -132,12 +141,18 @@ export default function LiftCreationScreen({
     liftItems,
     setNumberOfRecipients,
     numberOfRecipients,
+    category,
+    location,
   } = useLiftDraft();
+
+  // Count selected options from more options screen
+  const moreOptionsCount = [category, location].filter(Boolean).length;
   const audienceSheetRef = useRef<BottomSheetRef>(null);
   const navigation = useNavigation();
-  
+
   const [isAmountSheetMounted, setIsAmountSheetMounted] = useState(false);
-  const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] = useState(false);
+  const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] =
+    useState(false);
 
   const handleNavigateToCollaborators = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -254,11 +269,7 @@ export default function LiftCreationScreen({
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={handleGoBack}>
-            <X 
-              size={24}
-              color={colors['grey-plain']['550']}
-              strokeWidth={2}
-            />
+            <X size={24} color={colors['grey-plain']['550']} strokeWidth={2} />
           </TouchableOpacity>
           <Text className="text-lg font-semibold text-grey-alpha-500">
             {headerTitle}
@@ -266,15 +277,20 @@ export default function LiftCreationScreen({
         </View>
       </View>
 
-      <KeyboardAwareScrollView
-        enableOnAndroid
-        keyboardShouldPersistTaps="handled"
-        extraScrollHeight={120}
-        extraHeight={140}
-        enableAutomaticScroll
-        enableResetScrollToCoords={false}
-        showsVerticalScrollIndicator={false}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={0}
       >
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          keyboardShouldPersistTaps="handled"
+          extraScrollHeight={120}
+          extraHeight={140}
+          enableAutomaticScroll
+          enableResetScrollToCoords={false}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Lift Type & Visibility */}
           <View className="gap-4 border-b border-grey-plain-300 p-4">
             <SegmentedControl
@@ -303,7 +319,7 @@ export default function LiftCreationScreen({
                 onChangeText={setTitle}
                 placeholder="Enter a title for your lift"
                 maxLength={TITLE_MAX_LENGTH}
-                size="large"
+                size="medium"
                 showCharacterCountBelow
                 maxCharacters={TITLE_MAX_LENGTH}
                 helperText="e.g., Medical bill, School fees, etc."
@@ -318,7 +334,7 @@ export default function LiftCreationScreen({
                 placeholder="Enter a description for your lift"
                 multiline
                 maxLength={DESCRIPTION_MAX_LENGTH}
-                size="medium"
+                size="small"
                 showCharacterCountBelow
                 maxCharacters={DESCRIPTION_MAX_LENGTH}
               />
@@ -359,15 +375,15 @@ export default function LiftCreationScreen({
           <View className=" px-4 py-4">
             {selectedMedia.length > 0 && (
               <View className="mb-4 flex-row items-center justify-between">
-                <Text className="text-sm text-grey-alpha-400">
-                  {getMediaCountText()}
-                </Text>
                 <TouchableOpacity
                   onPress={() => setSelectedMedia([])}
                   hitSlop={10}
                 >
-                  <Trash2 size={20} color={colors.state.red} strokeWidth={2} />
+                  <Trash size={20} color={colors.state.red} strokeWidth={2} />
                 </TouchableOpacity>
+                <Text className="text-sm text-grey-alpha-400">
+                  {getMediaCountText()}
+                </Text>
               </View>
             )}
 
@@ -540,37 +556,50 @@ export default function LiftCreationScreen({
                   Explore more options
                 </Text>
               </View>
-              <ChevronRight
-                size={20}
-                color={colors['grey-alpha']['400']}
-                strokeWidth={2}
-              />
+              <View className="flex-row items-center gap-2">
+                {moreOptionsCount > 0 && (
+                  <View
+                    style={{ backgroundColor: '#CF2586' }}
+                    className="h-6 min-w-6 items-center justify-center rounded-full px-2"
+                  >
+                    <Text className="text-xs font-semibold text-white">
+                      {moreOptionsCount}
+                    </Text>
+                  </View>
+                )}
+                <ChevronRight
+                  size={20}
+                  color={colors['grey-alpha']['400']}
+                  strokeWidth={2}
+                />
+              </View>
             </TouchableOpacity>
           </View>
-      </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
 
-      {/* Footer Buttons */}
-      <View className="border-t border-grey-plain-150 bg-grey-alpha-100 px-4 py-3">
-        <View className="flex-row gap-3">
-          <View className="flex-1">
-            <Button
-              title="Preview"
-              onPress={handleSubmit}
-              variant="outline"
-              className="rounded-full"
-            />
-          </View>
+        {/* Footer Buttons */}
+        <View className="border-t border-grey-plain-150 bg-grey-alpha-100 px-4 py-3">
+          <View className="flex-row gap-3">
+            <View className="flex-1">
+              <Button
+                title="Preview"
+                onPress={handleSubmit}
+                variant="outline"
+                className="rounded-full"
+              />
+            </View>
 
-          <View className="flex-1">
-            <Button
-              title={actionButtonText}
-              onPress={handleSubmit}
-              variant="primary"
-              className="rounded-full"
-            />
+            <View className="flex-1">
+              <Button
+                title={actionButtonText}
+                onPress={handleSubmit}
+                variant="primary"
+                className="rounded-full"
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
 
       {showVisibilitySelector && (
         <AudienceBottomSheet
