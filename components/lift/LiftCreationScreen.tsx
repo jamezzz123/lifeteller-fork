@@ -12,7 +12,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { router, Href } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import {
-  CornerUpLeft,
   X,
   Hash,
   AtSign,

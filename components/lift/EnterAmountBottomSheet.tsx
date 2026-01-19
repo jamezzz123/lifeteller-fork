@@ -154,5 +154,7 @@ export const EnterAmountBottomSheet = forwardRef<
         </View>
       </BottomSheetComponent>
     );
-}
+  }
 );
+
+EnterAmountBottomSheet.displayName = 'EnterAmountBottomSheet';
