@@ -17,7 +17,11 @@ export default function HomeScreen() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
   const handleFABPress = () => {
-    liftOptionsSheetRef.current?.open();
+    setIsBottomSheetOpen(true);
+    // Use setTimeout to ensure the component is rendered before calling open
+    setTimeout(() => {
+      liftOptionsSheetRef.current?.open();
+    }, 1000);
   };
 
   return (
@@ -41,10 +45,12 @@ export default function HomeScreen() {
         onPress={handleFABPress}
         visible={!isBottomSheetOpen}
       />
-      <LiftOptionsBottomSheet
-        ref={liftOptionsSheetRef}
-        onSheetChange={setIsBottomSheetOpen}
-      />
+      {isBottomSheetOpen && (
+        <LiftOptionsBottomSheet
+          ref={liftOptionsSheetRef}
+          onSheetChange={setIsBottomSheetOpen}
+        />
+      )}
     </SafeAreaView>
   );
 }

@@ -1,5 +1,5 @@
-import { forwardRef, useState, useRef, useEffect } from 'react';
-import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import React, { forwardRef, useState, useRef, useEffect } from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 import * as Haptics from 'expo-haptics';
 import {
@@ -38,7 +38,7 @@ export const EnterAmountBottomSheet = forwardRef<
     ref
   ) => {
     const [amount, setAmount] = useState(initialAmount);
-    const inputRef = useRef<TextInput>(null);
+    const inputRef = useRef<React.ElementRef<typeof BottomSheetTextInput>>(null);
     const bottomSheetRef = useRef<BottomSheetRef>(null);
 
     // Auto-expand bottom sheet when component mounts
