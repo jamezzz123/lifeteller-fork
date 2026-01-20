@@ -3,7 +3,6 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
-  Switch,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -30,6 +29,7 @@ import { Image } from 'expo-image';
 import { useRef, useState } from 'react';
 
 import { colors } from '@/theme/colors';
+import { Toggle } from '@/components/ui/Toggle';
 import { Button } from '@/components/ui/Button';
 import { useLiftDraft, LiftTypeValue } from '@/context/LiftDraftContext';
 import { AudienceOfferType } from '@/context/request-lift';
@@ -88,7 +88,9 @@ function MediaButton({ onPress, icon, label }: MediaButtonProps) {
       className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border-grey-plain-300 bg-primary-tints-50 py-3"
     >
       {icon}
-      <Text className="font-inter-medium text-sm text-grey-alpha-500">{label}</Text>
+      <Text className="font-inter-medium text-sm text-grey-alpha-500">
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -106,6 +108,7 @@ interface LiftCreationScreenProps {
   showCollaboratorsSelector?: boolean;
   showRecipientNumberSelector?: boolean;
   showMedia?: boolean;
+  audienceBottomSheetTitle?: string;
 }
 
 export default function LiftCreationScreen({
@@ -121,6 +124,7 @@ export default function LiftCreationScreen({
   showCollaboratorsSelector = true,
   showRecipientNumberSelector = false,
   showMedia = true,
+  audienceBottomSheetTitle = 'Who can see the Lift i am raising?',
 }: LiftCreationScreenProps) {
   const {
     collaborators,
@@ -408,7 +412,9 @@ export default function LiftCreationScreen({
                     </TouchableOpacity>
                     {item.type === 'video' && (
                       <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
-                        <Text className="font-inter text-xs text-white">Video</Text>
+                        <Text className="font-inter text-xs text-white">
+                          Video
+                        </Text>
                       </View>
                     )}
                   </View>
@@ -461,7 +467,9 @@ export default function LiftCreationScreen({
                     />
                     <Text className="font-inter-medium text-sm text-grey-alpha-500">
                       Collaborators{' '}
-                      <Text className="font-inter text-grey-alpha-400">(optional)</Text>
+                      <Text className="font-inter text-grey-alpha-400">
+                        (optional)
+                      </Text>
                     </Text>
                   </View>
                   <View className="flex-row items-center gap-1.5 rounded-lg border border-grey-plain-300 p-2">
@@ -521,18 +529,13 @@ export default function LiftCreationScreen({
                       </TouchableOpacity>
                     </View>
                   </View>
-                  <Switch
+                  <Toggle
                     value={true}
                     onValueChange={(enabled) => {
                       if (!enabled) {
                         setCollaborators([]);
                       }
                     }}
-                    trackColor={{
-                      false: colors['grey-plain']['450'],
-                      true: colors.primary.purple,
-                    }}
-                    thumbColor={colors['grey-plain']['50']}
                   />
                 </View>
               )}
@@ -604,6 +607,7 @@ export default function LiftCreationScreen({
         <AudienceBottomSheet
           ref={audienceSheetRef}
           variant="see"
+          title={audienceBottomSheetTitle}
           selectedKey={audienceType}
           onSelectAudience={(key) => {
             setAudienceType(key as AudienceOfferType);

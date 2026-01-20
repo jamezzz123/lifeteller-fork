@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, Switch } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -11,6 +11,7 @@ import {
   Camera,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
+import { Toggle } from '@/components/ui/Toggle';
 
 function NotificationRow({
   Icon,
@@ -49,15 +50,9 @@ function NotificationRow({
         </View>
       </View>
 
-      <Switch
+      <Toggle
         value={value}
         onValueChange={onToggle}
-        trackColor={{
-          false: colors['grey-plain']['150'],
-          true: colors.primary.purple,
-        }}
-        thumbColor={colors['grey-plain']['50']}
-        ios_backgroundColor={colors['grey-plain']['150']}
       />
     </View>
   );
@@ -98,15 +93,9 @@ export default function NotificationsScreen() {
             <Text className="font-inter-semibold text-base text-grey-alpha-500">
               Email notification
             </Text>
-            <Switch
+            <Toggle
               value={emailEnabled}
               onValueChange={() => setEmailEnabled((s) => !s)}
-              trackColor={{
-                false: colors['grey-plain']['150'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
-              ios_backgroundColor={colors['grey-plain']['150']}
             />
           </View>
 

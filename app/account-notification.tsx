@@ -200,7 +200,15 @@ export default function AccountNotificationScreen() {
   };
 
   const handleSettings = () => {
-    // TODO: Navigate to notification settings
+    router.push('/settings');
+  };
+
+  const handleOfferLift = () => {
+    router.push('/screens/lifts/offer');
+  };
+
+  const handleRaiseLift = () => {
+    router.push('/screens/lifts/raise');
   };
 
   const handleMore = () => {
@@ -402,7 +410,7 @@ export default function AccountNotificationScreen() {
       <NotificationItem
         {...item.data}
         onDecline={() => console.log('Declined')}
-        onOfferLift={() => console.log('Offered lift')}
+        onOfferLift={handleOfferLift}
       />
     );
   };
@@ -463,8 +471,8 @@ export default function AccountNotificationScreen() {
 
         {activeFilter === 'lifts' ? (
           <EmptyState
-            onOfferLift={() => console.log('Offer a lift')}
-            onRaiseLift={() => console.log('Raise a lift')}
+            onOfferLift={handleOfferLift}
+            onRaiseLift={handleRaiseLift}
           />
         ) : (
           <FlatList

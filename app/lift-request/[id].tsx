@@ -38,6 +38,12 @@ import {
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { PasscodeBottomSheet } from '@/components/ui/PasscodeBottomSheet';
+import {
+  PaymentBottomSheet,
+  RequestSuccessBottomSheet,
+} from '@/components/lift';
 
 export default function LiftRequestDetailScreen() {
   const router = useRouter();
@@ -47,6 +53,13 @@ export default function LiftRequestDetailScreen() {
   const [isBookmarked, setIsBookmarked] = useState(false);
   const moreOptionsSheetRef = useRef<BottomSheetRef>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+  // Offer Lift flow state
+  const paymentSheetRef = useRef<BottomSheetRef>(null);
+  const passcodeBottomSheetRef = useRef<BottomSheetRef>(null);
+  const successSheetRef = useRef<BottomSheetRef>(null);
+  const [showOfferConfirmationModal, setShowOfferConfirmationModal] =
+    useState(false);
 
   // Get lift data from mockLifts
   const liftData = mockLifts.find((lift) => lift.id === id);
@@ -82,6 +95,45 @@ export default function LiftRequestDetailScreen() {
     // TODO: Navigate to report screen or show report modal with block option
     console.log('Report lift and block user');
   }
+
+  // Offer Lift flow handlers
+  const handleOfferLift = () => {
+    paymentSheetRef.current?.expand();
+  };
+
+  const handlePaymentProceed = () => {
+    paymentSheetRef.current?.close();
+    setTimeout(() => {
+      setShowOfferConfirmationModal(true);
+    }, 300);
+  };
+
+  const handleConfirmOffer = () => {
+    setShowOfferConfirmationModal(false);
+    setTimeout(() => {
+      passcodeBottomSheetRef.current?.expand();
+    }, 300);
+  };
+
+  const handleCancelOffer = () => {
+    setShowOfferConfirmationModal(false);
+  };
+
+  const handlePasscodeComplete = () => {
+    passcodeBottomSheetRef.current?.close();
+    setTimeout(() => {
+      successSheetRef.current?.expand();
+    }, 500);
+  };
+
+  const handleGoToFeeds = () => {
+    successSheetRef.current?.close();
+    router.replace('/(tabs)');
+  };
+
+  const handleShareOffer = async () => {
+    console.log('Share offer');
+  };
 
   const getStatusConfig = () => {
     switch (liftData.status) {
@@ -611,10 +663,7 @@ export default function LiftRequestDetailScreen() {
                 Decline
               </Text>
             </TouchableOpacity>
-            <Button
-              onPress={() => console.log('hello world')}
-              variant="primary"
-            >
+            <Button onPress={handleOfferLift} variant="primary">
               <Text className="text-sm font-semibold text-white">
                 Offer Lift
               </Text>
@@ -670,6 +719,44 @@ export default function LiftRequestDetailScreen() {
           setShowConfirmDialog(false);
         }}
         cancelTextColor={colors.primary.purple}
+      />
+
+      {/* Payment Bottom Sheet */}
+      <PaymentBottomSheet
+        ref={paymentSheetRef}
+        amount={targetAmount}
+        walletBalance={500000}
+        onFundWallet={() => console.log('Fund wallet')}
+        onProceed={handlePaymentProceed}
+      />
+
+      {/* Offer Confirmation Modal */}
+      <ConfirmationModal
+        visible={showOfferConfirmationModal}
+        title={`You are about to lift ${liftData?.owner.name} with ₦${targetAmount.toLocaleString()}`}
+        message="They will receive the monetary value of your lift in their wallet."
+        confirmText="Yes, lift"
+        cancelText="Cancel"
+        onConfirm={handleConfirmOffer}
+        onCancel={handleCancelOffer}
+      />
+
+      {/* Passcode Bottom Sheet */}
+      <PasscodeBottomSheet
+        ref={passcodeBottomSheetRef}
+        mode="verify"
+        onComplete={handlePasscodeComplete}
+      />
+
+      {/* Success Bottom Sheet */}
+      <RequestSuccessBottomSheet
+        ref={successSheetRef}
+        title="Lift offer successfully sent"
+        description="Your lift offer has been sent. We will notify you when it's accepted."
+        primaryButtonTitle="Share lift offer"
+        secondaryButtonTitle="Go to feeds"
+        onGoToFeeds={handleGoToFeeds}
+        onShareRequest={handleShareOffer}
       />
     </SafeAreaView>
   );

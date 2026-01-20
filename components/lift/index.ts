@@ -21,6 +21,7 @@ export { LiftTypeModal } from './LiftTypeModal';
 export { MediaPickerBottomSheet } from './MediaPickerModal';
 export { default as MoreOptionsScreen } from './MoreOptionsScreen';
 export { NonMonetaryItemsSelector } from './NonMonetaryItemsSelector';
+export { PaymentBottomSheet } from './PaymentBottomSheet';
 export { default as PreviewLiftScreen } from './PreviewLiftScreen';
 export * from './RequestMethodSelector';
 export { RequestSuccessBottomSheet } from './RequestSuccessBottomSheet';

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Search, Bell, MessageSquareText } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
+import { router } from 'expo-router';
 
 export function LiftHeader() {
   return (
@@ -16,7 +17,10 @@ export function LiftHeader() {
         <TouchableOpacity className="p-1">
           <Search color={colors['grey-plain']['550']} size={24} />
         </TouchableOpacity>
-        <TouchableOpacity className="p-1">
+        <TouchableOpacity
+          onPress={() => router.push('/account-notification')}
+          className="p-1"
+        >
           <View className="relative">
             <Bell color={colors['grey-plain']['550']} size={24} />
             <View className="absolute -right-1 -top-1 h-5 min-w-[20px] items-center justify-center rounded-[10px] bg-state-red px-1">
@@ -26,7 +30,14 @@ export function LiftHeader() {
             </View>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity className="p-1">
+        {/* <TouchableOpacity className="p-1">
+          <MessageSquareText color={colors['grey-plain']['550']} size={24} />
+        </TouchableOpacity> */}
+
+        <TouchableOpacity
+          className="p-1"
+          onPress={() => router.push('/messages' as any)}
+        >
           <MessageSquareText color={colors['grey-plain']['550']} size={24} />
         </TouchableOpacity>
       </View>

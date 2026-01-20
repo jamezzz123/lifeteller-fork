@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ScrollView, Text, TouchableOpacity, View, Switch } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import {
@@ -11,6 +11,7 @@ import {
 } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
+import { Toggle } from '@/components/ui/Toggle';
 import {
   AllowCollaboratorsBottomSheet,
   ScheduleRequestBottomSheet,
@@ -197,14 +198,9 @@ export default function MoreOptionsScreen() {
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={scheduleLift}
-              // onValueChange={handleScheduleLiftToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
+              onValueChange={() => {}}
             />
           </View>
         </TouchableOpacity>
@@ -245,14 +241,9 @@ export default function MoreOptionsScreen() {
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={liftEndDate}
               onValueChange={handleLiftEndDateToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </TouchableOpacity>
@@ -289,14 +280,9 @@ export default function MoreOptionsScreen() {
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={allowCollaborators}
               onValueChange={handleAllowCollaboratorsToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </TouchableOpacity>
@@ -316,14 +302,9 @@ export default function MoreOptionsScreen() {
                 </Text>
               </View>
             </View>
-            <Switch
+            <Toggle
               value={allowRequesters}
               onValueChange={handleAllowRequestersToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </View>

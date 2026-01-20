@@ -4,8 +4,9 @@ import {
   BottomSheetComponent,
   BottomSheetRef,
 } from '@/components/ui/BottomSheet';
+import { Checkbox } from '@/components/ui/Checkbox';
 import { colors } from '@/theme/colors';
-import { forwardRef } from 'react';
+import { forwardRef, useState } from 'react';
 
 export type AudienceOption = {
   key: string;
@@ -100,6 +101,8 @@ export const AudienceBottomSheet = forwardRef<
     },
     ref
   ) => {
+    const [setAsDefault, setSetAsDefault] = useState(false);
+
     function handleSelect(key: string) {
       onSelectAudience(key);
     }
@@ -119,7 +122,7 @@ export const AudienceBottomSheet = forwardRef<
     return (
       <BottomSheetComponent ref={ref} snapPoints={['60%']}>
         <View className="pb-4">
-          <Text className="px-4 mb-4 text-lg font-bold text-grey-alpha-500">
+          <Text className="mb-4 px-4 text-lg font-bold text-grey-alpha-500">
             {title}
           </Text>
 
@@ -130,7 +133,7 @@ export const AudienceBottomSheet = forwardRef<
                 <TouchableOpacity
                   key={option.key}
                   onPress={() => handleSelect(option.key)}
-                  className="pr-4 flex-row items-center border-b border-grey-plain-300 py-1"
+                  className="flex-row items-center border-b border-grey-plain-300 py-1 pr-4"
                 >
                   <View
                     className="mr-3 h-8"
@@ -179,6 +182,15 @@ export const AudienceBottomSheet = forwardRef<
                 </TouchableOpacity>
               );
             })}
+          </View>
+
+          {/* Set as default checkbox */}
+          <View className="mt-4 px-4">
+            <Checkbox
+              label="Set as default audience"
+              checked={setAsDefault}
+              onPress={() => setSetAsDefault(!setAsDefault)}
+            />
           </View>
         </View>
       </BottomSheetComponent>

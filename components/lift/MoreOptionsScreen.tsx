@@ -4,7 +4,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Switch,
   TextInput,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -23,6 +22,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { colors } from '@/theme/colors';
+import { Toggle } from '@/components/ui/Toggle';
 import {
   AllowCollaboratorsBottomSheet,
   ScheduleRequestBottomSheet,
@@ -327,7 +327,7 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Calendar size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
+                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
                   Schedule lift
                 </Text>
                 {scheduleLift && scheduleDate ? (
@@ -353,13 +353,9 @@ export default function MoreOptionsScreen({
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={scheduleLift}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
+              onValueChange={() => {}}
             />
           </View>
         </TouchableOpacity>
@@ -374,8 +370,8 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <CalendarX size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
-                  Lift end date
+                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                  Request end date
                 </Text>
                 {liftEndDate && endDate ? (
                   <Text className="font-inter-medium text-sm text-grey-alpha-500">
@@ -400,14 +396,9 @@ export default function MoreOptionsScreen({
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={liftEndDate}
               onValueChange={handleLiftEndDateToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </TouchableOpacity>
@@ -422,7 +413,7 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Users size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
+                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
                   Allow collaborators
                 </Text>
                 {allowCollaborators && collaboratorLimit !== 'unlimited' ? (
@@ -444,14 +435,9 @@ export default function MoreOptionsScreen({
                 )}
               </View>
             </View>
-            <Switch
+            <Toggle
               value={allowCollaborators}
               onValueChange={handleAllowCollaboratorsToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </TouchableOpacity>
@@ -462,7 +448,7 @@ export default function MoreOptionsScreen({
             <View className="flex-1 flex-row items-center gap-3">
               <Hand size={24} color={colors['grey-alpha']['500']} />
               <View className="flex-1">
-                <Text className="font-inter-semibold mb-1 text-base text-grey-alpha-500">
+                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
                   Allow requesters
                 </Text>
                 <Text className="font-inter text-sm text-grey-alpha-400">
@@ -471,14 +457,9 @@ export default function MoreOptionsScreen({
                 </Text>
               </View>
             </View>
-            <Switch
+            <Toggle
               value={allowRequesters}
               onValueChange={handleAllowRequestersToggle}
-              trackColor={{
-                false: colors['grey-plain']['450'],
-                true: colors.primary.purple,
-              }}
-              thumbColor={colors['grey-plain']['50']}
             />
           </View>
         </View>
@@ -533,19 +514,19 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="font-inter-bold mb-4 text-lg text-grey-alpha-500">
+            <Text className="mb-4 font-inter-bold text-lg text-grey-alpha-500">
               Choose category
             </Text>
 
             {/* Search Input */}
-            <View className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 px-4 py-3">
+            <View className="mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 bg-grey-plain-200 px-4 py-3">
               <Search size={20} color={colors['grey-alpha']['400']} />
               <TextInput
                 value={categorySearch}
                 onChangeText={setCategorySearch}
                 placeholder="Search for category"
                 placeholderTextColor={colors['grey-alpha']['400']}
-                className="font-inter flex-1 text-base text-grey-alpha-500"
+                className="flex-1 font-inter text-base text-grey-alpha-500"
               />
             </View>
 
@@ -557,7 +538,9 @@ export default function MoreOptionsScreen({
                   onPress={() => handleCategorySelect(cat)}
                   className="flex-row items-center justify-between border-b border-grey-plain-450/20 py-4"
                 >
-                  <Text className="font-inter text-base text-grey-alpha-500">{cat}</Text>
+                  <Text className="font-inter text-base text-grey-alpha-500">
+                    {cat}
+                  </Text>
                   <ChevronRight
                     size={20}
                     color={colors['grey-alpha']['400']}
@@ -574,24 +557,24 @@ export default function MoreOptionsScreen({
       {showCategoryAndLocation && (
         <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
-            <Text className="font-inter-bold mb-4 text-lg text-grey-alpha-500">
+            <Text className="mb-4 font-inter-bold text-lg text-grey-alpha-500">
               Choose location
             </Text>
 
             {/* Search Input */}
-            <View className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 px-4 py-3">
+            <View className="mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 bg-grey-plain-200 px-4 py-3">
               <Search size={20} color={colors['grey-alpha']['400']} />
               <TextInput
                 value={locationSearch}
                 onChangeText={setLocationSearch}
                 placeholder="Search for location"
                 placeholderTextColor={colors['grey-alpha']['400']}
-                className="font-inter flex-1 text-base text-grey-alpha-500"
+                className="flex-1 font-inter text-base text-grey-alpha-500"
               />
             </View>
 
             {/* Get Location Button */}
-            <TouchableOpacity className="bg-grey-plain-200 mb-4 flex-row items-center gap-3 rounded-2xl px-4 py-4">
+            <TouchableOpacity className="mb-4 flex-row items-center gap-3 rounded-2xl bg-grey-plain-200 px-4 py-4">
               <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
               </View>
@@ -606,9 +589,11 @@ export default function MoreOptionsScreen({
                 <TouchableOpacity
                   key={loc}
                   onPress={() => handleLocationSelect(loc)}
-                  className="bg-grey-plain-200 rounded-lg px-4 py-2.5"
+                  className="rounded-lg bg-grey-plain-200 px-4 py-2.5"
                 >
-                  <Text className="font-inter text-sm text-grey-alpha-500">{loc}</Text>
+                  <Text className="font-inter text-sm text-grey-alpha-500">
+                    {loc}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </View>

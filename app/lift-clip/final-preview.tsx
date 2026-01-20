@@ -19,6 +19,7 @@ import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { useRequestLift } from '@/context/request-lift';
 import { SuccessBottomSheet } from '@/components/ui/SuccessBottomSheet';
+import { CancelBottomSheet } from '@/components/lift';
 
 export default function FinalPreviewScreen() {
   const params = useLocalSearchParams();
@@ -32,9 +33,27 @@ export default function FinalPreviewScreen() {
   const [allowCollaborators] = useState(true);
   const [allowRequesters] = useState(true);
   const [maxRequesters] = useState(10);
+  const [showCancelSheet, setShowCancelSheet] = useState(false);
 
   const handleBack = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setShowCancelSheet(true);
+  };
+
+  const handleSaveAsDraft = () => {
+    setShowCancelSheet(false);
+    // TODO: Save as draft logic
+    console.log('Saving as draft...');
     router.back();
+  };
+
+  const handleDiscard = () => {
+    setShowCancelSheet(false);
+    router.back();
+  };
+
+  const handleContinueEditing = () => {
+    setShowCancelSheet(false);
   };
 
   const handleEditDetails = () => {
@@ -218,6 +237,13 @@ export default function FinalPreviewScreen() {
         secondaryActionText="Go to feeds"
         onPrimaryAction={handleShareClip}
         onSecondaryAction={handleGoToFeeds}
+      />
+
+      <CancelBottomSheet
+        visible={showCancelSheet}
+        onSaveAsDraft={handleSaveAsDraft}
+        onDiscard={handleDiscard}
+        onContinueEditing={handleContinueEditing}
       />
     </SafeAreaView>
   );
