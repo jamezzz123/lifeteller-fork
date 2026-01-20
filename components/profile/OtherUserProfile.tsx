@@ -35,6 +35,7 @@ import { ShareProfileBottomSheet } from './ShareProfileBottomSheet';
 import { InterestChip } from '@/components/ui/InterestChip';
 import { Button } from '@/components/ui/Button';
 import { BlockUserConfirmationModal } from './BlockUserConfirmationModal';
+import { Toast } from '@/components/ui/Toast';
 import LifterBadge from '@/assets/images/badges/lifter.svg';
 import LiftCaptainBadge from '@/assets/images/badges/lift-captain.svg';
 import LiftChampionBadge from '@/assets/images/badges/lift-champion.svg';
@@ -475,6 +476,8 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
   const moreOptionsSheetRef = useRef<BottomSheetRef>(null);
   const shareProfileSheetRef = useRef<BottomSheetRef>(null);
   const [isFollowing, setIsFollowing] = useState(user.isFollowing || false);
+  const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [showBlockConfirmation, setShowBlockConfirmation] = useState(false);
   const [routes] = useState([
     { key: 'posts', title: 'Posts' },
@@ -526,6 +529,11 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
     console.log('Block user:', user.id);
     setShowBlockConfirmation(false);
     router.back();
+  };
+
+  const handleShowToast = (message: string) => {
+    setSuccessMessage(message);
+    setShowSuccessToast(true);
   };
 
   const handleCancelBlock = () => {
@@ -818,6 +826,7 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
         onUnfollow={() => setIsFollowing(false)}
         onBlockUser={handleBlockUser}
         onShareProfile={() => shareProfileSheetRef.current?.expand()}
+        onShowToast={handleShowToast}
         onSharedActivities={() => {
           router.push({
             pathname: '/shared-activities/[userId]',
@@ -846,6 +855,13 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
         ref={shareProfileSheetRef}
         username={user.handle || user.fullName}
         profileUrl={`https://lifteller.com/${user.handle || user.id}`}
+      />
+
+      <Toast
+        visible={showSuccessToast}
+        message={successMessage}
+        duration={3000}
+        onHide={() => setShowSuccessToast(false)}
       />
     </SafeAreaView>
   );

@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  Linking,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Linking } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { CornerUpLeft, Info } from 'lucide-react-native';
@@ -64,10 +59,17 @@ export default function WalletActivationScreen() {
         </Text>
       </View>
 
-      <ScrollView
+      <KeyboardAwareScrollView
         className="flex-1"
-        contentContainerStyle={{ paddingHorizontal: 24, paddingVertical: 24 }}
+        contentContainerStyle={{
+          paddingHorizontal: 24,
+          paddingTop: 24,
+          paddingBottom: 32,
+        }}
         showsVerticalScrollIndicator={false}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={24}
       >
         {/* Title */}
         <Text className="mb-4 text-2xl font-bold text-grey-alpha-500">
@@ -166,9 +168,9 @@ export default function WalletActivationScreen() {
           onPress={handleActivate}
           variant="primary"
           disabled={!isFormValid}
-          className="mb-8"
+          className="mb-8 self-center"
         />
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

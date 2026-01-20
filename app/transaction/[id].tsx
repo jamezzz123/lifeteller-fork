@@ -66,7 +66,7 @@ const getTransactionDetail = (id: string): TransactionDetail | null => {
         avatar: undefined, // Use placeholder for now
         verified: true,
       },
-      liftId: 'lift123',
+      liftId: '1',
     },
   };
 };
@@ -127,7 +127,10 @@ export default function TransactionDetailScreen() {
   const handleGoToLift = () => {
     if (!transaction?.liftSummary) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    router.push(`/lift/${transaction.liftSummary.liftId}` as any);
+    router.push({
+      pathname: '/lift-request/[id]' as any,
+      params: { id: transaction.liftSummary.liftId },
+    });
   };
 
   if (!transaction) {
@@ -270,8 +273,11 @@ export default function TransactionDetailScreen() {
         {/* Lift Summary */}
         {transaction.liftSummary && (
           <View className="border-b border-grey-plain-150 px-4 py-6">
-            <Text className="mb-4 text-sm font-semibold text-grey-alpha-500">
+            <Text className="mb-4 text-sm text-grey-alpha-500">
               Lift summary
+            </Text>
+            <Text className="mb-4 text-sm font-semibold text-grey-alpha-500">
+              {transaction.liftSummary.type}
             </Text>
             <View className="flex-row items-center gap-3">
               {/* Profile Picture */}

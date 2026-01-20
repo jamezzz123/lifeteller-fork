@@ -8,6 +8,7 @@ import {
   MoreVertical,
   FileText,
   ChevronRight,
+  HelpCircle,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 
@@ -175,6 +176,7 @@ export default function TopicArticlesScreen() {
   const { topicId } = useLocalSearchParams();
   const topicKey = (topicId as string) || 'onboarding';
   const topicData = topicsData[topicKey];
+  const showContactUs = topicKey === 'wallet';
 
   if (!topicData) {
     return (
@@ -250,6 +252,25 @@ export default function TopicArticlesScreen() {
           ))}
         </View>
       </ScrollView>
+
+      {showContactUs && (
+        <View className="absolute bottom-6 right-8">
+          <TouchableOpacity
+            className="flex-row items-center justify-center gap-2 rounded-full px-6 py-4"
+            style={{ backgroundColor: colors.primary.purple }}
+            onPress={() => {
+              // TODO: Handle contact us
+              console.log('Contact us');
+            }}
+            activeOpacity={0.8}
+          >
+            <HelpCircle color="white" size={20} strokeWidth={2} />
+            <Text className="text-base font-semibold text-white">
+              Contact us
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </SafeAreaView>
   );
 }

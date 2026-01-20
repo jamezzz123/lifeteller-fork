@@ -19,6 +19,7 @@ import {
   Paperclip,
   Camera,
   Mic,
+  SendHorizontal,
   HandHelping,
   HandCoins,
   BadgeCheck,
@@ -78,6 +79,7 @@ export default function ChatScreen() {
   const [showMessageMenu, setShowMessageMenu] = useState(false);
   const attachmentSheetRef = useRef<any>(null);
   const scrollViewRef = useRef<ScrollView>(null);
+  const hasMessage = message.trim().length > 0;
 
   // Find contact by ID
   const contact = CONTACTS.find((c) => c.id === id) || CONTACTS[0];
@@ -600,7 +602,11 @@ export default function ChatScreen() {
                   backgroundColor: colors.primary.purple,
                 }}
               >
-                <Mic color={colors['grey-plain']['50']} size={24} />
+                {hasMessage ? (
+                  <SendHorizontal color={colors['grey-plain']['50']} size={24} />
+                ) : (
+                  <Mic color={colors['grey-plain']['50']} size={24} />
+                )}
               </TouchableOpacity>
             </View>
           </View>

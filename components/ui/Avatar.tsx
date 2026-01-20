@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { Medal } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { router } from 'expo-router';
@@ -12,6 +13,7 @@ interface AvatarProps {
   name?: string;
   size?: number;
   showBadge?: boolean;
+  showRing?: boolean;
   className?: string;
   userId?: string;
   onPress?: () => void;
@@ -22,11 +24,18 @@ export function Avatar({
   name = '',
   size = 48,
   showBadge = true,
+  showRing = false,
   className = '',
   userId,
   onPress,
 }: AvatarProps) {
   const initials = getInitials(name);
+  const ringPadding = 2;
+  const innerBorderWidth = 2;
+  const ringContentSize = size - ringPadding * 2;
+  const imageSize = showRing
+    ? ringContentSize - innerBorderWidth * 2
+    : size;
   const badgeSize =
     size === 48 ? 20 : size === 40 ? 16 : Math.round(size * 0.42);
   const medalIconSize =
@@ -41,8 +50,80 @@ export function Avatar({
     onPress?.();
   };
 
-  const AvatarContent = (
-    <View className={`relative ${className}`} style={{ width: size, height: size }}>
+  function renderAvatarContent() {
+    if (showRing) {
+      return (
+        <LinearGradient
+          colors={['#7538BA', '#CF2586']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={{
+            width: size,
+            height: size,
+            borderRadius,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: ringPadding,
+          }}
+        >
+          <View
+            style={{
+              width: ringContentSize,
+              height: ringContentSize,
+              borderRadius: ringContentSize / 2,
+              overflow: 'hidden',
+              backgroundColor: colors['grey-plain']['50'],
+              borderWidth: innerBorderWidth,
+              borderColor: colors['grey-plain']['50'],
+            }}
+          >
+            {profileImage ? (
+              <Image
+                source={{ uri: profileImage }}
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  borderRadius: imageSize / 2,
+                }}
+                contentFit="cover"
+              />
+            ) : initials ? (
+              <View
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  borderRadius: imageSize / 2,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  backgroundColor: colors['primary-tints'].purple['100'],
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: imageSize * 0.4,
+                    fontWeight: 'bold',
+                    color: colors.primary.purple,
+                  }}
+                >
+                  {initials}
+                </Text>
+              </View>
+            ) : (
+              <View
+                style={{
+                  width: imageSize,
+                  height: imageSize,
+                  borderRadius: imageSize / 2,
+                  backgroundColor: colors['grey-plain']['450'],
+                }}
+              />
+            )}
+          </View>
+        </LinearGradient>
+      );
+    }
+
+    return (
       <View
         className="overflow-hidden rounded-full"
         style={{
@@ -86,14 +167,26 @@ export function Avatar({
           />
         )}
       </View>
+    );
+  }
+
+  const AvatarContent = (
+    <View
+      className={`relative ${className}`}
+      style={{ width: size, height: size, overflow: 'visible' }}
+    >
+      {renderAvatarContent()}
       {/* Badge Overlay */}
       {showBadge && (
         <View
-          className="absolute -bottom-0.5 left-3 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+          className="absolute items-center justify-center rounded-full border-2 border-white"
           style={{
             width: badgeSize,
             height: badgeSize,
             backgroundColor: colors['primary-tints'].purple['100'],
+            bottom: -15,
+            left: '50%',
+            transform: [{ translateX: -badgeSize / 2 }],
           }}
         >
           <Medal

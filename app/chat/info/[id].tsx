@@ -8,36 +8,33 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
-import { Image } from 'expo-image';
 import {
   CornerUpLeft,
   Bell,
   UserX,
   Trash2,
-  ArrowUpRight,
   BadgeCheck,
+  Phone,
+  Video,
+  Search,
 } from 'lucide-react-native';
 import { Button } from '@/components/ui/Button';
 import { colors } from '@/theme/colors';
 import { CONTACTS } from '@/components/request-lift/data';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { Avatar } from '@/components/ui/Avatar';
+import { Toast } from '@/components/ui/Toast';
 
 export default function ChatInfoScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [showBlockConfirm, setShowBlockConfirm] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showBlockToast, setShowBlockToast] = useState(false);
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
 
   // Find contact by ID
   const contact = CONTACTS.find((c) => c.id === id) || CONTACTS[0];
-
-  // Mock user stats - in production, this would come from API
-  const userStats = {
-    lifts: 817,
-    posts: 48,
-    following: 1324,
-    followers: 48200,
-  };
 
   const handleViewFullProfile = () => {
     router.push(`/user/${contact.id}` as any);
@@ -51,18 +48,33 @@ export default function ChatInfoScreen() {
     // TODO: Implement block user functionality
     console.log('Block user:', contact.id);
     setShowBlockConfirm(false);
-    router.back();
+    setShowBlockToast(true);
   };
 
   const handleDeleteConversation = () => {
     setShowDeleteConfirm(true);
   };
 
+  const handleCall = () => {
+    // TODO: Implement call action
+    console.log('Call user:', contact.id);
+  };
+
+  const handleVideoCall = () => {
+    // TODO: Implement video call action
+    console.log('Video call user:', contact.id);
+  };
+
+  const handleSearch = () => {
+    // TODO: Implement search in conversation
+    console.log('Search conversation with user:', contact.id);
+  };
+
   const handleConfirmDelete = () => {
     // TODO: Implement delete conversation functionality
     console.log('Delete conversation:', contact.id);
     setShowDeleteConfirm(false);
-    router.back();
+    setShowDeleteToast(true);
   };
 
   const profileImage =
@@ -82,7 +94,7 @@ export default function ChatInfoScreen() {
           />
         </TouchableOpacity>
         <Text className="text-lg font-semibold text-grey-alpha-500">
-          Chat info
+          View chat info
         </Text>
       </View>
 
@@ -92,48 +104,24 @@ export default function ChatInfoScreen() {
         contentContainerStyle={{ paddingBottom: 32 }}
       >
         {/* Profile Section */}
-        <View className="items-center bg-white px-4 py-8">
+        <View className="items-center bg-white px-4 pb-6 pt-8">
           {/* Avatar */}
           <View className="relative mb-4">
-            <View
-              className="h-24 w-24 overflow-hidden rounded-full bg-grey-plain-300"
-              style={{
-                borderWidth: 4,
-                borderColor: colors.primary.purple,
-              }}
-            >
-              {profileImage ? (
-                <Image
-                  source={{ uri: profileImage }}
-                  style={{ width: 96, height: 96 }}
-                  contentFit="cover"
-                />
-              ) : (
-                <View
-                  className="h-full w-full items-center justify-center"
-                  style={{
-                    backgroundColor: colors['primary-tints'].purple['100'],
-                  }}
-                >
-                  <Text
-                    className="text-2xl font-bold"
-                    style={{ color: colors.primary.purple }}
-                  >
-                    {contact.name
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')}
-                  </Text>
-                </View>
-              )}
-            </View>
+            <Avatar
+              profileImage={profileImage}
+              name={contact.name}
+              size={88}
+              showBadge={true}
+              showRing={true}
+            />
             {/* Online Status Dot */}
             <View
-              className="absolute top-0 right-0 rounded-full border-2 border-white"
+              className="absolute top-0 rounded-full border-2 border-white"
               style={{
                 width: 16,
                 height: 16,
                 backgroundColor: colors.state.green,
+                right: 10,
               }}
             />
           </View>
@@ -149,101 +137,54 @@ export default function ChatInfoScreen() {
           </View>
 
           {/* Username */}
-          <Text className="mb-6 text-base text-grey-plain-550">
+          <Text className="mb-5 text-base text-grey-plain-550">
             @{contact.username}
           </Text>
 
-          {/* Statistics Grid */}
-          <View className="mb-6 w-full flex-row flex-wrap gap-3">
-            {/* Lifts Card */}
-            <View className="flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]">
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                {userStats.lifts.toLocaleString()}
-              </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
-                Lifts
-              </Text>
-            </View>
-
-            {/* Posts Card */}
-            <View className="flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]">
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                {userStats.posts.toLocaleString()}
-              </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
-                Posts
-              </Text>
-            </View>
-
-            {/* Following Card */}
-            <TouchableOpacity
-              className="relative flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]"
-              onPress={() =>
-                router.push({
-                  pathname: '/followers-following',
-                  params: {
-                    userName: contact.name,
-                    userId: contact.id,
-                    initialTab: 'following',
-                  },
-                } as any)
-              }
-              activeOpacity={0.7}
-            >
-              <View className="absolute right-2.5 top-2.5">
-                <ArrowUpRight
-                  color={colors['grey-plain']['550']}
-                  size={14}
-                  strokeWidth={2.5}
-                />
-              </View>
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                {userStats.following.toLocaleString()}
-              </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
-                Following
-              </Text>
-            </TouchableOpacity>
-
-            {/* Followers Card */}
-            <TouchableOpacity
-              className="relative flex-1 rounded-xl bg-white border border-grey-plain-300 p-4 min-w-[45%]"
-              onPress={() =>
-                router.push({
-                  pathname: '/followers-following',
-                  params: {
-                    userName: contact.name,
-                    userId: contact.id,
-                    initialTab: 'followers',
-                  },
-                } as any)
-              }
-              activeOpacity={0.7}
-            >
-              <View className="absolute right-2.5 top-2.5">
-                <ArrowUpRight
-                  color={colors['grey-plain']['550']}
-                  size={14}
-                  strokeWidth={2.5}
-                />
-              </View>
-              <Text className="mb-1 text-2xl font-bold text-grey-alpha-500">
-                {(userStats.followers / 1000).toFixed(1)}k
-              </Text>
-              <Text className="text-xs font-medium text-grey-plain-550">
-                Followers
-              </Text>
-            </TouchableOpacity>
-          </View>
-
           {/* View Full Profile Button */}
           <Button
-            title="View full profile"
+            title="View profile"
             onPress={handleViewFullProfile}
             variant="outline"
             size="medium"
             className="rounded-full border-primary"
           />
+
+          {/* Quick Actions */}
+          <View className="mt-6 w-full border-t border-grey-plain-150 pt-6">
+            <View className="flex-row gap-3">
+              <TouchableOpacity
+                onPress={handleCall}
+                className="flex-1 items-center rounded-2xl border border-grey-plain-150 bg-white py-4"
+                activeOpacity={0.7}
+              >
+                <Phone color={colors.primary.purple} size={24} />
+                <Text className="mt-2 text-sm font-medium text-grey-alpha-500">
+                  Call
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleVideoCall}
+                className="flex-1 items-center rounded-2xl border border-grey-plain-150 bg-white py-4"
+                activeOpacity={0.7}
+              >
+                <Video color={colors.primary.purple} size={24} />
+                <Text className="mt-2 text-sm font-medium text-grey-alpha-500">
+                  Video
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleSearch}
+                className="flex-1 items-center rounded-2xl border border-grey-plain-150 bg-white py-4"
+                activeOpacity={0.7}
+              >
+                <Search color={colors.primary.purple} size={24} />
+                <Text className="mt-2 text-sm font-medium text-grey-alpha-500">
+                  Search
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
         {/* Settings Section */}
@@ -374,6 +315,18 @@ export default function ChatInfoScreen() {
         onConfirm={handleConfirmDelete}
         onCancel={() => setShowDeleteConfirm(false)}
         destructive
+      />
+
+      <Toast
+        visible={showBlockToast}
+        message="User blocked successfully"
+        onHide={() => setShowBlockToast(false)}
+      />
+
+      <Toast
+        visible={showDeleteToast}
+        message="Conversation deleted successfully"
+        onHide={() => setShowDeleteToast(false)}
       />
     </SafeAreaView>
   );

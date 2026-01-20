@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   View,
   Text,
@@ -16,16 +16,12 @@ import {
   CornerUpLeft,
   ArrowUpRight,
 } from 'lucide-react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { colors } from '@/theme/colors';
 import { formatAmount } from '@/utils/formatAmount';
 import * as Haptics from 'expo-haptics';
 import EmptyTransactionIllustration from '@/assets/images/empty-transaction.svg';
-import {
-  FilterTransactionsBottomSheet,
-  TransactionFilters,
-} from '@/components/wallet/FilterTransactionsBottomSheet';
-import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { TransactionFilters } from '@/components/wallet/FilterTransactionsBottomSheet';
 
 interface Transaction {
   id: string;
@@ -108,14 +104,52 @@ const mockTransactions: Transaction[] = [
 ];
 
 export default function AllTransactionsScreen() {
+  const params = useLocalSearchParams<{
+    status?: string | string[];
+    dateRange?: string | string[];
+    startDate?: string | string[];
+    endDate?: string | string[];
+    transactionType?: string | string[];
+    transactionCategory?: string | string[];
+  }>();
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState<TransactionFilters>({
-    status: 'All',
-    dateRange: 'All time',
-    transactionType: 'All',
-    transactionCategory: 'All',
-  });
-  const filterSheetRef = useRef<BottomSheetRef>(null);
+
+  const paramString = (value?: string | string[]) => {
+    if (!value) return undefined;
+    return Array.isArray(value) ? value[0] : value;
+  };
+
+  const parsedFilters = useMemo<TransactionFilters>(() => {
+    const status = paramString(params.status) || 'All';
+    const dateRange = paramString(params.dateRange) || 'All time';
+    const startDate = paramString(params.startDate) || undefined;
+    const endDate = paramString(params.endDate) || undefined;
+    const transactionType = paramString(params.transactionType) || 'All';
+    const transactionCategory =
+      paramString(params.transactionCategory) || 'All';
+
+    return {
+      status,
+      dateRange,
+      startDate,
+      endDate,
+      transactionType,
+      transactionCategory,
+    };
+  }, [
+    params.dateRange,
+    params.endDate,
+    params.startDate,
+    params.status,
+    params.transactionCategory,
+    params.transactionType,
+  ]);
+
+  const [filters, setFilters] = useState<TransactionFilters>(parsedFilters);
+
+  useEffect(() => {
+    setFilters(parsedFilters);
+  }, [parsedFilters]);
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -124,11 +158,17 @@ export default function AllTransactionsScreen() {
 
   const handleFilter = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    filterSheetRef.current?.expand();
-  };
-
-  const handleApplyFilters = (appliedFilters: TransactionFilters) => {
-    setFilters(appliedFilters);
+    router.push({
+      pathname: '/filter-transactions' as any,
+      params: {
+        status: filters.status,
+        dateRange: filters.dateRange,
+        startDate: filters.startDate || '',
+        endDate: filters.endDate || '',
+        transactionType: filters.transactionType,
+        transactionCategory: filters.transactionCategory,
+      },
+    });
   };
 
   const handleTransactionPress = (transactionId: string) => {
@@ -282,11 +322,21 @@ export default function AllTransactionsScreen() {
     // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (tx) =>
+      const numericQuery = query.replace(/[^\d]/g, '');
+      filtered = filtered.filter((tx) => {
+        const formattedAmount = formatAmount(tx.amount).toLowerCase();
+        const numericAmount = String(tx.amount).replace(/[^\d]/g, '');
+        const formattedNumericAmount = formattedAmount.replace(/[^\d]/g, '');
+
+        return (
           tx.title.toLowerCase().includes(query) ||
-          tx.description.toLowerCase().includes(query)
-      );
+          tx.description.toLowerCase().includes(query) ||
+          formattedAmount.includes(query) ||
+          (numericQuery.length > 0 &&
+            (numericAmount.includes(numericQuery) ||
+              formattedNumericAmount.includes(numericQuery)))
+        );
+      });
     }
 
     // Group by date
@@ -499,12 +549,6 @@ export default function AllTransactionsScreen() {
         )}
       </ScrollView>
 
-      {/* Filter Bottom Sheet */}
-      <FilterTransactionsBottomSheet
-        ref={filterSheetRef}
-        initialFilters={filters}
-        onApplyFilters={handleApplyFilters}
-      />
     </SafeAreaView>
   );
 }

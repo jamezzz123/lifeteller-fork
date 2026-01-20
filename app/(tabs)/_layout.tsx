@@ -115,6 +115,14 @@ export default function TabsLayout() {
             ),
           }}
         />
+
+        <Tabs.Screen
+          name="messages"
+          options={{
+            title: 'Messages',
+            href: null,
+          }}
+        />
       </Tabs>
     </ProtectedRoute>
   );

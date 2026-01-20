@@ -1,16 +1,14 @@
-import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TextInput as RNTextInput,
-} from 'react-native';
+import { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { CornerUpLeft, Check, Info, Calendar } from 'lucide-react-native';
+import { CornerUpLeft, Check, Info } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/Button';
+import { DatePickerField } from '@/components/ui/DatePickerField';
+import { OTPVerificationBottomSheet } from '@/components/ui/OTPVerificationBottomSheet';
+import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
 import * as Haptics from 'expo-haptics';
 
@@ -19,7 +17,7 @@ type VerificationOption = 'bvn' | 'nin' | null;
 export default function UpgradeWalletScreen() {
   const router = useRouter();
   const params = useLocalSearchParams<{ targetTier?: string }>();
-  const targetTier = params.targetTier || 'tier 1';
+  const targetTier = params.targetTier || 'tier-1';
 
   // Redirect to tier-3 screen if target tier is tier 3
   useEffect(() => {
@@ -40,7 +38,10 @@ export default function UpgradeWalletScreen() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [otherName, setOtherName] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
+  const [verifiedType, setVerifiedType] = useState<'bvn' | 'nin' | null>(null);
+  const otpSheetRef = useRef<BottomSheetRef>(null);
+  const successSheetRef = useRef<BottomSheetRef>(null);
 
   const handleGoBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -56,7 +57,7 @@ export default function UpgradeWalletScreen() {
       setFirstName('');
       setLastName('');
       setOtherName('');
-      setDateOfBirth('');
+      setDateOfBirth(null);
     } else {
       setBvn('');
     }
@@ -85,14 +86,39 @@ export default function UpgradeWalletScreen() {
       return;
     }
 
-    // Navigate to Liveliness check screen
-    router.push({
-      pathname: '/upgrade-wallet/liveliness-check',
-      params: {
-        type: selectedOption,
-        targetTier: targetTier,
-      },
-    } as any);
+    otpSheetRef.current?.expand();
+  };
+
+  const handleVerifyOtp = (otpValue: string) => {
+    if (!otpValue) return;
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    otpSheetRef.current?.close();
+    setVerifiedType(selectedOption || 'bvn');
+    setTimeout(() => {
+      successSheetRef.current?.expand();
+    }, 250);
+  };
+
+  const handleGoToWallet = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    successSheetRef.current?.close();
+    setTimeout(() => {
+      router.replace('/(tabs)/wallet');
+    }, 300);
+  };
+
+  const handleUpgradeToNextTier = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    successSheetRef.current?.close();
+    setTimeout(() => {
+      router.replace({
+        pathname: '/upgrade-wallet/liveliness-check' as any,
+        params: {
+          type: 'nin',
+          targetTier: 'tier 2',
+        },
+      });
+    }, 300);
   };
 
   const handleContactUs = () => {
@@ -100,17 +126,12 @@ export default function UpgradeWalletScreen() {
     console.log('Contact us');
   };
 
-  const handleDatePicker = () => {
-    // TODO: Open date picker
-    console.log('Open date picker');
-  };
-
   const isBVNFormValid = bvn.trim().length >= 11;
   const isNINFormValid =
     nin.trim().length >= 11 &&
     firstName.trim().length > 0 &&
     lastName.trim().length > 0 &&
-    dateOfBirth.trim().length > 0;
+    !!dateOfBirth;
 
   const isFormValid =
     selectedOption === 'bvn' ? isBVNFormValid : isNINFormValid;
@@ -127,15 +148,18 @@ export default function UpgradeWalletScreen() {
           />
         </TouchableOpacity>
         <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
-          Upgrade to {targetTier}
+          Upgrade to tier-1
         </Text>
       </View>
 
       {/* Content */}
-      <ScrollView
+      <KeyboardAwareScrollView
         className="flex-1 bg-grey-plain-50"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 160 }}
         showsVerticalScrollIndicator={false}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={24}
       >
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* Choose an option */}
@@ -370,67 +394,116 @@ export default function UpgradeWalletScreen() {
               </View>
 
               {/* Date of birth */}
-              <View className="mb-6">
-                <Text className="mb-2 text-base font-medium text-grey-alpha-500">
-                  Date of birth
-                </Text>
-
-                <TouchableOpacity
-                  onPress={handleDatePicker}
-                  className="flex-row items-center justify-between rounded-xl border border-grey-plain-300 bg-white px-4 py-4"
-                  style={{ minHeight: 56 }}
-                  activeOpacity={0.7}
-                >
-                  <RNTextInput
-                    value={dateOfBirth}
-                    onChangeText={setDateOfBirth}
-                    placeholder="DD/MM/YYYY"
-                    placeholderTextColor={colors['grey-alpha']['400']}
-                    editable={false}
-                    className="flex-1 text-base text-grey-alpha-500"
-                    style={{ fontSize: 16 }}
-                  />
-                  <Calendar
-                    size={20}
-                    color={colors['grey-alpha']['400']}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
-              </View>
+              <DatePickerField
+                containerClassName="mb-6"
+                label="Date of birth"
+                value={dateOfBirth}
+                onChange={setDateOfBirth}
+                placeholder="DD/MM/YYYY"
+                maximumDate={new Date()}
+              />
             </View>
           )}
 
-          {/* Contact Us */}
-          <View className="mb-8 px-4">
-            <Text className="text-center text-sm text-grey-plain-550">
-              Kindly{' '}
-              <Text
-                onPress={handleContactUs}
-                className="text-primary-purple underline"
-              >
-                contact us
-              </Text>{' '}
-              if you are experiencing any issue.
-            </Text>
-          </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
+
+      {/* Contact Us */}
+      <View
+        className="absolute left-0 right-0 px-4"
+        style={{ bottom: 84 }}
+      >
+        <Text className="text-center text-sm text-grey-plain-550">
+          Kindly{' '}
+          <Text onPress={handleContactUs} className="text-primary-purple underline">
+            contact us
+          </Text>{' '}
+          if you are experiencing any issue.
+        </Text>
+      </View>
 
       {/* Footer */}
-      <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
-        <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-          <Text className="text-base font-medium text-grey-alpha-500">
-            Go back
-          </Text>
-        </TouchableOpacity>
-        <Button
-          title="Proceed"
-          onPress={handleProceed}
-          variant="primary"
-          size="medium"
-          disabled={!selectedOption || !isFormValid}
-        />
+      <View className="absolute bottom-0 left-0 right-0 border-t border-grey-plain-150 bg-white px-4 py-4">
+        <View className="flex-row items-center justify-between">
+          <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
+            <Text className="text-base font-medium text-grey-alpha-500">
+              Go back
+            </Text>
+          </TouchableOpacity>
+          <Button
+            title="Proceed"
+            onPress={handleProceed}
+            variant="primary"
+            size="medium"
+            disabled={!selectedOption || !isFormValid}
+          />
+        </View>
       </View>
+
+      <OTPVerificationBottomSheet
+        ref={otpSheetRef}
+        title={selectedOption === 'nin' ? 'Verify your NIN' : 'Verify your BVN'}
+        phoneNumber="+2348134***778"
+        otpLength={selectedOption === 'nin' ? 6 : 5}
+        onVerify={handleVerifyOtp}
+        onClose={() => otpSheetRef.current?.close()}
+      />
+
+      <BottomSheetComponent ref={successSheetRef} snapPoints={['50%']}>
+        <View className="items-center px-6 pb-8 pt-4">
+          <View className="mb-6 items-center">
+            <View className="relative">
+              <View
+                className="h-16 w-16 items-center justify-center rounded-full"
+                style={{ backgroundColor: colors.state.green }}
+              >
+                <Check color="#FFFFFF" size={32} strokeWidth={3} />
+              </View>
+              <View
+                className="absolute -right-2 -top-2 h-3 w-3 rounded-full"
+                style={{ backgroundColor: colors.primary.purple }}
+              />
+              <View
+                className="absolute -bottom-2 -left-2 h-2 w-2 rounded-full"
+                style={{ backgroundColor: colors.yellow['50'] }}
+              />
+              <View
+                className="absolute -right-4 top-4 h-2 w-2 rounded-full"
+                style={{ backgroundColor: colors.state.green }}
+              />
+            </View>
+          </View>
+
+          <Text className="mb-2 text-2xl font-bold text-grey-alpha-500">
+            {verifiedType === 'nin'
+              ? 'NIN verified successfully'
+              : 'BVN verified successfully'}
+          </Text>
+          <Text className="mb-8 text-center text-base text-grey-plain-550">
+            Your wallet has been upgraded to Tier 1. Continue to fully upgrade
+            your account.
+          </Text>
+
+          <View className="w-full flex-row gap-3">
+            <View className="flex-1">
+              <Button
+                title="Go to wallet"
+                onPress={handleGoToWallet}
+                variant="outline"
+                className="w-full"
+              />
+            </View>
+            <View className="flex-1">
+              <Button
+                title="Upgrade to tier 2"
+                onPress={handleUpgradeToNextTier}
+                variant="primary"
+                className="w-full"
+              />
+            </View>
+          </View>
+        </View>
+      </BottomSheetComponent>
     </SafeAreaView>
   );
 }

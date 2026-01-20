@@ -67,7 +67,7 @@ export function StoriesSection() {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{ paddingHorizontal: 16, gap: 16 }}
+        contentContainerStyle={{ paddingHorizontal: 16, gap: 2 }}
       >
         {stories.map((story) => (
           <TouchableOpacity

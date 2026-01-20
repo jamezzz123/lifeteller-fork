@@ -10,6 +10,7 @@ import {
 import { colors } from '@/theme/colors';
 
 type OTPVerificationBottomSheetProps = {
+  title?: string;
   phoneNumber: string;
   otpLength?: number;
   onVerify: (otp: string) => void;
@@ -24,6 +25,7 @@ export const OTPVerificationBottomSheet = forwardRef<
 >(
   (
     {
+      title = 'Verify yourself',
       phoneNumber,
       otpLength = 6,
       onVerify,
@@ -109,7 +111,7 @@ export const OTPVerificationBottomSheet = forwardRef<
           {/* Header */}
           <View className="mb-6 flex-row items-center justify-between">
             <Text className="text-lg font-semibold text-grey-alpha-500">
-              Verify yourself
+              {title}
             </Text>
             <TouchableOpacity onPress={onClose} className="p-1">
               <X size={24} color={colors['grey-alpha']['500']} strokeWidth={2} />

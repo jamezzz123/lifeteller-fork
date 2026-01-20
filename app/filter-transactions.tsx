@@ -1,85 +1,57 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useMemo, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { X } from 'lucide-react-native';
-import {
-  BottomSheetComponent,
-  BottomSheetRef,
-} from '@/components/ui/BottomSheet';
+import { router, useLocalSearchParams } from 'expo-router';
+import * as Haptics from 'expo-haptics';
+
 import { Button } from '@/components/ui/Button';
 import { DatePickerField } from '@/components/ui/DatePickerField';
 import { colors } from '@/theme/colors';
-import * as Haptics from 'expo-haptics';
+import { TransactionFilters } from '@/components/wallet/FilterTransactionsBottomSheet';
 
-export interface TransactionFilters {
-  status: string;
-  dateRange: string;
-  startDate?: string;
-  endDate?: string;
-  transactionType: string;
-  transactionCategory: string;
-}
+export default function FilterTransactionsScreen() {
+  const params = useLocalSearchParams<{
+    status?: string | string[];
+    dateRange?: string | string[];
+    startDate?: string | string[];
+    endDate?: string | string[];
+    transactionType?: string | string[];
+    transactionCategory?: string | string[];
+  }>();
 
-interface FilterTransactionsBottomSheetProps {
-  initialFilters?: TransactionFilters;
-  onApplyFilters: (filters: TransactionFilters) => void;
-  onClose?: () => void;
-}
-
-export const FilterTransactionsBottomSheet = forwardRef<
-  BottomSheetRef,
-  FilterTransactionsBottomSheetProps
->(({ initialFilters, onApplyFilters, onClose }, ref) => {
-  const [filters, setFilters] = useState<TransactionFilters>(
-    initialFilters || {
-      status: 'All',
-      dateRange: 'All time',
-      transactionType: 'All',
-      transactionCategory: 'All',
-    }
-  );
-
-  const handleClose = () => {
-    if (ref && typeof ref !== 'function' && ref.current) {
-      ref.current.close();
-    }
-    onClose?.();
+  const paramString = (value?: string | string[]) => {
+    if (!value) return undefined;
+    return Array.isArray(value) ? value[0] : value;
   };
 
-  const handleGoBack = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    handleClose();
-  };
+  const initialFilters = useMemo<TransactionFilters>(() => {
+    const status = paramString(params.status) || 'All';
+    const dateRange = paramString(params.dateRange) || 'All time';
+    const startDate = paramString(params.startDate) || undefined;
+    const endDate = paramString(params.endDate) || undefined;
+    const transactionType = paramString(params.transactionType) || 'All';
+    const transactionCategory =
+      paramString(params.transactionCategory) || 'All';
 
-  const handleApplyFilters = () => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    onApplyFilters(filters);
-    handleClose();
-  };
-
-  const handleSelectStatus = (status: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFilters({ ...filters, status });
-  };
-
-  const handleSelectDateRange = (dateRange: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFilters({
-      ...filters,
+    return {
+      status,
       dateRange,
-      startDate: undefined,
-      endDate: undefined,
-    });
-  };
+      startDate,
+      endDate,
+      transactionType,
+      transactionCategory,
+    };
+  }, [
+    params.dateRange,
+    params.endDate,
+    params.startDate,
+    params.status,
+    params.transactionCategory,
+    params.transactionType,
+  ]);
 
-  const handleSelectTransactionType = (type: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFilters({ ...filters, transactionType: type });
-  };
-
-  const handleSelectCategory = (category: string) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setFilters({ ...filters, transactionCategory: category });
-  };
+  const [filters, setFilters] = useState<TransactionFilters>(initialFilters);
 
   const formatDateString = (date: Date) => date.toLocaleDateString('en-GB');
 
@@ -89,6 +61,26 @@ export const FilterTransactionsBottomSheet = forwardRef<
     const parsed = new Date(Number(year), Number(month) - 1, Number(day));
     if (Number.isNaN(parsed.getTime())) return null;
     return parsed;
+  };
+
+  const handleClose = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.back();
+  };
+
+  const handleApplyFilters = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.replace({
+      pathname: '/all-transactions' as any,
+      params: {
+        status: filters.status,
+        dateRange: filters.dateRange,
+        startDate: filters.startDate || '',
+        endDate: filters.endDate || '',
+        transactionType: filters.transactionType,
+        transactionCategory: filters.transactionCategory,
+      },
+    });
   };
 
   const renderFilterChip = (
@@ -155,7 +147,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
   ];
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['80%']} onClose={onClose}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
       <View className="flex-1">
         {/* Header */}
         <View className="flex-row items-center justify-between border-b border-grey-plain-150 px-6 py-4">
@@ -170,7 +162,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
         {/* Content */}
         <ScrollView
           className="flex-1"
-          contentContainerStyle={{ padding: 24, paddingBottom: 140 }}
+          contentContainerStyle={{ padding: 24, paddingBottom: 24 }}
           showsVerticalScrollIndicator={false}
         >
           {/* Status Filter */}
@@ -182,7 +174,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
               {statusOptions.map((status) => (
                 <View key={`status-${status}`}>
                   {renderFilterChip(status, filters.status === status, () =>
-                    handleSelectStatus(status)
+                    setFilters({ ...filters, status })
                   )}
                 </View>
               ))}
@@ -198,7 +190,12 @@ export const FilterTransactionsBottomSheet = forwardRef<
               {dateRangeOptions.map((range) => (
                 <View key={`range-${range}`}>
                   {renderFilterChip(range, filters.dateRange === range, () =>
-                    handleSelectDateRange(range)
+                    setFilters({
+                      ...filters,
+                      dateRange: range,
+                      startDate: undefined,
+                      endDate: undefined,
+                    })
                   )}
                 </View>
               ))}
@@ -239,7 +236,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
               {transactionTypeOptions.map((type) => (
                 <View key={`type-${type}`}>
                   {renderFilterChip(type, filters.transactionType === type, () =>
-                    handleSelectTransactionType(type)
+                    setFilters({ ...filters, transactionType: type })
                   )}
                 </View>
               ))}
@@ -257,7 +254,7 @@ export const FilterTransactionsBottomSheet = forwardRef<
                   {renderFilterChip(
                     category,
                     filters.transactionCategory === category,
-                    () => handleSelectCategory(category)
+                    () => setFilters({ ...filters, transactionCategory: category })
                   )}
                 </View>
               ))}
@@ -266,22 +263,22 @@ export const FilterTransactionsBottomSheet = forwardRef<
         </ScrollView>
 
         {/* Footer */}
-        <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-6 py-4">
-          <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <Text className="text-base font-medium text-grey-alpha-500">
-              Go back
-            </Text>
-          </TouchableOpacity>
-          <Button
-            title="Apply filter"
-            onPress={handleApplyFilters}
-            variant="primary"
-            size="medium"
-          />
+        <View className="border-t border-grey-plain-150 bg-white px-6 py-4">
+          <View className="flex-row items-center justify-between">
+            <TouchableOpacity onPress={handleClose} hitSlop={8}>
+              <Text className="text-base font-medium text-grey-alpha-500">
+                Go back
+              </Text>
+            </TouchableOpacity>
+            <Button
+              title="Apply filter"
+              onPress={handleApplyFilters}
+              variant="primary"
+              size="medium"
+            />
+          </View>
         </View>
       </View>
-    </BottomSheetComponent>
+    </SafeAreaView>
   );
-});
-
-FilterTransactionsBottomSheet.displayName = 'FilterTransactionsBottomSheet';
+}

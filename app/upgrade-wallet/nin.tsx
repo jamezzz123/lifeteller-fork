@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TextInput as RNTextInput,
-} from 'react-native';
+import { View, Text, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useRouter } from 'expo-router';
-import { CornerUpLeft, Info, Calendar } from 'lucide-react-native';
+import { CornerUpLeft, Info } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Button } from '@/components/ui/Button';
+import { DatePickerField } from '@/components/ui/DatePickerField';
 import { colors } from '@/theme/colors';
 import * as Haptics from 'expo-haptics';
 
@@ -20,7 +16,7 @@ export default function NINFormScreen() {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [otherName, setOtherName] = useState('');
-  const [dateOfBirth, setDateOfBirth] = useState('');
+  const [dateOfBirth, setDateOfBirth] = useState<Date | null>(null);
 
   const handleGoBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -43,16 +39,11 @@ export default function NINFormScreen() {
     console.log('Contact us');
   };
 
-  const handleDatePicker = () => {
-    // TODO: Open date picker
-    console.log('Open date picker');
-  };
-
   const isFormValid =
     nin.trim().length >= 11 &&
     firstName.trim().length > 0 &&
     lastName.trim().length > 0 &&
-    dateOfBirth.trim().length > 0;
+    !!dateOfBirth;
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
@@ -71,10 +62,13 @@ export default function NINFormScreen() {
       </View>
 
       {/* Content */}
-      <ScrollView
+      <KeyboardAwareScrollView
         className="flex-1 bg-grey-plain-50"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 160 }}
         showsVerticalScrollIndicator={false}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={24}
       >
         <View className="rounded-t-3xl bg-white px-4 pt-6">
           {/* NIN */}
@@ -191,33 +185,14 @@ export default function NINFormScreen() {
           </View>
 
           {/* Date of birth */}
-          <View className="mb-6">
-            <Text className="mb-2 text-base font-medium text-grey-alpha-500">
-              Date of birth
-            </Text>
-
-            <TouchableOpacity
-              onPress={handleDatePicker}
-              className="flex-row items-center justify-between rounded-xl border border-grey-plain-300 bg-white px-4 py-4"
-              style={{ minHeight: 56 }}
-              activeOpacity={0.7}
-            >
-              <RNTextInput
-                value={dateOfBirth}
-                onChangeText={setDateOfBirth}
-                placeholder="DD/MM/YYYY"
-                placeholderTextColor={colors['grey-alpha']['400']}
-                editable={false}
-                className="flex-1 text-base text-grey-alpha-500"
-                style={{ fontSize: 16 }}
-              />
-              <Calendar
-                size={20}
-                color={colors['grey-alpha']['400']}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
-          </View>
+          <DatePickerField
+            containerClassName="mb-6"
+            label="Date of birth"
+            value={dateOfBirth}
+            onChange={setDateOfBirth}
+            placeholder="DD/MM/YYYY"
+            maximumDate={new Date()}
+          />
 
           {/* Contact Us */}
           <View className="mb-8">
@@ -230,7 +205,7 @@ export default function NINFormScreen() {
             </Text>
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
 
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">

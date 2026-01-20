@@ -261,8 +261,8 @@ export default function CreateAccountScreen() {
       });
       const response = await registerMutation.mutateAsync({
         username: username.trim(),
-        email: hasEmail && email.trim() ? email.trim() : undefined,
-        phone_number: hasPhone && phoneNumber.trim() ? phoneNumber.trim() : undefined,
+        email: hasEmail && email.trim() ? email.trim() : "",
+        phone_number: hasPhone && phoneNumber.trim() ? phoneNumber.trim() : "",
         password: password.trim(),
       });
       console.log('Registration successful:', response);
@@ -318,6 +318,7 @@ export default function CreateAccountScreen() {
         } else if (typeof responseData === 'string') {
           // Handle server errors (500) with tracebacks - extract useful info
           if (status === 500) {
+            console.log('Server error:', responseData);
             // Check for specific database errors in the traceback
             if (responseData.includes('duplicate key value violates unique constraint')) {
               if (responseData.includes('email')) {

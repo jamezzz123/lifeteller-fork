@@ -29,8 +29,6 @@ import {
 import { colors } from '@/theme/colors';
 import { router } from 'expo-router';
 import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
-import { Toast } from '@/components/ui/Toast';
-
 interface MoreOptionsBottomSheetProps {
   userId: string;
   username: string;
@@ -54,6 +52,7 @@ interface MoreOptionsBottomSheetProps {
   onBlockUser?: () => void;
   onReportUser?: () => void;
   onReportAndBlock?: () => void;
+  onShowToast?: (message: string) => void;
 }
 
 export const MoreOptionsBottomSheet = forwardRef<
@@ -84,6 +83,7 @@ export const MoreOptionsBottomSheet = forwardRef<
       onBlockUser,
       onReportUser,
       onReportAndBlock,
+      onShowToast,
     },
     ref
   ) => {
@@ -96,9 +96,9 @@ export const MoreOptionsBottomSheet = forwardRef<
     const [showUnhideStoriesConfirm, setShowUnhideStoriesConfirm] =
       useState(false);
 
-    // Toast states
-    const [showSuccessToast, setShowSuccessToast] = useState(false);
-    const [successMessage, setSuccessMessage] = useState('');
+    const showToast = (message: string) => {
+      onShowToast?.(message);
+    };
 
     useImperativeHandle(ref, () => ({
       expand: () => {
@@ -182,14 +182,12 @@ export const MoreOptionsBottomSheet = forwardRef<
       if (isMuted) {
         handleAction(() => {
           onUnmutePosts?.();
-          setSuccessMessage(`Posts from ${username} unmuted`);
-          setShowSuccessToast(true);
+          showToast(`Posts from ${username} unmuted`);
         });
       } else {
         handleAction(() => {
           onMutePosts?.();
-          setSuccessMessage(`Posts from ${username} muted`);
-          setShowSuccessToast(true);
+          showToast(`Posts from ${username} muted`);
         });
       }
     };
@@ -197,8 +195,7 @@ export const MoreOptionsBottomSheet = forwardRef<
     const handleAddAsFollower = () => {
       handleAction(() => {
         onAddAsFollower?.();
-        setSuccessMessage(`${username} added as follower`);
-        setShowSuccessToast(true);
+        showToast(`${username} added as follower`);
       });
     };
 
@@ -211,8 +208,7 @@ export const MoreOptionsBottomSheet = forwardRef<
     const confirmRemoveFollower = () => {
       setShowRemoveFollowerConfirm(false);
       onRemoveFollower?.();
-      setSuccessMessage(`${username} removed as follower`);
-      setShowSuccessToast(true);
+      showToast(`${username} removed as follower`);
     };
 
     const handleHideStories = () => {
@@ -230,15 +226,13 @@ export const MoreOptionsBottomSheet = forwardRef<
     const confirmHideStories = () => {
       setShowHideStoriesConfirm(false);
       onHideStories?.();
-      setSuccessMessage(`Stories from ${username} hidden`);
-      setShowSuccessToast(true);
+      showToast(`Stories from ${username} hidden`);
     };
 
     const confirmUnhideStories = () => {
       setShowUnhideStoriesConfirm(false);
       onUnhideStories?.();
-      setSuccessMessage(`Stories from ${username} unhidden`);
-      setShowSuccessToast(true);
+      showToast(`Stories from ${username} unhidden`);
     };
 
     const handleBlockUser = () => {
@@ -517,13 +511,6 @@ export const MoreOptionsBottomSheet = forwardRef<
           onCancel={() => setShowUnhideStoriesConfirm(false)}
         />
 
-        {/* Success Toast */}
-        <Toast
-          visible={showSuccessToast}
-          message={successMessage}
-          duration={3000}
-          onHide={() => setShowSuccessToast(false)}
-        />
       </BottomSheetComponent>
     );
   }
