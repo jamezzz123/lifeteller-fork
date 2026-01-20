@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Pressable, Animated, View } from 'react-native';
+import { Pressable, Animated } from 'react-native';
 import { Check } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/theme/colors';
