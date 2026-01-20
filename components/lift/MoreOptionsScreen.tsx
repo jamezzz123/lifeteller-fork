@@ -18,6 +18,8 @@ import {
   MapPin,
   ChevronRight,
   Search,
+  CreditCard,
+  UserX,
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -36,26 +38,56 @@ import {
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { useLiftDraft } from '@/context/LiftDraftContext';
 
+// All possible setting keys
+export type SettingKey =
+  | 'category'
+  | 'location'
+  | 'scheduleLift'
+  | 'liftEndDate'
+  | 'requestEndDate'
+  | 'allowCollaborators'
+  | 'allowRequesters'
+  | 'autoDebit'
+  | 'offerAnonymously';
+
+// Default settings shown (all settings)
+const ALL_SETTINGS: SettingKey[] = [
+  'category',
+  'location',
+  'scheduleLift',
+  'liftEndDate',
+  'allowCollaborators',
+  'allowRequesters',
+];
+
 interface MoreOptionsScreenProps {
-  showCategoryAndLocation?: boolean;
+  /** Array of setting keys to show. If not provided, shows default settings */
+  visibleSettings?: SettingKey[];
   onBack?: () => void;
 }
 
 export default function MoreOptionsScreen({
-  showCategoryAndLocation = true,
+  visibleSettings = ALL_SETTINGS,
   onBack,
 }: MoreOptionsScreenProps) {
   const { category, setCategory, location, setLocation } = useLiftDraft();
+
+  // Helper to check if a setting should be shown
+  const showSetting = (key: SettingKey) => visibleSettings.includes(key);
 
   const [scheduleLift] = useState(false);
   const [scheduleDate, setScheduleDate] = useState<Date | null>(null);
   const [liftEndDate, setLiftEndDate] = useState(false);
   const [endDate, setEndDate] = useState<Date | null>(null);
+  const [requestEndDate, setRequestEndDate] = useState(false);
+  const [requestEndDateValue, setRequestEndDateValue] = useState<Date | null>(null);
   const [allowCollaborators, setAllowCollaborators] = useState(false);
   const [collaboratorLimit, setCollaboratorLimit] = useState<
     'unlimited' | number
   >('unlimited');
   const [allowRequesters, setAllowRequesters] = useState(false);
+  const [autoDebit, setAutoDebit] = useState(false);
+  const [offerAnonymously, setOfferAnonymously] = useState(false);
   const [showRemoveCollaboratorsDialog, setShowRemoveCollaboratorsDialog] =
     useState(false);
   const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] =
@@ -65,6 +97,7 @@ export default function MoreOptionsScreen({
 
   const scheduleSheetRef = useRef<BottomSheetRef>(null);
   const endDateSheetRef = useRef<BottomSheetRef>(null);
+  const requestEndDateSheetRef = useRef<BottomSheetRef>(null);
   const collaboratorsSheetRef = useRef<BottomSheetRef>(null);
   const categorySheetRef = useRef<BottomSheetRef>(null);
   const locationSheetRef = useRef<BottomSheetRef>(null);
@@ -102,6 +135,30 @@ export default function MoreOptionsScreen({
     if (liftEndDate) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       endDateSheetRef.current?.expand();
+    }
+  }
+
+  function handleRequestEndDateToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setRequestEndDate(value);
+    if (value) {
+      setTimeout(() => {
+        requestEndDateSheetRef.current?.expand();
+      }, 300);
+    } else {
+      setRequestEndDateValue(null);
+    }
+  }
+
+  function handleRequestEndDateDone(date: Date) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setRequestEndDateValue(date);
+  }
+
+  function handleRequestEndDatePress() {
+    if (requestEndDate) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      requestEndDateSheetRef.current?.expand();
     }
   }
 
@@ -155,6 +212,16 @@ export default function MoreOptionsScreen({
     }
   }
 
+  function handleAutoDebitToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setAutoDebit(value);
+  }
+
+  function handleOfferAnonymouslyToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setOfferAnonymously(value);
+  }
+
   const filteredCategories = CATEGORIES.filter((cat) =>
     cat.toLowerCase().includes(categorySearch.toLowerCase())
   );
@@ -205,8 +272,53 @@ export default function MoreOptionsScreen({
         className="flex-1"
         contentContainerStyle={{ paddingBottom: 32 }}
       >
+        {/* Auto-debit */}
+        {showSetting('autoDebit') && (
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <CreditCard size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Auto-debit
+                  </Text>
+                  <Text className="font-inter text-sm text-grey-alpha-400">
+                    First-come-first-serve basis. You won't need to approve join
+                    requests.
+                  </Text>
+                </View>
+              </View>
+              <Toggle value={autoDebit} onValueChange={handleAutoDebitToggle} />
+            </View>
+          </View>
+        )}
+
+        {/* Offer lift anonymously */}
+        {showSetting('offerAnonymously') && (
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <UserX size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Offer lift anonymously
+                  </Text>
+                  <Text className="font-inter text-sm text-grey-alpha-400">
+                    People who see and join your lift offer won't know it is
+                    you.
+                  </Text>
+                </View>
+              </View>
+              <Toggle
+                value={offerAnonymously}
+                onValueChange={handleOfferAnonymouslyToggle}
+              />
+            </View>
+          </View>
+        )}
+
         {/* Select Category */}
-        {showCategoryAndLocation && (
+        {showSetting('category') && (
           <View className="border-b border-grey-plain-450/20 px-4 py-4">
             <TouchableOpacity
               onPress={() => categorySheetRef.current?.expand()}
@@ -262,7 +374,7 @@ export default function MoreOptionsScreen({
         )}
 
         {/* Location */}
-        {showCategoryAndLocation && (
+        {showSetting('location') && (
           <View className="border-b border-grey-plain-450/20 px-4 py-4">
             <TouchableOpacity
               onPress={() => locationSheetRef.current?.expand()}
@@ -318,200 +430,269 @@ export default function MoreOptionsScreen({
         )}
 
         {/* Schedule lift */}
-        <TouchableOpacity
-          onPress={handleScheduleLiftPress}
-          className="border-b border-grey-plain-450/20 px-4 py-4"
-          activeOpacity={scheduleLift ? 0.7 : 1}
-        >
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1 flex-row items-center gap-3">
-              <Calendar size={24} color={colors['grey-alpha']['500']} />
-              <View className="flex-1">
-                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
-                  Schedule lift
-                </Text>
-                {scheduleLift && scheduleDate ? (
-                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
-                    {scheduleDate.toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}{' '}
-                    at{' '}
-                    {scheduleDate.toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    })}{' '}
-                    →
+        {showSetting('scheduleLift') && (
+          <TouchableOpacity
+            onPress={handleScheduleLiftPress}
+            className="border-b border-grey-plain-450/20 px-4 py-4"
+            activeOpacity={scheduleLift ? 0.7 : 1}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <Calendar size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Schedule lift
                   </Text>
-                ) : (
-                  <Text className="font-inter text-sm text-grey-alpha-400">
-                    Choose a start date for your lift.
-                  </Text>
-                )}
+                  {scheduleLift && scheduleDate ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      {scheduleDate.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}{' '}
+                      at{' '}
+                      {scheduleDate.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                      })}{' '}
+                      →
+                    </Text>
+                  ) : (
+                    <Text className="font-inter text-sm text-grey-alpha-400">
+                      Choose a start date for your lift.
+                    </Text>
+                  )}
+                </View>
               </View>
+              <Toggle value={scheduleLift} onValueChange={() => {}} />
             </View>
-            <Toggle
-              value={scheduleLift}
-              onValueChange={() => {}}
-            />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
 
         {/* Lift end date */}
-        <TouchableOpacity
-          onPress={handleLiftEndDatePress}
-          className="border-b border-grey-plain-450/20 px-4 py-4"
-          activeOpacity={liftEndDate ? 0.7 : 1}
-        >
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1 flex-row items-center gap-3">
-              <CalendarX size={24} color={colors['grey-alpha']['500']} />
-              <View className="flex-1">
-                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
-                  Request end date
-                </Text>
-                {liftEndDate && endDate ? (
-                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
-                    {endDate.toLocaleDateString('en-US', {
-                      weekday: 'short',
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}{' '}
-                    at{' '}
-                    {endDate.toLocaleTimeString('en-US', {
-                      hour: 'numeric',
-                      minute: '2-digit',
-                      hour12: true,
-                    })}{' '}
-                    →
+        {showSetting('liftEndDate') && (
+          <TouchableOpacity
+            onPress={handleLiftEndDatePress}
+            className="border-b border-grey-plain-450/20 px-4 py-4"
+            activeOpacity={liftEndDate ? 0.7 : 1}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <CalendarX size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Request end date
                   </Text>
-                ) : (
-                  <Text className="font-inter text-sm text-grey-alpha-400">
-                    This will end the lift even when the target is not met.
-                  </Text>
-                )}
+                  {liftEndDate && endDate ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      {endDate.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}{' '}
+                      at{' '}
+                      {endDate.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                      })}{' '}
+                      →
+                    </Text>
+                  ) : (
+                    <Text className="font-inter text-sm text-grey-alpha-400">
+                      This will end the lift even when the target is not met.
+                    </Text>
+                  )}
+                </View>
               </View>
+              <Toggle
+                value={liftEndDate}
+                onValueChange={handleLiftEndDateToggle}
+              />
             </View>
-            <Toggle
-              value={liftEndDate}
-              onValueChange={handleLiftEndDateToggle}
-            />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
+
+        {/* Request end date */}
+        {showSetting('requestEndDate') && (
+          <TouchableOpacity
+            onPress={handleRequestEndDatePress}
+            className="border-b border-grey-plain-450/20 px-4 py-4"
+            activeOpacity={requestEndDate ? 0.7 : 1}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <CalendarX size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Request end date
+                  </Text>
+                  {requestEndDate && requestEndDateValue ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      {requestEndDateValue.toLocaleDateString('en-US', {
+                        weekday: 'short',
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                      })}{' '}
+                      at{' '}
+                      {requestEndDateValue.toLocaleTimeString('en-US', {
+                        hour: 'numeric',
+                        minute: '2-digit',
+                        hour12: true,
+                      })}{' '}
+                      →
+                    </Text>
+                  ) : (
+                    <Text className="font-inter text-sm text-grey-alpha-400">
+                      This will end the request even when the target is not met.
+                    </Text>
+                  )}
+                </View>
+              </View>
+              <Toggle
+                value={requestEndDate}
+                onValueChange={handleRequestEndDateToggle}
+              />
+            </View>
+          </TouchableOpacity>
+        )}
 
         {/* Allow collaborators */}
-        <TouchableOpacity
-          onPress={handleCollaboratorsPress}
-          className="border-b border-grey-plain-450/20 px-4 py-4"
-          activeOpacity={allowCollaborators ? 0.7 : 1}
-        >
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1 flex-row items-center gap-3">
-              <Users size={24} color={colors['grey-alpha']['500']} />
-              <View className="flex-1">
-                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
-                  Allow collaborators
-                </Text>
-                {allowCollaborators && collaboratorLimit !== 'unlimited' ? (
-                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
-                    {collaboratorLimit} →
+        {showSetting('allowCollaborators') && (
+          <TouchableOpacity
+            onPress={handleCollaboratorsPress}
+            className="border-b border-grey-plain-450/20 px-4 py-4"
+            activeOpacity={allowCollaborators ? 0.7 : 1}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <Users size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Allow collaborators
                   </Text>
-                ) : allowCollaborators ? (
-                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
-                    {typeof collaboratorLimit === 'number'
-                      ? collaboratorLimit
-                      : '5'}{' '}
-                    →
-                  </Text>
-                ) : (
-                  <Text className="font-inter text-sm text-grey-alpha-400">
-                    Approve people&apos;s request to join you in supporting and
-                    raising the lift.
-                  </Text>
-                )}
+                  {allowCollaborators && collaboratorLimit !== 'unlimited' ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      {collaboratorLimit} →
+                    </Text>
+                  ) : allowCollaborators ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      {typeof collaboratorLimit === 'number'
+                        ? collaboratorLimit
+                        : '5'}{' '}
+                      →
+                    </Text>
+                  ) : (
+                    <Text className="font-inter text-sm text-grey-alpha-400">
+                      Approve people&apos;s request to join you in supporting
+                      and raising the lift.
+                    </Text>
+                  )}
+                </View>
               </View>
+              <Toggle
+                value={allowCollaborators}
+                onValueChange={handleAllowCollaboratorsToggle}
+              />
             </View>
-            <Toggle
-              value={allowCollaborators}
-              onValueChange={handleAllowCollaboratorsToggle}
-            />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        )}
 
         {/* Allow requesters */}
-        <View className="border-b border-grey-plain-450/20 px-4 py-4">
-          <View className="flex-row items-center justify-between">
-            <View className="flex-1 flex-row items-center gap-3">
-              <Hand size={24} color={colors['grey-alpha']['500']} />
-              <View className="flex-1">
-                <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
-                  Allow requesters
-                </Text>
-                <Text className="font-inter text-sm text-grey-alpha-400">
-                  Approve people&apos;s request to join and benefit from the
-                  lift you are raising.
-                </Text>
+        {showSetting('allowRequesters') && (
+          <View className="border-b border-grey-plain-450/20 px-4 py-4">
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <Hand size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Allow requesters
+                  </Text>
+                  <Text className="font-inter text-sm text-grey-alpha-400">
+                    Approve people&apos;s request to join and benefit from the
+                    lift you are raising.
+                  </Text>
+                </View>
               </View>
+              <Toggle
+                value={allowRequesters}
+                onValueChange={handleAllowRequestersToggle}
+              />
             </View>
-            <Toggle
-              value={allowRequesters}
-              onValueChange={handleAllowRequestersToggle}
-            />
           </View>
-        </View>
+        )}
       </ScrollView>
 
       {/* Schedule Request Bottom Sheet */}
-      <ScheduleRequestBottomSheet
-        ref={scheduleSheetRef}
-        onDone={handleScheduleDone}
-        initialDate={scheduleDate || undefined}
-      />
+      {showSetting('scheduleLift') && (
+        <ScheduleRequestBottomSheet
+          ref={scheduleSheetRef}
+          onDone={handleScheduleDone}
+          initialDate={scheduleDate || undefined}
+        />
+      )}
 
-      {/* End Date Bottom Sheet */}
-      <ScheduleRequestBottomSheet
-        ref={endDateSheetRef}
-        onDone={handleEndDateDone}
-        initialDate={endDate || undefined}
-      />
+      {/* Lift End Date Bottom Sheet */}
+      {showSetting('liftEndDate') && (
+        <ScheduleRequestBottomSheet
+          ref={endDateSheetRef}
+          onDone={handleEndDateDone}
+          initialDate={endDate || undefined}
+        />
+      )}
+
+      {/* Request End Date Bottom Sheet */}
+      {showSetting('requestEndDate') && (
+        <ScheduleRequestBottomSheet
+          ref={requestEndDateSheetRef}
+          onDone={handleRequestEndDateDone}
+          initialDate={requestEndDateValue || undefined}
+        />
+      )}
 
       {/* Allow Collaborators Bottom Sheet */}
-      <AllowCollaboratorsBottomSheet
-        ref={collaboratorsSheetRef}
-        currentLimit={collaboratorLimit}
-        onDone={handleCollaboratorLimitDone}
-      />
+      {showSetting('allowCollaborators') && (
+        <AllowCollaboratorsBottomSheet
+          ref={collaboratorsSheetRef}
+          currentLimit={collaboratorLimit}
+          onDone={handleCollaboratorLimitDone}
+        />
+      )}
 
       {/* Remove Collaborators Confirmation */}
-      <ConfirmDialog
-        visible={showRemoveCollaboratorsDialog}
-        title="Remove collaborators"
-        message="Are you sure you want to remove this collaborators?"
-        confirmText="Yes, remove"
-        cancelText="No, go back"
-        onConfirm={handleConfirmRemoveCollaborators}
-        onCancel={handleCancelRemoveCollaborators}
-        destructive
-      />
+      {showSetting('allowCollaborators') && (
+        <ConfirmDialog
+          visible={showRemoveCollaboratorsDialog}
+          title="Remove collaborators"
+          message="Are you sure you want to remove this collaborators?"
+          confirmText="Yes, remove"
+          cancelText="No, go back"
+          onConfirm={handleConfirmRemoveCollaborators}
+          onCancel={handleCancelRemoveCollaborators}
+          destructive
+        />
+      )}
 
       {/* Remove Requesters Confirmation */}
-      <ConfirmDialog
-        visible={showRemoveRequestersDialog}
-        title="Don't allow requesters"
-        message="People won't be able to join your lift as a beneficiary."
-        confirmText="Yes, remove requesters"
-        cancelText="No, go back"
-        onConfirm={handleConfirmRemoveRequesters}
-        onCancel={handleCancelRemoveRequesters}
-        destructive
-      />
+      {showSetting('allowRequesters') && (
+        <ConfirmDialog
+          visible={showRemoveRequestersDialog}
+          title="Don't allow requesters"
+          message="People won't be able to join your lift as a beneficiary."
+          confirmText="Yes, remove requesters"
+          cancelText="No, go back"
+          onConfirm={handleConfirmRemoveRequesters}
+          onCancel={handleCancelRemoveRequesters}
+          destructive
+        />
+      )}
 
       {/* Category Bottom Sheet */}
-      {showCategoryAndLocation && (
+      {showSetting('category') && (
         <BottomSheetComponent ref={categorySheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
             <Text className="mb-4 font-inter-bold text-lg text-grey-alpha-500">
@@ -554,7 +735,7 @@ export default function MoreOptionsScreen({
       )}
 
       {/* Location Bottom Sheet */}
-      {showCategoryAndLocation && (
+      {showSetting('location') && (
         <BottomSheetComponent ref={locationSheetRef} snapPoints={['70%']}>
           <View className="px-4 pb-4">
             <Text className="mb-4 font-inter-bold text-lg text-grey-alpha-500">

@@ -515,8 +515,14 @@ export function OtherUserProfile({ user }: OtherUserProfileProps) {
 
   const handleOfferLift = () => {
     router.push({
-      pathname: '/offer-lift',
-      params: { recipientId: user.id, recipientName: user.fullName },
+      pathname: '/screens/lifts/offer-from-profile',
+      params: {
+        recipientId: user.id,
+        recipientFullName: user.fullName,
+        recipientHandle: user.handle,
+        recipientProfileImage: user.profileImage || '',
+        recipientIsVerified: user.isVerified ? 'true' : 'false',
+      },
     } as any);
   };
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { User } from '@/hooks/useUser';
 import { AudienceOfferType } from '@/context/request-lift';
+import { UserDisplayInfo } from '@/components/ui/UserInfoRow';
 
 export type MediaItem = {
   id: string;
@@ -46,6 +47,8 @@ type LiftDraftContextType = {
   reset: () => void;
   numberOfRecipients: string;
   setNumberOfRecipients: (number: string) => void;
+  offerTo: UserDisplayInfo | null;
+  setOfferTo: (user: UserDisplayInfo | null) => void;
 };
 
 const LiftDraftContext = createContext<LiftDraftContextType | undefined>(
@@ -65,6 +68,7 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
   const [category, setCategory] = useState<string>('');
   const [location, setLocation] = useState<string>('');
   const [numberOfRecipients, setNumberOfRecipients] = useState<string>('');
+  const [offerTo, setOfferTo] = useState<UserDisplayInfo | null>(null);
 
   const reset = () => {
     setCollaborators([]);
@@ -78,6 +82,7 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
     setCategory('');
     setLocation('');
     setNumberOfRecipients('');
+    setOfferTo(null);
   };
 
   return (
@@ -105,6 +110,8 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
         setLocation,
         numberOfRecipients,
         setNumberOfRecipients,
+        offerTo,
+        setOfferTo,
         reset,
       }}
     >

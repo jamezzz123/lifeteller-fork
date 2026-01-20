@@ -26,7 +26,8 @@ import {
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
+import { z } from 'zod';
 
 import { colors } from '@/theme/colors';
 import { Toggle } from '@/components/ui/Toggle';
@@ -37,15 +38,13 @@ import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import { VisibilitySelector } from '@/components/ui/VisibilitySelector';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { ProfileStack } from '@/components/ui/ProfileStack';
+import { UserInfoRow } from '@/components/ui/UserInfoRow';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { AudienceBottomSheet } from '@/components/lift/AudienceBottomSheet';
 import { LiftAmountSelector } from '@/components/lift/LiftAmountSelector';
 import { EnterAmountBottomSheet } from '@/components/lift/EnterAmountBottomSheet';
 import { NonMonetaryItemsSelector } from '@/components/lift/NonMonetaryItemsSelector';
-import {
-  RecipientNumberSelector,
-  QUICK_AMOUNTS as RNQuickAmount,
-} from './RecipientNumberSelector';
+import { RecipientNumberSelector } from './RecipientNumberSelector';
 
 const TITLE_MAX_LENGTH = 55;
 const DESCRIPTION_MAX_LENGTH = 500;
@@ -146,7 +145,47 @@ export default function LiftCreationScreen({
     numberOfRecipients,
     category,
     location,
+    offerTo,
   } = useLiftDraft();
+
+  // Zod schema for lift form validation
+  const liftFormSchema = useMemo(
+    () =>
+      z
+        .object({
+          title: z.string().min(1, 'Title is required'),
+          description: z.string().min(1, 'Description is required'),
+          // location: z.string().min(1, 'Location is required'),
+          // category: z.string().min(1, 'Category is required'),
+          liftType: z.enum(['monetary', 'non-monetary']),
+          liftAmount: z.string(),
+          liftItems: z.array(
+            z.object({ id: z.string(), name: z.string(), quantity: z.number() })
+          ),
+        })
+        .refine(
+          (data) => {
+            if (data.liftType === 'monetary') {
+              return data.liftAmount.trim().length > 0;
+            }
+            return data.liftItems.length > 0;
+          },
+          {
+            message:
+              'Monetary lift requires an amount, non-monetary requires at least one item',
+          }
+        ),
+    []
+  );
+
+  // Validate form and determine if buttons should be enabled
+  const isFormValid = useMemo(() => {
+    const result = liftFormSchema.safeParse({
+      title,
+      description,
+    });
+    return result.success;
+  }, [title, description]);
 
   // Count selected options from more options screen
   const moreOptionsCount = [category, location].filter(Boolean).length;
@@ -311,6 +350,16 @@ export default function LiftCreationScreen({
                 title=""
                 onPress={() => audienceSheetRef.current?.expand()}
               />
+            )}
+
+            {/* Offer to: section */}
+            {offerTo && (
+              <View>
+                <Text className="mb-2 font-inter text-sm text-grey-alpha-400">
+                  Offer to:
+                </Text>
+                <UserInfoRow user={offerTo} />
+              </View>
             )}
           </View>
 
@@ -588,6 +637,7 @@ export default function LiftCreationScreen({
                 onPress={handleSubmit}
                 variant="outline"
                 className="rounded-full"
+                disabled={!isFormValid}
               />
             </View>
 
@@ -597,6 +647,7 @@ export default function LiftCreationScreen({
                 onPress={handleSubmit}
                 variant="primary"
                 className="rounded-full"
+                disabled={!isFormValid}
               />
             </View>
           </View>
@@ -628,12 +679,13 @@ export default function LiftCreationScreen({
       {/* Enter Recipient Bottom Sheet */}
       {isNumberOfRecipientSheetMounted && (
         <EnterAmountBottomSheet
-          title="Offer Lift to multiple people"
+          title="Offer lift to multiple people"
+          inputLabel="Number of recipients"
           enableFormattedDisplay={false}
-          hintText="Enter the number of people you want to offer this Lift to."
           onDone={handleNRDone}
           initialAmount={numberOfRecipients}
-          quickAmounts={RNQuickAmount}
+          quickAmounts={[1, 2, 3, 5, 10]}
+          singleRowQuickAmounts
           onClose={handleNumberOfRecipientSheetClose}
         />
       )}
