@@ -48,10 +48,6 @@ export const BankSelectionBottomSheet = forwardRef<
         className="flex-1 px-6"
         showsVerticalScrollIndicator={false}
       >
-        <Text className="mb-6 text-center text-lg font-bold text-grey-alpha-500">
-          Choose an account
-        </Text>
-
         <Text className="mb-4 text-base font-semibold text-grey-alpha-500">
           Choose an option
         </Text>

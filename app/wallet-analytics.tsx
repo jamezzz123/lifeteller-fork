@@ -208,7 +208,7 @@ export default function WalletAnalyticsScreen() {
           <View className="mb-6">
             <TouchableOpacity
               onPress={handlePeriodSelect}
-              className="flex-row items-center justify-between rounded-xl border border-grey-plain-300 bg-white px-4 py-3"
+              className="flex-row items-center justify-between w-32"
               activeOpacity={0.7}
             >
               <Text className="text-base font-semibold text-grey-alpha-500">

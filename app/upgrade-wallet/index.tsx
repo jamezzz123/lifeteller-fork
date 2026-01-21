@@ -1,5 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput as RNTextInput,
+  Linking,
+  Alert,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { CornerUpLeft, Check, Info } from 'lucide-react-native';
@@ -11,6 +18,7 @@ import { OTPVerificationBottomSheet } from '@/components/ui/OTPVerificationBotto
 import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
 import { colors } from '@/theme/colors';
 import * as Haptics from 'expo-haptics';
+import { appConfig } from '@/config/app.config';
 
 type VerificationOption = 'bvn' | 'nin' | null;
 
@@ -121,9 +129,21 @@ export default function UpgradeWalletScreen() {
     }, 300);
   };
 
-  const handleContactUs = () => {
-    // TODO: Navigate to contact us
-    console.log('Contact us');
+  const handleContactUs = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    const emailUrl = `mailto:${appConfig.contact.email}`;
+    const canOpen = await Linking.canOpenURL(emailUrl);
+
+    if (canOpen) {
+      await Linking.openURL(emailUrl);
+      return;
+    }
+
+    Alert.alert(
+      'Unable to open email app',
+      `Please email us at ${appConfig.contact.email}.`
+    );
   };
 
   const isBVNFormValid = bvn.trim().length >= 11;

@@ -42,9 +42,9 @@ export function InflowOutflowChart({
     },
   ];
 
-  // Chart dimensions - larger size with thinner ring
+  // Chart dimensions - thinner ring
   const chartRadius = 70;
-  const innerRadius = 55; // Increased inner radius to reduce thickness
+  const innerRadius = 62;
   const chartSize = 160;
 
   return (

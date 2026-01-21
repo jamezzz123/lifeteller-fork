@@ -20,7 +20,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.lifteller"
+      "bundleIdentifier": "com.lifteller",
+      "infoPlist": {
+        "LSApplicationQueriesSchemes": ["mailto"]
+      }
     },
     "android": {
       "adaptiveIcon": {

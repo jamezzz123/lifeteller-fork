@@ -22,7 +22,7 @@ export const appConfig = {
    */
   contact: {
     phone: '+234801 0987 918',
-    email: 'ourEmailAddresGoesHere',
+    email: 'contact@lifteller.com',
     x: 'x.com/lifteller',
     threads: 'thread.com/lifteller',
   },
