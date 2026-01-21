@@ -80,7 +80,7 @@ export default function OnboardingStep2Screen() {
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
-        <View className="mt-4 px-6 pb-3 pt-4">
+        <View className="mx-4 mt-4 border-b border-grey-plain-300 px-6 pb-3 pt-4">
           <LogoColor width={104} height={30} />
         </View>
 
