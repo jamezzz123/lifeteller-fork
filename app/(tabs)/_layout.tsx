@@ -123,6 +123,14 @@ export default function TabsLayout() {
             href: null,
           }}
         />
+
+        <Tabs.Screen
+          name="account-notification"
+          options={{
+            title: 'Notifications',
+            href: null,
+          }}
+        />
       </Tabs>
     </ProtectedRoute>
   );
