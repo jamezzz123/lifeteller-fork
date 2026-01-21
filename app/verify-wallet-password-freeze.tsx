@@ -3,9 +3,8 @@ import {
   View,
   Text,
   TouchableOpacity,
-  KeyboardAvoidingView,
-  Platform,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { CornerUpLeft } from 'lucide-react-native';
@@ -51,9 +50,12 @@ export default function VerifyWalletPasswordFreezeScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      <KeyboardAwareScrollView
         className="flex-1"
+        contentContainerStyle={{ flexGrow: 1 }}
+        enableOnAndroid
+        keyboardShouldPersistTaps="handled"
+        extraScrollHeight={24}
       >
         {/* Header */}
         <View className="flex-row items-center border-b border-grey-plain-150 bg-white px-4 py-3">
@@ -99,7 +101,7 @@ export default function VerifyWalletPasswordFreezeScreen() {
         </View>
 
         {/* Action Buttons */}
-        <View className="border-t border-grey-plain-150 bg-white px-6 pb-4 pt-4">
+        <View className="mt-auto border-t border-grey-plain-150 bg-white px-6 pb-4 pt-4">
           <View className="flex-row gap-3">
             <TouchableOpacity
               onPress={() => router.back()}
@@ -121,7 +123,7 @@ export default function VerifyWalletPasswordFreezeScreen() {
             />
           </View>
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 }

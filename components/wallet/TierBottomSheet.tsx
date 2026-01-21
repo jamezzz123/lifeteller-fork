@@ -52,22 +52,22 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
         id: 'tier-1',
         name: 'Tier 1',
         isCurrent: currentTier === 'Tier 1',
-        feature: 'Enhanced transaction limits and features for Tier 1 users.',
-        requirement: 'Additional verification required',
+        feature: 'User can only perform transaction of max of 20,000 and single inflow of 50,000 is allowed.',
+        requirement: 'BVN or NIN',
       },
       {
         id: 'tier-2',
         name: 'Tier 2',
         isCurrent: currentTier === 'Tier 2',
-        feature: 'Advanced features and higher transaction limits.',
-        requirement: 'Full KYC verification',
+        feature: 'User can only perform transaction of max of 500,000.',
+        requirement: 'Verify BVN or NIN',
       },
       {
         id: 'tier-3',
         name: 'Tier 3',
         isCurrent: currentTier === 'Tier 3',
-        feature: 'Premium tier with maximum benefits and limits.',
-        requirement: 'Complete verification and approval',
+        feature: ' User can perform Unlimited transactions.',
+        requirement: 'Proof of Address, Verify NIN Photo and Liveness Check Recognition.',
       },
     ];
 
@@ -104,7 +104,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
     };
 
     return (
-      <BottomSheetComponent ref={ref} snapPoints={['85%']}>
+      <BottomSheetComponent ref={ref} snapPoints={['70%']}>
         <View className="flex-1">
           {/* Title */}
           <View className="px-6 pb-4">
@@ -222,7 +222,7 @@ export const TierBottomSheet = forwardRef<BottomSheetRef, TierBottomSheetProps>(
               onPress={handleUpgrade}
               variant="primary"
               size="medium"
-              className="w-full"
+              className="self-center"
             />
           </View>
         </View>

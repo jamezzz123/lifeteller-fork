@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { colors } from '@/theme/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WalletDeactivationLoadingScreen() {
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -26,11 +27,20 @@ export default function WalletDeactivationLoadingScreen() {
 
     // Simulate deactivation process
     const timer = setTimeout(() => {
-      // Navigate back to wallet with success toast
-      router.replace({
-        pathname: '/(tabs)/wallet',
-        params: { walletDeactivated: 'true' },
-      } as any);
+      const navigateToWallet = async () => {
+        try {
+          await AsyncStorage.setItem('@wallet_deactivate_toast', 'true');
+        } catch (error) {
+          console.error('Error storing deactivate toast flag:', error);
+        }
+
+        // Navigate back to wallet with success toast
+        router.replace({
+          pathname: '/(tabs)/wallet',
+          params: { walletDeactivated: 'true' },
+        } as any);
+      };
+      navigateToWallet();
     }, 3000);
 
     return () => clearTimeout(timer);

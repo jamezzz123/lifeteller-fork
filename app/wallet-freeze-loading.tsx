@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { colors } from '@/theme/colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function WalletFreezeLoadingScreen() {
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -26,11 +27,20 @@ export default function WalletFreezeLoadingScreen() {
 
     // Simulate freeze process
     const timer = setTimeout(() => {
-      // Navigate back to wallet with success toast
-      router.replace({
-        pathname: '/(tabs)/wallet',
-        params: { walletFrozen: 'true' },
-      } as any);
+      const navigateToWallet = async () => {
+        try {
+          await AsyncStorage.setItem('@wallet_freeze_toast', 'true');
+        } catch (error) {
+          console.error('Error storing freeze toast flag:', error);
+        }
+
+        // Navigate back to wallet with success toast
+        router.replace({
+          pathname: '/(tabs)/wallet',
+          params: { walletFrozen: 'true' },
+        } as any);
+      };
+      navigateToWallet();
     }, 3000);
 
     return () => clearTimeout(timer);

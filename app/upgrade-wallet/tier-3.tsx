@@ -483,7 +483,9 @@ const styles = StyleSheet.create({
     borderStyle: 'dashed',
     borderColor: colors.primary.purple,
     borderRadius: 16,
-    backgroundColor: colors['grey-plain']['50'],
+    backgroundColor: colors['primary-tints']['purple']['50'],
     minHeight: 120,
+    width: '50%',
+    alignSelf: 'flex-start',
   },
 });

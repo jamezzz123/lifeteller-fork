@@ -24,7 +24,9 @@ export const FundWalletBottomSheet = forwardRef<
   const [showCopyToast, setShowCopyToast] = useState(false);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const handleCopy = async (field: 'accountNumber' | 'accountName' | 'bankName', value: string) => {
+  const accountDetails = `Bank: ${bankName}\nAccount Number: ${accountNumber}\nAccount Name: ${accountName}`;
+
+  const handleCopy = async (field: 'accountNumber' | 'details', value: string) => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       await Clipboard.setStringAsync(value);
@@ -38,7 +40,6 @@ export const FundWalletBottomSheet = forwardRef<
   const handleShare = async () => {
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-      const accountDetails = `Bank: ${bankName}\nAccount Number: ${accountNumber}\nAccount Name: ${accountName}`;
       await Share.share({
         message: `Fund my Lifteller wallet:\n\n${accountDetails}`,
       });
@@ -49,8 +50,7 @@ export const FundWalletBottomSheet = forwardRef<
 
   const getToastMessage = () => {
     if (copiedField === 'accountNumber') return 'Account number copied!';
-    if (copiedField === 'accountName') return 'Account name copied!';
-    if (copiedField === 'bankName') return 'Bank name copied!';
+    if (copiedField === 'details') return 'Account details copied!';
     return 'Copied!';
   };
 
@@ -70,116 +70,82 @@ export const FundWalletBottomSheet = forwardRef<
         title="Fund wallet"
         snapPoints={['50%']}
       >
-        <View className="px-6">
-          {/* Instructions */}
-          <Text className="mb-6 text-base text-grey-plain-550">
-            Transfer funds to the account details below to fund your wallet.
-          </Text>
-
-          {/* Bank Account Information Card */}
+        <View className="px-6 pb-6">
           <View
-            className="mb-6 rounded-xl border p-4"
+            className="mb-6 rounded-3xl border px-5 py-6"
             style={{
               backgroundColor: colors['grey-plain']['50'],
               borderColor: colors['grey-plain']['300'],
             }}
           >
-            {/* Bank Name */}
-            <View className="mb-4">
-              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
-                Bank Name
-              </Text>
-              <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
-                  {bankName}
+            <View className="flex-row items-start justify-between">
+              <View className="flex-1 pr-3">
+                <Text className="text-sm font-medium text-grey-plain-550">
+                  Account number
                 </Text>
-                <TouchableOpacity
-                  onPress={() => handleCopy('bankName', bankName)}
-                  className="ml-2"
-                  hitSlop={8}
-                >
-                  <Copy
-                    color={colors['grey-alpha']['500']}
-                    size={18}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
-              </View>
-            </View>
-
-            {/* Divider */}
-            <View
-              className="mb-4 h-px"
-              style={{ backgroundColor: colors['grey-plain']['300'] }}
-            />
-
-            {/* Account Number */}
-            <View className="mb-4">
-              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
-                Account Number
-              </Text>
-              <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
+                <Text className="text-2xl font-semibold text-grey-alpha-500">
                   {accountNumber}
                 </Text>
-                <TouchableOpacity
-                  onPress={() => handleCopy('accountNumber', accountNumber)}
-                  className="ml-2"
-                  hitSlop={8}
-                >
-                  <Copy
-                    color={colors['grey-alpha']['500']}
-                    size={18}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
               </View>
+              <TouchableOpacity
+                onPress={() => handleCopy('accountNumber', accountNumber)}
+                className="rounded-xl border p-2"
+                hitSlop={8}
+                style={{
+                  borderColor: colors['primary-tints'].purple['100'],
+                  backgroundColor: colors['primary-tints'].purple['50'],
+                }}
+              >
+                <Copy color={colors.primary.purple} size={18} strokeWidth={2} />
+              </TouchableOpacity>
             </View>
 
-            {/* Divider */}
-            <View
-              className="mb-4 h-px"
-              style={{ backgroundColor: colors['grey-plain']['300'] }}
-            />
-
-            {/* Account Name */}
-            <View>
-              <Text className="mb-2 text-xs font-medium text-grey-plain-550">
-                Account Name
+            <View className="mt-6">
+              <Text className="text-sm font-medium text-grey-plain-550">
+                Account name
               </Text>
-              <View className="flex-row items-center justify-between">
-                <Text className="flex-1 text-base font-semibold text-grey-alpha-500">
-                  {accountName}
-                </Text>
-                <TouchableOpacity
-                  onPress={() => handleCopy('accountName', accountName)}
-                  className="ml-2"
-                  hitSlop={8}
-                >
-                  <Copy
-                    color={colors['grey-alpha']['500']}
-                    size={18}
-                    strokeWidth={2}
-                  />
-                </TouchableOpacity>
-              </View>
+              <Text className="text-xl font-semibold text-grey-alpha-500">
+                {accountName}
+              </Text>
+            </View>
+
+            <View className="mt-6">
+              <Text className="text-sm font-medium text-grey-plain-550">
+                Bank
+              </Text>
+              <Text className="text-xl font-semibold text-grey-alpha-500">
+                {bankName}
+              </Text>
             </View>
           </View>
 
-          {/* Share Button */}
-          <Button
-            title="Share account details"
-            onPress={handleShare}
-            variant="outline"
-            iconLeft={
-              <Share2
-                color={colors.primary.purple}
-                size={20}
-                strokeWidth={2}
-              />
-            }
-            className="w-full"
-          />
+          <View className="flex-row gap-4">
+            <Button
+              title="Share"
+              onPress={handleShare}
+              variant="outline"
+              className="w-[50%]"
+              iconLeft={
+                <Share2
+                  color={colors.primary.purple}
+                  size={20}
+                  strokeWidth={2}
+                />
+              }
+            />
+            <Button
+              title="Copy Details"
+              onPress={() => handleCopy('details', accountDetails)}
+              iconLeft={
+                <Copy
+                  color={colors['grey-plain']['50']}
+                  size={20}
+                  strokeWidth={2}
+                />
+              }
+              className="flex-1"
+            />
+          </View>
         </View>
       </BottomSheetComponent>
     </>

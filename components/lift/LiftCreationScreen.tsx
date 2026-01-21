@@ -185,7 +185,7 @@ export default function LiftCreationScreen({
       description,
     });
     return result.success;
-  }, [title, description]);
+  }, [liftFormSchema, title, description]);
 
   // Count selected options from more options screen
   const moreOptionsCount = [category, location].filter(Boolean).length;

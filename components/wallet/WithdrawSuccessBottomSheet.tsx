@@ -50,12 +50,9 @@ export const WithdrawSuccessBottomSheet = forwardRef<
     };
 
     return (
-      <BottomSheetComponent ref={ref} snapPoints={['80%']}>
-        <ScrollView
-          className="flex-1 px-6"
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="items-center">
+      <BottomSheetComponent ref={ref}>
+        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+          <View className="items-center px-6">
             {/* Success Icon with Confetti Effect */}
             <View className="mb-6 mt-6 items-center">
               <View className="relative">
@@ -104,12 +101,10 @@ export const WithdrawSuccessBottomSheet = forwardRef<
               >
                 <Share2
                   size={20}
-                  color={colors.primary.purple}
                   strokeWidth={2}
                 />
                 <Text
                   className="text-base font-semibold"
-                  style={{ color: colors.primary.purple }}
                 >
                   Share receipt
                 </Text>
@@ -122,20 +117,26 @@ export const WithdrawSuccessBottomSheet = forwardRef<
               >
                 <Download
                   size={20}
-                  color={colors.primary.purple}
                   strokeWidth={2}
                 />
                 <Text
                   className="text-base font-semibold"
-                  style={{ color: colors.primary.purple }}
                 >
                   Download receipt
                 </Text>
               </TouchableOpacity>
             </View>
+          </View>
 
-            {/* Action Buttons */}
-            <View className="mb-6 flex-row gap-3">
+          {/* Action Buttons */}
+          <View
+            className="mb-6 w-full border-t pt-6"
+            style={{
+              backgroundColor: colors['grey-plain']['100'],
+              borderTopColor: colors['grey-plain']['300'],
+            }}
+          >
+            <View className="flex-row gap-3 px-6">
               {/* Secondary Action Button */}
               <View className="flex-1">
                 <Button

@@ -68,7 +68,7 @@ export const SetDailyLimitBottomSheet = forwardRef<
     selectedAmount !== null || (customAmount && parseInt(customAmount, 10) > 0);
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['90%']} onClose={onClose}>
+    <BottomSheetComponent ref={ref} onClose={onClose}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}

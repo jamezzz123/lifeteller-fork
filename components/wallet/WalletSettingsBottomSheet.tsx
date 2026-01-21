@@ -22,7 +22,10 @@ interface WalletSettingsBottomSheetProps {
   onWalletAnalytics?: () => void;
   onWalletPolicyAndFees?: () => void;
   onDeactivateWallet?: () => void;
+  onActivateWallet?: () => void;
   onBlockWallet?: () => void;
+  isWalletFrozen?: boolean;
+  isWalletDeactivated?: boolean;
 }
 
 export const WalletSettingsBottomSheet = forwardRef<
@@ -36,7 +39,10 @@ export const WalletSettingsBottomSheet = forwardRef<
       onWalletAnalytics,
       onWalletPolicyAndFees,
       onDeactivateWallet,
+      onActivateWallet,
       onBlockWallet,
+      isWalletFrozen = false,
+      isWalletDeactivated = false,
     },
     ref
   ) => {
@@ -90,7 +96,9 @@ export const WalletSettingsBottomSheet = forwardRef<
 
     const handleDeactivateWallet = () => {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-      if (onDeactivateWallet) {
+      if (isWalletDeactivated && onActivateWallet) {
+        onActivateWallet();
+      } else if (onDeactivateWallet) {
         onDeactivateWallet();
       } else {
         // TODO: Navigate to deactivate wallet screen
@@ -145,14 +153,21 @@ export const WalletSettingsBottomSheet = forwardRef<
       },
       {
         id: 'deactivate-wallet',
-        label: 'Deactivate wallet',
-        icon: <MinusCircle size={24} color={colors.state.red} />,
+        label: isWalletDeactivated ? 'Activate wallet' : 'Deactivate wallet',
+        icon: (
+          <MinusCircle
+            size={24}
+            color={
+              isWalletDeactivated ? colors.primary.purple : colors.state.red
+            }
+          />
+        ),
         onPress: handleDeactivateWallet,
-        isDestructive: true,
+        isDestructive: !isWalletDeactivated,
       },
       {
         id: 'block-wallet',
-        label: 'Block wallet',
+        label: isWalletFrozen ? 'Unblock wallet' : 'Block wallet',
         icon: <CircleSlash size={24} color={colors.state.red} />,
         onPress: handleBlockWallet,
         isDestructive: true,

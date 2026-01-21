@@ -7,6 +7,8 @@ import {
   ShieldUser,
   CalendarClock,
   Check,
+  KeyRound,
+  ChevronRight,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
@@ -44,6 +46,7 @@ export default function WalletSettingsScreen() {
   const [limitToRemove, setLimitToRemove] = useState<
     'daily' | 'one-time' | null
   >(null);
+  const [isRemovingLimit, setIsRemovingLimit] = useState(false);
   const [isSettingOneTimeLimit, setIsSettingOneTimeLimit] = useState(false);
 
   const setLimitSheetRef = useRef<BottomSheetRef>(null);
@@ -53,7 +56,7 @@ export default function WalletSettingsScreen() {
   // Mock KYC data - replace with actual data from API
   const kycItems: KYCItem[] = [
     { id: 'bvn-1', label: 'BVN', isVerified: true },
-    { id: 'bvn-2', label: 'BVN', isVerified: true },
+    { id: 'nin', label: 'NIN', isVerified: true },
     { id: 'other', label: 'Any other one', isVerified: true },
   ];
 
@@ -139,18 +142,18 @@ export default function WalletSettingsScreen() {
   };
 
   const handleConfirmRemove = () => {
-    if (limitToRemove === 'daily') {
-      removeDailyLimit();
-    } else if (limitToRemove === 'one-time') {
-      removeOneTimeLimit();
-    }
     setShowRemoveConfirmation(false);
-    setLimitToRemove(null);
+    setIsRemovingLimit(true);
+    setTimeout(() => {
+      setPasscodeError(undefined);
+      passcodeSheetRef.current?.expand();
+    }, 300);
   };
 
   const handleCancelRemove = () => {
     setShowRemoveConfirmation(false);
     setLimitToRemove(null);
+    setIsRemovingLimit(false);
   };
 
   const handleLimitSelected = (amount: number) => {
@@ -183,6 +186,17 @@ export default function WalletSettingsScreen() {
     if (passcode === CORRECT_PASSCODE) {
       setPasscodeError(undefined);
       passcodeSheetRef.current?.close();
+
+      if (isRemovingLimit && limitToRemove) {
+        if (limitToRemove === 'daily') {
+          removeDailyLimit();
+        } else if (limitToRemove === 'one-time') {
+          removeOneTimeLimit();
+        }
+        setLimitToRemove(null);
+        setIsRemovingLimit(false);
+        return;
+      }
 
       if (isSettingOneTimeLimit && selectedOneTimeAmount) {
         setOneTimeLimit(selectedOneTimeAmount);
@@ -396,23 +410,53 @@ export default function WalletSettingsScreen() {
               />
             )}
           </View>
+
+          {/* Divider */}
+          <View
+            className="mx-4 h-px"
+            style={{ backgroundColor: colors['grey-plain']['300'] }}
+          />
+
+          {/* Wallet passcode */}
+          <TouchableOpacity
+            onPress={() => router.push('/wallet-passcode' as any)}
+            className="flex-row items-center justify-between px-4 py-4"
+            activeOpacity={0.7}
+          >
+            <View className="flex-1 flex-row items-center gap-3">
+              <KeyRound
+                color={colors['grey-alpha']['500']}
+                size={24}
+                strokeWidth={2}
+              />
+              <Text className="flex-1 text-sm font-medium text-grey-alpha-500">
+                Wallet passcode
+              </Text>
+            </View>
+            <ChevronRight
+              color={colors['grey-alpha']['400']}
+              size={20}
+              strokeWidth={2}
+            />
+          </TouchableOpacity>
         </View>
 
-        {/* Help Center Link */}
-        <View className="mx-4 mt-6 px-4">
-          <Text className="text-center text-sm text-grey-plain-550">
-            Visit the{' '}
-            <Text
-              onPress={handleHelpCenter}
-              className="font-semibold"
-              style={{ color: colors.primary.purple }}
-            >
-              wallet help center
-            </Text>{' '}
-            for wallet-related issues.
-          </Text>
-        </View>
       </ScrollView>
+
+      {/* Help Center Link */}
+      <View className="mx-4 mb-4 px-4">
+        <Text className="text-center text-sm text-grey-plain-550">
+          Visit the{' '}
+          <Text
+            onPress={handleHelpCenter}
+            className="font-semibold"
+            style={{ color: colors.primary.purple }}
+          >
+            wallet help center
+          </Text>{' '}
+          for wallet-related issues.
+        </Text>
+      </View>
 
       {/* Set Daily Limit Bottom Sheet */}
       <SetDailyLimitBottomSheet

@@ -1,13 +1,12 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
-  ScrollView,
   TouchableOpacity,
   TextInput,
-  KeyboardAvoidingView,
   Platform,
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import {
@@ -172,7 +171,6 @@ export default function WithdrawScreen() {
           amount: numericAmount,
           recipientName: selectedBank?.accountName || '',
         });
-        withdrawSuccessSheetRef.current?.expand();
       }, 300);
     } else {
       setWithdrawPasscodeError('Incorrect passcode. Please try again.');
@@ -204,6 +202,14 @@ export default function WithdrawScreen() {
     console.log('Download receipt');
   };
 
+  useEffect(() => {
+    if (!withdrawalSuccessData) return;
+    const timer = setTimeout(() => {
+      withdrawSuccessSheetRef.current?.expand();
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [withdrawalSuccessData]);
+
   const numericAmount = parseFloat(amount) || 0;
   const canProceed =
     numericAmount > 0 &&
@@ -212,32 +218,30 @@ export default function WithdrawScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        className="flex-1"
-      >
-        {/* Header */}
-        <View className="flex-row items-center gap-4 border-b border-grey-plain-150 bg-white px-4 py-4">
-          <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <CornerUpLeft
-              size={24}
-              color={colors['grey-alpha']['500']}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-          <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
-            Withdraw
-          </Text>
-        </View>
+      {/* Header */}
+      <View className="flex-row items-center gap-4 border-b border-grey-plain-150 bg-white px-4 py-4">
+        <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
+          <CornerUpLeft
+            size={24}
+            color={colors['grey-alpha']['500']}
+            strokeWidth={2}
+          />
+        </TouchableOpacity>
+        <Text className="flex-1 text-lg font-semibold text-grey-alpha-500">
+          Withdraw
+        </Text>
+      </View>
 
-        {/* Content */}
-        <ScrollView
-          className="flex-1 bg-grey-plain-50"
-          contentContainerStyle={{ paddingBottom: 100 }}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        >
-          <View className="rounded-t-3xl bg-white px-4 pt-6">
+      {/* Content */}
+      <KeyboardAwareScrollView
+        className="flex-1 bg-grey-plain-50"
+        contentContainerStyle={{ paddingBottom: 160 }}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        enableOnAndroid
+        extraScrollHeight={24}
+      >
+        <View className="rounded-t-3xl bg-white px-4 pt-6">
             {/* Amount to withdraw section */}
             <View className="mb-6">
               <Text className="mb-3 text-base font-semibold text-grey-alpha-500">
@@ -410,25 +414,24 @@ export default function WithdrawScreen() {
                 }}
               />
             </View>
-          </View>
-        </ScrollView>
-
-        {/* Footer */}
-        <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
-          <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
-            <Text className="text-base font-medium text-grey-alpha-500">
-              Go back
-            </Text>
-          </TouchableOpacity>
-          <Button
-            title="Proceed"
-            onPress={handleProceed}
-            variant="primary"
-            size="medium"
-            disabled={!canProceed}
-          />
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
+
+      {/* Footer */}
+      <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
+        <TouchableOpacity onPress={handleGoBack} hitSlop={8}>
+          <Text className="text-base font-medium text-grey-alpha-500">
+            Go back
+          </Text>
+        </TouchableOpacity>
+        <Button
+          title="Proceed"
+          onPress={handleProceed}
+          variant="primary"
+          size="medium"
+          disabled={!canProceed}
+        />
+      </View>
 
       {/* Bank Selection Bottom Sheet */}
       <BankSelectionBottomSheet

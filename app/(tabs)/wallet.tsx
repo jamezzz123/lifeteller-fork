@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
@@ -36,6 +36,7 @@ import {
   ArrowUpRight,
 } from 'lucide-react-native';
 import { router, useLocalSearchParams } from 'expo-router';
+import { useFocusEffect } from '@react-navigation/native';
 import { WalletSuccessBottomSheet } from '@/components/wallet/WalletSuccessBottomSheet';
 import { WalletCreatePasscodeBottomSheet } from '@/components/wallet/WalletCreatePasscodeBottomSheet';
 import { WalletSettingsBottomSheet } from '@/components/wallet/WalletSettingsBottomSheet';
@@ -52,6 +53,7 @@ import { formatAmount } from '@/utils/formatAmount';
 import * as Clipboard from 'expo-clipboard';
 import * as Haptics from 'expo-haptics';
 import WalletIllustration from '@/assets/images/wallet.svg';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Transaction {
   id: string;
@@ -70,6 +72,8 @@ export default function WalletScreen() {
   const [showDeactivateToast, setShowDeactivateToast] = useState(false);
   const [showFreezeToast, setShowFreezeToast] = useState(false);
   const [isWalletActivated, setIsWalletActivated] = useState(false);
+  const [isWalletFrozen, setIsWalletFrozen] = useState(false);
+  const [isWalletDeactivated, setIsWalletDeactivated] = useState(false);
   const [showDeactivateConfirmation, setShowDeactivateConfirmation] =
     useState(false);
   const [showFreezeConfirmation, setShowFreezeConfirmation] = useState(false);
@@ -105,6 +109,16 @@ export default function WalletScreen() {
     bookBalance: 898981.01,
     isKycVerified: false,
   };
+  const statusLabel = isWalletDeactivated
+    ? 'Deactivated'
+    : isWalletFrozen
+      ? 'Freeze'
+      : walletData.status;
+  const statusColor = isWalletDeactivated
+    ? colors.state.red
+    : isWalletFrozen
+      ? colors.state.yellow
+      : colors.state.green;
 
   useEffect(() => {
     if (params.showSuccess === 'true') {
@@ -114,15 +128,22 @@ export default function WalletScreen() {
     }
     if (params.walletActivated === 'true') {
       setIsWalletActivated(true);
+      setIsWalletDeactivated(false);
       // Clear the param to avoid showing again on re-render
       router.setParams({ walletActivated: undefined } as any);
     }
     if (params.walletDeactivated === 'true') {
+      setIsWalletFrozen(false);
+      setIsWalletActivated(true);
+      setIsWalletDeactivated(true);
       setShowDeactivateToast(true);
       // Clear the param to avoid showing again on re-render
       router.setParams({ walletDeactivated: undefined } as any);
     }
     if (params.walletFrozen === 'true') {
+      setIsWalletFrozen(true);
+      setIsWalletActivated(true);
+      setIsWalletDeactivated(false);
       setShowFreezeToast(true);
       // Clear the param to avoid showing again on re-render
       router.setParams({ walletFrozen: undefined } as any);
@@ -133,6 +154,45 @@ export default function WalletScreen() {
     params.walletDeactivated,
     params.walletFrozen,
   ]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const checkFreezeToast = async () => {
+        if (params.walletFrozen === 'true') {
+          setIsWalletFrozen(true);
+          setIsWalletActivated(true);
+          setShowFreezeToast(true);
+          router.setParams({ walletFrozen: undefined } as any);
+        }
+
+        try {
+          const shouldShow = await AsyncStorage.getItem('@wallet_freeze_toast');
+          if (shouldShow === 'true') {
+            setIsWalletFrozen(true);
+            setIsWalletActivated(true);
+            setIsWalletDeactivated(false);
+            setShowFreezeToast(true);
+            await AsyncStorage.removeItem('@wallet_freeze_toast');
+          }
+
+          const shouldShowDeactivate = await AsyncStorage.getItem(
+            '@wallet_deactivate_toast'
+          );
+          if (shouldShowDeactivate === 'true') {
+            setIsWalletFrozen(false);
+            setIsWalletActivated(true);
+            setIsWalletDeactivated(true);
+            setShowDeactivateToast(true);
+            await AsyncStorage.removeItem('@wallet_deactivate_toast');
+          }
+        } catch (error) {
+          console.error('Error reading toast flags:', error);
+        }
+      };
+
+      checkFreezeToast();
+    }, [params.walletFrozen])
+  );
 
   const handleSettingsPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -182,6 +242,11 @@ export default function WalletScreen() {
   const handleFreezeWallet = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setShowFreezeConfirmation(true);
+  };
+
+  const handleUnfreezeWallet = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsWalletFrozen(false);
   };
 
   const handleConfirmFreeze = () => {
@@ -465,12 +530,15 @@ export default function WalletScreen() {
               {/* Wallet Status */}
               <View className="mb-3 flex-row items-center justify-between">
                 <View className="flex-row items-center gap-2">
-                  <View className="size-2 rounded-full bg-state-green" />
+                  <View
+                    className="size-2 rounded-full"
+                    style={{ backgroundColor: statusColor }}
+                  />
                   <Text
                     className="text-sm font-medium"
-                    style={{ color: colors.state.green }}
+                    style={{ color: statusColor }}
                   >
-                    {walletData.status}
+                    {statusLabel}
                   </Text>
                 </View>
                 <TouchableOpacity
@@ -630,9 +698,11 @@ export default function WalletScreen() {
               {/* Row 1 */}
               <View className="flex-1 items-center gap-2">
                 <TouchableOpacity
-                  onPress={handleWithdraw}
+                  onPress={isWalletFrozen ? undefined : handleWithdraw}
                   className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
                   activeOpacity={0.7}
+                  disabled={isWalletFrozen}
+                  style={{ opacity: isWalletFrozen ? 0.4 : 1 }}
                 >
                   <CircleArrowOutDownLeft
                     color={colors['grey-alpha']['500']}
@@ -647,9 +717,11 @@ export default function WalletScreen() {
 
               <View className="flex-1 items-center gap-2">
                 <TouchableOpacity
-                  onPress={handleBuyAirtime}
+                  onPress={isWalletFrozen ? undefined : handleBuyAirtime}
                   className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
                   activeOpacity={0.7}
+                  disabled={isWalletFrozen}
+                  style={{ opacity: isWalletFrozen ? 0.4 : 1 }}
                 >
                   <ArrowUpDown
                     color={colors['grey-alpha']['500']}
@@ -664,9 +736,11 @@ export default function WalletScreen() {
 
               <View className="flex-1 items-center gap-2">
                 <TouchableOpacity
-                  onPress={handleBuyData}
+                  onPress={isWalletFrozen ? undefined : handleBuyData}
                   className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
                   activeOpacity={0.7}
+                  disabled={isWalletFrozen}
+                  style={{ opacity: isWalletFrozen ? 0.4 : 1 }}
                 >
                   <Wifi
                     color={colors['grey-alpha']['500']}
@@ -684,9 +758,11 @@ export default function WalletScreen() {
             <View className="mt-6 flex-row justify-between gap-3">
               <View className="flex-1 items-center gap-2">
                 <TouchableOpacity
-                  onPress={handlePayBills}
+                  onPress={isWalletFrozen ? undefined : handlePayBills}
                   className="h-16 w-24 items-center justify-center rounded-[2rem] bg-grey-plain-150"
                   activeOpacity={0.7}
+                  disabled={isWalletFrozen}
+                  style={{ opacity: isWalletFrozen ? 0.4 : 1 }}
                 >
                   <ReceiptText
                     color={colors['grey-alpha']['500']}
@@ -878,7 +954,10 @@ export default function WalletScreen() {
       <WalletSettingsBottomSheet
         ref={settingsSheetRef}
         onDeactivateWallet={handleDeactivateWallet}
-        onBlockWallet={handleFreezeWallet}
+        onActivateWallet={handleActivateWallet}
+        onBlockWallet={isWalletFrozen ? handleUnfreezeWallet : handleFreezeWallet}
+        isWalletFrozen={isWalletFrozen}
+        isWalletDeactivated={isWalletDeactivated}
       />
 
       {/* Tier Bottom Sheet */}

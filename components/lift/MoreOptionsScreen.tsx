@@ -283,7 +283,7 @@ export default function MoreOptionsScreen({
                     Auto-debit
                   </Text>
                   <Text className="font-inter text-sm text-grey-alpha-400">
-                    First-come-first-serve basis. You won't need to approve join
+                    First-come-first-serve basis. You won&apos;t need to approve join
                     requests.
                   </Text>
                 </View>
@@ -304,7 +304,7 @@ export default function MoreOptionsScreen({
                     Offer lift anonymously
                   </Text>
                   <Text className="font-inter text-sm text-grey-alpha-400">
-                    People who see and join your lift offer won't know it is
+                    People who see and join your lift offer won&apos;t know it is
                     you.
                   </Text>
                 </View>

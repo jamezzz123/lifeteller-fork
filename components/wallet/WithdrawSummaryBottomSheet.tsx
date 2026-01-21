@@ -36,11 +36,11 @@ export const WithdrawSummaryBottomSheet = forwardRef<
   };
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['70%']}>
+    <BottomSheetComponent ref={ref}>
       <ScrollView className="flex-1 px-6" showsVerticalScrollIndicator={false}>
         {/* Amount */}
         <View className="mb-6 mt-4">
-          <Text className="text-4xl font-bold text-grey-alpha-500">
+          <Text className="text-3xl font-bold text-grey-alpha-500">
             {formatAmount(amount, {
               minimumFractionDigits: 2,
               maximumFractionDigits: 2,
@@ -49,12 +49,12 @@ export const WithdrawSummaryBottomSheet = forwardRef<
         </View>
 
         {/* Destination */}
-        <View className="mb-6">
-          <Text className="mb-3 text-sm font-medium text-grey-alpha-400">
+        <View className="mb-4">
+          <Text className="text-sm font-medium text-grey-alpha-400">
             Destination
           </Text>
 
-          <View className="flex-row items-center gap-3 rounded-xl bg-white p-4">
+          <View className="flex-row items-center gap-3 rounded-xl bg-white mt-3">
             {/* Bank icon */}
             <View className="size-12 items-center justify-center rounded-full bg-primary">
               <Text className="text-xs font-bold text-white">
@@ -102,13 +102,12 @@ export const WithdrawSummaryBottomSheet = forwardRef<
         )}
 
         {/* Withdraw button */}
-        <View className="mb-4">
+        <View className="mb-4 w-[70%] self-center">
           <Button
             title="Withdraw"
             onPress={handleWithdraw}
             variant="primary"
-            size="large"
-            className="w-full"
+           
           />
         </View>
 
