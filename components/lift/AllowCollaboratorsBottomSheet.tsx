@@ -1,5 +1,6 @@
 import { forwardRef, useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
 import { colors } from '@/theme/colors';
 import {
@@ -39,7 +40,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
   }
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['30%']}>
+    <BottomSheetComponent ref={ref} snapPoints={['50%']}>
       <View className="px-4 pb-4">
         <Text className="mb-2 text-lg font-bold text-grey-alpha-500">
           Allow collaborators
@@ -104,7 +105,7 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
             <Text className="mb-3 text-sm text-grey-alpha-500">
               Enter number
             </Text>
-            <TextInput
+            <BottomSheetTextInput
               value={customLimit}
               onChangeText={setCustomLimit}
               keyboardType="number-pad"
