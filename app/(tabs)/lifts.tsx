@@ -126,6 +126,7 @@ export default function LiftsScreen() {
         contentContainerStyle={{
           paddingHorizontal: 16,
           paddingTop: 16,
+          gap: 10,
           paddingBottom: 100,
         }}
         renderItem={({ item }) => (
