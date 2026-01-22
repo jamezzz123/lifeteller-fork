@@ -66,8 +66,9 @@ export const QuantityBottomSheet = forwardRef<
   return (
     <BottomSheetComponent
       ref={bottomSheetRef}
-      snapPoints={['50%', '90%']}
-      keyboardBehavior="extend"
+      snapPoints={['60%', '90%']}
+      keyboardBehavior="interactive"
+      keyboardBlurBehavior="restore"
       android_keyboardInputMode="adjustResize"
       scrollable
       onClose={onClose}
