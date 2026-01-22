@@ -22,7 +22,6 @@ import {
   MoreHorizontal,
   ChevronRight,
   Trash,
-  UserRound,
   UserRoundX,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
