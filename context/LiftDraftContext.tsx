@@ -14,6 +14,7 @@ export type LiftItem = {
   id: string;
   name: string;
   quantity: number;
+  media: MediaItem[];
 };
 
 export const LiftType = {

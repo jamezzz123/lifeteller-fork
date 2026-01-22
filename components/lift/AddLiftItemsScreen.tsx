@@ -1,22 +1,65 @@
 import { useState } from 'react';
-import { Text, TextInput, TouchableOpacity, View } from 'react-native';
+import {
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ScrollView,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { router } from 'expo-router';
 import * as Haptics from 'expo-haptics';
-import { X, Minus, Plus } from 'lucide-react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { Image } from 'expo-image';
+import {
+  X,
+  Minus,
+  Plus,
+  ImageIcon,
+  Video,
+  Trash,
+  Trash2,
+} from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { LiftItem, useLiftDraft } from '@/context/LiftDraftContext';
+import { Checkbox } from '../ui/Checkbox';
+import { QuantitySelector } from './QuantitySelector';
+import { QuantityBottomSheet } from './QuantityBottomSheet';
 
 const MAX_ITEMS = 5;
+
+type MediaButtonProps = {
+  onPress: () => void;
+  icon: React.ReactNode;
+  label: string;
+};
+
+function MediaButton({ onPress, icon, label }: MediaButtonProps) {
+  return (
+    <TouchableOpacity
+      onPress={onPress}
+      className="flex-1 flex-row items-center justify-center gap-2 rounded-lg border-grey-plain-300 bg-primary-tints-50 py-3"
+    >
+      {icon}
+      <Text className="font-inter-medium text-sm text-grey-alpha-500">
+        {label}
+      </Text>
+    </TouchableOpacity>
+  );
+}
 
 export default function AddLiftItemsScreen() {
   const { liftItems, setLiftItems } = useLiftDraft();
   const [items, setItems] = useState<LiftItem[]>(
     liftItems.length > 0 ? liftItems : []
   );
+  const [setAsDefault, setSetAsDefault] = useState(false);
+  const [numberOfRecipients, setNumberOfRecipients] = useState('1');
+  const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] =
+    useState(false);
 
   function handleAddItem() {
     if (items.length >= MAX_ITEMS) return;
@@ -27,6 +70,7 @@ export default function AddLiftItemsScreen() {
         id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         name: '',
         quantity: 1,
+        media: [],
       },
     ]);
   }
@@ -80,20 +124,109 @@ export default function AddLiftItemsScreen() {
     router.back();
   }
 
+  function handleCustomAmountPressOnNR() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsNumberOfRecipientSheetMounted(true);
+  }
+
+  function handleNRDone(amount: string) {
+    setNumberOfRecipients(amount);
+    setIsNumberOfRecipientSheetMounted(false);
+  }
+
+  function handleNumberOfRecipientSheetClose() {
+    setIsNumberOfRecipientSheetMounted(false);
+  }
+
+  async function handlePickImage(itemId: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsMultipleSelection: true,
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      const newMedia = result.assets.map((asset) => ({
+        id: Math.random().toString(),
+        uri: asset.uri,
+        type: 'image' as const,
+        fileName: asset.fileName || undefined,
+      }));
+      setItems(
+        items.map((item) =>
+          item.id === itemId
+            ? { ...item, media: [...item.media, ...newMedia] }
+            : item
+        )
+      );
+    }
+  }
+
+  async function handlePickVideo(itemId: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['videos'],
+      allowsMultipleSelection: true,
+      quality: 0.8,
+    });
+
+    if (!result.canceled) {
+      const newMedia = result.assets.map((asset) => ({
+        id: Math.random().toString(),
+        uri: asset.uri,
+        type: 'video' as const,
+        fileName: asset.fileName || undefined,
+      }));
+      setItems(
+        items.map((item) =>
+          item.id === itemId
+            ? { ...item, media: [...item.media, ...newMedia] }
+            : item
+        )
+      );
+    }
+  }
+
+  function handleRemoveMedia(itemId: string, mediaId: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setItems(
+      items.map((item) =>
+        item.id === itemId
+          ? { ...item, media: item.media.filter((m) => m.id !== mediaId) }
+          : item
+      )
+    );
+  }
+
+  function handleClearItemMedia(itemId: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setItems(
+      items.map((item) => (item.id === itemId ? { ...item, media: [] } : item))
+    );
+  }
+
+  function getMediaCountText(media: LiftItem['media']) {
+    const imageCount = media.filter((m) => m.type === 'image').length;
+    const videoCount = media.filter((m) => m.type === 'video').length;
+    const parts = [];
+    if (imageCount > 0)
+      parts.push(`${imageCount} image${imageCount > 1 ? 's' : ''}`);
+    if (videoCount > 0)
+      parts.push(`${videoCount} video${videoCount > 1 ? 's' : ''}`);
+    return parts.join(', ');
+  }
+
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
       {/* Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={handleClose}>
-            <X
-              color={colors['grey-plain']['550']}
-              size={24}
-              strokeWidth={2}
-            />
+            <X color={colors['grey-plain']['550']} size={24} strokeWidth={2} />
           </TouchableOpacity>
           <Text className="font-inter-semibold text-lg text-grey-alpha-500">
-            Add items
+            Add Lift items
           </Text>
         </View>
 
@@ -113,12 +246,24 @@ export default function AddLiftItemsScreen() {
         extraHeight={140}
         enableAutomaticScroll
         enableResetScrollToCoords={false}
-        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 40 }}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 8,
+          paddingBottom: 40,
+        }}
         showsVerticalScrollIndicator={false}
       >
         {/* Items Section */}
         <View>
-          <Text className="font-inter text-sm text-grey-alpha-400">
+          <View className=" py-3">
+            <Checkbox
+              label="Users can request for more than one item."
+              className="text-sm"
+              checked={setAsDefault}
+              onPress={() => setSetAsDefault(!setAsDefault)}
+            />
+          </View>
+          <Text className="font-inter text-sm text-grey-alpha-500">
             You can add up to 5 items.
           </Text>
 
@@ -132,7 +277,7 @@ export default function AddLiftItemsScreen() {
                 }}
               >
                 <View className="flex-row items-center justify-between">
-                  <Text className="font-inter-semibold text-sm text-grey-alpha-500">
+                  <Text className="font-inter-medium text-sm text-grey-alpha-450">
                     Item #{index + 1}
                   </Text>
                   <TouchableOpacity
@@ -141,7 +286,7 @@ export default function AddLiftItemsScreen() {
                     accessibilityLabel={`Remove item ${index + 1}`}
                   >
                     <Text
-                      className="font-inter-semibold text-sm"
+                      className="font-inter-medium text-sm"
                       style={{ color: colors.state.red }}
                     >
                       Remove item
@@ -161,13 +306,13 @@ export default function AddLiftItemsScreen() {
                       }
                       placeholder="Laptop"
                       placeholderTextColor={colors['grey-alpha']['250']}
-                      className="font-inter mt-2 h-12 rounded-xl border border-grey-alpha-250 bg-grey-plain-150 px-3 text-base text-grey-alpha-500"
+                      className="mt-2 h-12 rounded-xl  border border-grey-alpha-250 bg-grey-plain-150 px-3 font-inter-medium text-base text-grey-alpha-500"
                     />
                   </View>
 
                   <View className="mt-4">
                     <Text className="font-inter-semibold text-xs text-grey-alpha-400">
-                      Quantity needed
+                      Quantity available
                     </Text>
                     <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">
                       <TextInput
@@ -176,7 +321,7 @@ export default function AddLiftItemsScreen() {
                           handleItemQuantityInputChange(item.id, text)
                         }
                         keyboardType="numeric"
-                        className="font-inter w-16 flex-1 px-3 py-3 text-base text-grey-alpha-500"
+                        className="w-16 flex-1 px-3 py-3 font-inter-medium text-base text-grey-alpha-500"
                       />
                       <View className="h-12 w-px bg-grey-plain-450/60" />
                       <TouchableOpacity
@@ -204,6 +349,98 @@ export default function AddLiftItemsScreen() {
                       </TouchableOpacity>
                     </View>
                   </View>
+
+                  {/* Quantity Selector */}
+                  <QuantitySelector
+                    selectedQuantity={numberOfRecipients}
+                    onQuantityChange={setNumberOfRecipients}
+                    onCustomValuePress={handleCustomAmountPressOnNR}
+                  />
+
+                  {/* Media Section for this item */}
+                  <View className="py-4">
+                    {item.media.length > 0 && (
+                      <View className="mb-4 flex-row items-center justify-between">
+                        <TouchableOpacity
+                          onPress={() => handleClearItemMedia(item.id)}
+                          hitSlop={10}
+                        >
+                          <Trash
+                            size={20}
+                            color={colors.state.red}
+                            strokeWidth={2}
+                          />
+                        </TouchableOpacity>
+                        <Text className="font-inter text-sm text-grey-alpha-400">
+                          {getMediaCountText(item.media)}
+                        </Text>
+                      </View>
+                    )}
+
+                    {item.media.length > 0 && (
+                      <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        className="mb-4"
+                        contentContainerStyle={{ gap: 8 }}
+                      >
+                        {item.media.map((mediaItem) => (
+                          <View key={mediaItem.id} className="relative">
+                            <Image
+                              source={{ uri: mediaItem.uri }}
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 8,
+                              }}
+                              contentFit="cover"
+                            />
+                            <TouchableOpacity
+                              onPress={() =>
+                                handleRemoveMedia(item.id, mediaItem.id)
+                              }
+                              className="absolute right-1 top-1 rounded-full bg-black/60 p-1"
+                            >
+                              <Trash2 size={14} color="white" strokeWidth={2} />
+                            </TouchableOpacity>
+                            {mediaItem.type === 'video' && (
+                              <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
+                                <Text className="font-inter text-xs text-white">
+                                  Video
+                                </Text>
+                              </View>
+                            )}
+                          </View>
+                        ))}
+                      </ScrollView>
+                    )}
+
+                    <View className="flex-row gap-3">
+                      <MediaButton
+                        onPress={() => handlePickImage(item.id)}
+                        icon={
+                          <ImageIcon
+                            size={20}
+                            color={colors.primary.purple}
+                            strokeWidth={2}
+                          />
+                        }
+                        label="Add image"
+                      />
+
+                      <MediaButton
+                        onPress={() => handlePickVideo(item.id)}
+                        icon={
+                          <Video
+                            size={20}
+                            color={colors.primary.purple}
+                            strokeWidth={2}
+                          />
+                        }
+                        label="Add video"
+                      />
+                    </View>
+                  </View>
                 </View>
               </View>
             ))}
@@ -228,6 +465,15 @@ export default function AddLiftItemsScreen() {
           )}
         </View>
       </KeyboardAwareScrollView>
+
+      {/* Quantity Bottom Sheet */}
+      {isNumberOfRecipientSheetMounted && (
+        <QuantityBottomSheet
+          initialQuantity={numberOfRecipients}
+          onDone={handleNRDone}
+          onClose={handleNumberOfRecipientSheetClose}
+        />
+      )}
     </SafeAreaView>
   );
 }

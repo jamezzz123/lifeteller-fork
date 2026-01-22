@@ -12,6 +12,7 @@ export default function RaiseLiftScreen() {
       addItemsRoute="/screens/lifts/request/add-lift-items"
       onSubmit={() => router.push('/screens/lifts/request/preview' as any)}
       showVisibilitySelector={true}
+      usedAs={'Request'}
     />
   );
 }

@@ -14,19 +14,51 @@ import { PaymentBottomSheet } from './PaymentBottomSheet';
 import { LiftProgressBar } from '../ui/LiftProgressBar';
 import { UserInfoRow } from '@/components/ui/UserInfoRow';
 
+// All possible setting keys for PreviewOfferLiftScreen
+export type PreviewSettingKey =
+  | 'progressBar'
+  | 'offerTo'
+  | 'amount'
+  | 'liftSettings'
+  | 'liftConfiguration';
+
+// Default settings shown (all settings)
+const ALL_SETTINGS: PreviewSettingKey[] = [
+  'progressBar',
+  'offerTo',
+  'amount',
+  'liftSettings',
+  'liftConfiguration',
+];
+
 interface PreviewOfferLiftScreenProps {
   onSuccess?: () => void;
   onEdit?: () => void;
   successRoute?: Href;
+  /** @deprecated Use visibleSettings instead */
+  showProgressBar?: boolean;
+  /** Array of setting keys to show. If not provided, shows all settings */
+  visibleSettings?: PreviewSettingKey[];
 }
 
 export default function PreviewOfferLiftScreen({
   onSuccess,
   onEdit,
   successRoute = '/(tabs)/home' as Href,
+  showProgressBar = true,
+  visibleSettings = ALL_SETTINGS,
 }: PreviewOfferLiftScreenProps) {
   const { title, description, liftAmount, numberOfRecipients, offerTo } =
     useLiftDraft();
+
+  // Helper to check if a setting should be shown
+  // Supports both legacy showProgressBar prop and new visibleSettings
+  const showSetting = (key: PreviewSettingKey) => {
+    if (key === 'progressBar') {
+      return showProgressBar && visibleSettings.includes(key);
+    }
+    return visibleSettings.includes(key);
+  };
 
   const successSheetRef = useRef<BottomSheetRef>(null);
   const passcodeBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -99,7 +131,7 @@ export default function PreviewOfferLiftScreen({
   // };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView>
         {/* Header */}
         <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
@@ -130,88 +162,105 @@ export default function PreviewOfferLiftScreen({
           </View>
 
           <View
-            className="mb-4 rounded-2xl border p-4"
+            className="mb-4 justify-center rounded-2xl border p-4"
             style={{
               backgroundColor: colors['grey-plain']['50'],
               borderColor: colors['grey-plain']['300'],
             }}
           >
-            <Text className="mb-3 text-2xl font-bold text-grey-alpha-500">
+            <Text
+              // className="mb-3 text-2xl font-bold text-grey-alpha-500"
+              className={
+                showSetting('progressBar')
+                  ? 'text-grey-alpha-50 mb-3 text-2xl font-bold'
+                  : 'text-grey-alpha-50  py-2 text-2xl font-bold'
+              }
+            >
               ₦100000
             </Text>
 
             {/* Progress Bar */}
-            <LiftProgressBar
-              currentAmount={500}
-              targetAmount={10000}
-              showAmount={false}
-            />
+            {showSetting('progressBar') && (
+              <LiftProgressBar
+                currentAmount={500}
+                targetAmount={10000}
+                showAmount={false}
+              />
+            )}
           </View>
 
           <View className="mb-6 w-3 w-full border-b border-grey-plain-300" />
 
           {/* Offer to Section */}
-          <View className="mb-6">
-            <Text className="mb-2 font-inter-medium text-sm text-grey-alpha-450">
-              Offer to:
-            </Text>
-            {offerTo ? (
-              <UserInfoRow user={offerTo} />
-            ) : (
-              <View className="h-10 w-10 items-center justify-center rounded-full bg-grey-plain-150">
-                <Text className="font-inter text-base">
-                  {numberOfRecipients}
-                </Text>
-              </View>
-            )}
-          </View>
+          {showSetting('offerTo') && (
+            <View className="mb-6">
+              <Text className="mb-2 font-inter-medium text-sm text-grey-alpha-450">
+                Offer to:
+              </Text>
+              {offerTo ? (
+                <UserInfoRow user={offerTo} />
+              ) : (
+                <View className="h-10 w-10 items-center justify-center rounded-full bg-grey-plain-150">
+                  <Text className="font-inter text-base">
+                    {numberOfRecipients}
+                  </Text>
+                </View>
+              )}
+            </View>
+          )}
           {/* Amount Section */}
-          <View className="mb-6">
-            <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
-              Amount
-            </Text>
-            <Text className="mb-2 font-inter-bold text-xl text-black text-grey-alpha-550">
-              {new Intl.NumberFormat('en-NG', {
-                style: 'currency',
-                currency: 'NGN',
-              }).format(Number(liftAmount))}
-            </Text>
-            <View className="flex-row items-center gap-2">
-              <Info size={16} color={colors['grey-plain']['600']} />
-              <Text className="text-grey-plain-500 font-inter text-sm">
-                Each recipients will get{' '}
+          {showSetting('amount') && (
+            <View className="mb-6">
+              <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
+                Amount
+              </Text>
+              <Text className="mb-2 font-inter-bold text-xl text-black text-grey-alpha-550">
                 {new Intl.NumberFormat('en-NG', {
                   style: 'currency',
                   currency: 'NGN',
-                }).format(Number(liftAmount) / Number(numberOfRecipients))}{' '}
-                each
+                }).format(Number(liftAmount))}
               </Text>
+              <View className="flex-row items-center gap-2">
+                <Info size={16} color={colors['grey-plain']['600']} />
+                <Text className="text-grey-plain-500 font-inter text-sm">
+                  Each recipients will get{' '}
+                  {new Intl.NumberFormat('en-NG', {
+                    style: 'currency',
+                    currency: 'NGN',
+                  }).format(Number(liftAmount) / Number(numberOfRecipients))}{' '}
+                  each
+                </Text>
+              </View>
             </View>
-          </View>
+          )}
 
           {/* Settings */}
-          <View className="mb-6">
-            <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
-              Lift settings
-            </Text>
-            <Text className="font-inter-semibold text-base text-black text-grey-alpha-550">
-              One-to-many
-            </Text>
-          </View>
+          {showSetting('liftSettings') && (
+            <View className="mb-6">
+              <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
+                Lift settings
+              </Text>
+              <Text className="font-inter-semibold text-base text-black text-grey-alpha-550">
+                One-to-many
+              </Text>
+            </View>
+          )}
 
           {/* Configuration */}
-          <View className="mb-6">
-            <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
-              Lift configuration
-            </Text>
-            <Text className="font-inter-semibold text-base text-black text-grey-alpha-550">
-              Anonymous
-            </Text>
-          </View>
+          {showSetting('liftConfiguration') && (
+            <View className="mb-6">
+              <Text className="text-grey-plain-500 mb-1 font-inter text-sm">
+                Lift configuration
+              </Text>
+              <Text className="font-inter-semibold text-base text-black text-grey-alpha-550">
+                Anonymous
+              </Text>
+            </View>
+          )}
         </View>
       </ScrollView>
       {/* Bottom Action Buttons */}
-      <View className="border-t border-grey-plain-450/20 bg-background px-4 pb-6 pt-4">
+      <View className="border-t border-grey-plain-300 bg-grey-alpha-100 px-4 py-6">
         <View className="flex-row gap-3">
           <View className="flex-1">
             <Button

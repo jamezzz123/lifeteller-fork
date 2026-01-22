@@ -135,6 +135,7 @@ interface LiftCreationScreenProps {
   showOfferAnon?: boolean;
   /** Configuration for which fields are required for form validation */
   validationConfig?: ValidationConfig;
+  usedAs?: 'Offer' | 'Request';
 }
 
 export default function LiftCreationScreen({
@@ -154,6 +155,7 @@ export default function LiftCreationScreen({
   showExploreOption = true,
   showOfferAnon = false,
   validationConfig,
+  usedAs = 'Request',
 }: LiftCreationScreenProps) {
   // Merge provided validation config with defaults
   const validation = useMemo(
@@ -335,7 +337,7 @@ export default function LiftCreationScreen({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <View className="flex-row items-center gap-3">
@@ -440,6 +442,7 @@ export default function LiftCreationScreen({
                 selectedAmount={liftAmount}
                 onAmountChange={setLiftAmount}
                 onCustomAmountPress={handleCustomAmountPress}
+                usedAs={usedAs}
               />
             </View>
           )}
@@ -685,7 +688,7 @@ export default function LiftCreationScreen({
         </KeyboardAwareScrollView>
 
         {/* Footer Buttons */}
-        <View className="border-t border-grey-plain-150 bg-grey-alpha-100 px-4 py-3">
+        <View className="border-t border-grey-plain-300 bg-grey-alpha-100 px-4 py-6">
           <View className="flex-row gap-3">
             <View className="flex-1">
               <Button

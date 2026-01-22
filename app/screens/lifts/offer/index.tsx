@@ -13,7 +13,8 @@ export default function RaiseLiftScreen() {
       showVisibilitySelector={true}
       showRecipientNumberSelector={true}
       showCollaboratorsSelector={false}
-      showMedia={false} 
+      showMedia={false}
+      usedAs={'Offer'}
     />
   );
 }

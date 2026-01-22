@@ -114,7 +114,7 @@ export default function PreviewLiftScreen({
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       <ScrollView>
         {/* Header */}
         <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
@@ -137,18 +137,26 @@ export default function PreviewLiftScreen({
           <View className="mb-4 mt-4 px-4">
             <View className="relative">
               <View className="flex-row overflow-hidden">
-              <Image
-                source={{ uri: images[currentImageIndex] }}
-                style={{ width: '90%', height: 280, borderRadius: 16 }}
-                contentFit="cover"
-              />
-              <Image
-                source={{ uri: images[(currentImageIndex + 1) % images.length] }}
-                style={{ width: '10%', height: 280, borderRadius: 16, position: 'absolute', marginLeft: '93%' }}
-                contentFit="cover"
+                <Image
+                  source={{ uri: images[currentImageIndex] }}
+                  style={{ width: '90%', height: 280, borderRadius: 16 }}
+                  contentFit="cover"
                 />
-                </View>
-           
+                <Image
+                  source={{
+                    uri: images[(currentImageIndex + 1) % images.length],
+                  }}
+                  style={{
+                    width: '10%',
+                    height: 280,
+                    borderRadius: 16,
+                    position: 'absolute',
+                    marginLeft: '93%',
+                  }}
+                  contentFit="cover"
+                />
+              </View>
+
               {/* Navigation Arrows */}
               {images.length > 1 && (
                 <>
@@ -166,7 +174,7 @@ export default function PreviewLiftScreen({
 
                   <TouchableOpacity
                     onPress={handleNextImage}
-                    className="absolute right-3 mr-[10%] -mt-4 top-1/2 size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
+                    className="absolute right-3 top-1/2 -mt-4 mr-[10%] size-10 -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-sm"
                     style={{ transform: [{ translateY: -20 }] }}
                   >
                     <ChevronRight
@@ -310,7 +318,7 @@ export default function PreviewLiftScreen({
       </ScrollView>
 
       {/* Bottom Actions - Sticky to bottom */}
-      <View className="border-t border-grey-plain-450/20 bg-grey-alpha-150 p-4">
+      <View className="border-t border-grey-plain-300 bg-grey-alpha-100 px-4 py-6">
         <View className="flex-row items-center justify-between">
           <TouchableOpacity onPress={handleEditDetails}>
             <Text className="text-base text-grey-alpha-500">Edit details</Text>

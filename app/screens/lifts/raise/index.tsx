@@ -12,6 +12,7 @@ export default function RaiseLiftScreen() {
       onSubmit={() => router.push('/screens/lifts/raise/preview' as any)}
       showVisibilitySelector={true}
       audienceBottomSheetTitle={'Who can see this raised lift?'}
+      usedAs={'Request'}
     />
   );
 }

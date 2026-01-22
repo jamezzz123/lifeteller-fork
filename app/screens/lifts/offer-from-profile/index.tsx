@@ -53,6 +53,7 @@ export default function OfferFromProfileLiftScreen() {
       showMedia={false}
       showExploreOption={false}
       showOfferAnon={true}
+      usedAs="Offer"
     />
   );
 }

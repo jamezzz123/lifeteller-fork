@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { Check, HandCoins, ChevronRight } from 'lucide-react-native';
+import { Check, HandCoins, ChevronRight, Info } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { colors } from '@/theme/colors';
 
@@ -7,6 +7,7 @@ interface LiftAmountSelectorProps {
   selectedAmount: string;
   onAmountChange: (amount: string) => void;
   onCustomAmountPress: () => void;
+  usedAs: 'Offer' | 'Request';
 }
 
 const QUICK_AMOUNTS = [
@@ -17,6 +18,7 @@ export function LiftAmountSelector({
   selectedAmount,
   onAmountChange,
   onCustomAmountPress,
+  usedAs = 'Request',
 }: LiftAmountSelectorProps) {
   const handleQuickAmount = (amount: number) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -128,11 +130,12 @@ export function LiftAmountSelector({
 
       {/* Helper Text */}
       <View className="flex-row items-center gap-1.5">
-        <View className="size-4 items-center justify-center rounded-full bg-grey-alpha-150">
-          <Text className="text-xs text-grey-alpha-400">i</Text>
-        </View>
-        <Text className="text-xs text-grey-alpha-400">
-          Funds will be securely held in your Lift wallet.
+        <Info size={14}></Info>
+        <Text className="text-xs text-grey-alpha-550">
+          {/* Funds will be securely held in your Lift wallet. */}
+          {usedAs === 'Offer' && 'Funds will be shared among beneficiaries.'}
+          {usedAs === 'Request' &&
+            'Funds will be securely held in your Lift wallet.'}
         </Text>
       </View>
     </View>
