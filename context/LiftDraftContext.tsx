@@ -49,6 +49,8 @@ type LiftDraftContextType = {
   setNumberOfRecipients: (number: string) => void;
   offerTo: UserDisplayInfo | null;
   setOfferTo: (user: UserDisplayInfo | null) => void;
+  setOfferToAnonymous: (boolean: boolean) => void;
+  offerAnonymous: boolean;
 };
 
 const LiftDraftContext = createContext<LiftDraftContextType | undefined>(
@@ -69,6 +71,7 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
   const [location, setLocation] = useState<string>('');
   const [numberOfRecipients, setNumberOfRecipients] = useState<string>('');
   const [offerTo, setOfferTo] = useState<UserDisplayInfo | null>(null);
+  const [offerAnonymous, setOfferToAnonymous] = useState<boolean>(false);
 
   const reset = () => {
     setCollaborators([]);
@@ -83,6 +86,7 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
     setLocation('');
     setNumberOfRecipients('');
     setOfferTo(null);
+    setOfferToAnonymous(false);
   };
 
   return (
@@ -112,6 +116,8 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
         setNumberOfRecipients,
         offerTo,
         setOfferTo,
+        setOfferToAnonymous,
+        offerAnonymous,
         reset,
       }}
     >

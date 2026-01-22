@@ -22,12 +22,13 @@ import {
   MoreHorizontal,
   ChevronRight,
   Trash,
+  UserRound,
+  UserRoundX,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import * as ImagePicker from 'expo-image-picker';
 import { Image } from 'expo-image';
 import { useRef, useState, useMemo } from 'react';
-import { z } from 'zod';
 
 import { colors } from '@/theme/colors';
 import { Toggle } from '@/components/ui/Toggle';
@@ -48,6 +49,29 @@ import { RecipientNumberSelector } from './RecipientNumberSelector';
 
 const TITLE_MAX_LENGTH = 55;
 const DESCRIPTION_MAX_LENGTH = 500;
+
+// Configuration for which fields are required for validation
+export interface ValidationConfig {
+  title?: boolean;
+  description?: boolean;
+  liftAmount?: boolean;
+  liftItems?: boolean;
+  category?: boolean;
+  location?: boolean;
+  offerTo?: boolean;
+  numberOfRecipients?: boolean;
+}
+
+const defaultValidationConfig: ValidationConfig = {
+  title: true,
+  description: true,
+  liftAmount: true,
+  liftItems: true,
+  category: false,
+  location: false,
+  offerTo: false,
+  numberOfRecipients: false,
+};
 
 function InputActions() {
   return (
@@ -108,6 +132,10 @@ interface LiftCreationScreenProps {
   showRecipientNumberSelector?: boolean;
   showMedia?: boolean;
   audienceBottomSheetTitle?: string;
+  showExploreOption?: boolean;
+  showOfferAnon?: boolean;
+  /** Configuration for which fields are required for form validation */
+  validationConfig?: ValidationConfig;
 }
 
 export default function LiftCreationScreen({
@@ -124,7 +152,15 @@ export default function LiftCreationScreen({
   showRecipientNumberSelector = false,
   showMedia = true,
   audienceBottomSheetTitle = 'Who can see the Lift i am raising?',
+  showExploreOption = true,
+  showOfferAnon = false,
+  validationConfig,
 }: LiftCreationScreenProps) {
+  // Merge provided validation config with defaults
+  const validation = useMemo(
+    () => ({ ...defaultValidationConfig, ...validationConfig }),
+    [validationConfig]
+  );
   const {
     collaborators,
     setCollaborators,
@@ -146,46 +182,40 @@ export default function LiftCreationScreen({
     category,
     location,
     offerTo,
+    setOfferToAnonymous,
+    offerAnonymous,
   } = useLiftDraft();
-
-  // Zod schema for lift form validation
-  const liftFormSchema = useMemo(
-    () =>
-      z
-        .object({
-          title: z.string().min(1, 'Title is required'),
-          description: z.string().min(1, 'Description is required'),
-          // location: z.string().min(1, 'Location is required'),
-          // category: z.string().min(1, 'Category is required'),
-          liftType: z.enum(['monetary', 'non-monetary']),
-          liftAmount: z.string(),
-          liftItems: z.array(
-            z.object({ id: z.string(), name: z.string(), quantity: z.number() })
-          ),
-        })
-        .refine(
-          (data) => {
-            if (data.liftType === 'monetary') {
-              return data.liftAmount.trim().length > 0;
-            }
-            return data.liftItems.length > 0;
-          },
-          {
-            message:
-              'Monetary lift requires an amount, non-monetary requires at least one item',
-          }
-        ),
-    []
-  );
 
   // Validate form and determine if buttons should be enabled
   const isFormValid = useMemo(() => {
-    const result = liftFormSchema.safeParse({
-      title,
-      description,
-    });
-    return result.success;
-  }, [liftFormSchema, title, description]);
+    // Check required fields based on validation config
+    if (validation.title && !title.trim()) return false;
+    if (validation.description && !description.trim()) return false;
+    if (validation.category && !category) return false;
+    if (validation.location && !location) return false;
+    if (validation.offerTo && !offerTo) return false;
+    if (validation.numberOfRecipients && !numberOfRecipients) return false;
+
+    // Lift type specific validation
+    if (liftType === 'monetary') {
+      if (validation.liftAmount && !liftAmount.trim()) return false;
+    } else {
+      if (validation.liftItems && liftItems.length === 0) return false;
+    }
+
+    return true;
+  }, [
+    validation,
+    title,
+    description,
+    category,
+    location,
+    offerTo,
+    numberOfRecipients,
+    liftType,
+    liftAmount,
+    liftItems,
+  ]);
 
   // Count selected options from more options screen
   const moreOptionsCount = [category, location].filter(Boolean).length;
@@ -406,7 +436,7 @@ export default function LiftCreationScreen({
 
           {/* Lift Amount */}
           {liftType === 'monetary' && (
-            <View>
+            <View className="border-b  border-grey-plain-300">
               <LiftAmountSelector
                 selectedAmount={liftAmount}
                 onAmountChange={setLiftAmount}
@@ -417,10 +447,12 @@ export default function LiftCreationScreen({
 
           {/* Non-Monetary Items */}
           {liftType === 'non-monetary' && (
-            <NonMonetaryItemsSelector
-              items={liftItems}
-              onAddItemsPress={() => router.push(addItemsRoute as Href)}
-            />
+            <View className="border-b  border-grey-plain-300">
+              <NonMonetaryItemsSelector
+                items={liftItems}
+                onAddItemsPress={() => router.push(addItemsRoute as Href)}
+              />
+            </View>
           )}
 
           {/* Media Section */}
@@ -592,40 +624,65 @@ export default function LiftCreationScreen({
           )}
 
           {/* Explore More Options */}
-          <View className=" px-4 py-4">
-            <TouchableOpacity
-              onPress={() => router.push(moreOptionsRoute as Href)}
-              className="flex-row items-center justify-between"
-            >
-              <View className="flex-row items-center gap-3">
-                <MoreHorizontal
-                  size={20}
-                  color={colors['grey-alpha']['500']}
-                  strokeWidth={2}
-                />
-                <Text className="font-inter-medium text-sm text-grey-alpha-500">
-                  Explore more options
-                </Text>
+          {showExploreOption && (
+            <View className="px-4 py-3">
+              <TouchableOpacity
+                onPress={() => router.push(moreOptionsRoute as Href)}
+                className="flex-row items-center justify-between"
+              >
+                <View className="flex-row items-center gap-3">
+                  <MoreHorizontal
+                    size={20}
+                    color={colors['grey-alpha']['500']}
+                    strokeWidth={2}
+                  />
+                  <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                    Explore more options
+                  </Text>
+                </View>
+                <View className="flex-row items-center gap-2">
+                  {moreOptionsCount > 0 && (
+                    <View
+                      style={{ backgroundColor: '#CF2586' }}
+                      className="h-6 min-w-6 items-center justify-center rounded-full px-2"
+                    >
+                      <Text className="font-inter-semibold text-xs text-white">
+                        {moreOptionsCount}
+                      </Text>
+                    </View>
+                  )}
+                  <ChevronRight
+                    size={20}
+                    color={colors['grey-alpha']['400']}
+                    strokeWidth={2}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          {/* Offer Anonymously */}
+          {showOfferAnon && (
+            <View className="flex-row items-center justify-between px-4 py-3">
+              <View className="flex-1 flex-row items-center">
+                <UserRoundX></UserRoundX>
+                <View className="ml-3 flex">
+                  <Text className="font-inter-medium text-sm font-semibold text-grey-alpha-500">
+                    Offer lift anonymously
+                  </Text>
+                  <Text className="font-inter text-xs text-grey-alpha-400">
+                    Recipient won’t know it is you.
+                  </Text>
+                </View>
               </View>
-              <View className="flex-row items-center gap-2">
-                {moreOptionsCount > 0 && (
-                  <View
-                    style={{ backgroundColor: '#CF2586' }}
-                    className="h-6 min-w-6 items-center justify-center rounded-full px-2"
-                  >
-                    <Text className="font-inter-semibold text-xs text-white">
-                      {moreOptionsCount}
-                    </Text>
-                  </View>
-                )}
-                <ChevronRight
-                  size={20}
-                  color={colors['grey-alpha']['400']}
-                  strokeWidth={2}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
+              <Toggle
+                value={offerAnonymous}
+                onValueChange={(enabled) => {
+                  setOfferToAnonymous(enabled);
+                }}
+              />
+            </View>
+          )}
         </KeyboardAwareScrollView>
 
         {/* Footer Buttons */}

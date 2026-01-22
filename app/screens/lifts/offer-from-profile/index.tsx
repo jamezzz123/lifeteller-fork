@@ -51,6 +51,8 @@ export default function OfferFromProfileLiftScreen() {
       showRecipientNumberSelector={false}
       showCollaboratorsSelector={false}
       showMedia={false}
+      showExploreOption={false}
+      showOfferAnon={true}
     />
   );
 }

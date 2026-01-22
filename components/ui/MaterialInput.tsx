@@ -20,7 +20,6 @@ interface MaterialInputProps extends Omit<RNTextInputProps, 'style'> {
   showCharacterCount?: boolean;
   showCharacterCountBelow?: boolean;
   maxCharacters?: number;
- 
 }
 
 export function MaterialInput({
@@ -77,7 +76,7 @@ export function MaterialInput({
       {/* Floating Label */}
       {label && (
         <Text
-          className={`font-inter-semibold mb-2 text-xs transition-all ${
+          className={`mb-2 font-inter-semibold text-xs transition-all ${
             isFocused
               ? 'text-primary'
               : error
@@ -105,7 +104,7 @@ export function MaterialInput({
         {/* Prefix */}
         {prefix && (
           <Text
-            className={`font-inter mr-3 ${currentSize.prefixClass} ${multiline ? 'pt-0.5' : ''} ${
+            className={`mr-3 font-inter ${currentSize.prefixClass} ${multiline ? 'pt-0.5' : ''} ${
               isFocused || hasValue
                 ? 'text-grey-alpha-500'
                 : 'text-grey-alpha-400'
@@ -129,7 +128,7 @@ export function MaterialInput({
             props.onBlur?.(e);
           }}
           placeholderTextColor={colors['grey-alpha']['250']}
-          className={`font-inter flex-1 ${currentSize.textClass} text-grey-plain-300`}
+          className={`flex-1 font-inter ${currentSize.textClass} text-grey-plain-300`}
           style={{
             fontSize: currentSize.fontSize,
             color: colors['grey-alpha']['500'],
@@ -151,7 +150,7 @@ export function MaterialInput({
         {/* Suffix (Character Count or Custom) */}
         {(suffix || showCharacterCount) && (
           <Text
-            className={`font-inter ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
+            className={`ml-3 font-inter ${currentSize.prefixClass} text-grey-alpha-400`}
             style={{
               alignSelf: 'flex-end',
               paddingBottom: 2,
@@ -164,23 +163,28 @@ export function MaterialInput({
           </Text>
         )}
       </View>
-  {showCharacterCountBelow && (
-          <Text
-            className={`font-inter -mb-5 text-xs mt-2 ml-3 ${currentSize.prefixClass} text-grey-alpha-400`}
-            style={{
-              alignSelf: 'flex-end',
-            }}
-          >
-            {
-              (showCharacterCountBelow && maxCharacters
-                ? `${value?.length || 0}/${maxCharacters}`
-                : '')}
-          </Text>
-        )}
+      {showCharacterCountBelow && (
+        <Text
+          className={`-mb-5 ml-3 mt-2 font-inter text-xs ${currentSize.prefixClass} text-grey-alpha-400`}
+          style={{
+            alignSelf: 'flex-end',
+          }}
+        >
+          {showCharacterCountBelow && maxCharacters
+            ? `${value?.length || 0}/${maxCharacters}`
+            : ''}
+        </Text>
+      )}
       {/* Error or Helper Text */}
-      {error && <Text className="font-inter mt-1.5 text-xs text-red-500">{error}</Text>}
+      {error && (
+        <Text className="mt-1.5 font-inter text-sm text-state-red">
+          {error}
+        </Text>
+      )}
       {helperText && !error && (
-        <Text className="font-inter mt-1 text-xs text-grey-alpha-400">{helperText}</Text>
+        <Text className="mt-1 font-inter text-sm text-grey-alpha-550">
+          {helperText}
+        </Text>
       )}
     </View>
   );
