@@ -186,7 +186,7 @@ export const OTPVerificationBottomSheet = forwardRef<
           <View className="flex-1" />
 
           {/* Confirm Button */}
-          <View className="pb-6">
+          <View className="self-end pb-6" style={{ width: 200 }}>
             <Button
               title="Confirm OTP"
               onPress={handleConfirm}

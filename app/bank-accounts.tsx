@@ -165,7 +165,7 @@ export default function BankAccountsScreen() {
       {/* Bank Accounts List */}
       <ScrollView
         className="flex-1 bg-grey-plain-50"
-        contentContainerStyle={{ paddingBottom: 100 }}
+        contentContainerStyle={{ paddingBottom: 24 }}
         showsVerticalScrollIndicator={false}
       >
         <View
@@ -243,15 +243,15 @@ export default function BankAccountsScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </ScrollView>
 
-      {/* Footer Info */}
-      <View className="absolute bottom-0 left-0 right-0 flex-row items-center gap-2 bg-grey-plain-50 px-4 py-3">
-        <Info size={16} color={colors['grey-alpha']['500']} strokeWidth={2} />
-        <Text className="text-sm text-grey-alpha-500">
-          You can only add 5 bank accounts
-        </Text>
-      </View>
+        {/* Footer Info */}
+        <View className="mx-4 mt-3 flex-row items-center gap-2 pb-6">
+          <Info size={16} color={colors['grey-alpha']['500']} strokeWidth={2} />
+          <Text className="text-sm text-grey-alpha-500">
+            You can only add 5 bank accounts
+          </Text>
+        </View>
+      </ScrollView>
 
       {/* Delete Confirmation Modal */}
       <ConfirmationModal

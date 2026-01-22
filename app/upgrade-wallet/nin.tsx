@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput as RNTextInput } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput as RNTextInput,
+  Linking,
+  Alert,
+} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useRouter } from 'expo-router';
 import { CornerUpLeft, Info } from 'lucide-react-native';
@@ -9,6 +16,7 @@ import { Button } from '@/components/ui/Button';
 import { DatePickerField } from '@/components/ui/DatePickerField';
 import { colors } from '@/theme/colors';
 import * as Haptics from 'expo-haptics';
+import { appConfig } from '@/config/app.config';
 
 export default function NINFormScreen() {
   const router = useRouter();
@@ -34,9 +42,21 @@ export default function NINFormScreen() {
     });
   };
 
-  const handleContactUs = () => {
-    // TODO: Navigate to contact us
-    console.log('Contact us');
+  const handleContactUs = async () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+
+    const emailUrl = `mailto:${appConfig.contact.email}`;
+    const canOpen = await Linking.canOpenURL(emailUrl);
+
+    if (canOpen) {
+      await Linking.openURL(emailUrl);
+      return;
+    }
+
+    Alert.alert(
+      'Unable to open email app',
+      `Please email us at ${appConfig.contact.email}.`
+    );
   };
 
   const isFormValid =

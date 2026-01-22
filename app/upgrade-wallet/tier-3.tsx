@@ -7,6 +7,7 @@ import {
   TextInput as RNTextInput,
   StyleSheet,
   Alert,
+  Image,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import {
@@ -15,6 +16,7 @@ import {
   Info,
   Upload,
   Check,
+  Pencil,
 } from 'lucide-react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
@@ -274,13 +276,23 @@ export default function Tier3UpgradeScreen() {
               style={styles.uploadContainer}
             >
               {uploadedFile ? (
-                <View className="items-center justify-center py-6">
-                  <Text className="mb-2 text-base font-medium text-primary">
-                    Document uploaded
-                  </Text>
-                  <Text className="text-sm text-grey-alpha-400">
-                    Tap to change
-                  </Text>
+                <View className="relative">
+                  <Image
+                    source={{ uri: uploadedFile }}
+                    style={styles.previewImage}
+                    resizeMode="cover"
+                  />
+                  <TouchableOpacity
+                    onPress={handleCaptureDocument}
+                    hitSlop={8}
+                    style={styles.editBadge}
+                  >
+                    <Pencil
+                      size={16}
+                      color={colors.primary.purple}
+                      strokeWidth={2}
+                    />
+                  </TouchableOpacity>
                 </View>
               ) : (
                 <View className="items-center justify-center py-8">
@@ -312,21 +324,22 @@ export default function Tier3UpgradeScreen() {
             </Text>
           </View>
 
-          {/* Contact Us */}
-          <View className="mb-8 px-4">
-            <Text className="text-center text-sm text-grey-plain-550">
-              Kindly{' '}
-              <Text
-                onPress={handleContactUs}
-                className="text-primary-purple underline"
-              >
-                contact us
-              </Text>{' '}
-              if you are experiencing any issue.
-            </Text>
-          </View>
         </View>
       </ScrollView>
+
+      {/* Contact Us */}
+      <View className="px-4 pb-6" style={styles.contactUsContainer}>
+        <Text className="text-center text-sm text-grey-plain-550">
+          Kindly{' '}
+          <Text
+            onPress={handleContactUs}
+            className="text-primary-purple underline"
+          >
+            contact us
+          </Text>{' '}
+          if you are experiencing any issue.
+        </Text>
+      </View>
 
       {/* Footer */}
       <View className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between border-t border-grey-plain-150 bg-white px-4 py-4">
@@ -487,5 +500,30 @@ const styles = StyleSheet.create({
     minHeight: 120,
     width: '50%',
     alignSelf: 'flex-start',
+    overflow: 'hidden',
+  },
+  previewImage: {
+    width: '100%',
+    height: 120,
+    borderRadius: 14,
+  },
+  editBadge: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    height: 28,
+    width: 28,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors['grey-plain']['50'],
+    borderWidth: 1,
+    borderColor: colors['grey-plain']['200'],
+  },
+  contactUsContainer: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 80,
   },
 });
