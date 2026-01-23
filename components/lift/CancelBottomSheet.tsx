@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { FileDown, Trash2, UserPen } from 'lucide-react-native';
+import { FileDown, Trash2, UserPen, FileAxis3d } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import {
   BottomSheetComponent,
@@ -37,18 +37,15 @@ export function CancelBottomSheet({
 
   return (
     <BottomSheetComponent
-      title="want to finish your post later?"
+      title="Want to finish your post later?"
       ref={bottomSheetRef}
       onClose={handleClose}
     >
       <View className="px-6">
-        {/* Title */}
-        {/* <Text className="mb-6 text-2xl font-bold text-grey-alpha-500">
-          Want to finish your request lift later?
-        </Text> */}
+      
 
         {/* Options */}
-        <View className="gap-6">
+        <View className="gap-6 mt-6">
           {/* Save as draft */}
           <TouchableOpacity
             onPress={onSaveAsDraft}
@@ -57,7 +54,7 @@ export function CancelBottomSheet({
             accessibilityLabel="Save as draft"
           >
             <View className=" items-center justify-center rounded-xl bg-grey-plain-100">
-              <FileDown
+              <FileAxis3d
                 size={24}
                 color={colors['grey-alpha']['500']}
                 strokeWidth={2}

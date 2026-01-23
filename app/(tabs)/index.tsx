@@ -16,6 +16,7 @@ export default function HomeScreen() {
   const liftOptionsSheetRef = useRef<LiftOptionsBottomSheetRef>(null);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
 
+
   const handleFABPress = () => {
     setIsBottomSheetOpen(true);
     // Use setTimeout to ensure the component is rendered before calling open

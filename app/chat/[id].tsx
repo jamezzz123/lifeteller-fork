@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import {
   CornerUpLeft,
   Video,
@@ -23,6 +25,11 @@ import {
   HandHelping,
   HandCoins,
   BadgeCheck,
+  X,
+  FileText,
+  FileImage,
+  FileAudio,
+  FileVideo,
 } from 'lucide-react-native';
 import { ChatStarterCard } from '@/components/chat/ChatStarterCard';
 import { Avatar } from '@/components/ui/Avatar';
@@ -38,6 +45,8 @@ import {
   LiftMessageCard,
   LiftMessageType,
 } from '@/components/chat/LiftMessageCard';
+import { Image } from 'expo-image';
+import PdfIcon from '@/assets/images/file-type-pdf.svg';
 import { MessageActionMenu } from '@/components/chat/MessageActionMenu';
 import { CONTACTS } from '@/components/request-lift/data';
 import * as Haptics from 'expo-haptics';
@@ -65,7 +74,33 @@ interface LiftMessage {
   recipientName?: string; // For appreciation message
 }
 
-type Message = TextMessage | LiftMessage;
+interface MediaMessage {
+  id: string;
+  type: 'media';
+  media: MediaItem[];
+  caption?: string;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+interface DocumentAttachment {
+  uri: string;
+  name: string;
+  size?: number;
+  mimeType?: string;
+}
+
+interface DocumentMessage {
+  id: string;
+  type: 'document';
+  document: DocumentAttachment;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+type Message = TextMessage | LiftMessage | MediaMessage | DocumentMessage;
 
 export default function ChatScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -75,11 +110,15 @@ export default function ChatScreen() {
   const [showMediaSelection, setShowMediaSelection] = useState(false);
   const [showMediaPreview, setShowMediaPreview] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
+  const [selectedDocuments, setSelectedDocuments] = useState<
+    DocumentAttachment[]
+  >([]);
   const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
   const [showMessageMenu, setShowMessageMenu] = useState(false);
   const attachmentSheetRef = useRef<any>(null);
   const scrollViewRef = useRef<ScrollView>(null);
   const hasMessage = message.trim().length > 0;
+  const hasAttachment = selectedDocuments.length > 0;
 
   // Find contact by ID
   const contact = CONTACTS.find((c) => c.id === id) || CONTACTS[0];
@@ -187,6 +226,24 @@ export default function ChatScreen() {
   );
 
   const handleSendMessage = () => {
+    if (selectedDocuments.length > 0) {
+      const timestamp = formatTimestamp(new Date());
+      setMessages((prev) => [
+        ...prev,
+        ...selectedDocuments.map((doc, index) => ({
+          id: `${Date.now()}-${index}`,
+          type: 'document' as const,
+          document: doc,
+          isSent: true,
+          isSeen: true,
+          timestamp,
+        })),
+      ]);
+      setSelectedDocuments([]);
+      setMessage('');
+      return;
+    }
+
     if (message.trim()) {
       // TODO: Send message via API
       setMessage('');
@@ -198,12 +255,84 @@ export default function ChatScreen() {
   ) => {
     setShowAttachmentSheet(false);
 
-    if (type === 'gallery' || type === 'camera') {
-      // Open media selection screen
+    if (type === 'gallery') {
       setShowMediaSelection(true);
+    } else if (type === 'camera') {
+      handleOpenCamera();
+    } else if (type === 'document') {
+      handlePickDocument();
+    } else if (type === 'audio') {
+      handlePickAudio();
     } else {
       // TODO: Handle document and audio attachments
       console.log('Selected attachment type:', type);
+    }
+  };
+
+  const handleOpenCamera = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Camera permission is required to take a photo or video.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      const asset = result.assets[0];
+      const captured: MediaItem = {
+        id: Date.now().toString(),
+        uri: asset.uri,
+        type: asset.type === 'video' ? 'video' : 'image',
+        fileName: asset.fileName ?? undefined,
+      };
+      setSelectedMedia([captured]);
+      setShowMediaPreview(true);
+    }
+  };
+
+  const handlePickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+      const files = result.assets.map((file) => ({
+        uri: file.uri,
+        name: file.name,
+        size: file.size,
+        mimeType: file.mimeType,
+      }));
+      setSelectedDocuments((prev) => [...prev, ...files]);
+    } catch (error) {
+      console.log('Document picker error:', error);
+    }
+  };
+
+  const handlePickAudio = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        copyToCacheDirectory: true,
+        type: ['audio/*'],
+      });
+
+      if (result.canceled) return;
+      const files = result.assets.map((file) => ({
+        uri: file.uri,
+        name: file.name,
+        size: file.size,
+        mimeType: file.mimeType,
+      }));
+      setSelectedDocuments((prev) => [...prev, ...files]);
+    } catch (error) {
+      console.log('Audio picker error:', error);
     }
   };
 
@@ -213,9 +342,50 @@ export default function ChatScreen() {
     setShowMediaPreview(true);
   };
 
+  const formatTimestamp = (date: Date) => {
+    return date
+      .toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      .replace(' ', '')
+      .toLowerCase();
+  };
+
+  const formatFileSize = (size?: number) => {
+    if (!size) return '';
+    const kb = size / 1024;
+    if (kb < 1024) return `${Math.round(kb)}kb`;
+    return `${(kb / 1024).toFixed(1)}mb`;
+  };
+
+  const renderDocumentIcon = (mimeType?: string, size = 22) => {
+    if (mimeType?.includes('pdf')) return <PdfIcon width={size} height={size} />;
+    if (mimeType?.startsWith('image/'))
+      return <FileImage size={size} color={colors['grey-plain']['50']} />;
+    if (mimeType?.startsWith('audio/'))
+      return <FileAudio size={size} color={colors['grey-plain']['50']} />;
+    if (mimeType?.startsWith('video/'))
+      return <FileVideo size={size} color={colors['grey-plain']['50']} />;
+    return <FileText size={size} color={colors['grey-plain']['50']} />;
+  };
+
   const handleSendMedia = (caption: string) => {
     // TODO: Send message with media via API
     console.log('Sending media:', selectedMedia, 'with caption:', caption);
+
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        type: 'media',
+        media: selectedMedia,
+        caption: caption.trim() ? caption.trim() : undefined,
+        isSent: true,
+        isSeen: true,
+        timestamp: formatTimestamp(new Date()),
+      },
+    ]);
 
     // Reset state
     setSelectedMedia([]);
@@ -459,6 +629,113 @@ export default function ChatScreen() {
               );
             }
 
+            if (msg.type === 'media') {
+              const preview = msg.media[0];
+              return (
+                <TouchableOpacity
+                  key={msg.id}
+                  className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+                  onLongPress={() => handleLongPressMessage(msg)}
+                  activeOpacity={0.9}
+                  delayLongPress={300}
+                >
+                  <View className="max-w-[80%] rounded-2xl bg-grey-plain-150 p-3">
+                    <View className="overflow-hidden rounded-2xl">
+                      {preview?.type === 'image' ? (
+                        <Image
+                          source={{ uri: preview.uri }}
+                          style={{ width: 220, height: 220 }}
+                          contentFit="cover"
+                        />
+                      ) : (
+                        <View className="items-center justify-center bg-black">
+                          <Text className="text-white">Video preview</Text>
+                        </View>
+                      )}
+                    </View>
+                    {msg.media.length > 1 && (
+                      <View
+                        className="absolute right-4 top-4 rounded-full px-2 py-1"
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                      >
+                        <Text className="text-xs font-medium text-white">
+                          1 of {msg.media.length}
+                        </Text>
+                      </View>
+                    )}
+                    {msg.caption && (
+                      <Text className="mt-2 text-base text-grey-alpha-500">
+                        {msg.caption}
+                      </Text>
+                    )}
+                    <View className="mt-2 flex-row items-center gap-2">
+                      <Text className="text-xs text-grey-plain-550">
+                        {msg.timestamp}
+                      </Text>
+                      {msg.isSent && msg.isSeen && (
+                        <Text className="text-xs text-grey-plain-550">
+                          • Seen
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }
+
+            if (msg.type === 'document') {
+              return (
+                <TouchableOpacity
+                  key={msg.id}
+                  className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+                  onLongPress={() => handleLongPressMessage(msg)}
+                  activeOpacity={0.9}
+                  delayLongPress={300}
+                >
+                  <View className="max-w-[85%] rounded-2xl bg-grey-plain-150 p-4">
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-row items-center gap-3">
+                        <View
+                          className="items-center justify-center rounded-2xl"
+                          style={{
+                            width: 56,
+                            height: 56,
+                            backgroundColor: colors.primary.purple,
+                          }}
+                        >
+                          {renderDocumentIcon(msg.document.mimeType, 28)}
+                        </View>
+                        <View className="flex-1">
+                          <Text
+                            className="text-base font-semibold text-grey-alpha-500"
+                            numberOfLines={1}
+                          >
+                            {msg.document.name}
+                          </Text>
+                          <Text className="text-sm text-grey-plain-550">
+                            {msg.document.mimeType?.toUpperCase() || 'FILE'}
+                            {msg.document.size
+                              ? ` • ${formatFileSize(msg.document.size)}`
+                              : ''}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View className="mt-3 flex-row items-center gap-2">
+                      <Text className="text-xs text-grey-plain-550">
+                        {msg.timestamp}
+                      </Text>
+                      {msg.isSent && msg.isSeen && (
+                        <Text className="text-xs text-grey-plain-550">
+                          • Seen
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            }
+
             // Text message
             return (
               <TouchableOpacity
@@ -558,6 +835,53 @@ export default function ChatScreen() {
 
         {/* Message Input Bar */}
         <View className="border-t border-grey-plain-150 bg-white px-4 py-3">
+          {selectedDocuments.length > 0 && (
+            <View className="mb-3 gap-2">
+              {selectedDocuments.map((doc, index) => (
+                <View
+                  key={`${doc.uri}-${index}`}
+                  className="rounded-2xl bg-grey-plain-150 p-3"
+                >
+                  <View className="flex-row items-center justify-between">
+                    <View className="flex-1 flex-row items-center gap-3 pr-3">
+                      <View
+                        className="items-center justify-center rounded-2xl"
+                        style={{
+                          width: 48,
+                          height: 48,
+                          backgroundColor: colors.primary.purple,
+                        }}
+                      >
+                        {renderDocumentIcon(doc.mimeType, 22)}
+                      </View>
+                      <View className="flex-1">
+                        <Text
+                          className="text-sm font-semibold text-grey-alpha-500"
+                          numberOfLines={1}
+                        >
+                          {doc.name}
+                        </Text>
+                        <Text className="text-xs text-grey-plain-550">
+                          {doc.mimeType?.toUpperCase() || 'FILE'}
+                          {doc.size ? ` • ${formatFileSize(doc.size)}` : ''}
+                        </Text>
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() =>
+                        setSelectedDocuments((prev) =>
+                          prev.filter((_, itemIndex) => itemIndex !== index)
+                        )
+                      }
+                      className="size-8 items-center justify-center rounded-full bg-grey-plain-300"
+                    >
+                      <X size={18} color={colors['grey-plain']['600']} />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              ))}
+            </View>
+          )}
           <View className="flex-row items-start gap-3">
             <TouchableOpacity className="p-1">
               <Smile color={colors['grey-plain']['550']} size={24} />
@@ -589,7 +913,7 @@ export default function ChatScreen() {
                 <Paperclip color={colors['grey-plain']['550']} size={24} />
               </TouchableOpacity>
 
-              <TouchableOpacity className="p-1">
+              <TouchableOpacity className="p-1" onPress={handleOpenCamera}>
                 <Camera color={colors['grey-plain']['550']} size={24} />
               </TouchableOpacity>
 
@@ -602,7 +926,7 @@ export default function ChatScreen() {
                   backgroundColor: colors.primary.purple,
                 }}
               >
-                {hasMessage ? (
+                {hasMessage || hasAttachment ? (
                   <SendHorizontal color={colors['grey-plain']['50']} size={24} />
                 ) : (
                   <Mic color={colors['grey-plain']['50']} size={24} />

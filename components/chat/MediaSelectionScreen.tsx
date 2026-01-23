@@ -28,6 +28,7 @@ interface MediaSelectionScreenProps {
   onClose: () => void;
   onProceed: (selectedMedia: MediaItem[]) => void;
   maxSelection?: number;
+  initialSelected?: MediaItem[];
 }
 
 const { width } = Dimensions.get('window');
@@ -41,6 +42,7 @@ export function MediaSelectionScreen({
   onClose,
   onProceed,
   maxSelection = MAX_MEDIA,
+  initialSelected,
 }: MediaSelectionScreenProps) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -51,6 +53,11 @@ export function MediaSelectionScreen({
     // This would fetch actual media from device in production
     // For now, using empty array - will be populated when user picks from gallery
   }, []);
+
+  useEffect(() => {
+    if (!visible || !initialSelected) return;
+    setSelectedMedia(initialSelected);
+  }, [visible, initialSelected]);
 
   async function requestPermissions() {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -205,18 +212,8 @@ export function MediaSelectionScreen({
       onRequestClose={onClose}
     >
       <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-        {/* Header */}
-        <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
-          <Text className="text-lg font-semibold text-grey-alpha-500">
-            Image Selection
-          </Text>
-          <TouchableOpacity onPress={onClose} className="p-1">
-            <X color={colors['grey-plain']['550']} size={24} strokeWidth={2} />
-          </TouchableOpacity>
-        </View>
-
         {/* Search Bar */}
-        <View className="border-b border-grey-plain-150 bg-white px-4 py-3">
+        <View className="border-b border-grey-plain-150 bg-white px-4 py-3 mt-8">
           <View className="flex-row items-center gap-3 rounded-full border border-grey-plain-300 bg-grey-plain-50 px-4 py-3">
             <Search
               size={20}
@@ -314,7 +311,7 @@ export function MediaSelectionScreen({
                 {selectedMedia.length} media selected
               </Text>
               <Button
-                title="Proceed"
+                title="Continue"
                 onPress={handleProceed}
                 variant="primary"
                 size="medium"

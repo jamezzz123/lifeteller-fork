@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Image } from 'expo-image';
+import { router } from 'expo-router';
 import { colors } from '@/theme/colors';
 import { useAuth } from '@/context/auth';
 import { getInitials, getFullName } from '@/utils/user';
@@ -9,8 +10,7 @@ export function ShareSection() {
   const { user } = useAuth();
 
   const handlePress = () => {
-    // TODO: Navigate to create post screen
-    console.log('Navigate to create post');
+    router.push('/share-uplifting-words');
   };
 
   // Get user's full name and initials

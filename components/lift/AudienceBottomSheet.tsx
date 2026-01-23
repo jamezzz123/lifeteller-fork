@@ -126,14 +126,14 @@ export const AudienceBottomSheet = forwardRef<
             {title}
           </Text>
 
-          <View className="gap-4">
+          <View className="gap-2">
             {options.map((option) => {
               const isSelected = option.key === selectedKey;
               return (
                 <TouchableOpacity
                   key={option.key}
                   onPress={() => handleSelect(option.key)}
-                  className="flex-row items-center border-b border-grey-plain-300 py-1 pr-4"
+                  className="flex-row items-center border-b border-grey-plain-300 py-1 pb-3 pr-4"
                 >
                   <View
                     className="mr-3 h-8"

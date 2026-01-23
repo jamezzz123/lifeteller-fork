@@ -7,8 +7,11 @@ import {
   Dimensions,
   FlatList,
   Modal,
+  StatusBar,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Image } from 'expo-image';
 import { Send, Smile } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
@@ -21,7 +24,7 @@ interface MediaPreviewScreenProps {
   onSend: (caption: string) => void;
 }
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export function MediaPreviewScreen({
   visible,
@@ -29,6 +32,7 @@ export function MediaPreviewScreen({
   onClose,
   onSend,
 }: MediaPreviewScreenProps) {
+  const insets = useSafeAreaInsets();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [caption, setCaption] = useState('');
   const flatListRef = useRef<FlatList>(null);
@@ -56,22 +60,12 @@ export function MediaPreviewScreen({
 
   const renderMediaItem = ({ item }: { item: MediaItem }) => {
     return (
-      <View
-        style={{
-          width,
-          height: height * 0.7,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
+      <View style={{ width, height: '100%' }}>
         {item.type === 'image' ? (
           <Image
             source={{ uri: item.uri }}
-            style={{
-              width: '100%',
-              height: '100%',
-            }}
-            contentFit="contain"
+            style={{ width: '100%', height: '100%' }}
+            contentFit="cover"
           />
         ) : (
           <View className="flex-1 items-center justify-center bg-black">
@@ -95,9 +89,17 @@ export function MediaPreviewScreen({
       onRequestClose={onClose}
     >
       <View className="flex-1 bg-grey-alpha-550">
-        <SafeAreaView className="flex-1" edges={['top']}>
+        <StatusBar barStyle="dark-content" backgroundColor="white" />
+        <SafeAreaView className="flex-1 bg-white" edges={['top']}>
+          <KeyboardAvoidingView
+            className="flex-1"
+            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          >
           {/* Cancel Bar - White bar below status bar */}
-          <View className="bg-white px-6 py-4">
+          <View
+            className="bg-white px-6 py-4 border-b border-grey-plain-300"
+            style={{ paddingTop: Math.max(insets.top, 12) }}
+          >
             <TouchableOpacity onPress={onClose} activeOpacity={0.7}>
               <Text className="text-base font-medium text-grey-alpha-500">
                 Cancel
@@ -126,8 +128,8 @@ export function MediaPreviewScreen({
             {/* Media Counter Badge */}
             {media.length > 1 && (
               <View
-                className="absolute right-4 top-4 rounded-lg px-3 py-1.5"
-                style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                className="absolute bottom-24 self-center rounded-full px-3 py-1"
+                style={{ backgroundColor: 'rgba(0, 0, 0, 0.55)' }}
               >
                 <Text className="text-sm font-medium text-white">
                   {currentIndex + 1} of {media.length}
@@ -137,8 +139,11 @@ export function MediaPreviewScreen({
           </View>
 
           {/* Caption Input Section */}
-          <View className="border-t border-grey-plain-300 bg-white px-4 py-3">
-            <View className="flex-row items-end gap-3">
+          <View
+            className="border-t border-grey-plain-300 bg-white px-4 pt-3 pb-6"
+            style={{ paddingBottom: Math.max(insets.bottom + 12, 24) }}
+          >
+            <View className="flex-row items-center gap-3">
               <TouchableOpacity className="p-1">
                 <Smile color={colors['grey-plain']['550']} size={24} />
               </TouchableOpacity>
@@ -154,7 +159,7 @@ export function MediaPreviewScreen({
                     fontSize: 16,
                     textAlignVertical: 'center',
                     paddingVertical: 0,
-                    minHeight: 20,
+                    minHeight: 24,
                   }}
                   multiline
                   maxLength={500}
@@ -175,6 +180,7 @@ export function MediaPreviewScreen({
               </TouchableOpacity>
             </View>
           </View>
+          </KeyboardAvoidingView>
         </SafeAreaView>
       </View>
     </Modal>
