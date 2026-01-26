@@ -17,6 +17,7 @@ import {
   HandMetal,
   Medal,
   HandHelping,
+  HandHeart,
 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '@/theme/colors';
@@ -88,10 +89,10 @@ export function LiftCard({
         };
       case 'offered':
         return {
-          bg: colors['primary-tints'].purple['100'],
-          text: colors.primary.purple,
+          bg: '#E7F5E9',
+          text: '#22874E',
           label: 'Offered',
-          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
         };
       case 'accepted':
         return {
@@ -150,12 +151,17 @@ export function LiftCard({
         };
       case 'lift-raised':
         return {
-          icon: HandCoins,
+          icon: HandHeart,
           label: 'Lift raised',
+        };
+      case 'lift-raised-collaboration':
+        return {
+          icon: HandHeart,
+          label: 'Lift raised - collaboration',
         };
       case 'lift-offer':
         return {
-          icon: Hand,
+          icon: HandCoins,
           label: 'Lift offer',
         };
       case 'lift-offered':
@@ -193,7 +199,7 @@ export function LiftCard({
         </View>
         <Text className="text-[13px] text-grey-plain-550">
           Co-raised by{' '}
-          <Text className="font-semibold">{firstCoRaiser.name}</Text>
+          <Text className="font-inter-semibold">{firstCoRaiser.name}</Text>
           {othersCount > 0 && (
             <Text>
               {' '}
@@ -217,7 +223,7 @@ export function LiftCard({
             key={item.id}
             className="rounded-full bg-grey-plain-150 px-4 py-2"
           >
-            <Text className="text-[14px] font-medium text-grey-alpha-500">
+            <Text className="font-inter-medium text-[14px] text-grey-alpha-500">
               {item.name}
               {item.quantity && item.quantity > 1 ? ` (${item.quantity})` : ''}
             </Text>
@@ -249,7 +255,9 @@ export function LiftCard({
     return (
       <View className="mb-4">
         <Text className="mb-2 text-[13px] text-grey-plain-550">
-          <Text className="font-semibold">{formatCurrency(currentAmount)}</Text>{' '}
+          <Text className="font-inter-semibold">
+            {formatCurrency(currentAmount)}
+          </Text>{' '}
           of {formatCurrency(targetAmount)} raised
         </Text>
 
@@ -275,7 +283,7 @@ export function LiftCard({
                   marginLeft: pillPosition.marginLeft,
                 }}
               >
-                <Text className="text-xs font-medium text-grey-alpha-500">
+                <Text className="font-inter-medium text-xs text-grey-alpha-500">
                   {Math.round(progress)}%
                 </Text>
               </View>
@@ -311,7 +319,8 @@ export function LiftCard({
     return (
       <View className="mb-4">
         <Text className="text-[14px] text-grey-plain-550">
-          <Text className="font-semibold">Offered:</Text> {parts.join(' • ')}
+          <Text className="font-inter-semibold">Offered:</Text>{' '}
+          {parts.join(' • ')}
         </Text>
       </View>
     );
@@ -328,7 +337,7 @@ export function LiftCard({
             className="flex-1 items-start rounded-full  border-grey-alpha-250 bg-white py-3"
             activeOpacity={0.7}
           >
-            <Text className="text-sm font-semibold text-state-red">
+            <Text className="font-inter-semibold text-sm text-state-red">
               Decline
             </Text>
           </TouchableOpacity>
@@ -360,7 +369,7 @@ export function LiftCard({
           >
             <View className="flex-row items-center gap-2">
               <XCircle size={18} color={colors.state.red} />
-              <Text className="text-[15px] font-semibold text-state-red">
+              <Text className="font-inter-semibold text-[15px] text-state-red">
                 Decline
               </Text>
             </View>
@@ -400,7 +409,7 @@ export function LiftCard({
       >
         <View className="flex-row items-center gap-2">
           <HeaderIcon size={20} color={colors['grey-alpha']['500']} />
-          <Text className="text-[15px] font-medium text-grey-alpha-500">
+          <Text className="font-inter-medium text-[13px] text-grey-alpha-500">
             {headerConfig.label}
           </Text>
         </View>
@@ -410,7 +419,7 @@ export function LiftCard({
         >
           {statusConfig.icon}
           <Text
-            className="px-1 text-[13px] font-semibold"
+            className="px-1 font-inter-medium text-[13px]"
             style={{ color: statusConfig.text }}
           >
             {statusConfig.label}
@@ -439,7 +448,7 @@ export function LiftCard({
           </View>
           <View className="flex-1">
             <View className="flex-row items-center gap-1">
-              <Text className="text-[15px] font-semibold text-grey-alpha-500">
+              <Text className="font-inter-semibold text-[15px] text-grey-alpha-500">
                 {lift.owner.name}
               </Text>
               {lift.owner.verified && (
@@ -467,11 +476,11 @@ export function LiftCard({
 
         {/* Title & Description */}
         <View className="mb-3">
-          <Text className="mb-2 text-[17px] font-semibold text-grey-alpha-500">
+          <Text className="mb-2 font-inter-semibold text-[17px] text-grey-alpha-500">
             {lift.title}
           </Text>
           <Text
-            className="text-[14px] font-normal leading-5 text-grey-plain-550"
+            className="font-inter text-[14px] leading-5 text-grey-plain-550"
             numberOfLines={2}
             ellipsizeMode="tail"
           >
@@ -486,8 +495,10 @@ export function LiftCard({
           lift.monetary &&
           renderMonetaryProgress()}
 
-        {/* Co-raisers (for completed/active monetary lifts) */}
-        {(lift.status === 'completed' || lift.status === 'active') &&
+        {/* Co-raisers (for completed/active monetary lifts and lift-raised-collaboration) */}
+        {(lift.status === 'completed' ||
+          lift.status === 'active' ||
+          lift.cardType === 'lift-raised-collaboration') &&
           renderCoRaisers()}
 
         {/* Offer Details (for lift-offer cards) */}

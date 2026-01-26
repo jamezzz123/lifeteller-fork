@@ -432,4 +432,127 @@ export const mockLifts: Lift[] = [
     comments: 89,
     shares: 56,
   },
+  // LIFT RAISED - COLLABORATION (Accepted)
+  {
+    id: '8',
+    owner: {
+      id: 'user8',
+      name: 'Grace Adeyemi',
+      handle: 'graceadeyemi',
+      avatar: 'https://i.pravatar.cc/150?img=32',
+      verified: true,
+    },
+    collaborators: [
+      {
+        id: 'collab1',
+        name: 'Tunde Bakare',
+        avatar: 'https://i.pravatar.cc/150?img=33',
+        verified: true,
+      },
+      {
+        id: 'collab2',
+        name: 'Chioma Eze',
+        avatar: 'https://i.pravatar.cc/150?img=34',
+      },
+    ],
+    title: 'School renovation project',
+    description:
+      'Collaborated with the community to renovate the local primary school. Your collaboration request has been accepted and you are now part of this lift.',
+    liftType: 'monetary',
+    cardType: 'lift-raised-collaboration',
+    status: 'accepted',
+    timestamp: '2 hours ago',
+    category: 'Education',
+    location: 'Festac, Lagos',
+    timeRemaining: '18 days left',
+    monetary: {
+      currentAmount: 120000,
+      targetAmount: 300000,
+      coRaisers: [
+        {
+          id: 'raiser1',
+          name: 'Emeka Okonkwo',
+          avatar: 'https://i.pravatar.cc/150?img=35',
+          amount: 50000,
+        },
+        {
+          id: 'raiser2',
+          name: 'Funke Akindele',
+          avatar: 'https://i.pravatar.cc/150?img=36',
+          amount: 30000,
+        },
+        {
+          id: 'raiser3',
+          name: 'Segun Alade',
+          avatar: 'https://i.pravatar.cc/150?img=37',
+          amount: 40000,
+        },
+      ],
+    },
+    images: [
+      'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=800',
+      'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=800',
+      'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800',
+    ],
+    likes: 145,
+    comments: 32,
+    shares: 28,
+  },
+  // LIFT RAISED - COLLABORATION (Declined)
+  {
+    id: '9',
+    owner: {
+      id: 'user9',
+      name: 'Olumide Fashola',
+      handle: 'olumide_f',
+      avatar: 'https://i.pravatar.cc/150?img=40',
+      verified: false,
+    },
+    collaborators: [
+      {
+        id: 'collab1',
+        name: 'Yemi Alade',
+        avatar: 'https://i.pravatar.cc/150?img=41',
+      },
+    ],
+    title: 'Community water borehole',
+    description:
+      'A project to provide clean water to the neighborhood. Unfortunately, your collaboration request was declined.',
+    liftType: 'monetary',
+    cardType: 'lift-raised-collaboration',
+    status: 'declined',
+    timestamp: '1 day ago',
+    category: 'Community',
+    location: 'Oshodi, Lagos',
+    timeRemaining: '25 days left',
+    monetary: {
+      currentAmount: 85000,
+      targetAmount: 250000,
+      coRaisers: [
+        {
+          id: 'raiser1',
+          name: 'Kola Balogun',
+          avatar: 'https://i.pravatar.cc/150?img=42',
+          amount: 45000,
+        },
+        {
+          id: 'raiser2',
+          name: 'Ngozi Okafor',
+          avatar: 'https://i.pravatar.cc/150?img=43',
+          amount: 40000,
+        },
+      ],
+    },
+    declinedData: {
+      dateDeclined: '24/01/2026 ~ 2:30:15pm',
+      reason: 'Maximum collaborators reached',
+    },
+    images: [
+      'https://images.unsplash.com/photo-1541544537156-7627a7a4aa1c?w=800',
+      'https://images.unsplash.com/photo-1594398901394-4e34939a4fd0?w=800',
+    ],
+    likes: 67,
+    comments: 14,
+    shares: 9,
+  },
 ];

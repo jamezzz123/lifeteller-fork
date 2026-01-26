@@ -153,10 +153,10 @@ export default function LiftRequestDetailScreen() {
         };
       case 'offered':
         return {
-          bg: colors['primary-tints'].purple['100'],
-          text: colors.primary.purple,
+          bg: '#E7F5E9',
+          text: '#22874E',
           label: 'Offered',
-          icon: <HandMetal size={16} color={colors.primary.purple}></HandMetal>,
+          icon: <CircleCheck size={16} color={'#22874E'}></CircleCheck>,
         };
       case 'accepted':
         return {
@@ -211,7 +211,7 @@ export default function LiftRequestDetailScreen() {
           <TouchableOpacity onPress={() => router.back()}>
             <CornerUpLeft color={colors['grey-plain']['550']} size={24} />
           </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
+          <Text className="text-lg font-inter-semibold text-grey-alpha-500">
             Lift request
           </Text>
         </View>
@@ -253,7 +253,7 @@ export default function LiftRequestDetailScreen() {
             </View>
             <View className="flex-1">
               <View className="flex-row items-center gap-1.5">
-                <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                   {liftData.owner.name}
                 </Text>
                 {liftData.owner.verified && (
@@ -273,7 +273,7 @@ export default function LiftRequestDetailScreen() {
             >
               {getStatusConfig().icon}
               <Text
-                className="text-xs font-medium"
+                className="text-xs font-inter-medium"
                 style={{ color: getStatusConfig().text }}
               >
                 {getStatusConfig().label}
@@ -322,16 +322,16 @@ export default function LiftRequestDetailScreen() {
 
         {/* Title */}
         <View className="bg-white px-4 pb-2">
-          <Text className="text-xl font-bold text-grey-alpha-550">
+          <Text className="text-xl font-inter-bold text-grey-alpha-550">
             {liftData.title}
           </Text>
         </View>
 
         {/* Description */}
         <View className="bg-white px-4 pb-4">
-          <Text className="text-[15px] font-normal leading-6 text-grey-alpha-500">
+          <Text className="text-[15px] font-inter leading-6 text-grey-alpha-500">
             {liftData.description}{' '}
-            <Text className="font-bold text-grey-alpha-500">see more</Text>
+            <Text className="font-inter-bold text-grey-alpha-500">see more</Text>
           </Text>
         </View>
 
@@ -341,7 +341,7 @@ export default function LiftRequestDetailScreen() {
         {/* Amount */}
         {liftData.monetary && (
           <View className="bg-white px-4 pb-4">
-            <Text className="text-3xl font-bold text-grey-alpha-500">
+            <Text className="text-3xl font-inter-bold text-grey-alpha-500">
               ₦{targetAmount.toLocaleString()}
             </Text>
           </View>
@@ -399,7 +399,7 @@ export default function LiftRequestDetailScreen() {
 
         {/* Requested By Section */}
         <View className="bg-white px-4 py-4">
-          <Text className="mb-4 text-xs font-semibold uppercase tracking-wider text-grey-plain-550">
+          <Text className="mb-4 text-xs font-inter-semibold uppercase tracking-wider text-grey-plain-550">
             Requested by
           </Text>
 
@@ -428,7 +428,7 @@ export default function LiftRequestDetailScreen() {
             </View>
             <View className="flex-1">
               <View className="flex-row items-center gap-1.5">
-                <Text className="text-[15px] font-semibold text-grey-alpha-500">
+                <Text className="text-[15px] font-inter-semibold text-grey-alpha-500">
                   {liftData.owner.name}
                 </Text>
                 {liftData.owner.verified && (
@@ -458,7 +458,7 @@ export default function LiftRequestDetailScreen() {
             >
               <View className="flex-row items-center gap-1">
                 <Medal color={colors.primary.purple} size={14} />
-                <Text className="text-primary-purple text-xs font-medium">
+                <Text className="text-primary-purple text-xs font-inter-medium">
                   Lift Captain
                 </Text>
               </View>
@@ -471,7 +471,7 @@ export default function LiftRequestDetailScreen() {
               <Text className="mb-1 px-2 text-xs text-grey-plain-550">
                 Total Lifts
               </Text>
-              <Text className="rounded bg-white px-2 py-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="rounded bg-white px-2 py-1 text-2xl font-inter-bold text-grey-alpha-500">
                 24
               </Text>
             </View>
@@ -479,7 +479,7 @@ export default function LiftRequestDetailScreen() {
               <Text className="mb-1 px-2 text-xs text-grey-plain-550">
                 Total Lift Offered
               </Text>
-              <Text className="rounded bg-white px-2 py-1 text-2xl font-bold text-grey-alpha-500">
+              <Text className="rounded bg-white px-2 py-1 text-2xl font-inter-bold text-grey-alpha-500">
                 24
               </Text>
             </View>
@@ -488,10 +488,10 @@ export default function LiftRequestDetailScreen() {
           {/* Followers/Following */}
           <View className="mt-4 flex-row gap-4">
             <Text className="text-sm text-grey-alpha-500">
-              <Text className="font-semibold">1,324</Text> Following
+              <Text className="font-inter-semibold">1,324</Text> Following
             </Text>
             <Text className="text-sm text-grey-alpha-500">
-              <Text className="font-semibold">48.2k</Text> Followers
+              <Text className="font-inter-semibold">48.2k</Text> Followers
             </Text>
           </View>
 
@@ -508,8 +508,8 @@ export default function LiftRequestDetailScreen() {
               />
             </View>
             <Text className="text-[13px] text-grey-plain-550">
-              Followed by <Text className="font-semibold">Seyi Makinde</Text>{' '}
-              and <Text className="font-semibold">21 others</Text>
+              Followed by <Text className="font-inter-semibold">Seyi Makinde</Text>{' '}
+              and <Text className="font-inter-semibold">21 others</Text>
             </Text>
           </View>
         </View>
@@ -522,7 +522,7 @@ export default function LiftRequestDetailScreen() {
           <View className="bg-white px-4 py-4">
             {/* Date Offered */}
             <View className="mb-3">
-              <Text className="mb-1 text-xs font-medium text-grey-plain-550">
+              <Text className="mb-1 text-xs font-inter-medium text-grey-plain-550">
                 Date offered
               </Text>
               <Text className="text-sm text-grey-alpha-500">
@@ -532,17 +532,17 @@ export default function LiftRequestDetailScreen() {
 
             {/* Amount Offered */}
             <View className="mb-3">
-              <Text className="mb-1 text-xs font-medium text-grey-plain-550">
+              <Text className="mb-1 text-xs font-inter-medium text-grey-plain-550">
                 Amount offered
               </Text>
-              <Text className="text-lg font-bold text-grey-alpha-500">
+              <Text className="text-lg font-inter-bold text-grey-alpha-500">
                 ₦{liftData.offeredData.amountOffered.toLocaleString()}
               </Text>
             </View>
 
             {/* Uplifting Message */}
             <View>
-              <Text className="mb-1 text-xs font-medium text-grey-plain-550">
+              <Text className="mb-1 text-xs font-inter-medium text-grey-plain-550">
                 Uplifting message
               </Text>
               <Text className="text-sm leading-5 text-grey-alpha-500">
@@ -557,7 +557,7 @@ export default function LiftRequestDetailScreen() {
           <View className="bg-white px-4 py-4">
             {/* Date Declined */}
             <View className="mb-3">
-              <Text className="mb-1 text-xs font-medium text-grey-plain-550">
+              <Text className="mb-1 text-xs font-inter-medium text-grey-plain-550">
                 Date declined
               </Text>
               <Text className="text-sm text-grey-alpha-500">
@@ -568,7 +568,7 @@ export default function LiftRequestDetailScreen() {
             {/* Reason (if provided) */}
             {liftData.declinedData.reason && (
               <View>
-                <Text className="mb-1 text-xs font-medium text-grey-plain-550">
+                <Text className="mb-1 text-xs font-inter-medium text-grey-plain-550">
                   Reason
                 </Text>
                 <Text className="text-sm leading-5 text-grey-alpha-500">
@@ -584,10 +584,10 @@ export default function LiftRequestDetailScreen() {
           <>
             {/* Requested From Section */}
             <View className="bg-white px-4 py-4">
-              <Text className="mb-2 text-xs font-semibold uppercase tracking-wider text-grey-plain-550">
+              <Text className="mb-2 text-xs font-inter-semibold uppercase tracking-wider text-grey-plain-550">
                 REQUESTED FROM
               </Text>
-              <Text className="text-base font-semibold text-grey-alpha-500">
+              <Text className="text-base font-inter-semibold text-grey-alpha-500">
                 EVERYONE
               </Text>
             </View>
@@ -599,16 +599,16 @@ export default function LiftRequestDetailScreen() {
             <View className="bg-white px-4 py-4">
               {/* Header */}
               <View className="mb-4 flex-row items-center justify-between">
-                <Text className="text-xs font-semibold uppercase tracking-wider text-grey-alpha-500">
+                <Text className="text-xs font-inter-semibold uppercase tracking-wider text-grey-alpha-500">
                   LIFTED BY{' '}
-                  <Text className="font-normal">
+                  <Text className="font-inter">
                     ({liftData.monetary?.coRaisers?.length || 0})
                   </Text>
                 </Text>
                 <TouchableOpacity
                   onPress={() => router.push(`/lifted-by/${id}` as any)}
                 >
-                  <Text className="text-primary-purple text-[13px] font-medium">
+                  <Text className="text-primary-purple text-[13px] font-inter-medium">
                     See more
                   </Text>
                 </TouchableOpacity>
@@ -649,7 +649,7 @@ export default function LiftRequestDetailScreen() {
           <View className="flex-row items-center justify-between gap-3">
             {liftData.monetary && (
               <View className="flex-1">
-                <Text className="text-2xl font-bold text-grey-alpha-500">
+                <Text className="text-2xl font-inter-bold text-grey-alpha-500">
                   ₦{targetAmount.toLocaleString()}
                 </Text>
               </View>
@@ -659,12 +659,12 @@ export default function LiftRequestDetailScreen() {
               activeOpacity={0.7}
               onPress={() => setShowConfirmDialog(true)}
             >
-              <Text className="text-sm font-semibold text-state-red">
+              <Text className="text-sm font-inter-semibold text-state-red">
                 Decline
               </Text>
             </TouchableOpacity>
             <Button onPress={handleOfferLift} variant="primary">
-              <Text className="text-sm font-semibold text-white">
+              <Text className="text-sm font-inter-semibold text-white">
                 Offer Lift
               </Text>
             </Button>

@@ -40,7 +40,13 @@ export const AllowCollaboratorsBottomSheet = forwardRef<
   }
 
   return (
-    <BottomSheetComponent ref={ref} snapPoints={['50%']}>
+    <BottomSheetComponent
+      ref={ref}
+      snapPoints={['50%', '90%']}
+      keyboardBehavior="extend"
+      android_keyboardInputMode="adjustResize"
+      scrollable
+    >
       <View className="px-4 pb-4">
         <Text className="mb-2 text-lg font-bold text-grey-alpha-500">
           Allow collaborators

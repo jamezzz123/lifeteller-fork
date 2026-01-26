@@ -20,6 +20,10 @@ export default function LiftsScreen() {
     { id: 'pending', label: 'Pending', count: 3 },
     { id: 'clips', label: 'Clips', count: 9 },
     { id: 'offered', label: 'Offered', count: 9 },
+    { id: 'raised', label: 'Raised', count: 2 },
+    { id: 'request', label: 'Request', count: 4 },
+    { id: 'offer', label: 'Offer', count: 1 },
+    // 'all', pending, clips, offered,
   ];
   const [activeFilter, setActiveFilter] = useState('all');
   const [likedItems, setLikedItems] = useState<Set<string>>(new Set());
