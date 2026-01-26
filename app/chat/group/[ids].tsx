@@ -1,32 +1,87 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
-  TextInput as RNTextInput,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
 import {
   CornerUpLeft,
   MoreVertical,
-  Smile,
-  Paperclip,
-  Camera,
-  Mic,
+  FileText,
+  FileImage,
+  FileAudio,
+  FileVideo,
+  X,
 } from 'lucide-react-native';
 import { Avatar } from '@/components/ui/Avatar';
 import { colors } from '@/theme/colors';
 import { AttachmentBottomSheet } from '@/components/chat/AttachmentBottomSheet';
+import {
+  MediaSelectionScreen,
+  MediaItem,
+} from '@/components/chat/MediaSelectionScreen';
+import { MediaPreviewScreen } from '@/components/chat/MediaPreviewScreen';
 import { CONTACTS } from '@/components/request-lift/data';
+import { ChatMessageBar } from '@/components/chat/ChatMessageBar';
+import { Image } from 'expo-image';
+import PdfIcon from '@/assets/images/file-type-pdf.svg';
+
+interface TextMessage {
+  id: string;
+  type: 'text';
+  text: string;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+interface MediaMessage {
+  id: string;
+  type: 'media';
+  media: MediaItem[];
+  caption?: string;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+interface DocumentAttachment {
+  uri: string;
+  name: string;
+  size?: number;
+  mimeType?: string;
+}
+
+interface DocumentMessage {
+  id: string;
+  type: 'document';
+  document: DocumentAttachment;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+type Message = TextMessage | MediaMessage | DocumentMessage;
 
 export default function GroupChatScreen() {
   const { ids } = useLocalSearchParams<{ ids: string }>();
   const [message, setMessage] = useState('');
   const [showAttachmentSheet, setShowAttachmentSheet] = useState(false);
+  const [showMediaSelection, setShowMediaSelection] = useState(false);
+  const [showMediaPreview, setShowMediaPreview] = useState(false);
+  const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
+  const [pendingMediaPreview, setPendingMediaPreview] = useState(false);
+  const [selectedDocuments, setSelectedDocuments] = useState<
+    DocumentAttachment[]
+  >([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const attachmentSheetRef = useRef<any>(null);
 
   // Parse contact IDs from route params
@@ -47,8 +102,36 @@ export default function GroupChatScreen() {
   const memberCount = groupMembers.length;
 
   const handleSendMessage = () => {
+    if (selectedDocuments.length > 0) {
+      const timestamp = formatTimestamp(new Date());
+      setMessages((prev) => [
+        ...prev,
+        ...selectedDocuments.map((doc, index) => ({
+          id: `${Date.now()}-${index}`,
+          type: 'document' as const,
+          document: doc,
+          isSent: true,
+          isSeen: true,
+          timestamp,
+        })),
+      ]);
+      setSelectedDocuments([]);
+      setMessage('');
+      return;
+    }
+
     if (message.trim()) {
-      // TODO: Send message via API
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now().toString(),
+          type: 'text',
+          text: message.trim(),
+          isSent: true,
+          isSeen: true,
+          timestamp: formatTimestamp(new Date()),
+        },
+      ]);
       setMessage('');
     }
   };
@@ -56,9 +139,159 @@ export default function GroupChatScreen() {
   const handleAttachmentSelect = (
     type: 'gallery' | 'camera' | 'document' | 'audio'
   ) => {
-    // TODO: Handle attachment selection
-    console.log('Selected attachment type:', type);
     setShowAttachmentSheet(false);
+    if (type === 'gallery' || type === 'camera') {
+      if (type === 'camera') {
+        handleOpenCamera();
+        return;
+      }
+      setShowMediaSelection(true);
+      return;
+    }
+    if (type === 'document') {
+      handlePickDocument();
+      return;
+    }
+    if (type === 'audio') handlePickAudio();
+  };
+
+  const handleMediaSelected = (media: MediaItem[]) => {
+    setSelectedMedia(media);
+    setShowMediaSelection(false);
+    setPendingMediaPreview(true);
+  };
+
+  useEffect(() => {
+    if (!pendingMediaPreview) return;
+    if (showMediaSelection) return;
+    if (selectedMedia.length === 0) return;
+    const timeout = setTimeout(() => {
+      setShowMediaPreview(true);
+      setPendingMediaPreview(false);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [pendingMediaPreview, selectedMedia.length, showMediaSelection]);
+
+  const handleOpenCamera = async () => {
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
+    if (status !== 'granted') {
+      alert('Camera permission is required to take a photo or video.');
+      return;
+    }
+
+    const result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 0.8,
+    });
+
+    if (!result.canceled && result.assets[0]) {
+      const asset = result.assets[0];
+      const captured: MediaItem = {
+        id: Date.now().toString(),
+        uri: asset.uri,
+        type: asset.type === 'video' ? 'video' : 'image',
+        fileName: asset.fileName ?? undefined,
+      };
+      setSelectedMedia([captured]);
+      setShowMediaPreview(true);
+    }
+  };
+
+  const handlePickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        copyToCacheDirectory: true,
+      });
+
+      if (result.canceled) return;
+      const files = result.assets.map((file) => ({
+        uri: file.uri,
+        name: file.name,
+        size: file.size,
+        mimeType: file.mimeType,
+      }));
+      setSelectedDocuments((prev) => [...prev, ...files]);
+    } catch (error) {
+      console.log('Document picker error:', error);
+    }
+  };
+
+  const handlePickAudio = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        copyToCacheDirectory: true,
+        type: ['audio/*'],
+      });
+
+      if (result.canceled) return;
+      const files = result.assets.map((file) => ({
+        uri: file.uri,
+        name: file.name,
+        size: file.size,
+        mimeType: file.mimeType,
+      }));
+      setSelectedDocuments((prev) => [...prev, ...files]);
+    } catch (error) {
+      console.log('Audio picker error:', error);
+    }
+  };
+
+  const formatTimestamp = (date: Date) => {
+    return date
+      .toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+      .replace(' ', '')
+      .toLowerCase();
+  };
+
+  const formatFileSize = (size?: number) => {
+    if (!size) return '';
+    const kb = size / 1024;
+    if (kb < 1024) return `${Math.round(kb)}kb`;
+    return `${(kb / 1024).toFixed(1)}mb`;
+  };
+
+  const renderDocumentIcon = (mimeType?: string, size = 22) => {
+    if (mimeType?.includes('pdf')) return <PdfIcon width={size} height={size} />;
+    if (mimeType?.startsWith('image/'))
+      return <FileImage size={size} color={colors['grey-plain']['50']} />;
+    if (mimeType?.startsWith('audio/'))
+      return <FileAudio size={size} color={colors['grey-plain']['50']} />;
+    if (mimeType?.startsWith('video/'))
+      return <FileVideo size={size} color={colors['grey-plain']['50']} />;
+    return <FileText size={size} color={colors['grey-plain']['50']} />;
+  };
+
+  const handleRemoveSelectedDocument = (uri: string) => {
+    setSelectedDocuments((prev) => prev.filter((doc) => doc.uri !== uri));
+  };
+
+  const handleSendMedia = (caption: string) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        type: 'media',
+        media: selectedMedia,
+        caption: caption.trim() ? caption.trim() : undefined,
+        isSent: true,
+        isSeen: true,
+        timestamp: formatTimestamp(new Date()),
+      },
+    ]);
+    setShowMediaPreview(false);
+    setSelectedMedia([]);
+    setMessage('');
+  };
+
+  const handleOpenAttachmentSheet = () => {
+    setShowAttachmentSheet(true);
+    attachmentSheetRef.current?.expand();
   };
 
   // Create group avatar from first few members
@@ -251,53 +484,193 @@ export default function GroupChatScreen() {
           </View>
 
           {/* Messages will appear here */}
-          {/* TODO: Add group messages */}
+          {messages.map((msg) => {
+            if (msg.type === 'media') {
+              const preview = msg.media[0];
+              return (
+                <View
+                  key={msg.id}
+                  className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+                >
+                  <View className="max-w-[80%] rounded-2xl bg-grey-plain-150 p-3">
+                    <View className="overflow-hidden rounded-2xl">
+                      {preview?.type === 'image' ? (
+                        <Image
+                          source={{ uri: preview.uri }}
+                          style={{ width: 220, height: 220 }}
+                          contentFit="cover"
+                        />
+                      ) : (
+                        <View className="items-center justify-center bg-black">
+                          <Text className="text-white">Video preview</Text>
+                        </View>
+                      )}
+                    </View>
+                    {msg.media.length > 1 && (
+                      <View
+                        className="absolute right-4 top-4 rounded-full px-2 py-1"
+                        style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)' }}
+                      >
+                        <Text className="text-xs font-medium text-white">
+                          1 of {msg.media.length}
+                        </Text>
+                      </View>
+                    )}
+                    {msg.caption && (
+                      <Text className="mt-2 text-base text-grey-alpha-500">
+                        {msg.caption}
+                      </Text>
+                    )}
+                    <View className="mt-2 flex-row items-center gap-2">
+                      <Text className="text-xs text-grey-plain-550">
+                        {msg.timestamp}
+                      </Text>
+                      {msg.isSent && msg.isSeen && (
+                        <Text className="text-xs text-grey-plain-550">
+                          • Seen
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                </View>
+              );
+            }
+
+            if (msg.type === 'document') {
+              return (
+                <View
+                  key={msg.id}
+                  className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+                >
+                  <View className="max-w-[85%] rounded-2xl bg-grey-plain-150 p-4">
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-row items-center gap-3">
+                        <View
+                          className="items-center justify-center rounded-2xl"
+                          style={{
+                            width: 56,
+                            height: 56,
+                            backgroundColor: colors.primary.purple,
+                          }}
+                        >
+                          {renderDocumentIcon(msg.document.mimeType, 28)}
+                        </View>
+                        <View className="flex-1">
+                          <Text
+                            className="text-base font-semibold text-grey-alpha-500"
+                            numberOfLines={1}
+                          >
+                            {msg.document.name}
+                          </Text>
+                          <Text className="text-sm text-grey-plain-550">
+                            {msg.document.mimeType?.toUpperCase() || 'FILE'}
+                            {msg.document.size
+                              ? ` • ${formatFileSize(msg.document.size)}`
+                              : ''}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
+                    <View className="mt-3 flex-row items-center gap-2">
+                      <Text className="text-xs text-grey-plain-550">
+                        {msg.timestamp}
+                      </Text>
+                      {msg.isSent && msg.isSeen && (
+                        <Text className="text-xs text-grey-plain-550">
+                          • Seen
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                </View>
+              );
+            }
+
+            return (
+              <View
+                key={msg.id}
+                className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+              >
+                <View className="max-w-[80%] rounded-2xl bg-grey-plain-150 px-4 py-3">
+                  <Text className="text-base text-grey-alpha-500">
+                    {msg.text}
+                  </Text>
+                  <View className="mt-2 flex-row items-center gap-2">
+                    <Text className="text-xs text-grey-plain-550">
+                      {msg.timestamp}
+                    </Text>
+                    {msg.isSent && msg.isSeen && (
+                      <Text className="text-xs text-grey-plain-550">
+                        • Seen
+                      </Text>
+                    )}
+                  </View>
+                </View>
+              </View>
+            );
+          })}
         </ScrollView>
 
-        {/* Message Input Bar */}
-        <View className="border-t border-grey-plain-150 bg-white px-4 py-3">
-          <View className="flex-row items-center gap-3">
-            <TouchableOpacity className="p-1">
-              <Smile color={colors['grey-plain']['550']} size={24} />
-            </TouchableOpacity>
-
-            <View className="flex-1 flex-row items-center rounded-full border border-grey-plain-300 bg-grey-plain-50 px-4 py-2">
-              <RNTextInput
-                value={message}
-                onChangeText={setMessage}
-                placeholder="Start a message..."
-                placeholderTextColor={colors['grey-alpha']['400']}
-                className="flex-1 text-base text-grey-alpha-500"
-                style={{ fontSize: 16 }}
-                multiline
-                maxLength={500}
-              />
-            </View>
-
-            <TouchableOpacity
-              onPress={() => setShowAttachmentSheet(true)}
-              className="p-1"
+        {selectedDocuments.length > 0 && (
+          <View className="border-t border-grey-plain-150 bg-white px-4 pt-3">
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 12 }}
             >
-              <Paperclip color={colors['grey-plain']['550']} size={24} />
-            </TouchableOpacity>
-
-            <TouchableOpacity className="p-1">
-              <Camera color={colors['grey-plain']['550']} size={24} />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={handleSendMessage}
-              className="items-center justify-center rounded-full"
-              style={{
-                width: 48,
-                height: 48,
-                backgroundColor: colors.primary.purple,
-              }}
-            >
-              <Mic color={colors['grey-plain']['50']} size={24} />
-            </TouchableOpacity>
+              {selectedDocuments.map((doc) => (
+                <View
+                  key={doc.uri}
+                  className="flex-row items-center gap-3 rounded-2xl px-3 py-2"
+                  style={{ backgroundColor: colors['grey-plain']['100'] }}
+                >
+                  <View
+                    className="items-center justify-center rounded-xl"
+                    style={{
+                      width: 36,
+                      height: 36,
+                      backgroundColor: colors.primary.purple,
+                    }}
+                  >
+                    {renderDocumentIcon(doc.mimeType, 18)}
+                  </View>
+                  <View style={{ maxWidth: 180 }}>
+                    <Text
+                      className="text-sm font-semibold text-grey-alpha-500"
+                      numberOfLines={1}
+                    >
+                      {doc.name}
+                    </Text>
+                    <Text className="text-xs text-grey-plain-550">
+                      {doc.mimeType?.toUpperCase() || 'FILE'}
+                      {doc.size ? ` • ${formatFileSize(doc.size)}` : ''}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleRemoveSelectedDocument(doc.uri)}
+                    className="items-center justify-center rounded-full"
+                    style={{
+                      width: 28,
+                      height: 28,
+                      backgroundColor: colors['grey-plain']['150'],
+                    }}
+                  >
+                    <X size={16} color={colors['grey-plain']['550']} />
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </ScrollView>
           </View>
-        </View>
+        )}
+
+        <ChatMessageBar
+          message={message}
+          onChangeMessage={setMessage}
+          onSend={handleSendMessage}
+          onOpenAttachments={handleOpenAttachmentSheet}
+          onOpenCamera={handleOpenAttachmentSheet}
+          hasAttachments={selectedDocuments.length > 0}
+        />
 
         {/* Attachment Bottom Sheet */}
         <AttachmentBottomSheet
@@ -305,6 +678,24 @@ export default function GroupChatScreen() {
           visible={showAttachmentSheet}
           onSelectAttachment={handleAttachmentSelect}
           onClose={() => setShowAttachmentSheet(false)}
+        />
+
+        <MediaSelectionScreen
+          visible={showMediaSelection}
+          onClose={() => setShowMediaSelection(false)}
+          onProceed={handleMediaSelected}
+          maxSelection={10}
+          autoProceedOnPick
+        />
+
+        <MediaPreviewScreen
+          visible={showMediaPreview}
+          media={selectedMedia}
+          onClose={() => {
+            setShowMediaPreview(false);
+            setSelectedMedia([]);
+          }}
+          onSend={handleSendMedia}
         />
       </KeyboardAvoidingView>
     </SafeAreaView>

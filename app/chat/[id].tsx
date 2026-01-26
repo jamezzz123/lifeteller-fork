@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
-  TextInput as RNTextInput,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -17,11 +16,6 @@ import {
   Video,
   Phone,
   MoreVertical,
-  Smile,
-  Paperclip,
-  Camera,
-  Mic,
-  SendHorizontal,
   HandHelping,
   HandCoins,
   BadgeCheck,
@@ -36,6 +30,7 @@ import { Avatar } from '@/components/ui/Avatar';
 import { colors } from '@/theme/colors';
 import { AttachmentBottomSheet } from '@/components/chat/AttachmentBottomSheet';
 import { ChatOptionsMenu } from '@/components/chat/ChatOptionsMenu';
+import { ChatMessageBar } from '@/components/chat/ChatMessageBar';
 import {
   MediaSelectionScreen,
   MediaItem,
@@ -110,6 +105,7 @@ export default function ChatScreen() {
   const [showMediaSelection, setShowMediaSelection] = useState(false);
   const [showMediaPreview, setShowMediaPreview] = useState(false);
   const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
+  const [pendingMediaPreview, setPendingMediaPreview] = useState(false);
   const [selectedDocuments, setSelectedDocuments] = useState<
     DocumentAttachment[]
   >([]);
@@ -117,8 +113,6 @@ export default function ChatScreen() {
   const [showMessageMenu, setShowMessageMenu] = useState(false);
   const attachmentSheetRef = useRef<any>(null);
   const scrollViewRef = useRef<ScrollView>(null);
-  const hasMessage = message.trim().length > 0;
-  const hasAttachment = selectedDocuments.length > 0;
 
   // Find contact by ID
   const contact = CONTACTS.find((c) => c.id === id) || CONTACTS[0];
@@ -339,8 +333,19 @@ export default function ChatScreen() {
   const handleMediaSelected = (media: MediaItem[]) => {
     setSelectedMedia(media);
     setShowMediaSelection(false);
-    setShowMediaPreview(true);
+    setPendingMediaPreview(true);
   };
+
+  useEffect(() => {
+    if (!pendingMediaPreview) return;
+    if (showMediaSelection) return;
+    if (selectedMedia.length === 0) return;
+    const timeout = setTimeout(() => {
+      setShowMediaPreview(true);
+      setPendingMediaPreview(false);
+    }, 250);
+    return () => clearTimeout(timeout);
+  }, [pendingMediaPreview, selectedMedia.length, showMediaSelection]);
 
   const formatTimestamp = (date: Date) => {
     return date
@@ -368,6 +373,10 @@ export default function ChatScreen() {
     if (mimeType?.startsWith('video/'))
       return <FileVideo size={size} color={colors['grey-plain']['50']} />;
     return <FileText size={size} color={colors['grey-plain']['50']} />;
+  };
+
+  const handleRemoveSelectedDocument = (uri: string) => {
+    setSelectedDocuments((prev) => prev.filter((doc) => doc.uri !== uri));
   };
 
   const handleSendMedia = (caption: string) => {
@@ -526,7 +535,7 @@ export default function ChatScreen() {
               }
               name={contact.name}
               size={40}
-              showBadge={true}
+              showBadge={false}
             />
             {/* Online Status Dot */}
             <View
@@ -585,6 +594,18 @@ export default function ChatScreen() {
           }}
           showsVerticalScrollIndicator={false}
         >
+          {messages.length === 0 && isNewConversationMock && (
+            <View className="mb-4 items-center">
+              <View
+                className="rounded-full px-4 py-2"
+                style={{ backgroundColor: colors['grey-plain']['150'] }}
+              >
+                <Text className="text-xs text-grey-plain-550">
+                  Last seen: Yesterday, 12:09pm
+                </Text>
+              </View>
+            </View>
+          )}
           {/* Date Separator - Show only if there are messages */}
           {messages.length > 0 && (
             <View className="mb-4 flex-row items-center">
@@ -833,108 +854,66 @@ export default function ChatScreen() {
           </View>
         )}
 
-        {/* Message Input Bar */}
-        <View className="border-t border-grey-plain-150 bg-white px-4 py-3">
-          {selectedDocuments.length > 0 && (
-            <View className="mb-3 gap-2">
-              {selectedDocuments.map((doc, index) => (
+        {selectedDocuments.length > 0 && (
+          <View className="border-t border-grey-plain-150 bg-white px-4 pt-3">
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ gap: 12 }}
+            >
+              {selectedDocuments.map((doc) => (
                 <View
-                  key={`${doc.uri}-${index}`}
-                  className="rounded-2xl bg-grey-plain-150 p-3"
+                  key={doc.uri}
+                  className="flex-row items-center gap-3 rounded-2xl px-3 py-2"
+                  style={{ backgroundColor: colors['grey-plain']['100'] }}
                 >
-                  <View className="flex-row items-center justify-between">
-                    <View className="flex-1 flex-row items-center gap-3 pr-3">
-                      <View
-                        className="items-center justify-center rounded-2xl"
-                        style={{
-                          width: 48,
-                          height: 48,
-                          backgroundColor: colors.primary.purple,
-                        }}
-                      >
-                        {renderDocumentIcon(doc.mimeType, 22)}
-                      </View>
-                      <View className="flex-1">
-                        <Text
-                          className="text-sm font-semibold text-grey-alpha-500"
-                          numberOfLines={1}
-                        >
-                          {doc.name}
-                        </Text>
-                        <Text className="text-xs text-grey-plain-550">
-                          {doc.mimeType?.toUpperCase() || 'FILE'}
-                          {doc.size ? ` • ${formatFileSize(doc.size)}` : ''}
-                        </Text>
-                      </View>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() =>
-                        setSelectedDocuments((prev) =>
-                          prev.filter((_, itemIndex) => itemIndex !== index)
-                        )
-                      }
-                      className="size-8 items-center justify-center rounded-full bg-grey-plain-300"
-                    >
-                      <X size={18} color={colors['grey-plain']['600']} />
-                    </TouchableOpacity>
+                  <View
+                    className="items-center justify-center rounded-xl"
+                    style={{
+                      width: 36,
+                      height: 36,
+                      backgroundColor: colors.primary.purple,
+                    }}
+                  >
+                    {renderDocumentIcon(doc.mimeType, 18)}
                   </View>
+                  <View style={{ maxWidth: 180 }}>
+                    <Text
+                      className="text-sm font-semibold text-grey-alpha-500"
+                      numberOfLines={1}
+                    >
+                      {doc.name}
+                    </Text>
+                    <Text className="text-xs text-grey-plain-550">
+                      {doc.mimeType?.toUpperCase() || 'FILE'}
+                      {doc.size ? ` • ${formatFileSize(doc.size)}` : ''}
+                    </Text>
+                  </View>
+                  <TouchableOpacity
+                    onPress={() => handleRemoveSelectedDocument(doc.uri)}
+                    className="items-center justify-center rounded-full"
+                    style={{
+                      width: 28,
+                      height: 28,
+                      backgroundColor: colors['grey-plain']['150'],
+                    }}
+                  >
+                    <X size={16} color={colors['grey-plain']['550']} />
+                  </TouchableOpacity>
                 </View>
               ))}
-            </View>
-          )}
-          <View className="flex-row items-start gap-3">
-            <TouchableOpacity className="p-1">
-              <Smile color={colors['grey-plain']['550']} size={24} />
-            </TouchableOpacity>
-
-            <View className="flex-1 flex-row items-center rounded-3xl border border-grey-plain-300 bg-grey-plain-50 px-4 py-2">
-              <RNTextInput
-                value={message}
-                onChangeText={setMessage}
-                placeholder="Start a message..."
-                placeholderTextColor={colors['grey-alpha']['400']}
-                className="flex-1 text-base text-grey-alpha-500"
-                style={{
-                  fontSize: 16,
-                  textAlignVertical: 'center',
-                  paddingVertical: 0,
-                  minHeight: 20,
-                }}
-                multiline
-                maxLength={500}
-              />
-            </View>
-
-            <View className="flex flex-row items-center gap-3">
-              <TouchableOpacity
-                onPress={() => setShowAttachmentSheet(true)}
-                className="p-1"
-              >
-                <Paperclip color={colors['grey-plain']['550']} size={24} />
-              </TouchableOpacity>
-
-              <TouchableOpacity className="p-1" onPress={handleOpenCamera}>
-                <Camera color={colors['grey-plain']['550']} size={24} />
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                onPress={handleSendMessage}
-                className="items-center justify-center rounded-full"
-                style={{
-                  width: 48,
-                  height: 48,
-                  backgroundColor: colors.primary.purple,
-                }}
-              >
-                {hasMessage || hasAttachment ? (
-                  <SendHorizontal color={colors['grey-plain']['50']} size={24} />
-                ) : (
-                  <Mic color={colors['grey-plain']['50']} size={24} />
-                )}
-              </TouchableOpacity>
-            </View>
+            </ScrollView>
           </View>
-        </View>
+        )}
+
+        <ChatMessageBar
+          message={message}
+          onChangeMessage={setMessage}
+          onSend={handleSendMessage}
+          onOpenAttachments={() => setShowAttachmentSheet(true)}
+          onOpenCamera={() => setShowAttachmentSheet(true)}
+          hasAttachments={selectedDocuments.length > 0}
+        />
 
         {/* Attachment Bottom Sheet */}
         <AttachmentBottomSheet
@@ -960,6 +939,7 @@ export default function ChatScreen() {
           onClose={() => setShowMediaSelection(false)}
           onProceed={handleMediaSelected}
           maxSelection={10}
+          autoProceedOnPick
         />
 
         {/* Media Preview Screen */}

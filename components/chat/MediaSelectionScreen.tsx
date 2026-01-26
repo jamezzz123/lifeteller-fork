@@ -29,6 +29,7 @@ interface MediaSelectionScreenProps {
   onProceed: (selectedMedia: MediaItem[]) => void;
   maxSelection?: number;
   initialSelected?: MediaItem[];
+  autoProceedOnPick?: boolean;
 }
 
 const { width } = Dimensions.get('window');
@@ -43,6 +44,7 @@ export function MediaSelectionScreen({
   onProceed,
   maxSelection = MAX_MEDIA,
   initialSelected,
+  autoProceedOnPick = false,
 }: MediaSelectionScreenProps) {
   const [selectedMedia, setSelectedMedia] = useState<MediaItem[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -88,7 +90,9 @@ export function MediaSelectionScreen({
       };
 
       if (selectedMedia.length < maxSelection) {
-        setSelectedMedia([...selectedMedia, newMedia]);
+        const combined = [...selectedMedia, newMedia].slice(0, maxSelection);
+        setSelectedMedia(combined);
+        if (autoProceedOnPick) onProceed(combined);
       } else {
         Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning);
         alert(`You can only select up to ${maxSelection} media`);
@@ -118,6 +122,7 @@ export function MediaSelectionScreen({
 
       const combined = [...selectedMedia, ...newMedia].slice(0, maxSelection);
       setSelectedMedia(combined);
+      if (autoProceedOnPick && combined.length > 0) onProceed(combined);
     }
   }
 

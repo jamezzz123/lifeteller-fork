@@ -1,18 +1,13 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import { CornerUpLeft } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { RadioButton } from '@/components/ui/RadioButton';
 import { Button } from '@/components/ui/Button';
-import { ReportUserConfirmationModal } from '@/components/profile/ReportUserConfirmationModal';
+import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
+import { Toast } from '@/components/ui/Toast';
 
 interface IssueType {
   id: string;
@@ -22,7 +17,32 @@ interface IssueType {
 
 const ISSUE_TYPES: IssueType[] = [
   {
-    id: 'scam',
+    id: 'scam-1',
+    label: 'Scam',
+    description: 'Money laundering, Ponzi scheme.',
+  },
+  {
+    id: 'scam-2',
+    label: 'Scam',
+    description: 'Money laundering, Ponzi scheme.',
+  },
+  {
+    id: 'scam-3',
+    label: 'Scam',
+    description: 'Money laundering, Ponzi scheme.',
+  },
+  {
+    id: 'scam-4',
+    label: 'Scam',
+    description: 'Money laundering, Ponzi scheme.',
+  },
+  {
+    id: 'scam-5',
+    label: 'Scam',
+    description: 'Money laundering, Ponzi scheme.',
+  },
+  {
+    id: 'scam-6',
     label: 'Scam',
     description: 'Money laundering, Ponzi scheme.',
   },
@@ -41,30 +61,16 @@ export default function ReportUserScreen() {
   const [selectedIssueType, setSelectedIssueType] = useState<string | null>(
     null
   );
-  const [issueDescription, setIssueDescription] = useState('');
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [currentStep, setCurrentStep] = useState<'type' | 'describe'>('type');
+  const [showReportToast, setShowReportToast] = useState(false);
+  const [shouldReturn, setShouldReturn] = useState(false);
 
   const handleIssueTypeSelect = (issueId: string) => {
     setSelectedIssueType(issueId);
   };
 
-  const handleNext = () => {
-    if (currentStep === 'type' && selectedIssueType) {
-      setCurrentStep('describe');
-    }
-  };
-
-  const handleGoBack = () => {
-    if (currentStep === 'describe') {
-      setCurrentStep('type');
-    } else {
-      router.back();
-    }
-  };
-
   const handleReport = () => {
-    if (issueDescription.trim().length > 0) {
+    if (selectedIssueType) {
       setShowConfirmation(true);
     }
   };
@@ -75,56 +81,64 @@ export default function ReportUserScreen() {
       userId,
       username,
       issueType: selectedIssueType,
-      description: issueDescription,
     });
     setShowConfirmation(false);
-    router.back();
+    setShowReportToast(true);
+    setShouldReturn(true);
   };
 
   const handleCancel = () => {
     setShowConfirmation(false);
   };
 
-  // Step 1: Issue Type Selection
-  if (currentStep === 'type') {
-    return (
-      <SafeAreaView className="flex-1 bg-white" edges={['top', 'bottom']}>
-        {/* Header */}
-        <View className="flex-row items-center border-b border-grey-plain-150 bg-white px-4 py-3">
-          <TouchableOpacity onPress={handleGoBack} className="mr-3">
-            <CornerUpLeft
-              color={colors['grey-plain']['550']}
-              size={24}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-          <Text className="text-lg font-semibold text-grey-alpha-500">
-            Report user
+  return (
+    <SafeAreaView className="flex-1 bg-white" edges={['top', 'bottom']}>
+      {/* Header */}
+      <View className="flex-row items-center border-b border-grey-plain-150 bg-white px-4 py-3">
+        <TouchableOpacity onPress={() => router.back()} className="mr-3">
+          <CornerUpLeft
+            color={colors['grey-plain']['550']}
+            size={24}
+            strokeWidth={2}
+          />
+        </TouchableOpacity>
+        <Text className="text-lg font-semibold text-grey-alpha-500">
+          Report user
+        </Text>
+      </View>
+
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{ paddingBottom: 24 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <View className="px-4 pt-6">
+          <Text className="mb-6 text-lg font-semibold text-grey-alpha-500">
+            What type of issue are you reporting?
           </Text>
-        </View>
 
-        <ScrollView
-          className="flex-1"
-          contentContainerStyle={{ paddingBottom: 24 }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View className="px-4 pt-6">
-            <Text className="mb-6 text-lg font-semibold text-grey-alpha-500">
-              What type of issue are you reporting?
-            </Text>
-
-            <View className="gap-3">
-              {ISSUE_TYPES.map((issue) => (
+          <View className="gap-3">
+            {ISSUE_TYPES.map((issue) => {
+              const isActive = selectedIssueType === issue.id;
+              return (
                 <TouchableOpacity
                   key={issue.id}
                   onPress={() => handleIssueTypeSelect(issue.id)}
-                  className="rounded-xl border border-grey-plain-300 bg-white p-4"
+                  className="rounded-xl border p-4"
+                  style={{
+                    borderColor: isActive
+                      ? colors.primary.purple
+                      : colors['grey-plain']['300'],
+                    backgroundColor: isActive
+                      ? colors['primary-tints'].purple['50']
+                      : colors['grey-plain']['50'],
+                  }}
                   activeOpacity={0.7}
                 >
                   <View className="flex-row items-center">
                     <RadioButton
                       label=""
-                      checked={selectedIssueType === issue.id}
+                      checked={isActive}
                       onPress={() => handleIssueTypeSelect(issue.id)}
                     />
                     <View className="flex-1">
@@ -137,77 +151,8 @@ export default function ReportUserScreen() {
                     </View>
                   </View>
                 </TouchableOpacity>
-              ))}
-            </View>
-          </View>
-        </ScrollView>
-
-        {/* Footer */}
-        <View className="border-t border-grey-plain-150 bg-white px-4 py-4">
-          <View className="flex-row items-center justify-between">
-            <TouchableOpacity onPress={handleGoBack}>
-              <Text
-                className="text-base font-medium"
-                style={{ color: colors.primary.purple }}
-              >
-                Go back
-              </Text>
-            </TouchableOpacity>
-            <Button
-              title="Next"
-              onPress={handleNext}
-              variant="primary"
-              size="medium"
-              disabled={!selectedIssueType}
-            />
-          </View>
-        </View>
-      </SafeAreaView>
-    );
-  }
-
-  // Step 2: Describe Issue
-  return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top', 'bottom']}>
-      {/* Header */}
-      <View className="flex-row items-center border-b border-grey-plain-150 bg-white px-4 py-3">
-        <TouchableOpacity onPress={handleGoBack} className="mr-3">
-          <CornerUpLeft
-            color={colors['grey-plain']['550']}
-            size={24}
-            strokeWidth={2}
-          />
-        </TouchableOpacity>
-        <Text className="text-lg font-semibold text-grey-alpha-500">
-          Describe issue
-        </Text>
-      </View>
-
-      <ScrollView
-        className="flex-1"
-        contentContainerStyle={{ paddingBottom: 24 }}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View className="px-4 pt-6">
-          <Text className="mb-4 text-lg font-semibold text-grey-alpha-500">
-            Describe the issue
-          </Text>
-
-          <View
-            className="rounded-xl border border-grey-plain-300 p-4"
-            style={{ minHeight: 200 }}
-          >
-            <TextInput
-              value={issueDescription}
-              onChangeText={setIssueDescription}
-              placeholder="Type here..."
-              placeholderTextColor={colors['grey-alpha']['400']}
-              multiline
-              textAlignVertical="top"
-              className="flex-1 text-base text-grey-alpha-500"
-              style={{ fontSize: 16, minHeight: 180 }}
-            />
+              );
+            })}
           </View>
         </View>
       </ScrollView>
@@ -215,7 +160,7 @@ export default function ReportUserScreen() {
       {/* Footer */}
       <View className="border-t border-grey-plain-150 bg-white px-4 py-4">
         <View className="flex-row items-center justify-between">
-          <TouchableOpacity onPress={handleGoBack}>
+          <TouchableOpacity onPress={() => router.back()}>
             <Text
               className="text-base font-medium"
               style={{ color: colors.primary.purple }}
@@ -224,20 +169,36 @@ export default function ReportUserScreen() {
             </Text>
           </TouchableOpacity>
           <Button
-            title="Report user"
+            title="Report"
             onPress={handleReport}
             variant="primary"
             size="medium"
-            disabled={issueDescription.trim().length === 0}
+            disabled={!selectedIssueType}
           />
         </View>
       </View>
 
-      <ReportUserConfirmationModal
+      <ConfirmationModal
         visible={showConfirmation}
-        username={username}
+        title="Confirm and Report user?"
+        message="We will investigate this user promptly and notify you of the outcome."
+        confirmText="Report"
+        cancelText="Cancel"
+        destructive
         onConfirm={handleConfirm}
         onCancel={handleCancel}
+      />
+
+      <Toast
+        visible={showReportToast}
+        message="User reported successfully."
+        onHide={() => {
+          setShowReportToast(false);
+          if (shouldReturn) {
+            setShouldReturn(false);
+            router.back();
+          }
+        }}
       />
     </SafeAreaView>
   );

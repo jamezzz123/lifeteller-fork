@@ -12,6 +12,8 @@ import {
   Reply,
   Copy,
   Forward,
+  Star,
+  Pin,
   Trash2,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
@@ -31,6 +33,8 @@ interface MessageActionMenuProps {
   onReply?: () => void;
   onCopy?: () => void;
   onForward?: () => void;
+  onStar?: () => void;
+  onPin?: () => void;
   onDelete?: () => void;
   onReact?: (emoji: string) => void;
   messagePosition?: { x: number; y: number };
@@ -49,6 +53,8 @@ export function MessageActionMenu({
   onReply,
   onCopy,
   onForward,
+  onStar,
+  onPin,
   onDelete,
   onReact,
   messagePosition,
@@ -125,8 +131,22 @@ export function MessageActionMenu({
       color: colors['grey-alpha']['500'],
     },
     {
+      id: 'star',
+      label: 'Star message',
+      icon: Star,
+      onPress: () => onStar?.(),
+      color: colors['grey-alpha']['500'],
+    },
+    {
+      id: 'pin',
+      label: 'Pin message',
+      icon: Pin,
+      onPress: () => onPin?.(),
+      color: colors['grey-alpha']['500'],
+    },
+    {
       id: 'delete',
-      label: isSent ? 'Unsend' : 'Delete',
+      label: 'Delete',
       icon: Trash2,
       onPress: () => onDelete?.(),
       color: colors.state.red,

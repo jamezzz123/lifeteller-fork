@@ -313,7 +313,7 @@ export default function Tier3UpgradeScreen() {
           </View>
 
           {/* Information Note */}
-          <View className="mb-6 flex-row items-start gap-2">
+          <View className="mb-6 flex-row items-start gap-2 bg-grey-plain-150 p-3 rounded-lg">
             <Info
               size={16}
               color={colors['grey-plain']['550']}
@@ -328,7 +328,7 @@ export default function Tier3UpgradeScreen() {
       </ScrollView>
 
       {/* Contact Us */}
-      <View className="px-4 pb-6" style={styles.contactUsContainer}>
+      <View className="px-4 pb-4" style={styles.contactUsContainer}>
         <Text className="text-center text-sm text-grey-plain-550">
           Kindly{' '}
           <Text
