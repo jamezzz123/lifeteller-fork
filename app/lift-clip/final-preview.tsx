@@ -3,37 +3,57 @@ import {
   View,
   Text,
   TouchableOpacity,
-  ScrollView,
   Image,
+  Dimensions,
+  StatusBar,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
-  MapPin,
-  Banknote,
   CornerUpLeft,
+  BadgeCheck,
+  Music2,
+  Calendar,
+  Link2,
+  Globe,
+  ScanEye,
+  Hand,
+  HandHelping,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { BlurView } from 'expo-blur';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
 import { useRequestLift } from '@/context/request-lift';
 import { SuccessBottomSheet } from '@/components/ui/SuccessBottomSheet';
 import { CancelBottomSheet } from '@/components/lift';
 
+const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+
 export default function FinalPreviewScreen() {
+  const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
   const videoUri = params.videoUri as string;
   const linkedLiftName = params.name as string;
   const description = params.description as string;
 
-  const { audienceOfferType, location, collaborators, liftAmount } =
-    useRequestLift();
+  const { audienceOfferType, location, liftAmount } = useRequestLift();
 
-  const [allowCollaborators] = useState(true);
-  const [allowRequesters] = useState(true);
-  const [maxRequesters] = useState(10);
   const [showCancelSheet, setShowCancelSheet] = useState(false);
+  const [showSuccessSheet, setShowSuccessSheet] = useState(false);
+
+  // Mock user data - replace with actual user data
+  const user = {
+    name: 'Isaac Tolulope',
+    username: 'dareytemy',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+    verified: true,
+  };
+
+  // Mock schedule date - replace with actual data from context
+  const scheduleDate = new Date('2026-12-12T13:15:00');
 
   const handleBack = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -42,8 +62,6 @@ export default function FinalPreviewScreen() {
 
   const handleSaveAsDraft = () => {
     setShowCancelSheet(false);
-    // TODO: Save as draft logic
-    console.log('Saving as draft...');
     router.back();
   };
 
@@ -60,21 +78,9 @@ export default function FinalPreviewScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     router.back();
   };
-  const [showSuccessSheet, setShowSuccessSheet] = useState(false);
 
   const handlePostClip = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // TODO: Submit the lift clip
-    console.log('Post lift clip:', {
-      videoUri,
-      linkedLiftName,
-      description,
-      location,
-      audienceOfferType,
-      collaborators,
-      allowCollaborators,
-      allowRequesters,
-    });
     setShowSuccessSheet(true);
   };
 
@@ -86,8 +92,6 @@ export default function FinalPreviewScreen() {
 
   const handleShareClip = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    // TODO: Implement share functionality
-    console.log('Share clip');
     setShowSuccessSheet(false);
     router.push('/(tabs)/lift-clips');
   };
@@ -109,122 +113,167 @@ export default function FinalPreviewScreen() {
     }
   };
 
+  const formatScheduleDate = (date: Date) => {
+    return date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }) + ', ' + date.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+    }).toLowerCase();
+  };
+
   return (
-    <SafeAreaView className="flex-1 bg-white" edges={['top']}>
-      {/* Header */}
-      <View className="flex-row items-center justify-between border-b border-grey-plain-150 px-4 py-3">
-        <TouchableOpacity
-          onPress={handleBack}
-          className="flex-row items-center gap-2"
+    <SafeAreaView className="flex-1 bg-black">
+      {/* <StatusBar barStyle="dark-content" backgroundColor="white" /> */}
+
+      {/* Header Overlay */}
+      <View
+        //  className="absolute top-0 left-0 right-0 justify-between bg-white px-2 z-10"
+        className="absolute left-4 z-10"
+        style={{ top: insets.top + 10 }}
+      >
+        <BlurView
+          intensity={30}
+          tint="light"
+          className="overflow-hidden rounded-full"
         >
-          <CornerUpLeft size={24} color={colors['grey-plain']['550']} />
-          <Text className="text-lg font-medium text-grey-plain-550">
-            Preview lift clip
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleBack}
+            style={{ backgroundColor: 'rgba(255, 255, 255, 0.65)' }}
+            className="flex-row items-center gap-2 px-5 py-3"
+          >
+            <CornerUpLeft size={20} color="black" />
+            <Text className="font-inter-medium text-base text-black">
+              Preview lift clip
+            </Text>
+          </TouchableOpacity>
+        </BlurView>
       </View>
 
-      <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
-        {/* Video Thumbnail */}
-        {videoUri && (
-          <View className="px-4 py-4">
-            <Image
-              source={{ uri: videoUri }}
-              style={{
-                width: 160,
-                height: 220,
-                borderRadius: 12,
-              }}
-              resizeMode="cover"
-            />
+      {/* Full-screen Background Image/Video */}
+      <Image
+        source={
+          videoUri
+            ? { uri: videoUri }
+            : require('../../assets/images/welcome/collage-1.jpg')
+        }
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: SCREEN_HEIGHT,
+        }}
+        resizeMode="cover"
+      />
+
+      {/* Bottom Content Overlay */}
+      <View
+        className="absolute bottom-0 left-0 right-0"
+        style={{ paddingBottom: insets.bottom + 80 }}
+      >
+       <View className="flex-1 gap-2 px-3 py-1.5">
+        <View className="flex-row justify-between items-center">
+          <View className=" flex-1 flex-row items-center gap-3">
+              <Avatar
+                profileImage={user.avatar}
+                name={user.name}
+                size={40}
+              />
+              <View className="flex-1">
+                <View className="flex-row items-center gap-1">
+                  <Text className="font-inter-medium text-base text-grey-plain-50">
+                    {user.name}
+                  </Text>
+                  {user.verified && (
+                    <BadgeCheck
+                      size={16}
+                      color={colors['grey-plain']['50']}
+                      fill={colors.primary.purple}
+                    />
+                  )}
+                </View>
+                <View className="flex-row items-center gap-1">
+                  <Text className="text-sm text-white/80">
+                    @{user.username}
+                  </Text>
+                  {location && (
+                    <>
+                      <View
+                        style={{
+                          height: 4,
+                          width: 4,
+                          backgroundColor: 'rgba(255,255,255,0.6)',
+                          borderRadius: 2,
+                        }}
+                      />
+                      <Text className="text-sm text-white/80">{location}</Text>
+                    </>
+                  )}
+                </View>
+              </View>
           </View>
-        )}
-
-        {/* Description */}
-        <View className="px-4 py-2">
-          <Text className="text-sm text-grey-alpha-500">
-            {description ||
-              "Our local community garden is expanding, but we desperately need a simple web presence to organize volunteers, share meeting dates, and collect sign-ups. Right now, we're relying on paper sign-up sheets, which is chaotic."}
-          </Text>
-        </View>
-
-        {/* Location */}
-        {location && (
-          <View className="flex-row items-center gap-2 px-4 py-2">
-            <MapPin size={16} color={colors['grey-alpha']['500']} />
-            <Text className="text-sm text-grey-alpha-500">{location}</Text>
-          </View>
-        )}
-
-        {/* Amount */}
-        {liftAmount > 0 && (
-          <View className="flex-row items-center gap-2 px-4 py-2">
-            <Banknote size={16} color={colors['grey-alpha']['500']} />
-            <Text className="text-sm text-grey-alpha-500">
-              ₦{liftAmount.toLocaleString()}
-            </Text>
-          </View>
-        )}
-
-        <View className="my-4 h-2 bg-grey-plain-150" />
-
-        {/* Who can see my request */}
-        <View className="px-4 py-3">
-          <Text className="mb-2 text-sm font-semibold text-grey-alpha-450">
-            Who can see my request?
-          </Text>
-          <Text className="text-base font-medium text-grey-alpha-550">
-            {getAudienceLabel()}
-          </Text>
-        </View>
-
-        {/* Grid Layout - 2 columns */}
-        <View className="flex-row flex-wrap border-t border-grey-plain-150">
-          {/* Added collaborators */}
-          <View className="w-1/2 border-r border-grey-plain-150 px-4 py-3">
-            <Text className="mb-2 text-sm text-grey-alpha-450">
-              Added collaborators
-            </Text>
-            <Text className="text-base font-semibold text-grey-alpha-550">
-              {collaborators.length}
-            </Text>
-          </View>
-
-          {/* Allow collaborators */}
-          <View className="w-1/2 px-4 py-3">
-            <Text className="mb-2 text-sm text-grey-alpha-450">
-              Allow collaborators
-            </Text>
-            <Text className="text-base font-semibold text-grey-alpha-550">
-              {allowCollaborators ? 'Yes' : 'No'} (Unlimited)
-            </Text>
-          </View>
-
-          {/* Allow requesters */}
-          <View className="w-1/2 border-r border-t border-grey-plain-150 px-4 py-3">
-            <Text className="mb-2 text-sm text-grey-alpha-450">
-              Allow requesters
-            </Text>
-            <Text className="text-base font-semibold text-grey-alpha-550">
-              {allowRequesters ? 'Yes' : 'No'} ({maxRequesters})
+          <View
+            className="flex-row items-center gap-1 rounded-full"
+          >
+            <ScanEye size={14} color={colors['grey-plain']['200']} />
+            <Text className="text-xs text-grey-plain-50">
+              {getAudienceLabel()}
             </Text>
           </View>
         </View>
+        <View>
+          <Text
+              className="text-sm leading-5 text-grey-plain-50"
+              numberOfLines={3}
+            >
+              {description ||
+                "Our local community garden is expanding, but we desperately need a simple online presence to organize volunteers, share meeting dates, and collect sign-up..."}
+            </Text>
+        </View>
+         <View className="flex-row justify-between items-center gap-2">
+         {/* Music Info */}
+            <View className="flex-row items-center gap-2">
+              <Music2 size={14} color={colors['grey-plain']['50']} />
+              <Text className="text-xs text-grey-plain-50">
+                Temi ni Temi • Brymo
+              </Text>
+            </View>
 
-        <View className="h-20" />
-      </ScrollView>
+            {/* Schedule Date */}
+            <View className="flex-row items-center gap-2">
+              <Calendar size={14} color={colors['grey-plain']['50']} />
+              <Text className="text-xs text-grey-plain-50">
+                {formatScheduleDate(scheduleDate)}
+              </Text>
+            </View>
+        </View>
+        <View>
+           <View className="flex-row items-center gap-2">
+                <HandHelping size={14} color={colors['grey-plain']['50']} />
+                <Text className="font-inter-semibold text-sm text-grey-plain-50">
+                  ₦{liftAmount.toLocaleString()}
+                </Text>
+              </View>
+        </View>
+       </View>   
+      </View>
 
-      {/* Bottom Buttons */}
-      <View className="b flex-row gap-3 border-t border-grey-plain-150 bg-grey-plain-300 px-4 py-4">
-        <TouchableOpacity
-          onPress={handleEditDetails}
-          className="flex-1 items-center justify-center rounded-full border border-grey-plain-300 py-3"
-        >
-          <Text className="text-base font-semibold text-grey-alpha-550">
+      {/* Fixed Bottom Buttons */}
+      <View
+        className="absolute bottom-0 left-0 right-0 flex-row items-center justify-between gap-4 bg-white px-4"
+        style={{
+          paddingBottom: Math.max(insets.bottom, 16),
+          paddingTop: 16,
+        }}
+      >
+        <TouchableOpacity onPress={handleEditDetails}>
+          <Text className="font-inter-semibold text-base text-grey-alpha-500">
             Edit details
           </Text>
         </TouchableOpacity>
-        <View className="flex-1">
+        <View style={{ width: 140 }}>
           <Button title="Post clip" onPress={handlePostClip} />
         </View>
       </View>

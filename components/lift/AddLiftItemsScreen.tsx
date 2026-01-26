@@ -20,6 +20,9 @@ import {
   Video,
   Trash,
   Trash2,
+  ChevronDown,
+  ChevronRight,
+  Pencil,
 } from 'lucide-react-native';
 
 import { colors } from '@/theme/colors';
@@ -61,18 +64,77 @@ export default function AddLiftItemsScreen() {
   const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] =
     useState(false);
 
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
+  const [editingItems, setEditingItems] = useState<Set<string>>(new Set());
+
   function handleAddItem() {
     if (items.length >= MAX_ITEMS) return;
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    const newId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
     setItems([
       ...items,
       {
-        id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        id: newId,
         name: '',
         quantity: 1,
         media: [],
       },
     ]);
+    
+    // Auto expand and edit the new item
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      next.add(newId);
+      return next;
+    });
+    setEditingItems((prev) => {
+      const next = new Set(prev);
+      next.add(newId);
+      return next;
+    });
+  }
+
+  function handleSaveItem(id: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Collapse and stop editing
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setEditingItems((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }
+
+  function toggleExpand(id: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  }
+
+  function startEditing(id: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setEditingItems((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+    // Also ensure it's expanded
+    setExpandedItems((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
   }
 
   function handleRemoveItem(id: string) {
@@ -268,199 +330,339 @@ export default function AddLiftItemsScreen() {
           </Text>
 
           <View className="mt-4 gap-4">
-            {items.map((item, index) => (
-              <View
-                key={item.id}
-                className="rounded-2xl px-4 py-3"
-                style={{
-                  backgroundColor: colors['grey-plain']['150'],
-                }}
-              >
-                <View className="flex-row items-center justify-between">
-                  <Text className="font-inter-medium text-sm text-grey-alpha-450">
-                    Item #{index + 1}
-                  </Text>
+            {items.map((item, index) => {
+              const isExpanded = expandedItems.has(item.id);
+              const isEditing = editingItems.has(item.id);
+
+              return (
+                <View
+                  key={item.id}
+                  className="overflow-hidden rounded-t-2xl border border-grey-plain-300"
+                  style={{
+                    backgroundColor: colors['grey-plain']['150'],
+                  }}
+                >
+                  {/* Item Header */}
                   <TouchableOpacity
-                    onPress={() => handleRemoveItem(item.id)}
-                    accessibilityRole="button"
-                    accessibilityLabel={`Remove item ${index + 1}`}
+                    onPress={() => toggleExpand(item.id)}
+                    className="flex-row items-center justify-between px-4 py-3"
                   >
-                    <Text
-                      className="font-inter-medium text-sm"
-                      style={{ color: colors.state.red }}
-                    >
-                      Remove item
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    <View className="flex-row items-center gap-2">
+                      {isExpanded ? (
+                        <ChevronDown
+                          size={20}
+                          color={colors['grey-alpha']['500']}
+                        />
+                      ) : (
+                        <ChevronRight
+                          size={20}
+                          color={colors['grey-alpha']['500']}
+                        />
+                      )}
+                      <Text className="font-inter-medium text-sm text-grey-alpha-400">
+                        Item #{index + 1}
+                        <Text className="font-inter-semibold text-base text-grey-alpha-500">{item.name ? ` - ${item.name}` : ''}</Text>
+                        {!isEditing && item.quantity > 1
+                          ? ` (${item.quantity})`
+                          : ''}
+                      </Text>
+                    </View>
 
-                <View className="mt-3 rounded-lg bg-white p-2">
-                  <View className="mt-4">
-                    <Text className="font-inter-semibold text-xs text-grey-alpha-400">
-                      Item name
-                    </Text>
-                    <TextInput
-                      value={item.name}
-                      onChangeText={(text) =>
-                        handleItemNameChange(item.id, text)
-                      }
-                      placeholder="Laptop"
-                      placeholderTextColor={colors['grey-alpha']['250']}
-                      className="mt-2 h-12 rounded-xl  border border-grey-alpha-250 bg-grey-plain-150 px-3 font-inter-medium text-base text-grey-alpha-500"
-                    />
-                  </View>
-
-                  <View className="mt-4">
-                    <Text className="font-inter-semibold text-xs text-grey-alpha-400">
-                      Quantity available
-                    </Text>
-                    <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">
-                      <TextInput
-                        value={item.quantity.toString()}
-                        onChangeText={(text) =>
-                          handleItemQuantityInputChange(item.id, text)
-                        }
-                        keyboardType="numeric"
-                        className="w-16 flex-1 px-3 py-3 font-inter-medium text-base text-grey-alpha-500"
-                      />
-                      <View className="h-12 w-px bg-grey-plain-450/60" />
+                    <View className="flex-row items-center gap-3">
                       <TouchableOpacity
-                        onPress={() => handleItemQuantityChange(item.id, -1)}
-                        disabled={item.quantity <= 1}
-                        className="w-12 items-center justify-center"
+                        onPress={() => startEditing(item.id)}
+                        hitSlop={8}
                       >
-                        <Minus
+                        <Pencil
                           size={18}
                           color={colors['grey-alpha']['500']}
-                          strokeWidth={2.6}
-                          opacity={item.quantity <= 1 ? 0.4 : 1}
                         />
                       </TouchableOpacity>
-                      <View className="h-12 w-px bg-grey-plain-450/60" />
                       <TouchableOpacity
-                        onPress={() => handleItemQuantityChange(item.id, 1)}
-                        className="w-12 items-center justify-center"
+                        onPress={() => handleRemoveItem(item.id)}
+                        hitSlop={8}
+                        accessibilityRole="button"
+                        accessibilityLabel={`Remove item ${index + 1}`}
                       >
-                        <Plus
+                        <Trash2
                           size={18}
-                          color={colors['grey-alpha']['500']}
-                          strokeWidth={2.6}
+                          color={colors.state.red}
+                          strokeWidth={2}
                         />
                       </TouchableOpacity>
                     </View>
-                  </View>
+                  </TouchableOpacity>
 
-                  {/* Quantity Selector */}
-                  <QuantitySelector
-                    selectedQuantity={numberOfRecipients}
-                    onQuantityChange={setNumberOfRecipients}
-                    onCustomValuePress={handleCustomAmountPressOnNR}
-                  />
-
-                  {/* Media Section for this item */}
-                  <View className="py-4">
-                    {item.media.length > 0 && (
-                      <View className="mb-4 flex-row items-center justify-between">
-                        <TouchableOpacity
-                          onPress={() => handleClearItemMedia(item.id)}
-                          hitSlop={10}
-                        >
-                          <Trash
-                            size={20}
-                            color={colors.state.red}
-                            strokeWidth={2}
-                          />
-                        </TouchableOpacity>
-                        <Text className="font-inter text-sm text-grey-alpha-400">
-                          {getMediaCountText(item.media)}
-                        </Text>
-                      </View>
-                    )}
-
-                    {item.media.length > 0 && (
-                      <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        className="mb-4"
-                        contentContainerStyle={{ gap: 8 }}
-                      >
-                        {item.media.map((mediaItem) => (
-                          <View key={mediaItem.id} className="relative">
-                            <Image
-                              source={{ uri: mediaItem.uri }}
-                              style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 8,
-                              }}
-                              contentFit="cover"
-                            />
-                            <TouchableOpacity
-                              onPress={() =>
-                                handleRemoveMedia(item.id, mediaItem.id)
+                  {/* Body */}
+                  {isExpanded && (
+                    <View className="px-4 pb-4">
+                      {isEditing ? (
+                        // EDIT MODE
+                        <View className="mt-1 rounded-lg bg-white p-2">
+                          <View className="mt-4">
+                            <Text className="font-inter-semibold text-xs text-grey-alpha-400">
+                              Item name
+                            </Text>
+                            <TextInput
+                              value={item.name}
+                              onChangeText={(text) =>
+                                handleItemNameChange(item.id, text)
                               }
-                              className="absolute right-1 top-1 rounded-full bg-black/60 p-1"
-                            >
-                              <Trash2 size={14} color="white" strokeWidth={2} />
-                            </TouchableOpacity>
-                            {mediaItem.type === 'video' && (
-                              <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
-                                <Text className="font-inter text-xs text-white">
-                                  Video
+                              placeholder="Laptop"
+                              placeholderTextColor={colors['grey-alpha']['250']}
+                              className="mt-2 h-12 rounded-xl  border border-grey-alpha-250 bg-grey-plain-150 px-3 font-inter-medium text-base text-grey-alpha-500"
+                            />
+                          </View>
+
+                          <View className="mt-4">
+                            <Text className="font-inter-semibold text-xs text-grey-alpha-400">
+                              Quantity available
+                            </Text>
+                            <View className="mt-2 flex-row overflow-hidden rounded-xl border border-grey-plain-450/60 bg-grey-plain-150">
+                              <TextInput
+                                value={item.quantity.toString()}
+                                onChangeText={(text) =>
+                                  handleItemQuantityInputChange(item.id, text)
+                                }
+                                keyboardType="numeric"
+                                className="w-16 flex-1 px-3 py-3 font-inter-medium text-base text-grey-alpha-500"
+                              />
+                              <View className="h-12 w-px bg-grey-plain-450/60" />
+                              <TouchableOpacity
+                                onPress={() =>
+                                  handleItemQuantityChange(item.id, -1)
+                                }
+                                disabled={item.quantity <= 1}
+                                className="w-12 items-center justify-center"
+                              >
+                                <Minus
+                                  size={18}
+                                  color={colors['grey-alpha']['500']}
+                                  strokeWidth={2.6}
+                                  opacity={item.quantity <= 1 ? 0.4 : 1}
+                                />
+                              </TouchableOpacity>
+                              <View className="h-12 w-px bg-grey-plain-450/60" />
+                              <TouchableOpacity
+                                onPress={() =>
+                                  handleItemQuantityChange(item.id, 1)
+                                }
+                                className="w-12 items-center justify-center"
+                              >
+                                <Plus
+                                  size={18}
+                                  color={colors['grey-alpha']['500']}
+                                  strokeWidth={2.6}
+                                />
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+
+                          {/* Quantity Selector */}
+                          <QuantitySelector
+                            selectedQuantity={numberOfRecipients}
+                            onQuantityChange={setNumberOfRecipients}
+                            onCustomValuePress={handleCustomAmountPressOnNR}
+                          />
+
+                          {/* Media Section for this item */}
+                          <View className="py-4">
+                            {item.media.length > 0 && (
+                              <View className="mb-4 flex-row items-center justify-between">
+                                <TouchableOpacity
+                                  onPress={() => handleClearItemMedia(item.id)}
+                                  hitSlop={10}
+                                >
+                                  <Trash
+                                    size={20}
+                                    color={colors.state.red}
+                                    strokeWidth={2}
+                                  />
+                                </TouchableOpacity>
+                                <Text className="font-inter text-sm text-grey-alpha-400">
+                                  {getMediaCountText(item.media)}
                                 </Text>
                               </View>
                             )}
+
+                            {item.media.length > 0 && (
+                              <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                className="mb-4"
+                                contentContainerStyle={{ gap: 8 }}
+                              >
+                                {item.media.map((mediaItem) => (
+                                  <View
+                                    key={mediaItem.id}
+                                    className="relative"
+                                  >
+                                    <Image
+                                      source={{ uri: mediaItem.uri }}
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 8,
+                                      }}
+                                      contentFit="cover"
+                                    />
+                                    <TouchableOpacity
+                                      onPress={() =>
+                                        handleRemoveMedia(
+                                          item.id,
+                                          mediaItem.id
+                                        )
+                                      }
+                                      className="absolute right-1 top-1 rounded-full bg-black/60 p-1"
+                                    >
+                                      <Trash2
+                                        size={14}
+                                        color="white"
+                                        strokeWidth={2}
+                                      />
+                                    </TouchableOpacity>
+                                    {mediaItem.type === 'video' && (
+                                      <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
+                                        <Text className="font-inter text-xs text-white">
+                                          Video
+                                        </Text>
+                                      </View>
+                                    )}
+                                  </View>
+                                ))}
+                              </ScrollView>
+                            )}
+
+                            <View className="flex-row gap-3">
+                              <MediaButton
+                                onPress={() => handlePickImage(item.id)}
+                                icon={
+                                  <ImageIcon
+                                    size={20}
+                                    color={colors.primary.purple}
+                                    strokeWidth={2}
+                                  />
+                                }
+                                label="Add image"
+                              />
+
+                              <MediaButton
+                                onPress={() => handlePickVideo(item.id)}
+                                icon={
+                                  <Video
+                                    size={20}
+                                    color={colors.primary.purple}
+                                    strokeWidth={2}
+                                  />
+                                }
+                                label="Add video"
+                              />
+                            </View>
+                            <TouchableOpacity
+                              onPress={() => handleSaveItem(item.id)}
+                              className="my-4 flex-row items-center justify-center rounded-full border px-4 py-3"
+                              style={{
+                                borderColor: colors.primary.purple,
+                                backgroundColor:
+                                  colors['primary-tints'].purple['50'],
+                              }}
+                            >
+                              <Text
+                                className="font-inter-medium text-sm"
+                                style={{ color: colors.primary.purple }}
+                              >
+                                Add item
+                              </Text>
+                              <Plus
+                                size={16}
+                                color={colors.primary.purple}
+                                strokeWidth={2}
+                              />
+                            </TouchableOpacity>
                           </View>
-                        ))}
-                      </ScrollView>
-                    )}
+                        </View>
+                      ) : (
+                        // READ ONLY MODE
+                        <View className="mt-1 rounded-lg p-4">
+                          <View>
+                            <Text className="font-inter text-sm text-grey-alpha-400">
+                              Item name
+                            </Text>
+                            <Text className="mt-1 font-inter-semibold text-base text-grey-alpha-500">
+                              {item.name || 'No name'}
+                            </Text>
+                          </View>
 
-                    <View className="flex-row gap-3">
-                      <MediaButton
-                        onPress={() => handlePickImage(item.id)}
-                        icon={
-                          <ImageIcon
-                            size={20}
-                            color={colors.primary.purple}
-                            strokeWidth={2}
-                          />
-                        }
-                        label="Add image"
-                      />
+                          <View className="mt-4">
+                            <Text className="font-inter text-sm text-grey-alpha-400">
+                              Quantity available
+                            </Text>
+                            <Text className="mt-1 font-inter-semibold text-base text-grey-alpha-500">
+                              {item.quantity}
+                            </Text>
+                          </View>
 
-                      <MediaButton
-                        onPress={() => handlePickVideo(item.id)}
-                        icon={
-                          <Video
-                            size={20}
-                            color={colors.primary.purple}
-                            strokeWidth={2}
-                          />
-                        }
-                        label="Add video"
-                      />
+                          {item.media.length > 0 && (
+                            <View className="mt-4">
+                              <Text className="mb-2 font-inter text-sm text-grey-alpha-400">
+                                Media
+                              </Text>
+                              <ScrollView
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{ gap: 8 }}
+                              >
+                                {item.media.map((mediaItem) => (
+                                  <View
+                                    key={mediaItem.id}
+                                    className="relative"
+                                  >
+                                    <Image
+                                      source={{ uri: mediaItem.uri }}
+                                      style={{
+                                        width: 80,
+                                        height: 80,
+                                        borderRadius: 8,
+                                      }}
+                                      contentFit="cover"
+                                    />
+                                    {mediaItem.type === 'video' && (
+                                      <View className="absolute bottom-1 left-1 rounded bg-black/60 px-1.5 py-0.5">
+                                        <Text className="font-inter text-xs text-white">
+                                          Video
+                                        </Text>
+                                      </View>
+                                    )}
+                                  </View>
+                                ))}
+                              </ScrollView>
+                            </View>
+                          )}
+                        </View>
+                      )}
                     </View>
-                  </View>
+                  )}
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
 
           {items.length < MAX_ITEMS && (
             <TouchableOpacity
               onPress={handleAddItem}
-              className="mt-4 items-center justify-center rounded-full border px-4 py-3"
+              className="mt-4 flex-row items-center justify-center rounded-full border px-4 py-3"
               style={{
                 borderColor: colors.primary.purple,
                 backgroundColor: colors['primary-tints'].purple['50'],
               }}
             >
               <Text
-                className="font-inter-semibold text-base"
+                className="font-inter-medium text-base"
                 style={{ color: colors.primary.purple }}
               >
-                Add item
+                Add another item
               </Text>
+              <Plus size={16} color={colors.primary.purple} strokeWidth={2} />
             </TouchableOpacity>
           )}
         </View>

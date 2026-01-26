@@ -182,6 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors['grey-alpha']['400'],
     flex: 1,
+    fontFamily: 'interRegular',
   },
   destructiveText: {
     color: colors.state.red,

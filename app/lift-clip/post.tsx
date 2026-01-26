@@ -2,11 +2,9 @@ import React, { useState, useRef } from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   ScrollView,
   Image,
-  Switch,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
@@ -14,16 +12,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
 import {
   MapPin,
-  MoreHorizontal,
   ChevronRight,
   CornerUpLeft,
+  Search,
+  Calendar,
+  HandHelping,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
 import { colors } from '@/theme/colors';
 import { Button } from '@/components/ui/Button';
 import { Dropdown } from '@/components/ui/Dropdown';
-import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { Toggle } from '@/components/ui/Toggle';
+import { MaterialInput } from '@/components/ui/MaterialInput';
+import {
+  BottomSheetComponent,
+  BottomSheetRef,
+} from '@/components/ui/BottomSheet';
 import {
   AudienceBottomSheet,
   AddCollaboratorsModal,
@@ -32,6 +38,7 @@ import {
   CreateListModal,
   Contact,
   LOCATIONS,
+  EnterAmountBottomSheet,
 } from '@/components/lift';
 import {
   useRequestLift,
@@ -53,16 +60,27 @@ export default function PostLiftClipScreen() {
     setSelectedList,
     location,
     setLocation,
+    liftAmount,
+    setLiftAmount,
   } = useRequestLift();
 
   const [description, setDescription] = useState('');
-  const [requestLiftEnabled, setRequestLiftEnabled] = useState(true);
+  const [requestLiftEnabled, setRequestLiftEnabled] = useState(false);
+  const [scheduleLiftClip, setScheduleLiftClip] = useState(false);
+  const [locationSearch, setLocationSearch] = useState('');
   const [showSelectedPeopleModal, setShowSelectedPeopleModal] = useState(false);
   const [showChooseListModal, setShowChooseListModal] = useState(false);
   const [showCreateListModal, setShowCreateListModal] = useState(false);
+  const [isAmountSheetMounted, setIsAmountSheetMounted] = useState(false);
 
   const audienceSheetRef = useRef<BottomSheetRef>(null);
   const chooseListSheetRef = useRef<BottomSheetRef>(null);
+  const locationSheetRef = useRef<BottomSheetRef>(null);
+  const enterAmountSheetRef = useRef<BottomSheetRef>(null);
+
+  const filteredLocations = LOCATIONS.filter((loc) =>
+    loc.toLowerCase().includes(locationSearch.toLowerCase())
+  );
 
   const handleBack = () => {
     router.back();
@@ -141,6 +159,50 @@ export default function PostLiftClipScreen() {
     setShowChooseListModal(false);
   }
 
+  function handleLocationPress() {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    locationSheetRef.current?.expand();
+  }
+
+  function handleLocationSelect(loc: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setLocation(loc);
+    locationSheetRef.current?.close();
+    setLocationSearch('');
+  }
+
+  function handleRequestLiftToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setRequestLiftEnabled(value);
+    if (value) {
+      setIsAmountSheetMounted(true);
+    } else {
+      setLiftAmount(0);
+    }
+  }
+
+  function handleRequestLiftPress() {
+    if (requestLiftEnabled) {
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setIsAmountSheetMounted(true);
+    }
+  }
+
+  function handleAmountDone(amount: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    setLiftAmount(Number(amount));
+    setIsAmountSheetMounted(false);
+  }
+
+  function handleAmountSheetClose() {
+    setIsAmountSheetMounted(false);
+  }
+
+  function handleScheduleLiftClipToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setScheduleLiftClip(value);
+  }
+
   function getAudienceLabel() {
     switch (audienceOfferType) {
       case 'everyone':
@@ -173,12 +235,12 @@ export default function PostLiftClipScreen() {
             className="flex-row items-center gap-2"
           >
             <CornerUpLeft size={24} color={colors['grey-plain']['550']} />
-            <Text className="text-lg font-medium text-grey-plain-550">
+            <Text className="font-inter-medium text-lg text-grey-plain-550">
               New lift clip
             </Text>
           </TouchableOpacity>
-          <View style={{ width: 80 }}>
-            <Button title="Next" onPress={handleNext} size="small" />
+          <View style={{ width: 90 }}>
+            <Button title="Preview" onPress={handleNext} size="small" />
           </View>
         </View>
 
@@ -186,6 +248,7 @@ export default function PostLiftClipScreen() {
           className="flex-1"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40 }}
         >
           {/* Profile and Audience */}
           <View className="flex-row items-center gap-3 px-4 py-4">
@@ -193,7 +256,10 @@ export default function PostLiftClipScreen() {
               source={require('../../assets/images/welcome/collage-1.jpg')}
               style={{ width: 48, height: 48, borderRadius: 24 }}
             />
-            <Dropdown label={getAudienceLabel()} onPress={handleAudienceButtonPress} />
+            <Dropdown
+              label={getAudienceLabel()}
+              onPress={handleAudienceButtonPress}
+            />
           </View>
 
           {/* Video Thumbnail */}
@@ -212,18 +278,13 @@ export default function PostLiftClipScreen() {
           )}
           {/* Description */}
           <View className="px-4 py-3">
-            <TextInput
+            <MaterialInput
               value={description}
               onChangeText={setDescription}
               placeholder="This is the description of the lift, and it continues here. It should be short, concise, and brief. Even though we have little to no control over it. Users can also tag people to it."
-              placeholderTextColor={colors['grey-alpha']['400']}
               multiline
+              size="small"
               numberOfLines={4}
-              className="text-sm text-grey-alpha-500"
-              style={{
-                minHeight: 80,
-                textAlignVertical: 'top',
-              }}
             />
             <Text className="mt-2 text-xs text-grey-alpha-400">
               You can also tag others and use hashtags
@@ -235,7 +296,7 @@ export default function PostLiftClipScreen() {
               onPress={handleLinkExistingLift}
               className="border-t border-grey-plain-150 px-4 py-4"
             >
-              <Text className="text-primary-purple text-sm font-medium">
+              <Text className="text-primary-purple font-inter-medium text-sm">
                 ✓ Linked to: {linkedLiftName}
               </Text>
               <Text className="mt-1 text-xs text-grey-alpha-400">
@@ -247,17 +308,20 @@ export default function PostLiftClipScreen() {
               onPress={handleLinkExistingLift}
               className="border-t border-grey-plain-150 px-4 py-4"
             >
-              <Text className="text-sm font-medium text-grey-alpha-500">
+              <Text className="font-inter-medium text-sm text-grey-alpha-500">
                 Link an existing lift
               </Text>
             </TouchableOpacity>
           )}
           {/* Location */}
           <View className="border-t border-grey-plain-150 px-4 py-4">
-            <TouchableOpacity className="mb-3 flex-row items-center justify-between">
+            <TouchableOpacity
+              onPress={handleLocationPress}
+              className="mb-3 flex-row items-center justify-between"
+            >
               <View className="flex-row items-center gap-3">
                 <MapPin size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
+                <Text className="font-inter-medium text-base text-grey-alpha-500">
                   Location
                 </Text>
               </View>
@@ -288,7 +352,7 @@ export default function PostLiftClipScreen() {
                     }}
                   >
                     <Text
-                      className="text-sm"
+                      className="font-inter text-sm"
                       style={{
                         color: isSelected
                           ? colors.primary.purple
@@ -302,51 +366,56 @@ export default function PostLiftClipScreen() {
               })}
             </ScrollView>
           </View>
-          {/* Request lift toggle */}
-          <View className="border-t border-grey-plain-150 px-4 py-4">
-            <View className="flex-row items-start justify-between">
-              <View className="flex-1 flex-row gap-3">
-                <View
-                  className="size-6 items-center justify-center rounded-full"
-                  style={{ backgroundColor: colors['grey-plain']['150'] }}
-                >
-                  <MapPin size={14} color={colors['grey-alpha']['500']} />
-                </View>
+          {/* Request lift settings */}
+          <TouchableOpacity
+            onPress={handleRequestLiftPress}
+            className="border-t border-grey-plain-150 px-4 py-4"
+            activeOpacity={requestLiftEnabled ? 0.7 : 1}
+          >
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <HandHelping size={24} color={colors['grey-alpha']['500']} />
                 <View className="flex-1">
-                  <Text className="mb-1 text-base font-semibold text-grey-alpha-500">
-                    Request lift
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Request lift settings
                   </Text>
-                  <Text className="text-sm text-grey-alpha-400">
-                    People can offer you lift when they see your lift clip
-                  </Text>
+                  {requestLiftEnabled && liftAmount > 0 ? (
+                    <Text className="font-inter-medium text-sm text-grey-alpha-500">
+                      ₦{liftAmount.toLocaleString()} →
+                    </Text>
+                  ) : (
+                    <Text className="font-inter text-sm text-grey-alpha-400">
+                      People can offer you lift when they see your lift clip
+                    </Text>
+                  )}
                 </View>
               </View>
-              <Switch
+              <Toggle
                 value={requestLiftEnabled}
-                onValueChange={setRequestLiftEnabled}
-                trackColor={{
-                  false: colors['grey-plain']['450'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
+                onValueChange={handleRequestLiftToggle}
               />
             </View>
-          </View>
-          {/* More options */}
+          </TouchableOpacity>
+
+          {/* Schedule lift clip */}
           <View className="border-t border-grey-plain-150 px-4 py-4">
-            <TouchableOpacity className="flex-row items-center justify-between">
-              <View className="flex-row items-center gap-3">
-                <MoreHorizontal size={20} color={colors['grey-alpha']['500']} />
-                <Text className="text-base font-medium text-grey-alpha-500">
-                  More options
-                </Text>
+            <View className="flex-row items-center justify-between">
+              <View className="flex-1 flex-row items-center gap-3">
+                <Calendar size={24} color={colors['grey-alpha']['500']} />
+                <View className="flex-1">
+                  <Text className="mb-1 font-inter-semibold text-base text-grey-alpha-500">
+                    Schedule lift clip
+                  </Text>
+                  <Text className="font-inter text-sm text-grey-alpha-400">
+                    Choose when to post your lift clip
+                  </Text>
+                </View>
               </View>
-              <ChevronRight
-                size={20}
-                color={colors['grey-alpha']['400']}
-                strokeWidth={2}
+              <Toggle
+                value={scheduleLiftClip}
+                onValueChange={handleScheduleLiftClipToggle}
               />
-            </TouchableOpacity>
+            </View>
           </View>
         </ScrollView>
 
@@ -354,7 +423,9 @@ export default function PostLiftClipScreen() {
         <AudienceBottomSheet
           ref={audienceSheetRef}
           selectedKey={audienceOfferType}
-          onSelectAudience={(key) => handleAudienceSelect(key as AudienceOfferType)}
+          onSelectAudience={(key) =>
+            handleAudienceSelect(key as AudienceOfferType)
+          }
         />
 
         {/* Selected People Modal */}
@@ -385,6 +456,71 @@ export default function PostLiftClipScreen() {
           onDone={handleCreateListDone}
           onClose={() => setShowCreateListModal(false)}
         />
+
+        {/* Location Bottom Sheet */}
+        <BottomSheetComponent
+          ref={locationSheetRef}
+          snapPoints={['70%', '90%']}
+          keyboardBehavior="extend"
+          android_keyboardInputMode="adjustResize"
+          scrollable
+        >
+          <View className="px-4 pb-4">
+            <Text className="mb-4 font-inter-bold text-lg text-grey-alpha-500">
+              Choose location
+            </Text>
+
+            {/* Search Input */}
+            <View className="mb-4 flex-row items-center gap-3 rounded-full border border-grey-plain-450 bg-grey-plain-200 px-4 py-3">
+              <Search size={20} color={colors['grey-alpha']['400']} />
+              <BottomSheetTextInput
+                value={locationSearch}
+                onChangeText={setLocationSearch}
+                placeholder="Search for location"
+                placeholderTextColor={colors['grey-alpha']['400']}
+                className="flex-1 font-inter text-base text-grey-alpha-500"
+              />
+            </View>
+
+            {/* Get Location Button */}
+            <TouchableOpacity className="mb-4 flex-row items-center gap-3 rounded-2xl bg-grey-plain-200 px-4 py-4">
+              <View className="size-10 items-center justify-center rounded-full bg-grey-plain-450/20">
+                <MapPin size={20} color={colors['grey-alpha']['500']} />
+              </View>
+              <Text className="font-inter-medium text-base text-grey-alpha-500">
+                Get my location on map
+              </Text>
+            </TouchableOpacity>
+
+            {/* Location Chips */}
+            <View className="mb-4 flex-row flex-wrap gap-2">
+              {filteredLocations.map((loc) => (
+                <TouchableOpacity
+                  key={loc}
+                  onPress={() => handleLocationSelect(loc)}
+                  className="rounded-lg bg-grey-plain-200 px-4 py-2.5"
+                >
+                  <Text className="font-inter text-sm text-grey-alpha-500">
+                    {loc}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          </View>
+        </BottomSheetComponent>
+
+        {/* Enter Amount Bottom Sheet */}
+        {isAmountSheetMounted && (
+          <EnterAmountBottomSheet
+            ref={enterAmountSheetRef}
+            title="Request lift amount"
+            inputLabel="Amount"
+            hintText="Enter the amount you want to request"
+            onDone={handleAmountDone}
+            onClose={handleAmountSheetClose}
+            initialAmount={liftAmount > 0 ? liftAmount.toString() : ''}
+          />
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

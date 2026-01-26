@@ -16,7 +16,7 @@ export type LiftStatus =
   | 'completed'
   | 'closed';
 
-export type LiftCardType = 'lift-request' | 'lift-raised' | 'lift-offer' | 'lift-offered';
+export type LiftCardType = 'lift-request' | 'lift-raised' | 'lift-raised-collaboration' | 'lift-offer' | 'lift-offered';
 
 // Non-monetary item
 export interface NonMonetaryItem {
