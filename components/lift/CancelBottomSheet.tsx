@@ -1,6 +1,6 @@
 import { useRef, useEffect } from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { FileDown, Trash2, UserPen, FileAxis3d } from 'lucide-react-native';
+import { Trash2, UserPen, FileAxis3d } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import {
   BottomSheetComponent,

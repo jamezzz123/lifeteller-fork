@@ -5,7 +5,6 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  StatusBar,
 } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -14,10 +13,7 @@ import {
   BadgeCheck,
   Music2,
   Calendar,
-  Link2,
-  Globe,
   ScanEye,
-  Hand,
   HandHelping,
 } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
@@ -36,7 +32,6 @@ export default function FinalPreviewScreen() {
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams();
   const videoUri = params.videoUri as string;
-  const linkedLiftName = params.name as string;
   const description = params.description as string;
 
   const { audienceOfferType, location, liftAmount } = useRequestLift();
