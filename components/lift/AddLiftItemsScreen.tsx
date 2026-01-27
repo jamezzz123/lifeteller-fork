@@ -124,12 +124,9 @@ export default function AddLiftItemsScreen() {
 
   function startEditing(id: string) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setEditingItems((prev) => {
-      const next = new Set(prev);
-      next.add(id);
-      return next;
-    });
-    // Also ensure it's expanded
+    // Only one item can be edited at a time - clear others first
+    setEditingItems(new Set([id]));
+    // Also ensure it's expanded (and collapse others being edited)
     setExpandedItems((prev) => {
       const next = new Set(prev);
       next.add(id);
@@ -343,58 +340,87 @@ export default function AddLiftItemsScreen() {
                   }}
                 >
                   {/* Item Header */}
-                  <TouchableOpacity
-                    onPress={() => toggleExpand(item.id)}
-                    className="flex-row items-center justify-between px-4 py-3"
-                  >
-                    <View className="flex-row items-center gap-2">
-                      {isExpanded ? (
-                        <ChevronDown
-                          size={20}
-                          color={colors['grey-alpha']['500']}
-                        />
-                      ) : (
-                        <ChevronRight
-                          size={20}
-                          color={colors['grey-alpha']['500']}
-                        />
-                      )}
+                  {isEditing ? (
+                    // Edit mode header - text only, no icons
+                    <View className="flex-row items-center justify-between px-4 py-3">
                       <Text className="font-inter-medium text-sm text-grey-alpha-400">
                         Item #{index + 1}
-                        <Text className="font-inter-semibold text-base text-grey-alpha-500">{item.name ? ` - ${item.name}` : ''}</Text>
-                        {!isEditing && item.quantity > 1
-                          ? ` (${item.quantity})`
-                          : ''}
                       </Text>
-                    </View>
-
-                    <View className="flex-row items-center gap-3">
-                      <TouchableOpacity
-                        onPress={() => startEditing(item.id)}
-                        hitSlop={8}
-                      >
-                        <Pencil
-                          size={18}
-                          color={colors['grey-alpha']['500']}
-                        />
-                      </TouchableOpacity>
                       <TouchableOpacity
                         onPress={() => handleRemoveItem(item.id)}
                         hitSlop={8}
                         accessibilityRole="button"
                         accessibilityLabel={`Remove item ${index + 1}`}
                       >
-                        <Trash2
-                          size={18}
-                          color={colors.state.red}
-                          strokeWidth={2}
-                        />
+                        <Text
+                          className="font-inter-medium text-sm"
+                          style={{ color: colors.state.red }}
+                        >
+                          Remove item
+                        </Text>
                       </TouchableOpacity>
                     </View>
-                  </TouchableOpacity>
+                  ) : (
+                    // View mode header - with icons
+                    <TouchableOpacity
+                      onPress={() => toggleExpand(item.id)}
+                      className="flex-row items-center justify-between px-4 py-3"
+                    >
+                      <View className="flex-row items-center gap-2">
+                        {isExpanded ? (
+                          <ChevronDown
+                            size={20}
+                            color={colors['grey-alpha']['500']}
+                          />
+                        ) : (
+                          <ChevronRight
+                            size={20}
+                            color={colors['grey-alpha']['500']}
+                          />
+                        )}
+                        <Text className="font-inter-medium text-sm text-grey-alpha-400">
+                          Item #{index + 1}
+                          <Text className="font-inter-semibold text-base text-grey-alpha-500">
+                            {item.name ? ` - ${item.name}` : ''}
+                          </Text>
+                          {item.quantity > 1 ? ` (${item.quantity})` : ''}
+                        </Text>
+                      </View>
 
-                  {/* Body */}
-                  {isExpanded && (
+                      <View className="flex-row items-center gap-3">
+                        <TouchableOpacity
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            startEditing(item.id);
+                          }}
+                          hitSlop={8}
+                        >
+                          <Pencil
+                            size={18}
+                            color={colors['grey-alpha']['500']}
+                          />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                          onPress={(e) => {
+                            e.stopPropagation();
+                            handleRemoveItem(item.id);
+                          }}
+                          hitSlop={8}
+                          accessibilityRole="button"
+                          accessibilityLabel={`Remove item ${index + 1}`}
+                        >
+                          <Trash2
+                            size={18}
+                            color={colors.state.red}
+                            strokeWidth={2}
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+
+                  {/* Body - always show when editing, otherwise based on expanded state */}
+                  {(isEditing || isExpanded) && (
                     <View className="px-4 pb-4">
                       {isEditing ? (
                         // EDIT MODE
