@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  Keyboard,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -40,7 +41,9 @@ import { MaterialInput } from '@/components/ui/MaterialInput';
 import { ProfileStack } from '@/components/ui/ProfileStack';
 import { UserInfoRow } from '@/components/ui/UserInfoRow';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
+import { useBottomToast } from '@/components/ui/BottomToast';
 import { AudienceBottomSheet } from '@/components/lift/AudienceBottomSheet';
+import { CancelBottomSheet } from '@/components/lift/CancelBottomSheet';
 import { LiftAmountSelector } from '@/components/lift/LiftAmountSelector';
 import { EnterAmountBottomSheet } from '@/components/lift/EnterAmountBottomSheet';
 import { NonMonetaryItemsSelector } from '@/components/lift/NonMonetaryItemsSelector';
@@ -226,6 +229,8 @@ export default function LiftCreationScreen({
   const [isAmountSheetMounted, setIsAmountSheetMounted] = useState(false);
   const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] =
     useState(false);
+  const [showCancelSheet, setShowCancelSheet] = useState(false);
+  const bottomToast = useBottomToast();
 
   const handleNavigateToCollaborators = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -275,8 +280,20 @@ export default function LiftCreationScreen({
     setSelectedMedia(selectedMedia.filter((item) => item.id !== id));
   };
 
+  // Check if user has entered any data
+  const hasData =
+    title.trim().length > 0 ||
+    description.trim().length > 0 ||
+    liftAmount.trim().length > 0 ||
+    liftItems.length > 0 ||
+    selectedMedia.length > 0 ||
+    collaborators.length > 0;
+
   const handleGoBack = () => {
-    if (onBack) {
+    if (hasData) {
+      Keyboard.dismiss();
+      setShowCancelSheet(true);
+    } else if (onBack) {
       onBack();
     } else {
       // Check if we can go back, otherwise navigate to home screen
@@ -286,6 +303,38 @@ export default function LiftCreationScreen({
         router.replace('/(tabs)' as Href);
       }
     }
+  };
+
+  const handleSaveAsDraft = () => {
+    setShowCancelSheet(false);
+    // TODO: Implement actual save as draft functionality
+    bottomToast.show({
+      message: `${usedAs} lift saved to drafts.`,
+      onHide: () => {
+        if (onBack) {
+          onBack();
+        } else if (navigation.canGoBack()) {
+          router.back();
+        } else {
+          router.replace('/(tabs)' as Href);
+        }
+      },
+    });
+  };
+
+  const handleDiscard = () => {
+    setShowCancelSheet(false);
+    if (onBack) {
+      onBack();
+    } else if (navigation.canGoBack()) {
+      router.back();
+    } else {
+      router.replace('/(tabs)' as Href);
+    }
+  };
+
+  const handleContinueEditing = () => {
+    setShowCancelSheet(false);
   };
 
   const handleSubmit = () => {
@@ -748,6 +797,14 @@ export default function LiftCreationScreen({
           onClose={handleNumberOfRecipientSheetClose}
         />
       )}
+
+      {/* Cancel Bottom Sheet */}
+      <CancelBottomSheet
+        visible={showCancelSheet}
+        onSaveAsDraft={handleSaveAsDraft}
+        onDiscard={handleDiscard}
+        onContinueEditing={handleContinueEditing}
+      />
     </SafeAreaView>
   );
 }

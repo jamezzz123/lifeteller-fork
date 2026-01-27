@@ -12,6 +12,7 @@ import { queryClient } from '@/lib/query-client';
 import { AuthProvider } from '@/context/auth';
 import { CommentBottomSheetProvider } from '@/context/comment-bottom-sheet';
 import { CommentBottomSheet } from '@/components/feed/CommentBottomSheet';
+import { BottomToastProvider } from '@/components/ui/BottomToast';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,14 +34,16 @@ export default function RootLayout() {
       <AuthProvider>
         <CommentBottomSheetProvider>
           <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-              <Stack
-                screenOptions={{
-                  headerShown: false,
-                }}
-              />
-              <CommentBottomSheet />
-            </BottomSheetModalProvider>
+            <BottomToastProvider>
+              <BottomSheetModalProvider>
+                <Stack
+                  screenOptions={{
+                    headerShown: false,
+                  }}
+                />
+                <CommentBottomSheet />
+              </BottomSheetModalProvider>
+            </BottomToastProvider>
           </GestureHandlerRootView>
         </CommentBottomSheetProvider>
       </AuthProvider>
