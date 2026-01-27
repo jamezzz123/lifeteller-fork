@@ -25,6 +25,8 @@ export function NonMonetaryItemsSelector({
 
   const displayText = getItemsDisplayText();
 
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+
   return (
     <View className=" px-4 py-4">
       {/* Header */}
@@ -59,11 +61,16 @@ export function NonMonetaryItemsSelector({
           <Text className="flex-1 text-base text-grey-alpha-500">
             {displayText}
           </Text>
-          <ChevronRight
-            size={20}
-            color={colors['grey-alpha']['400']}
-            strokeWidth={2}
-          />
+          <View className="flex-row items-center gap-1">
+            <Text className="rounded bg-grey-plain-200  px-2 py-1 text-sm font-inter-medium text-grey-alpha-450">
+              {totalItems} in total
+            </Text>
+            <ChevronRight
+              size={20}
+              color={colors['grey-alpha']['400']}
+              strokeWidth={2}
+            />
+          </View>
         </TouchableOpacity>
       )}
     </View>

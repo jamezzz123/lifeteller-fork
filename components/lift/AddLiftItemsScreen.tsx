@@ -280,25 +280,25 @@ export default function AddLiftItemsScreen() {
   }
 
   return (
-    <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
+    <SafeAreaView className="flex-1 bg-background" edges={['top']}>
       {/* Header */}
       <View className="flex-row items-center justify-between border-b border-grey-plain-150 bg-white px-4 py-3">
         <View className="flex-row items-center gap-3">
           <TouchableOpacity onPress={handleClose}>
             <X color={colors['grey-plain']['550']} size={24} strokeWidth={2} />
           </TouchableOpacity>
-          <Text className="font-inter-semibold text-lg text-grey-alpha-500">
+          <Text className="font-inter-medium text-lg text-grey-alpha-500">
             Add Lift items
           </Text>
         </View>
 
-        <Button
+        {/* <Button
           title="Done"
           onPress={handleDone}
           variant="primary"
           size="small"
           className="rounded-full px-6"
-        />
+        /> */}
       </View>
 
       <KeyboardAwareScrollView
@@ -573,11 +573,6 @@ export default function AddLiftItemsScreen() {
                               >
                                 Add item
                               </Text>
-                              <Plus
-                                size={16}
-                                color={colors.primary.purple}
-                                strokeWidth={2}
-                              />
                             </TouchableOpacity>
                           </View>
                         </View>
@@ -648,6 +643,7 @@ export default function AddLiftItemsScreen() {
           </View>
 
           {items.length < MAX_ITEMS && (
+            <View className="w-1/2 mx-auto">
             <TouchableOpacity
               onPress={handleAddItem}
               className="mt-4 flex-row items-center justify-center rounded-full border px-4 py-3"
@@ -664,9 +660,25 @@ export default function AddLiftItemsScreen() {
               </Text>
               <Plus size={16} color={colors.primary.purple} strokeWidth={2} />
             </TouchableOpacity>
+            </View>
           )}
         </View>
       </KeyboardAwareScrollView>
+
+       {/* Footer Buttons */}
+        <View className="border-t border-grey-plain-300 bg-grey-alpha-100 px-4 py-6">
+          <View className="flex-row gap-3 justify-end ">
+            <View className="items-center">
+              <Button
+                title={'Done'}
+                onPress={handleDone}
+                variant="primary"
+                className="rounded-full"
+                disabled={false}
+              />
+            </View>
+          </View>
+        </View>
 
       {/* Quantity Bottom Sheet */}
       {isNumberOfRecipientSheetMounted && (

@@ -7,7 +7,7 @@ import { router, Href } from 'expo-router';
 import { RequestSuccessBottomSheet } from '@/components/lift';
 import { useRef, useState } from 'react';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
-import { useLiftDraft } from '@/context/LiftDraftContext';
+import { useLiftDraft, LiftType } from '@/context/LiftDraftContext';
 import { ConfirmationModal } from '../ui/ConfirmationModal';
 import { PasscodeBottomSheet } from '../ui/PasscodeBottomSheet';
 import { PaymentBottomSheet } from './PaymentBottomSheet';
@@ -48,8 +48,15 @@ export default function PreviewOfferLiftScreen({
   showProgressBar = true,
   visibleSettings = ALL_SETTINGS,
 }: PreviewOfferLiftScreenProps) {
-  const { title, description, liftAmount, numberOfRecipients, offerTo } =
-    useLiftDraft();
+  const {
+    title,
+    description,
+    liftAmount,
+    numberOfRecipients,
+    offerTo,
+    liftType,
+    liftItems,
+  } = useLiftDraft();
 
   // Helper to check if a setting should be shown
   // Supports both legacy showProgressBar prop and new visibleSettings
@@ -161,35 +168,67 @@ export default function PreviewOfferLiftScreen({
             </Text>
           </View>
 
-          <View
-            className="mb-4 justify-center rounded-2xl border p-4"
-            style={{
-              backgroundColor: colors['grey-plain']['50'],
-              borderColor: colors['grey-plain']['300'],
-            }}
-          >
-            <Text
-              // className="mb-3 text-2xl font-bold text-grey-alpha-500"
-              className={
-                showSetting('progressBar')
-                  ? 'text-grey-alpha-50 mb-3 text-2xl font-bold'
-                  : 'text-grey-alpha-50  py-2 text-2xl font-bold'
-              }
+          {/* Amount and Items Section */}
+          {liftType === LiftType.Monetary && (
+            <View
+              className="mb-4 justify-center rounded-2xl border p-4"
+              style={{
+                backgroundColor: colors['grey-plain']['50'],
+                borderColor: colors['grey-plain']['300'],
+              }}
             >
-              ₦100000
-            </Text>
+              <Text
+                // className="mb-3 text-2xl font-bold text-grey-alpha-500"
+                className={
+                  showSetting('progressBar')
+                    ? 'text-grey-alpha-50 mb-3 text-2xl font-bold'
+                    : 'text-grey-alpha-50  py-2 text-2xl font-bold'
+                }
+              >
+                ₦100000
+              </Text>
 
-            {/* Progress Bar */}
-            {showSetting('progressBar') && (
+              {/* Progress Bar */}
+              {showSetting('progressBar') && (
+                <LiftProgressBar
+                  currentAmount={500}
+                  targetAmount={10000}
+                  showAmount={false}
+                />
+              )}
+            </View>
+          )}
+          {liftType === LiftType.NonMonetary && (
+            <View
+              className="mb-4  rounded-2xl border p-4"
+              style={{
+                backgroundColor: colors['grey-plain']['50'],
+                borderColor: colors['grey-plain']['300'],
+              }}
+            >
+              <View className="mb-3 flex-row flex-wrap gap-2">
+                {liftItems.map((item) => (
+                  <View
+                    key={item.id}
+                    className="rounded-full px-3 py-1.5"
+                    style={{ backgroundColor: colors['grey-alpha']['150'] }}
+                  >
+                    <Text className="text-xs font-medium text-grey-alpha-500">
+                      {item.name} ({item.quantity})
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              {/* Progress Bar */}
               <LiftProgressBar
-                currentAmount={500}
-                targetAmount={10000}
+                currentAmount={1}
+                targetAmount={2}
                 showAmount={false}
               />
-            )}
-          </View>
+            </View>
+          )}
 
-          <View className="mb-6 w-3 w-full border-b border-grey-plain-300" />
+          <View className="mb-6  w-full border-b border-grey-plain-300" />
 
           {/* Offer to Section */}
           {showSetting('offerTo') && (
@@ -227,7 +266,9 @@ export default function PreviewOfferLiftScreen({
                   {new Intl.NumberFormat('en-NG', {
                     style: 'currency',
                     currency: 'NGN',
-                  }).format(Number(liftAmount) / Number(numberOfRecipients))}{' '}
+                  }).format(
+                    Number(liftAmount) / Number(numberOfRecipients)
+                  )}{' '}
                   each
                 </Text>
               </View>
