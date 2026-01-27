@@ -16,6 +16,7 @@ import {
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { LiftProgressCard } from './LiftProgressCard';
+import { useCommentBottomSheet } from '@/context/comment-bottom-sheet';
 
 type MediaItem = {
   id: string;
@@ -99,6 +100,7 @@ export function FeedPost({
   onMenuPress,
 }: FeedPostProps) {
   const textParts = parseTextWithStyling(content);
+  const { openComments } = useCommentBottomSheet();
 
   function handlePostPress() {
     if (!id) return;
@@ -324,7 +326,10 @@ export function FeedPost({
           <TouchableOpacity
             className="flex-row items-center gap-1"
             onPress={() => {
-              // TODO: Handle comment action
+              if (id) {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                openComments(id);
+              }
             }}
           >
             <MessageCircleMore color={colors['grey-plain']['550']} size={20} />
