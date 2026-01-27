@@ -22,7 +22,8 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.lifteller",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["mailto"]
+        "LSApplicationQueriesSchemes": ["mailto"],
+        "NSMicrophoneUsageDescription": "Allow Lifteller to access your microphone to record voice notes."
       }
     },
     "android": {

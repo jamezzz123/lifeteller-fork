@@ -17,19 +17,19 @@ export function InterestChip({
 }: InterestChipProps) {
   const content = (
     <View
-      className={`rounded-xl px-3 py-1.5 ${className}`}
+      className={`rounded-full px-3 py-1.5 ${className}`}
       style={{
         backgroundColor: selected
-          ? colors['primary-tints'].purple['100']
+          ? colors['primary-tints'].purple['50']
           : colors['grey-alpha']['150'],
       }}
     >
       <Text
-        className="text-xs font-medium"
+        className="font-medium"
         style={{
           color: selected
-            ? colors.primary.purple
-            : colors['grey-alpha']['450'],
+            ? colors['primary-shades'].purple['300']
+            : colors['grey-alpha']['400'],
         }}
       >
         {label}

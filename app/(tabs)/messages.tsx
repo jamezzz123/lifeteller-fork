@@ -287,7 +287,10 @@ export default function MessagesScreen() {
               strokeWidth={2}
             />
           </TouchableOpacity>
-          <TouchableOpacity className="p-1">
+          <TouchableOpacity
+            className="p-1"
+            onPress={() => router.push('/message-settings')}
+          >
             <Settings
               color={colors['grey-plain']['550']}
               size={24}

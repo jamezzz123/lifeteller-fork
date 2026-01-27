@@ -150,11 +150,13 @@ export function FeedPost({
                 </View>
                 {/* Badge Overlay */}
                 <View
-                  className="absolute -bottom-0.5 left-0 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
+                  className="absolute -bottom-0.5 h-5 w-5 items-center justify-center rounded-full border-2 border-white"
                   style={{
                     backgroundColor: colors['primary-tints'].purple['100'],
                     alignItems: 'center',
                     justifyContent: 'center',
+                    left: '50%',
+                    transform: [{ translateX: -10 }],
                   }}
                 >
                   <Medal

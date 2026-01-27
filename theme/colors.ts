@@ -17,6 +17,7 @@ const palette = {
   'primary-shades': {
     purple: {
       '200': '#5A2C8F', // Darker shade of primary purple
+      '300': '#360E64'
     },
   },
   'grey-alpha': {
@@ -44,6 +45,7 @@ const palette = {
     red: '#BC1521',
     yellow: '#D97A0D',
     green: '#059652',
+    orange: '#D97A0D',
   },
   yellow: {
     '50': '#D97A0D',

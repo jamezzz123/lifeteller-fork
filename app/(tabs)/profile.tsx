@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useMemo, useState, useRef } from 'react';
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
   Alert,
   Platform,
   ActivityIndicator,
+  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TabView, TabBar, Route } from 'react-native-tab-view';
@@ -19,14 +20,14 @@ import * as Haptics from 'expo-haptics';
 import {
   Search,
   Settings,
-  Pencil,
-  Share2,
   BadgeCheck,
   Medal,
+  Trophy,
   ArrowUpRight,
   Plus,
+  Spotlight,
   ChevronRight,
-  UserCircle,
+  UserCog,
   SquareMousePointer,
   CalendarHeart,
   Info,
@@ -47,8 +48,25 @@ import LiftCaptainBadge from '@/assets/images/badges/lift-captain.svg';
 import { ShareProfileBottomSheet } from '@/components/profile/ShareProfileBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { useUploadAvatar } from '@/lib/hooks/mutations/useUploadAvatar';
+import { FloatingActionButton } from '@/components/feed/FloatingActionButton';
+import { Button } from '@/components/ui/Button';
+import LeaderboardBg from '@/assets/images/leaderboard-bg.svg';
 
 const { width } = Dimensions.get('window');
+const UNSPLASH_IMAGE_IDS = [
+  '1507003211169-0a1dd7228f2d',
+  '1492562080023-4713a9a30c24',
+  '1500648767791-00dcc994a43e',
+  '1506794778202-cad84cf45f1d',
+  '1502823403499-6ccfcf4fb453',
+  '1539571691757-3988c6b0c0c0',
+  '1544005313-94ddf0286d2b',
+  '1534528741775-53994a69daeb',
+  '1529626455594-4ff0802cfb7e',
+  '1506794778202-cad84cf45f1d',
+  '1500648767791-00dcc994a43e',
+  '1492562080023-4713a9a30c24',
+];
 
 // Placeholder tab content components
 function PostsTab() {
@@ -244,28 +262,20 @@ function LiftHistoryTab() {
 function PhotosTab() {
   // Placeholder photo data - replace with actual data from API/hooks
   // Each photo should have: { id: string, uri: string }
-  const unsplashImageIds = [
-    '1507003211169-0a1dd7228f2d',
-    '1492562080023-4713a9a30c24',
-    '1500648767791-00dcc994a43e',
-    '1506794778202-cad84cf45f1d',
-    '1502823403499-6ccfcf4fb453',
-    '1539571691757-3988c6b0c0c0',
-    '1544005313-94ddf0286d2b',
-    '1534528741775-53994a69daeb',
-    '1529626455594-4ff0802cfb7e',
-    '1506794778202-cad84cf45f1d',
-    '1500648767791-00dcc994a43e',
-    '1492562080023-4713a9a30c24',
-  ];
+  // Shuffle once for stable rendering
+  const shuffledIds = useMemo(
+    () => [...UNSPLASH_IMAGE_IDS].sort(() => Math.random() - 0.5),
+    []
+  );
 
-  // Shuffle array for randomization
-  const shuffledIds = [...unsplashImageIds].sort(() => Math.random() - 0.5);
-
-  const photos = Array.from({ length: 12 }, (_, i) => ({
-    id: `photo-${i + 1}`,
-    uri: `https://images.unsplash.com/photo-${shuffledIds[i]}?w=400&h=400&fit=crop`,
-  }));
+  const photos = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, i) => ({
+        id: `photo-${i + 1}`,
+        uri: `https://picsum.photos/seed/${shuffledIds[i]}/400/400`,
+      })),
+    [shuffledIds]
+  );
 
   const { width } = Dimensions.get('window');
   const GAP = 2;
@@ -316,30 +326,22 @@ function PhotosTab() {
 function LiftClipsTab() {
   // Placeholder video clip data - replace with actual data from API/hooks
   // Each clip should have: { id: string, thumbnailUri: string, videoUri: string, duration?: number }
-  const unsplashImageIds = [
-    '1507003211169-0a1dd7228f2d',
-    '1492562080023-4713a9a30c24',
-    '1500648767791-00dcc994a43e',
-    '1506794778202-cad84cf45f1d',
-    '1502823403499-6ccfcf4fb453',
-    '1539571691757-3988c6b0c0c0',
-    '1544005313-94ddf0286d2b',
-    '1534528741775-53994a69daeb',
-    '1529626455594-4ff0802cfb7e',
-    '1506794778202-cad84cf45f1d',
-    '1500648767791-00dcc994a43e',
-    '1492562080023-4713a9a30c24',
-  ];
+  // Shuffle once for stable rendering
+  const shuffledIds = useMemo(
+    () => [...UNSPLASH_IMAGE_IDS].sort(() => Math.random() - 0.5),
+    []
+  );
 
-  // Shuffle array for randomization
-  const shuffledIds = [...unsplashImageIds].sort(() => Math.random() - 0.5);
-
-  const clips = Array.from({ length: 9 }, (_, i) => ({
-    id: `clip-${i + 1}`,
-    thumbnailUri: `https://images.unsplash.com/photo-${shuffledIds[i]}?w=400&h=400&fit=crop`,
-    videoUri: `https://example.com/video-${i + 1}.mp4`, // Placeholder
-    duration: Math.floor(Math.random() * 120) + 15, // Random duration between 15-135 seconds
-  }));
+  const clips = useMemo(
+    () =>
+      Array.from({ length: 9 }, (_, i) => ({
+        id: `clip-${i + 1}`,
+        thumbnailUri: `https://picsum.photos/seed/${shuffledIds[i]}/400/400`,
+        videoUri: `https://example.com/video-${i + 1}.mp4`, // Placeholder
+        duration: Math.floor(Math.random() * 120) + 15, // Random duration between 15-135 seconds
+      })),
+    [shuffledIds]
+  );
 
   const { width } = Dimensions.get('window');
   const GAP = 2;
@@ -490,7 +492,7 @@ function AboutTab({
       >
         <SectionHeader
           icon={
-            <UserCircle
+            <UserCog
               color={colors['grey-alpha']['500']}
               size={18}
               strokeWidth={2}
@@ -697,6 +699,7 @@ export default function ProfileScreen() {
     { key: 'liftClips', title: 'LiftClips' },
     { key: 'about', title: 'About' },
   ]);
+  const isLiftClipsTabActive = routes[index]?.key === 'liftClips';
 
   // Get user data with fallbacks
   const fullName = user ? getFullName(user.first_name, user.last_name) : '';
@@ -800,6 +803,10 @@ export default function ProfileScreen() {
     }
   };
 
+  const handleCreateClip = () => {
+    router.push('/lift-clip' as any);
+  };
+
   return (
     <SafeAreaView className="flex-1 bg-grey-plain-50" edges={['top']}>
       {/* Fixed Header */}
@@ -809,9 +816,11 @@ export default function ProfileScreen() {
           <TouchableOpacity>
             <Search color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/debug')}>
-            <Bug color={colors['grey-alpha']['500']} size={24} />
-          </TouchableOpacity>
+          {__DEV__ && (
+            <TouchableOpacity onPress={() => router.push('/debug')}>
+              <Bug color={colors['grey-alpha']['500']} size={24} />
+            </TouchableOpacity>
+          )}
           <TouchableOpacity onPress={() => router.push('/settings')}>
             <Settings color={colors['grey-alpha']['500']} size={24} />
           </TouchableOpacity>
@@ -909,35 +918,30 @@ export default function ProfileScreen() {
                   </View>
                 </View>
 
-                {/* Action Buttons */}
-                <View className="ml-auto flex-row gap-3">
-                  <TouchableOpacity
-                    className="p-1.5"
-                    onPress={() => router.push('/edit-details' as any)}
-                  >
-                    <Pencil
-                      color={colors['grey-alpha']['500']}
-                      size={22}
-                      strokeWidth={2}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    className="p-1.5"
-                    onPress={() => shareProfileSheetRef.current?.expand()}
-                  >
-                    <Share2
-                      color={colors['grey-alpha']['500']}
-                      size={22}
-                      strokeWidth={2}
-                    />
-                  </TouchableOpacity>
-                </View>
               </View>
 
               {/* Bio - Below avatar and user info */}
               {bio && (
                 <Text className="text-sm text-grey-plain-550">{bio}</Text>
               )}
+
+              {/* Action Buttons */}
+              <View className="mt-3 flex-row gap-3">
+                <Button
+                  title="Edit details"
+                  onPress={() => router.push('/edit-details' as any)}
+                  variant="outline"
+                  size="small"
+                  className="flex-1 rounded-full border-grey-plain-300 px-4"
+                />
+                <Button
+                  title="Share profile"
+                  onPress={() => shareProfileSheetRef.current?.expand()}
+                  variant="primary"
+                  size="small"
+                  className="flex-1 rounded-full px-4"
+                />
+              </View>
             </View>
 
             {/* Stats */}
@@ -1010,6 +1014,63 @@ export default function ProfileScreen() {
                 </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Leaderboard Rank */}
+            <TouchableOpacity
+              activeOpacity={0.85}
+              onPress={() => router.push('/leaderboard')}
+              className="mt-4"
+            >
+              <View
+                className="w-full overflow-hidden"
+                style={{
+                  borderRadius: 18,
+                  backgroundColor: colors.primary.purple,
+                }}
+              >
+                <LeaderboardBg
+                  width="100%"
+                  height="100%"
+                  preserveAspectRatio="xMidYMid slice"
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    borderRadius: 18,
+                  }}
+                  pointerEvents="none"
+                />
+                <View className="flex-row items-center px-4 py-4">
+                  <View
+                    className="mr-3 h-12 w-12 items-center justify-center rounded-full"
+                    style={{ backgroundColor: colors['primary-tints'].purple['50'] }}
+                  >
+                    <Trophy color={colors.primary.purple} size={22} />
+                  </View>
+                  <View className="flex-1">
+                    <Text className="text-base font-semibold text-white">
+                      Leaderboard rank
+                    </Text>
+                  <View className="flex-row items-center gap-1">
+                    <Text className="text-sm text-white/90">
+                      #12 among friends • 
+                    </Text>
+                      <Spotlight color={colors['grey-plain']['50']} size={14} /> 
+                      <Text className="text-sm text-white/90">
+                      Top 5% globally
+                      </Text>
+                    </View>
+                  </View>
+                  <ChevronRight
+                    color={colors['grey-plain']['50']}
+                    size={20}
+                    strokeWidth={2.5}
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -1023,9 +1084,35 @@ export default function ProfileScreen() {
             renderTabBar={(props) => (
               <TabBar
                 {...props}
-                indicatorStyle={{
-                  backgroundColor: colors.primary.purple,
-                  height: 2,
+                renderIndicator={({ getTabWidth, position, navigationState }) => {
+                  const inputRange = navigationState.routes.map((_, i) => i);
+                  const tabWidths = navigationState.routes.map((_, i) =>
+                    getTabWidth(i)
+                  );
+                  const translateX = position.interpolate({
+                    inputRange,
+                    outputRange: tabWidths.map((_, i) => {
+                      const left = tabWidths
+                        .slice(0, i)
+                        .reduce((sum, width) => sum + width, 0);
+                      return left + tabWidths[i] / 2 - 18;
+                    }),
+                  });
+
+                  return (
+                    <Animated.View
+                      style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        height: 6,
+                        width: 36,
+                        borderTopLeftRadius: 999,
+                        borderTopRightRadius: 999,
+                        backgroundColor: colors.primary.purple,
+                        transform: [{ translateX }],
+                      }}
+                    />
+                  );
                 }}
                 style={{
                   backgroundColor: 'white',
@@ -1061,6 +1148,10 @@ export default function ProfileScreen() {
           />
         </View>
       </ScrollView>
+
+      {isLiftClipsTabActive && (
+        <FloatingActionButton onPress={handleCreateClip} visible={true} />
+      )}
 
       {/* Share Profile Bottom Sheet */}
       <ShareProfileBottomSheet

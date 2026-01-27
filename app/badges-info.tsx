@@ -134,6 +134,9 @@ export default function BadgesInfoScreen() {
             <Text className="text-center text-sm text-grey-alpha-500">
               🎉 {points.toLocaleString()} points earned so far
             </Text>
+            <Text className="text-center text-sm text-grey-alpha-500">
+              Click on earned badge(s) to view more details.
+            </Text>
           </View>
 
           {/* Badges Progression */}

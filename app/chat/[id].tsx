@@ -24,6 +24,8 @@ import {
   FileImage,
   FileAudio,
   FileVideo,
+  Pause,
+  Play,
 } from 'lucide-react-native';
 import { ChatStarterCard } from '@/components/chat/ChatStarterCard';
 import { Avatar } from '@/components/ui/Avatar';
@@ -45,6 +47,7 @@ import PdfIcon from '@/assets/images/file-type-pdf.svg';
 import { MessageActionMenu } from '@/components/chat/MessageActionMenu';
 import { CONTACTS } from '@/components/request-lift/data';
 import * as Haptics from 'expo-haptics';
+import { useAudioPlayer, useAudioPlayerStatus } from 'expo-audio';
 
 interface TextMessage {
   id: string;
@@ -95,7 +98,107 @@ interface DocumentMessage {
   isSeen?: boolean;
 }
 
-type Message = TextMessage | LiftMessage | MediaMessage | DocumentMessage;
+interface AudioMessage {
+  id: string;
+  type: 'audio';
+  audioUri: string;
+  duration: number;
+  isSent: boolean;
+  timestamp: string;
+  isSeen?: boolean;
+}
+
+type Message =
+  | TextMessage
+  | LiftMessage
+  | MediaMessage
+  | DocumentMessage
+  | AudioMessage;
+
+interface VoiceMessageBubbleProps {
+  uri: string;
+  duration: number;
+  timestamp: string;
+  isSent: boolean;
+  isSeen?: boolean;
+}
+
+function VoiceMessageBubble({
+  uri,
+  duration,
+  timestamp,
+  isSent,
+  isSeen,
+}: VoiceMessageBubbleProps) {
+  const player = useAudioPlayer(uri);
+  const status = useAudioPlayerStatus(player);
+
+  const formatDuration = (seconds: number) => {
+    if (!Number.isFinite(seconds)) return '0:00';
+    const total = Math.max(0, Math.round(seconds));
+    const mins = Math.floor(total / 60);
+    const secs = total % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const waveformHeights = [6, 12, 9, 14, 10, 16, 8, 14, 7, 12, 9, 13];
+
+  return (
+    <View
+      className="max-w-[85%] rounded-2xl bg-grey-plain-150 px-4 py-3"
+      style={{ width: '75%' }}
+    >
+      <View className="flex-row items-center gap-3">
+        <TouchableOpacity
+          className="items-center justify-center rounded-full"
+          style={{
+            width: 36,
+            height: 36,
+            backgroundColor: colors['grey-alpha']['450'],
+          }}
+          onPress={() => {
+            if (status.playing) {
+              player.pause();
+              return;
+            }
+            player.play();
+          }}
+        >
+          {status.playing ? (
+            <Pause fill={colors['grey-plain']['50']} color={colors['grey-plain']['50']} size={18} />
+          ) : (
+            <Play fill={colors['grey-plain']['50']} color={colors['grey-plain']['50']} size={18} />
+          )}
+        </TouchableOpacity>
+
+        <View className="flex-1 flex-row items-center gap-1">
+          {waveformHeights.map((height, index) => (
+            <View
+              key={`${uri}-${index}`}
+              style={{
+                width: 3,
+                height,
+                borderRadius: 2,
+                backgroundColor: colors['grey-plain']['300'],
+              }}
+            />
+          ))}
+        </View>
+
+        <Text className="text-xs text-grey-plain-550">
+          {formatDuration(duration)}
+        </Text>
+      </View>
+
+      <View className="mt-2 flex-row items-center gap-2">
+        <Text className="text-xs text-grey-plain-550">{timestamp}</Text>
+        {isSent && isSeen && (
+          <Text className="text-xs text-grey-plain-550">• Seen</Text>
+        )}
+      </View>
+    </View>
+  );
+}
 
 export default function ChatScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -402,6 +505,21 @@ export default function ChatScreen() {
     setMessage('');
   };
 
+  const handleSendAudio = (payload: { uri: string; duration: number }) => {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: Date.now().toString(),
+        type: 'audio',
+        audioUri: payload.uri,
+        duration: payload.duration,
+        isSent: true,
+        isSeen: true,
+        timestamp: formatTimestamp(new Date()),
+      },
+    ]);
+  };
+
   const handleRequestLift = () => {
     // TODO: Navigate to request lift flow
     router.push('/request-lift' as any);
@@ -410,11 +528,6 @@ export default function ChatScreen() {
   const handleOfferLift = () => {
     // TODO: Navigate to offer lift flow
     router.push('/offer-lift' as any);
-  };
-
-  const handleProfilePress = () => {
-    // Navigate to user profile
-    router.push(`/user/${contact.id}` as any);
   };
 
   const handleViewInfo = () => {
@@ -524,7 +637,7 @@ export default function ChatScreen() {
           {/* Contact Info */}
           <TouchableOpacity
             className="mr-3"
-            onPress={handleProfilePress}
+            onPress={handleViewInfo}
             activeOpacity={0.7}
           >
             <Avatar
@@ -550,7 +663,7 @@ export default function ChatScreen() {
 
           <TouchableOpacity
             className="flex-1"
-            onPress={handleProfilePress}
+            onPress={handleViewInfo}
             activeOpacity={0.7}
           >
             <View className="mb-0.5 flex-row items-center gap-1.5">
@@ -757,6 +870,26 @@ export default function ChatScreen() {
               );
             }
 
+            if (msg.type === 'audio') {
+              return (
+                <TouchableOpacity
+                  key={msg.id}
+                  className={`mb-4 ${msg.isSent ? 'items-end' : 'items-start'}`}
+                  onLongPress={() => handleLongPressMessage(msg)}
+                  activeOpacity={0.9}
+                  delayLongPress={300}
+                >
+                  <VoiceMessageBubble
+                    uri={msg.audioUri}
+                    duration={msg.duration}
+                    timestamp={msg.timestamp}
+                    isSent={msg.isSent}
+                    isSeen={msg.isSeen}
+                  />
+                </TouchableOpacity>
+              );
+            }
+
             // Text message
             return (
               <TouchableOpacity
@@ -910,6 +1043,7 @@ export default function ChatScreen() {
           message={message}
           onChangeMessage={setMessage}
           onSend={handleSendMessage}
+          onSendAudio={handleSendAudio}
           onOpenAttachments={() => setShowAttachmentSheet(true)}
           onOpenCamera={() => setShowAttachmentSheet(true)}
           hasAttachments={selectedDocuments.length > 0}

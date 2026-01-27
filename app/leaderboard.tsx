@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   TouchableOpacity,
   TextInput,
+  KeyboardAvoidingView,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
@@ -13,16 +15,24 @@ import {
   CornerUpLeft,
   ChevronDown,
   Search,
-  SlidersHorizontal,
   HandHeart,
   Flame,
   Crown,
+  Spotlight,
   Medal,
   BadgeCheck,
   ChevronRight,
 } from 'lucide-react-native';
 import { colors } from '@/theme/colors';
 import { Avatar } from '@/components/ui/Avatar';
+import BlockTop from '@/assets/images/block-top.svg';
+import {
+  RankingScopeBottomSheet,
+} from '@/components/leaderboard/RankingScopeBottomSheet';
+import {
+  TimeRangeBottomSheet,
+} from '@/components/leaderboard/TimeRangeBottomSheet';
+import { BottomSheetRef } from '@/components/ui/BottomSheet';
 
 interface LeaderboardUser {
   id: string;
@@ -161,19 +171,26 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
         <Text className="mt-0.5 text-xs text-grey-plain-550">
           {users[1]?.points} points
         </Text>
-        <View
-          className="mt-2 w-20 items-center justify-center"
-          style={{
-            backgroundColor: colors['primary-tints'].purple['100'],
-            height: heights[0],
-          }}
-        >
-          <Text
-            className="text-lg font-bold"
-            style={{ color: colors.primary.purple }}
+
+        <View className="mt-2">
+          <View style={{ width: 110, alignItems: 'center', overflow: 'visible' }}>
+            <BlockTop width={110} height={16} />
+          </View>
+          <View
+            className="items-center justify-center"
+            style={{
+              width: 110,
+              backgroundColor: colors['primary-tints'].purple['100'],
+              height: heights[0],
+            }}
           >
-            2nd
-          </Text>
+            <Text
+              className="text-lg font-bold"
+              style={{ color: colors.primary.purple }}
+            >
+              2nd
+            </Text>
+          </View>
         </View>
       </View>
 
@@ -196,19 +213,25 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
         <Text className="mt-0.5 text-xs text-grey-plain-550">
           {users[0]?.points} points
         </Text>
-        <View
-          className="mt-2 w-20 items-center justify-center"
-          style={{
-            backgroundColor: colors['primary-tints'].purple['100'],
-            height: heights[1],
-          }}
-        >
+        <View className="mt-2">
+          <View style={{ width: 110, alignItems: 'center', overflow: 'visible' }}>
+            <BlockTop width={110} height={16} />
+          </View>
+          <View
+            className="items-center justify-center"
+            style={{
+              width: 110,
+              backgroundColor: colors['primary-tints'].purple['100'],
+              height: heights[1],
+            }}
+          >
           <Text
             className="text-lg font-bold"
             style={{ color: colors.primary.purple }}
           >
             1st
           </Text>
+          </View>
         </View>
       </View>
 
@@ -230,19 +253,25 @@ function Top3Visual({ users }: { users: LeaderboardUser[] }) {
         <Text className="mt-0.5 text-xs text-grey-plain-550">
           {users[2]?.points} points
         </Text>
-        <View
-          className="mt-2 w-20 items-center justify-center"
-          style={{
-            backgroundColor: colors['primary-tints'].purple['100'],
-            height: heights[2],
-          }}
-        >
+        <View className="mt-2">
+          <View style={{ width: 110, alignItems: 'center', overflow: 'visible' }}>
+            <BlockTop width={110} height={16} />
+          </View>
+          <View
+            className="items-center justify-center"
+            style={{
+              width: 110,
+              backgroundColor: colors['primary-tints'].purple['100'],
+              height: heights[2],
+            }}
+          >
           <Text
             className="text-lg font-bold"
             style={{ color: colors.primary.purple }}
           >
             3rd
           </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -280,9 +309,11 @@ function RankListItem({ user }: { user: LeaderboardUser }) {
 }
 
 export default function LeaderboardScreen() {
-  const [selectedFilter] = useState('All users');
-  const [selectedTime] = useState('All time');
+  const [selectedFilter, setSelectedFilter] = useState('All users');
+  const [selectedTime, setSelectedTime] = useState('All time');
   const [searchQuery, setSearchQuery] = useState('');
+  const rankingScopeSheetRef = useRef<BottomSheetRef>(null);
+  const timeRangeSheetRef = useRef<BottomSheetRef>(null);
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
@@ -300,40 +331,49 @@ export default function LeaderboardScreen() {
         </Text>
       </View>
 
-      <ScrollView
+      <KeyboardAvoidingView
         className="flex-1"
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 16 }}
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 12 : 0}
       >
-        {/* Filter Options */}
-        <View className="flex-row gap-3 border-b border-grey-plain-150 bg-white px-4 py-3">
-          <TouchableOpacity
-            className="flex-1 flex-row items-center justify-between rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5"
-            activeOpacity={0.7}
-          >
-            <Text className="text-sm font-medium text-grey-alpha-500">
-              {selectedFilter}
-            </Text>
-            <ChevronDown
-              color={colors['grey-plain']['550']}
-              size={18}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="flex-1 flex-row items-center justify-between rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5"
-            activeOpacity={0.7}
-          >
-            <Text className="text-sm font-medium text-grey-alpha-500">
-              {selectedTime}
-            </Text>
-            <ChevronDown
-              color={colors['grey-plain']['550']}
-              size={18}
-              strokeWidth={2}
-            />
-          </TouchableOpacity>
-        </View>
+        <ScrollView
+          className="flex-1"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 16 }}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+        >
+          {/* Filter Options */}
+          <View className="flex-row gap-3 border-b border-grey-plain-150 bg-white px-4 py-3">
+            <TouchableOpacity
+              className="flex-1 flex-row items-center justify-between rounded-full border border-grey-plain-300 bg-white px-3 py-2.5"
+              activeOpacity={0.7}
+              onPress={() => rankingScopeSheetRef.current?.expand()}
+            >
+              <Text className="text-sm font-medium text-grey-alpha-500">
+                {selectedFilter}
+              </Text>
+              <ChevronDown
+                color={colors['grey-plain']['550']}
+                size={18}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              className="flex-1 flex-row items-center justify-between rounded-full border border-grey-plain-300 bg-white px-3 py-2.5"
+              activeOpacity={0.7}
+              onPress={() => timeRangeSheetRef.current?.expand()}
+            >
+              <Text className="text-sm font-medium text-grey-alpha-500">
+                {selectedTime}
+              </Text>
+              <ChevronDown
+                color={colors['grey-plain']['550']}
+                size={18}
+                strokeWidth={2}
+              />
+            </TouchableOpacity>
+          </View>
 
         {/* Your Rank Card */}
         <View className="mb-8 mt-4 px-3">
@@ -380,6 +420,12 @@ export default function LeaderboardScreen() {
                   </Text>
                 </View>
                 <View className="flex-row items-center gap-1.5">
+                  <Spotlight color="#FFFFFF" size={16} />
+                  <Text className="text-sm font-medium text-white">
+                    Top 5%
+                  </Text>
+                </View>
+                <View className="flex-row items-center gap-1.5">
                   <Flame color="#FFFFFF" size={16} />
                   <Text className="text-sm font-medium text-white">
                     {currentUser.streak} days streak
@@ -419,7 +465,7 @@ export default function LeaderboardScreen() {
 
           {/* Search Bar */}
           <View className="mb-4 flex-row gap-2">
-            <View className="flex-1 flex-row items-center rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5">
+            <View className="flex-1 flex-row items-center rounded-full border border-grey-plain-300 bg-white px-3 py-2.5">
               <Search
                 color={colors['grey-plain']['550']}
                 size={18}
@@ -434,16 +480,6 @@ export default function LeaderboardScreen() {
                 className="flex-1 text-sm text-grey-alpha-500"
               />
             </View>
-            <TouchableOpacity
-              className="items-center justify-center rounded-lg border border-grey-plain-300 bg-white px-3 py-2.5"
-              activeOpacity={0.7}
-            >
-              <SlidersHorizontal
-                color={colors['grey-plain']['550']}
-                size={18}
-                strokeWidth={2}
-              />
-            </TouchableOpacity>
           </View>
 
           {/* Ranks List */}
@@ -453,7 +489,19 @@ export default function LeaderboardScreen() {
             ))}
           </View>
         </View>
-      </ScrollView>
+        </ScrollView>
+      </KeyboardAvoidingView>
+
+      <RankingScopeBottomSheet
+        ref={rankingScopeSheetRef}
+        selectedScope={selectedFilter}
+        onApply={setSelectedFilter}
+      />
+      <TimeRangeBottomSheet
+        ref={timeRangeSheetRef}
+        selectedRange={selectedTime}
+        onApply={setSelectedTime}
+      />
     </SafeAreaView>
   );
 }
