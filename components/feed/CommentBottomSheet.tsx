@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import { Image } from 'expo-image';
 import {
   Heart,
@@ -65,10 +65,15 @@ function parseTextWithStyling(text: string) {
 interface CommentInputFooterProps {
   user: any;
   postId: string | null;
+  bottomInset: number;
 }
 
-function CommentInputFooter({ user, postId }: CommentInputFooterProps) {
-  const { isKeyboardVisible } = useKeyboard();
+function CommentInputFooter({
+  user,
+  postId,
+  bottomInset,
+}: CommentInputFooterProps) {
+  const { isKeyboardVisible, keyboardHeight } = useKeyboard();
   const [commentText, setCommentText] = useState('');
 
   function handleSendComment() {
@@ -79,12 +84,19 @@ function CommentInputFooter({ user, postId }: CommentInputFooterProps) {
     setCommentText('');
   }
 
+  // On Android, we need to manually add keyboard height as padding
+  // Add extra 50px to account for the button row height
+  const androidKeyboardPadding =
+    Platform.OS === 'android' && isKeyboardVisible ? keyboardHeight + 50 : 0;
+
   return (
     <View
       className="border-t border-grey-plain-150 bg-grey-plain-50 px-4"
       style={{
         paddingTop: isKeyboardVisible ? 8 : 12,
-        paddingBottom: isKeyboardVisible ? 8 : 12,
+        paddingBottom: isKeyboardVisible
+          ? 8 + androidKeyboardPadding
+          : 12 + bottomInset,
       }}
     >
       <View className="flex-row items-center gap-3">
@@ -92,7 +104,8 @@ function CommentInputFooter({ user, postId }: CommentInputFooterProps) {
         <View className="h-10 w-10 overflow-hidden rounded-full bg-grey-plain-300">
           {user?.profile_photo_url ? (
             <Image
-              source={{ uri: user.profile_photo_url }}
+              // source={{ uri: user.profile_photo_url }}
+              source={{ uri: 'https://i.pravatar.cc/150?img=17' }}
               style={{
                 width: 40,
                 height: 40,
@@ -227,7 +240,9 @@ export function CommentBottomSheet() {
   const { isOpen, postId, closeComments } = useCommentBottomSheet();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
-  const [sortBy, setSortBy] = useState<'most-relevant' | 'newest'>('most-relevant');
+  const [sortBy, setSortBy] = useState<'most-relevant' | 'newest'>(
+    'most-relevant'
+  );
 
   useEffect(() => {
     if (isOpen) {
@@ -264,8 +279,12 @@ export function CommentBottomSheet() {
 
   const renderFooter = useCallback(
     (props: BottomSheetFooterProps) => (
-      <BottomSheetFooter {...props} bottomInset={insets.bottom}>
-        <CommentInputFooter user={user} postId={postId} />
+      <BottomSheetFooter {...props} bottomInset={0}>
+        <CommentInputFooter
+          user={user}
+          postId={postId}
+          bottomInset={insets.bottom}
+        />
       </BottomSheetFooter>
     ),
     [insets.bottom, user, postId]
@@ -296,7 +315,9 @@ export function CommentBottomSheet() {
           <TouchableOpacity
             className="flex-row items-center gap-2"
             onPress={() => {
-              setSortBy(sortBy === 'most-relevant' ? 'newest' : 'most-relevant');
+              setSortBy(
+                sortBy === 'most-relevant' ? 'newest' : 'most-relevant'
+              );
             }}
           >
             <Text className="text-[15px] font-semibold text-grey-alpha-500">
@@ -342,7 +363,8 @@ export function CommentBottomSheet() {
                         <View
                           className="absolute -bottom-0.5 left-0 h-4 w-4 items-center justify-center rounded-full border-2 border-white"
                           style={{
-                            backgroundColor: colors['primary-tints'].purple['100'],
+                            backgroundColor:
+                              colors['primary-tints'].purple['100'],
                           }}
                         >
                           <Medal
