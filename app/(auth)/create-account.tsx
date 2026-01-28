@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef , useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   View,
   Text,
   ScrollView,
   KeyboardAvoidingView,
-  Platform,
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -36,8 +35,10 @@ export default function CreateAccountScreen() {
   const emailVerificationSheetRef = useRef<BottomSheetRef>(null);
   const phoneVerificationSheetRef = useRef<BottomSheetRef>(null);
   const isSubmittingRef = useRef(false);
-  const [showEmailVerificationSheet, setShowEmailVerificationSheet] = useState(false);
-  const [showPhoneVerificationSheet, setShowPhoneVerificationSheet] = useState(false);
+  const [showEmailVerificationSheet, setShowEmailVerificationSheet] =
+    useState(false);
+  const [showPhoneVerificationSheet, setShowPhoneVerificationSheet] =
+    useState(false);
 
   // Username validation with debouncing
   const [usernameValidationStatus, setUsernameValidationStatus] = useState<
@@ -202,12 +203,16 @@ export default function CreateAccountScreen() {
   const handleCreateAccount = useCallback(async () => {
     // Prevent double submission - check multiple conditions
     if (isSubmittingRef.current) {
-      console.log('Registration already in progress (ref check), ignoring duplicate call');
+      console.log(
+        'Registration already in progress (ref check), ignoring duplicate call'
+      );
       return;
     }
 
     if (registerMutation.isPending) {
-      console.log('Registration already in progress (mutation pending), ignoring duplicate call');
+      console.log(
+        'Registration already in progress (mutation pending), ignoring duplicate call'
+      );
       return;
     }
 
@@ -261,8 +266,8 @@ export default function CreateAccountScreen() {
       });
       const response = await registerMutation.mutateAsync({
         username: username.trim(),
-        email: hasEmail && email.trim() ? email.trim() : "",
-        phone_number: hasPhone && phoneNumber.trim() ? phoneNumber.trim() : "",
+        email: hasEmail && email.trim() ? email.trim() : '',
+        phone_number: hasPhone && phoneNumber.trim() ? phoneNumber.trim() : '',
         password: password.trim(),
       });
       console.log('Registration successful:', response);
@@ -320,15 +325,23 @@ export default function CreateAccountScreen() {
           if (status === 500) {
             console.log('Server error:', responseData);
             // Check for specific database errors in the traceback
-            if (responseData.includes('duplicate key value violates unique constraint')) {
+            if (
+              responseData.includes(
+                'duplicate key value violates unique constraint'
+              )
+            ) {
               if (responseData.includes('email')) {
-                errorMessage = 'This email is already registered. Please use a different email or try logging in.';
+                errorMessage =
+                  'This email is already registered. Please use a different email or try logging in.';
               } else if (responseData.includes('username')) {
-                errorMessage = 'This username is already taken. Please choose a different username.';
+                errorMessage =
+                  'This username is already taken. Please choose a different username.';
               } else if (responseData.includes('phone')) {
-                errorMessage = 'This phone number is already registered. Please use a different number.';
+                errorMessage =
+                  'This phone number is already registered. Please use a different number.';
               } else {
-                errorMessage = 'This account already exists. Please try logging in instead.';
+                errorMessage =
+                  'This account already exists. Please try logging in instead.';
               }
             } else {
               errorMessage = 'Server error occurred. Please try again later.';
@@ -411,10 +424,7 @@ export default function CreateAccountScreen() {
 
   return (
     <SafeAreaView className="flex-1 bg-background" edges={['top', 'bottom']}>
-      <KeyboardAvoidingView
-        behavior="padding"
-        className="flex-1"
-      >
+      <KeyboardAvoidingView behavior="padding" className="flex-1">
         <ScrollView
           className="flex-1"
           contentContainerClassName="flex-grow"
