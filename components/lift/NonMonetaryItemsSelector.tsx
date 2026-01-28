@@ -6,15 +6,26 @@ import { colors } from '@/theme/colors';
 interface NonMonetaryItemsSelectorProps {
   items: { id: string; name: string; quantity: number }[];
   onAddItemsPress: () => void;
+  onViewItemsPress?: () => void;
 }
 
 export function NonMonetaryItemsSelector({
   items,
   onAddItemsPress,
+  onViewItemsPress,
 }: NonMonetaryItemsSelectorProps) {
-  const handlePress = () => {
+  const handleAddPress = () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onAddItemsPress();
+  };
+
+  const handleViewPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (onViewItemsPress) {
+      onViewItemsPress();
+    } else {
+      onAddItemsPress();
+    }
   };
 
   const getItemsDisplayText = () => {
@@ -43,7 +54,7 @@ export function NonMonetaryItemsSelector({
         </View>
         {!displayText && (
           <TouchableOpacity
-            onPress={handlePress}
+            onPress={handleAddPress}
             className="flex-row items-center gap-1.5"
           >
             <Plus size={16} color={colors.primary.purple} strokeWidth={2.5} />
@@ -55,7 +66,7 @@ export function NonMonetaryItemsSelector({
       {/* Items Display */}
       {displayText && (
         <TouchableOpacity
-          onPress={handlePress}
+          onPress={handleViewPress}
           className="flex-row items-center justify-between"
         >
           <Text className="flex-1 text-base text-grey-alpha-500">

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react';
 import { Text, View } from 'react-native';
-import { Check } from 'lucide-react-native';
 
+import SuccessIcon from '@/assets/images/SuccessIcon.svg';
 import { Button } from '@/components/ui/Button';
 import {
   BottomSheetComponent,
@@ -37,21 +37,16 @@ export const RequestSuccessBottomSheet = forwardRef<
         <View className="px-6">
           {/* Success Icon */}
           <View className="mb-6 items-center">
-            <View
-              className="size-16 items-center justify-center  rounded-2xl"
-              style={{ backgroundColor: '#059652' }}
-            >
-              <Check size={32} color="#FFFFFF" strokeWidth={3} />
-            </View>
+            <SuccessIcon width={106} height={81} />
           </View>
 
           {/* Title */}
-          <Text className="mb-3 text-center text-xl font-bold text-grey-alpha-500">
+          <Text className="mb-3 text-center font-inter-bold text-xl text-grey-alpha-500">
             {title}
           </Text>
 
           {/* Description */}
-          <Text className="mb-8 text-center text-sm leading-5 text-grey-alpha-400">
+          <Text className="mb-8 text-center font-inter text-sm leading-5 text-grey-alpha-400">
             {description}
           </Text>
         </View>

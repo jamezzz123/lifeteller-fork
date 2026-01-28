@@ -47,6 +47,7 @@ import { CancelBottomSheet } from '@/components/lift/CancelBottomSheet';
 import { LiftAmountSelector } from '@/components/lift/LiftAmountSelector';
 import { EnterAmountBottomSheet } from '@/components/lift/EnterAmountBottomSheet';
 import { NonMonetaryItemsSelector } from '@/components/lift/NonMonetaryItemsSelector';
+import { ItemsAddedBottomSheet } from '@/components/lift/ItemsAddedBottomSheet';
 import { RecipientNumberSelector } from './RecipientNumberSelector';
 
 const TITLE_MAX_LENGTH = 55;
@@ -229,6 +230,7 @@ export default function LiftCreationScreen({
   const [isAmountSheetMounted, setIsAmountSheetMounted] = useState(false);
   const [isNumberOfRecipientSheetMounted, setIsNumberOfRecipientSheetMounted] =
     useState(false);
+  const [isItemsSheetMounted, setIsItemsSheetMounted] = useState(false);
   const [showCancelSheet, setShowCancelSheet] = useState(false);
   const bottomToast = useBottomToast();
 
@@ -373,6 +375,24 @@ export default function LiftCreationScreen({
     setIsNumberOfRecipientSheetMounted(false);
   };
 
+  const handleViewItemsPress = () => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setIsItemsSheetMounted(true);
+  };
+
+  const handleItemsSheetEdit = () => {
+    setIsItemsSheetMounted(false);
+    router.push(addItemsRoute as Href);
+  };
+
+  const handleItemsSheetDone = () => {
+    setIsItemsSheetMounted(false);
+  };
+
+  const handleItemsSheetClose = () => {
+    setIsItemsSheetMounted(false);
+  };
+
   const imageCount = selectedMedia.filter((m) => m.type === 'image').length;
   const videoCount = selectedMedia.filter((m) => m.type === 'video').length;
 
@@ -474,7 +494,7 @@ export default function LiftCreationScreen({
             </View>
           </View>
 
-          {showRecipientNumberSelector && (
+          {showRecipientNumberSelector && liftType !== 'non-monetary' && (
             <View>
               <RecipientNumberSelector
                 selectedAmount={numberOfRecipients}
@@ -502,6 +522,7 @@ export default function LiftCreationScreen({
               <NonMonetaryItemsSelector
                 items={liftItems}
                 onAddItemsPress={() => router.push(addItemsRoute as Href)}
+                onViewItemsPress={handleViewItemsPress}
               />
             </View>
           )}
@@ -805,6 +826,16 @@ export default function LiftCreationScreen({
         onDiscard={handleDiscard}
         onContinueEditing={handleContinueEditing}
       />
+
+      {/* Items Added Bottom Sheet */}
+      {isItemsSheetMounted && (
+        <ItemsAddedBottomSheet
+          items={liftItems}
+          onEdit={handleItemsSheetEdit}
+          onDone={handleItemsSheetDone}
+          onClose={handleItemsSheetClose}
+        />
+      )}
     </SafeAreaView>
   );
 }

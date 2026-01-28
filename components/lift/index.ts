@@ -11,6 +11,7 @@ export * from './ContactChip';
 export * from './ContactRow';
 export * from './CreateListModal';
 export { EnterAmountBottomSheet } from './EnterAmountBottomSheet';
+export { ItemsAddedBottomSheet } from './ItemsAddedBottomSheet';
 export { default as HelpMeWriteBottomSheet } from './HelpMeWriteBottomSheet';
 export type { HelpMeWriteBottomSheetRef } from './HelpMeWriteBottomSheet';
 export { LiftCard } from './LiftRequestCard';
