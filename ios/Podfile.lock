@@ -215,6 +215,8 @@ PODS:
     - ZXingObjC/PDF417
   - ExpoClipboard (8.0.8):
     - ExpoModulesCore
+  - ExpoDocumentPicker (14.0.8):
+    - ExpoModulesCore
   - ExpoFileSystem (19.0.21):
     - ExpoModulesCore
   - ExpoFont (14.0.10):
@@ -2353,6 +2355,7 @@ DEPENDENCIES:
   - "ExpoBlur (from `../.p/expo-blur@15.0.8_expo@54.0.31_react-native@0.81.5_react@19.1.0/node_modules/expo-blur/ios`)"
   - "ExpoCamera (from `../.p/expo-camera@16.0.18_expo@54.0.31_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-camera/ios`)"
   - "ExpoClipboard (from `../.p/expo-clipboard@8.0.8_expo@54.0.31_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios`)"
+  - "ExpoDocumentPicker (from `../.p/expo-document-picker@14.0.8_expo@54.0.31/node_modules/expo-document-picker/ios`)"
   - "ExpoFileSystem (from `../.p/expo-file-system@19.0.21_expo@54.0.31_react-native@0.81.5/node_modules/expo-file-system/ios`)"
   - "ExpoFont (from `../.p/expo-font@14.0.10_expo@54.0.31_react-native@0.81.5_react@19.1.0/node_modules/expo-font/ios`)"
   - "ExpoHaptics (from `../.p/expo-haptics@15.0.8_expo@54.0.31/node_modules/expo-haptics/ios`)"
@@ -2488,6 +2491,8 @@ EXTERNAL SOURCES:
     :path: "../.p/expo-camera@16.0.18_expo@54.0.31_react-native-web@0.21.2_react-native@0.81.5_react@19.1.0/node_modules/expo-camera/ios"
   ExpoClipboard:
     :path: "../.p/expo-clipboard@8.0.8_expo@54.0.31_react-native@0.81.5_react@19.1.0/node_modules/expo-clipboard/ios"
+  ExpoDocumentPicker:
+    :path: "../.p/expo-document-picker@14.0.8_expo@54.0.31/node_modules/expo-document-picker/ios"
   ExpoFileSystem:
     :path: "../.p/expo-file-system@19.0.21_expo@54.0.31_react-native@0.81.5/node_modules/expo-file-system/ios"
   ExpoFont:
@@ -2691,6 +2696,7 @@ SPEC CHECKSUMS:
   ExpoBlur: 688c53d5d26575cbb6c72e7fbd4caef8d8cfadf6
   ExpoCamera: 173e000631122854b87c20310513981e89030bc6
   ExpoClipboard: 50fa3332136758be7ca2ea912bae585f74bb93c3
+  ExpoDocumentPicker: 774b0d1f41468f79148e8201afd094ca852e9e42
   ExpoFileSystem: aefcd337b94b874f88752ebefc52813b84992fad
   ExpoFont: 26bbea90749b8dd0b69effc9fab54248e684f290
   ExpoHaptics: 7240781406f4563c3f4eb1e72864302a8c643fd0

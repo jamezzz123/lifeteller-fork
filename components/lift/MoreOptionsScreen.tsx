@@ -27,7 +27,7 @@ import { colors } from '@/theme/colors';
 import { Toggle } from '@/components/ui/Toggle';
 import {
   AllowCollaboratorsBottomSheet,
-  ScheduleRequestBottomSheet,
+  CalendarBottomSheet,
   CATEGORIES,
   LOCATIONS,
 } from '@/components/lift';
@@ -75,12 +75,14 @@ export default function MoreOptionsScreen({
   // Helper to check if a setting should be shown
   const showSetting = (key: SettingKey) => visibleSettings.includes(key);
 
-  const [scheduleLift] = useState(false);
+  const [scheduleLift, setScheduleLift] = useState(false);
   const [scheduleDate, setScheduleDate] = useState<Date | null>(null);
   const [liftEndDate, setLiftEndDate] = useState(false);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [requestEndDate, setRequestEndDate] = useState(false);
-  const [requestEndDateValue, setRequestEndDateValue] = useState<Date | null>(null);
+  const [requestEndDateValue, setRequestEndDateValue] = useState<Date | null>(
+    null
+  );
   const [allowCollaborators, setAllowCollaborators] = useState(false);
   const [collaboratorLimit, setCollaboratorLimit] = useState<
     'unlimited' | number
@@ -122,6 +124,18 @@ export default function MoreOptionsScreen({
   function handleEndDateDone(date: Date) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setEndDate(date);
+  }
+
+  function handleScheduleLiftToggle(value: boolean) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    setScheduleLift(value);
+    if (value) {
+      setTimeout(() => {
+        scheduleSheetRef.current?.expand();
+      }, 300);
+    } else {
+      setScheduleDate(null);
+    }
   }
 
   function handleScheduleLiftPress() {
@@ -283,8 +297,8 @@ export default function MoreOptionsScreen({
                     Auto-debit
                   </Text>
                   <Text className="font-inter text-sm text-grey-alpha-400">
-                    First-come-first-serve basis. You won&apos;t need to approve join
-                    requests.
+                    First-come-first-serve basis. You won&apos;t need to approve
+                    join requests.
                   </Text>
                 </View>
               </View>
@@ -304,8 +318,8 @@ export default function MoreOptionsScreen({
                     Offer lift anonymously
                   </Text>
                   <Text className="font-inter text-sm text-grey-alpha-400">
-                    People who see and join your lift offer won&apos;t know it is
-                    you.
+                    People who see and join your lift offer won&apos;t know it
+                    is you.
                   </Text>
                 </View>
               </View>
@@ -466,7 +480,7 @@ export default function MoreOptionsScreen({
                   )}
                 </View>
               </View>
-              <Toggle value={scheduleLift} onValueChange={() => {}} />
+              <Toggle value={scheduleLift} onValueChange={handleScheduleLiftToggle} />
             </View>
           </TouchableOpacity>
         )}
@@ -629,26 +643,29 @@ export default function MoreOptionsScreen({
 
       {/* Schedule Request Bottom Sheet */}
       {showSetting('scheduleLift') && (
-        <ScheduleRequestBottomSheet
+        <CalendarBottomSheet
           ref={scheduleSheetRef}
           onDone={handleScheduleDone}
+          title={'Schedule Lift'}
           initialDate={scheduleDate || undefined}
         />
       )}
 
       {/* Lift End Date Bottom Sheet */}
       {showSetting('liftEndDate') && (
-        <ScheduleRequestBottomSheet
+        <CalendarBottomSheet
           ref={endDateSheetRef}
           onDone={handleEndDateDone}
+          title={'Lift End Date'}
           initialDate={endDate || undefined}
         />
       )}
 
       {/* Request End Date Bottom Sheet */}
       {showSetting('requestEndDate') && (
-        <ScheduleRequestBottomSheet
+        <CalendarBottomSheet
           ref={requestEndDateSheetRef}
+          title={'Request End Date'}
           onDone={handleRequestEndDateDone}
           initialDate={requestEndDateValue || undefined}
         />

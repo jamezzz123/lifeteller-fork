@@ -14,7 +14,7 @@ import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomShee
 
 const ITEM_HEIGHT = 50;
 
-type ScheduleRequestBottomSheetProps = {
+type CalendarBottomSheetProps = {
   onDone: (date: Date) => void;
   initialDate?: Date;
 };
@@ -73,9 +73,9 @@ function formatHour(hour: number) {
   return `${hour}: (${hour - 12}pm)`;
 }
 
-export const ScheduleRequestBottomSheet = forwardRef<
+export const CalendarBottomSheet = forwardRef<
   BottomSheetRef,
-  ScheduleRequestBottomSheetProps
+  CalendarBottomSheetProps
 >(({ onDone, initialDate }, ref) => {
   const dates = generateDates();
   const hours = generateHours();
@@ -300,4 +300,4 @@ export const ScheduleRequestBottomSheet = forwardRef<
   );
 });
 
-ScheduleRequestBottomSheet.displayName = 'ScheduleRequestBottomSheet';
+CalendarBottomSheet.displayName = 'CalendarBottomSheet';

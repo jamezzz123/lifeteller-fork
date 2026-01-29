@@ -14,5 +14,5 @@ export { MediaPickerBottomSheet } from './MediaPickerModal';
 export * from './RequestMethodSelector';
 export { RequestSuccessBottomSheet } from './RequestSuccessBottomSheet';
 export { ReviewContactsModal } from './ReviewContactsModal';
-export { ScheduleRequestBottomSheet } from './ScheduleRequestBottomSheet';
+export { CalendarBottomSheet } from './CalendarBottomSheet';
 export * from './titleSuggestions';

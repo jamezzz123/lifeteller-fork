@@ -44,6 +44,7 @@ import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { useBottomToast } from '@/components/ui/BottomToast';
 import { AudienceBottomSheet } from '@/components/lift/AudienceBottomSheet';
 import { CancelBottomSheet } from '@/components/lift/CancelBottomSheet';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { LiftAmountSelector } from '@/components/lift/LiftAmountSelector';
 import { EnterAmountBottomSheet } from '@/components/lift/EnterAmountBottomSheet';
 import { NonMonetaryItemsSelector } from '@/components/lift/NonMonetaryItemsSelector';
@@ -232,6 +233,7 @@ export default function LiftCreationScreen({
     useState(false);
   const [isItemsSheetMounted, setIsItemsSheetMounted] = useState(false);
   const [showCancelSheet, setShowCancelSheet] = useState(false);
+  const [showRemoveMediaDialog, setShowRemoveMediaDialog] = useState(false);
   const bottomToast = useBottomToast();
 
   const handleNavigateToCollaborators = () => {
@@ -532,7 +534,7 @@ export default function LiftCreationScreen({
             {selectedMedia.length > 0 && (
               <View className="mb-4 flex-row items-center justify-between">
                 <TouchableOpacity
-                  onPress={() => setSelectedMedia([])}
+                  onPress={() => setShowRemoveMediaDialog(true)}
                   hitSlop={10}
                 >
                   <Trash size={20} color={colors.state.red} strokeWidth={2} />
@@ -825,6 +827,21 @@ export default function LiftCreationScreen({
         onSaveAsDraft={handleSaveAsDraft}
         onDiscard={handleDiscard}
         onContinueEditing={handleContinueEditing}
+      />
+
+      {/* Remove Media Confirmation */}
+      <ConfirmDialog
+        visible={showRemoveMediaDialog}
+        title="Remove images and videos"
+        message="Are you sure you want to remove the already added images and videos?"
+        confirmText="Yes, remove"
+        cancelText="No, go back"
+        onConfirm={() => {
+          setSelectedMedia([]);
+          setShowRemoveMediaDialog(false);
+        }}
+        onCancel={() => setShowRemoveMediaDialog(false)}
+        destructive
       />
 
       {/* Items Added Bottom Sheet */}

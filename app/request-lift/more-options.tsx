@@ -14,7 +14,7 @@ import { colors } from '@/theme/colors';
 import { Toggle } from '@/components/ui/Toggle';
 import {
   AllowCollaboratorsBottomSheet,
-  ScheduleRequestBottomSheet,
+  CalendarBottomSheet,
 } from '@/components/lift';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
@@ -311,14 +311,14 @@ export default function MoreOptionsScreen() {
       </ScrollView>
 
       {/* Schedule Request Bottom Sheet */}
-      <ScheduleRequestBottomSheet
+      <CalendarBottomSheet
         ref={scheduleSheetRef}
         onDone={handleScheduleDone}
         initialDate={scheduleDate || undefined}
       />
 
       {/* End Date Bottom Sheet */}
-      <ScheduleRequestBottomSheet
+      <CalendarBottomSheet
         ref={endDateSheetRef}
         onDone={handleEndDateDone}
         initialDate={endDate || undefined}
