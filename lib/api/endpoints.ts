@@ -55,6 +55,7 @@ export const authApi = {
       ...payload,
       email: payload.email && payload.email.trim() ? payload.email.trim() : undefined,
       phone_number: payload.phone_number && payload.phone_number.trim() ? payload.phone_number.trim() : undefined,
+      country_iso3: payload.country_iso3 && payload.country_iso3.trim() ? payload.country_iso3.trim() : undefined,
     };
     
     try {

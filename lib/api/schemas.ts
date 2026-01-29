@@ -63,6 +63,7 @@ export const RegisterRequestSchema = z.object({
   email: z.string().email().optional(),
   phone_number: z.string().optional(),
   password: z.string().min(8),
+  country_iso3: z.string().optional(),
 });
 
 export const RegisterDataSchema = z.object({

@@ -5,7 +5,9 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Alert,
+  Keyboard,
 } from 'react-native';
+import type { ICountry } from 'react-native-international-phone-number';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { ArrowLeft, CheckCircle2 } from 'lucide-react-native';
@@ -30,6 +32,7 @@ export default function CreateAccountScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isMobileMode, setIsMobileMode] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
 
   const registerMutation = useRegister();
   const emailVerificationSheetRef = useRef<BottomSheetRef>(null);
@@ -269,8 +272,13 @@ export default function CreateAccountScreen() {
         email: hasEmail && email.trim() ? email.trim() : '',
         phone_number: hasPhone && phoneNumber.trim() ? phoneNumber.trim() : '',
         password: password.trim(),
+        country_iso3:
+          hasPhone && selectedCountry?.cca3 ? selectedCountry.cca3 : 'NGN',
       });
       console.log('Registration successful:', response);
+
+      // Dismiss keyboard before showing bottom sheets
+      Keyboard.dismiss();
 
       // Check what needs verification
       const needsEmailVerification = !response.data.is_email_verified;
@@ -508,6 +516,7 @@ export default function CreateAccountScreen() {
                 label="Mobile number"
                 value={phoneNumber}
                 onChangeText={setPhoneNumber}
+                onCountryChange={setSelectedCountry}
                 placeholder="812 345 6789"
               />
             ) : (
