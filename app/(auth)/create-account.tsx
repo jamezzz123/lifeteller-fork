@@ -379,6 +379,7 @@ export default function CreateAccountScreen() {
     usernameValidationStatus,
     isCheckingUsername,
     registerMutation,
+    selectedCountry,
   ]);
 
   function handleEmailVerificationClose() {
