@@ -107,6 +107,15 @@ export default function MoreOptionsScreen({
     useState(false);
   const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] =
     useState(false);
+  const [showRemoveScheduleDialog, setShowRemoveScheduleDialog] =
+    useState(false);
+  const [showRemoveEndDateDialog, setShowRemoveEndDateDialog] = useState(false);
+  const [showRemoveRequestEndDateDialog, setShowRemoveRequestEndDateDialog] =
+    useState(false);
+  const [showRemoveAutoDebitDialog, setShowRemoveAutoDebitDialog] =
+    useState(false);
+  const [showRemoveAnonymousDialog, setShowRemoveAnonymousDialog] =
+    useState(false);
   const [categorySearch, setCategorySearch] = useState('');
   const [locationSearch, setLocationSearch] = useState('');
 
@@ -124,13 +133,15 @@ export default function MoreOptionsScreen({
 
   function handleLiftEndDateToggle(value: boolean) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setLiftEndDate(value);
-    if (value) {
-      setTimeout(() => {
-        endDateSheetRef.current?.expand();
-      }, 300);
+    if (!value && liftEndDate) {
+      setShowRemoveEndDateDialog(true);
     } else {
-      setEndDate(null);
+      setLiftEndDate(value);
+      if (value) {
+        setTimeout(() => {
+          endDateSheetRef.current?.expand();
+        }, 300);
+      }
     }
   }
 
@@ -141,13 +152,15 @@ export default function MoreOptionsScreen({
 
   function handleScheduleLiftToggle(value: boolean) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setScheduleLift(value);
-    if (value) {
-      setTimeout(() => {
-        scheduleSheetRef.current?.expand();
-      }, 300);
+    if (!value && scheduleLift) {
+      setShowRemoveScheduleDialog(true);
     } else {
-      setScheduleDate(null);
+      setScheduleLift(value);
+      if (value) {
+        setTimeout(() => {
+          scheduleSheetRef.current?.expand();
+        }, 300);
+      }
     }
   }
 
@@ -167,13 +180,15 @@ export default function MoreOptionsScreen({
 
   function handleRequestEndDateToggle(value: boolean) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setRequestEndDate(value);
-    if (value) {
-      setTimeout(() => {
-        requestEndDateSheetRef.current?.expand();
-      }, 300);
+    if (!value && requestEndDate) {
+      setShowRemoveRequestEndDateDialog(true);
     } else {
-      setRequestEndDateValue(null);
+      setRequestEndDate(value);
+      if (value) {
+        setTimeout(() => {
+          requestEndDateSheetRef.current?.expand();
+        }, 300);
+      }
     }
   }
 
@@ -242,12 +257,20 @@ export default function MoreOptionsScreen({
 
   function handleAutoDebitToggle(value: boolean) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setAutoDebit(value);
+    if (!value && autoDebit) {
+      setShowRemoveAutoDebitDialog(true);
+    } else {
+      setAutoDebit(value);
+    }
   }
 
   function handleOfferAnonymouslyToggle(value: boolean) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    setOfferAnonymously(value);
+    if (!value && offerAnonymously) {
+      setShowRemoveAnonymousDialog(true);
+    } else {
+      setOfferAnonymously(value);
+    }
   }
 
   const filteredCategories = CATEGORIES.filter((cat) =>
@@ -718,6 +741,94 @@ export default function MoreOptionsScreen({
           cancelText="No, go back"
           onConfirm={handleConfirmRemoveRequesters}
           onCancel={handleCancelRemoveRequesters}
+          destructive
+        />
+      )}
+
+      {/* Remove Schedule Confirmation */}
+      {showSetting('scheduleLift') && (
+        <ConfirmDialog
+          visible={showRemoveScheduleDialog}
+          title="Remove schedule"
+          message="Your lift will no longer have a scheduled start date."
+          confirmText="Yes, remove"
+          cancelText="No, go back"
+          onConfirm={() => {
+            setScheduleLift(false);
+            setScheduleDate(null);
+            setShowRemoveScheduleDialog(false);
+          }}
+          onCancel={() => setShowRemoveScheduleDialog(false)}
+          destructive
+        />
+      )}
+
+      {/* Remove End Date Confirmation */}
+      {showSetting('liftEndDate') && (
+        <ConfirmDialog
+          visible={showRemoveEndDateDialog}
+          title="Remove end date"
+          message="Your lift will no longer have an end date."
+          confirmText="Yes, remove"
+          cancelText="No, go back"
+          onConfirm={() => {
+            setLiftEndDate(false);
+            setEndDate(null);
+            setShowRemoveEndDateDialog(false);
+          }}
+          onCancel={() => setShowRemoveEndDateDialog(false)}
+          destructive
+        />
+      )}
+
+      {/* Remove Request End Date Confirmation */}
+      {showSetting('requestEndDate') && (
+        <ConfirmDialog
+          visible={showRemoveRequestEndDateDialog}
+          title="Remove request end date"
+          message="Your request will no longer have an end date."
+          confirmText="Yes, remove"
+          cancelText="No, go back"
+          onConfirm={() => {
+            setRequestEndDate(false);
+            setRequestEndDateValue(null);
+            setShowRemoveRequestEndDateDialog(false);
+          }}
+          onCancel={() => setShowRemoveRequestEndDateDialog(false)}
+          destructive
+        />
+      )}
+
+      {/* Disable Auto-debit Confirmation */}
+      {showSetting('autoDebit') && (
+        <ConfirmDialog
+          visible={showRemoveAutoDebitDialog}
+          title="Disable auto-debit"
+          message="You will need to manually approve join requests."
+          confirmText="Yes, disable"
+          cancelText="No, go back"
+          onConfirm={() => {
+            setAutoDebit(false);
+            setShowRemoveAutoDebitDialog(false);
+          }}
+          onCancel={() => setShowRemoveAutoDebitDialog(false)}
+          destructive
+        />
+      )}
+
+      {/* Disable Anonymous Confirmation */}
+      {showSetting('offerAnonymously') && (
+        <ConfirmDialog
+          visible={showRemoveAnonymousDialog}
+          title="Disable anonymous offer"
+          message="People will be able to see who created this lift offer."
+          confirmText="Yes, disable"
+          cancelText="No, go back"
+          onConfirm={() => {
+            setOfferAnonymously(false);
+            setShowRemoveAnonymousDialog(false);
+          }}
+          onCancel={() => setShowRemoveAnonymousDialog(false)}
           destructive
         />
       )}
