@@ -22,7 +22,9 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.lifteller",
       "infoPlist": {
-        "LSApplicationQueriesSchemes": ["mailto"],
+        "LSApplicationQueriesSchemes": [
+          "mailto"
+        ],
         "NSMicrophoneUsageDescription": "Allow Lifteller to access your microphone to record voice notes."
       }
     },
@@ -79,7 +81,8 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-audio"
+      "expo-audio",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true,
