@@ -16,6 +16,8 @@ import {
   UpdateProfileResponseSchema,
   UploadAvatarResponseSchema,
   InterestsListResponseSchema,
+  RaiseLiftRequestSchema,
+  RaiseLiftResponseSchema,
   type LoginRequest,
   type LoginResponse,
   type RefreshTokenRequest,
@@ -29,6 +31,8 @@ import {
   type UpdateProfileResponse,
   type UploadAvatarResponse,
   type InterestsListResponse,
+  type RaiseLiftRequest,
+  type RaiseLiftResponse,
 } from './schemas';
 
 export const authApi = {
@@ -212,6 +216,47 @@ export const userApi = {
       `${API_ROUTES.users.interests}?page=1&per_page=50`
     );
     return InterestsListResponseSchema.parse(data);
+  },
+};
+
+export const liftsApi = {
+  raise: async (payload: RaiseLiftRequest): Promise<RaiseLiftResponse> => {
+    const validatedPayload = RaiseLiftRequestSchema.parse(payload);
+
+    try {
+      const response = await apiClient.post<any>(
+        API_ROUTES.lifts.raise,
+        validatedPayload
+      );
+
+      const parsed = RaiseLiftResponseSchema.safeParse(response);
+
+      if (!parsed.success) {
+        console.warn(
+          'Raise lift response validation failed:',
+          parsed.error.issues
+        );
+        return {
+          message: response.message || 'Lift raised successfully',
+          data: response.data,
+          success: response.success ?? true,
+          onboarding_complete: response.onboarding_complete,
+        };
+      }
+
+      return parsed.data;
+    } catch (error: any) {
+      if (error?.name === 'ZodError' && error?.issues) {
+        const errorMessages = error.issues
+          .map((err: any) => {
+            const path = err.path?.join('.') || 'unknown';
+            return `${path}: ${err.message || 'Validation failed'}`;
+          })
+          .join(', ');
+        throw new Error(`Validation failed: ${errorMessages}`);
+      }
+      throw error;
+    }
   },
 };
 

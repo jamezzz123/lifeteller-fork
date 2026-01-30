@@ -20,4 +20,8 @@ export const API_ROUTES = {
     profileAvatar: '/api/v1/users/profile/avatar',
     interests: '/api/v1/users/interests',
   },
+  // Lift endpoints
+  lifts: {
+    raise: '/api/v1/lifts/raise',
+  },
 } as const;

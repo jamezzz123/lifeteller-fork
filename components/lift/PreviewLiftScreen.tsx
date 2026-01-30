@@ -22,12 +22,18 @@ interface PreviewLiftScreenProps {
   onSuccess?: () => void;
   onEdit?: () => void;
   successRoute?: Href;
+  onSubmit?: () => Promise<void> | void;
+  isSubmitting?: boolean;
+  submitError?: string | null;
 }
 
 export default function PreviewLiftScreen({
   onSuccess,
   onEdit,
   successRoute = '/(tabs)/home' as Href,
+  onSubmit,
+  isSubmitting = false,
+  submitError = null,
 }: PreviewLiftScreenProps) {
   const {
     selectedMedia,
@@ -57,11 +63,19 @@ export default function PreviewLiftScreen({
     successSheetRef.current?.close();
   }
 
-  const handleNext = useCallback(() => {
+  const handleNext = useCallback(async () => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    // Show success bottom sheet instead of navigating
-    successSheetRef.current?.expand();
-  }, []);
+    if (onSubmit) {
+      try {
+        await onSubmit();
+        successSheetRef.current?.expand();
+      } catch {
+        // Error is handled by the parent via submitError prop
+      }
+    } else {
+      successSheetRef.current?.expand();
+    }
+  }, [onSubmit]);
 
   const handleEditDetails = useCallback(() => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -319,12 +333,23 @@ export default function PreviewLiftScreen({
 
       {/* Bottom Actions - Sticky to bottom */}
       <View className="border-t border-grey-plain-300 bg-grey-alpha-100 px-4 py-6">
+        {submitError && (
+          <View className="mb-3 rounded-lg bg-red-50 px-4 py-2">
+            <Text className="text-sm text-red-600">{submitError}</Text>
+          </View>
+        )}
         <View className="flex-row items-center justify-between">
-          <TouchableOpacity onPress={handleEditDetails}>
+          <TouchableOpacity onPress={handleEditDetails} disabled={isSubmitting}>
             <Text className="text-base text-grey-alpha-500">Edit details</Text>
           </TouchableOpacity>
 
-          <Button title="Raise lift" onPress={handleNext} variant="primary" />
+          <Button
+            title="Raise lift"
+            onPress={handleNext}
+            variant="primary"
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          />
         </View>
       </View>
 

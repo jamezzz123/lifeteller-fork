@@ -52,6 +52,21 @@ type LiftDraftContextType = {
   setOfferTo: (user: UserDisplayInfo | null) => void;
   setOfferToAnonymous: (boolean: boolean) => void;
   offerAnonymous: boolean;
+  // More options fields
+  startDatetime: Date | null;
+  setStartDatetime: (date: Date | null) => void;
+  endDatetime: Date | null;
+  setEndDatetime: (date: Date | null) => void;
+  shouldAllowCollaborator: boolean;
+  setShouldAllowCollaborator: (value: boolean) => void;
+  allowedCollaborators: number;
+  setAllowedCollaborators: (value: number) => void;
+  shouldAllowRequester: boolean;
+  setShouldAllowRequester: (value: boolean) => void;
+  allowedRequesters: number;
+  setAllowedRequesters: (value: number) => void;
+  autoDebit: boolean;
+  setAutoDebit: (value: boolean) => void;
 };
 
 const LiftDraftContext = createContext<LiftDraftContextType | undefined>(
@@ -73,6 +88,15 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
   const [numberOfRecipients, setNumberOfRecipients] = useState<string>('');
   const [offerTo, setOfferTo] = useState<UserDisplayInfo | null>(null);
   const [offerAnonymous, setOfferToAnonymous] = useState<boolean>(false);
+  const [startDatetime, setStartDatetime] = useState<Date | null>(null);
+  const [endDatetime, setEndDatetime] = useState<Date | null>(null);
+  const [shouldAllowCollaborator, setShouldAllowCollaborator] =
+    useState<boolean>(false);
+  const [allowedCollaborators, setAllowedCollaborators] = useState<number>(0);
+  const [shouldAllowRequester, setShouldAllowRequester] =
+    useState<boolean>(false);
+  const [allowedRequesters, setAllowedRequesters] = useState<number>(0);
+  const [autoDebit, setAutoDebit] = useState<boolean>(false);
 
   const reset = () => {
     setCollaborators([]);
@@ -88,6 +112,13 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
     setNumberOfRecipients('');
     setOfferTo(null);
     setOfferToAnonymous(false);
+    setStartDatetime(null);
+    setEndDatetime(null);
+    setShouldAllowCollaborator(false);
+    setAllowedCollaborators(0);
+    setShouldAllowRequester(false);
+    setAllowedRequesters(0);
+    setAutoDebit(false);
   };
 
   return (
@@ -119,6 +150,20 @@ export function LiftDraftProvider({ children }: { children: ReactNode }) {
         setOfferTo,
         setOfferToAnonymous,
         offerAnonymous,
+        startDatetime,
+        setStartDatetime,
+        endDatetime,
+        setEndDatetime,
+        shouldAllowCollaborator,
+        setShouldAllowCollaborator,
+        allowedCollaborators,
+        setAllowedCollaborators,
+        shouldAllowRequester,
+        setShouldAllowRequester,
+        allowedRequesters,
+        setAllowedRequesters,
+        autoDebit,
+        setAutoDebit,
         reset,
       }}
     >

@@ -70,26 +70,39 @@ export default function MoreOptionsScreen({
   visibleSettings = ALL_SETTINGS,
   onBack,
 }: MoreOptionsScreenProps) {
-  const { category, setCategory, location, setLocation } = useLiftDraft();
+  const {
+    category,
+    setCategory,
+    location,
+    setLocation,
+    startDatetime: scheduleDate,
+    setStartDatetime: setScheduleDate,
+    endDatetime: endDate,
+    setEndDatetime: setEndDate,
+    shouldAllowCollaborator: allowCollaborators,
+    setShouldAllowCollaborator: setAllowCollaborators,
+    allowedCollaborators: collaboratorLimitCtx,
+    setAllowedCollaborators: setAllowedCollaboratorsCtx,
+    shouldAllowRequester: allowRequesters,
+    setShouldAllowRequester: setAllowRequesters,
+    autoDebit,
+    setAutoDebit,
+    offerAnonymous: offerAnonymously,
+    setOfferToAnonymous: setOfferAnonymously,
+  } = useLiftDraft();
 
   // Helper to check if a setting should be shown
   const showSetting = (key: SettingKey) => visibleSettings.includes(key);
 
-  const [scheduleLift, setScheduleLift] = useState(false);
-  const [scheduleDate, setScheduleDate] = useState<Date | null>(null);
-  const [liftEndDate, setLiftEndDate] = useState(false);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [scheduleLift, setScheduleLift] = useState(scheduleDate !== null);
+  const [liftEndDate, setLiftEndDate] = useState(endDate !== null);
   const [requestEndDate, setRequestEndDate] = useState(false);
   const [requestEndDateValue, setRequestEndDateValue] = useState<Date | null>(
     null
   );
-  const [allowCollaborators, setAllowCollaborators] = useState(false);
   const [collaboratorLimit, setCollaboratorLimit] = useState<
     'unlimited' | number
-  >('unlimited');
-  const [allowRequesters, setAllowRequesters] = useState(false);
-  const [autoDebit, setAutoDebit] = useState(false);
-  const [offerAnonymously, setOfferAnonymously] = useState(false);
+  >(collaboratorLimitCtx > 0 ? collaboratorLimitCtx : 'unlimited');
   const [showRemoveCollaboratorsDialog, setShowRemoveCollaboratorsDialog] =
     useState(false);
   const [showRemoveRequestersDialog, setShowRemoveRequestersDialog] =
@@ -217,6 +230,7 @@ export default function MoreOptionsScreen({
 
   function handleCollaboratorLimitDone(limit: 'unlimited' | number) {
     setCollaboratorLimit(limit);
+    setAllowedCollaboratorsCtx(typeof limit === 'number' ? limit : 0);
     collaboratorsSheetRef.current?.close();
   }
 

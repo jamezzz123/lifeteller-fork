@@ -158,6 +158,114 @@ export const InterestsListResponseSchema = ApiSuccessSchema.extend({
   onboarding_complete: z.boolean().nullable(),
 });
 
+// ── Lift schemas ─────────────────────────────────────────────
+
+export const RaiseLiftRequestSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  lift_category: z.enum(['MONETARY', 'NON_MONETARY']),
+  general_category_id: z.string().uuid().optional(),
+  is_hybrid: z.boolean().default(false),
+  visibility: z.enum(['PUBLIC', 'FRIENDS', 'PRIVATE']),
+  visibility_metadata: z.record(z.string(), z.unknown()).optional(),
+  group_id: z.string().uuid().optional(),
+  currency: z.string().default('NGN'),
+  lift_amount: z.number().default(0),
+  auto_debit: z.boolean().default(false),
+  items_metadata: z.record(z.string(), z.unknown()).optional(),
+  location_name: z.string().optional(),
+  latitude: z.number().optional(),
+  longitude: z.number().optional(),
+  start_datetime: z.string().optional(),
+  end_datetime: z.string().optional(),
+  should_allow_collaborator: z.boolean().default(false),
+  allowed_collaborators: z.number().default(0),
+  collaborators: z.array(z.string().uuid()).default([]),
+  should_allow_requester: z.boolean().default(false),
+  allowed_requesters: z.number().default(0),
+  is_anonymous: z.boolean().default(false),
+  media: z.array(z.string()).default([]),
+});
+
+export const LiftAuthorSchema = z.object({
+  id: z.string().uuid(),
+  username: z.string(),
+  avatar: z.string().nullable(),
+  following_since: z.string().nullable().optional(),
+});
+
+export const LiftGeneralCategorySchema = z.object({
+  id: z.string().uuid(),
+  name: z.string(),
+  icon: z.string().nullable(),
+  parent_name: z.string().nullable(),
+});
+
+export const LiftMediaSchema = z.object({
+  id: z.string().uuid(),
+  file: z.string(),
+  media_type: z.string(),
+  caption: z.string().nullable().optional(),
+  order: z.number(),
+});
+
+export const LiftCollaboratorSchema = z.object({
+  user_id: z.string().uuid(),
+  username: z.string(),
+  avatar_url: z.string().nullable(),
+  role: z.string(),
+  is_accepted: z.boolean(),
+});
+
+export const LiftDataSchema = z.object({
+  id: z.string().uuid(),
+  is_hybrid: z.boolean(),
+  author_id: z.string().uuid(),
+  author: LiftAuthorSchema,
+  title: z.string(),
+  description: z.string(),
+  tags: z.union([z.string(), z.array(z.string())]).nullable().optional(),
+  lift_type: z.string(),
+  lift_category: z.string(),
+  general_category: LiftGeneralCategorySchema.nullable().optional(),
+  status: z.string(),
+  visibility: z.string(),
+  visibility_metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  target_amount: z.string().nullable().optional(),
+  current_amount: z.string().nullable().optional(),
+  currency: z.string().nullable().optional(),
+  items_metadata: z.record(z.string(), z.unknown()).nullable().optional(),
+  location_name: z.string().nullable().optional(),
+  latitude: z.number().nullable().optional(),
+  longitude: z.number().nullable().optional(),
+  likes_count: z.number().default(0),
+  shares_count: z.number().default(0),
+  comments_count: z.number().default(0),
+  views_count: z.number().default(0),
+  contributors_count: z.number().default(0),
+  interaction_count: z.number().default(0),
+  is_anonymous: z.boolean(),
+  start_datetime: z.string().nullable().optional(),
+  end_datetime: z.string().nullable().optional(),
+  created_at: z.string(),
+  should_allow_collaborator: z.boolean().default(false),
+  allowed_collaborators: z.number().default(0),
+  should_allow_requester: z.boolean().default(false),
+  allowed_requesters: z.number().default(0),
+  collaborators: z.array(LiftCollaboratorSchema).default([]),
+  media: z.array(LiftMediaSchema).default([]),
+  is_liked_by_me: z.boolean().default(false),
+  parent_lift: z.unknown().nullable().optional(),
+  is_quote_repost: z.boolean().default(false),
+});
+
+export const RaiseLiftResponseSchema = z.object({
+  message: z.string(),
+  data: LiftDataSchema,
+  success: z.boolean(),
+  onboarding_complete: z.boolean().nullable().default(true),
+});
+
 export const UserSchema = z.object({
   id: z.string().uuid(),
   username: z.string(),
@@ -198,3 +306,9 @@ export type UpdateProfileResponse = z.infer<typeof UpdateProfileResponseSchema>;
 export type UploadAvatarResponse = z.infer<typeof UploadAvatarResponseSchema>;
 export type InterestsListResponse = z.infer<typeof InterestsListResponseSchema>;
 export type User = z.infer<typeof UserSchema>;
+export type RaiseLiftRequest = z.infer<typeof RaiseLiftRequestSchema>;
+export type RaiseLiftResponse = z.infer<typeof RaiseLiftResponseSchema>;
+export type LiftData = z.infer<typeof LiftDataSchema>;
+export type LiftAuthor = z.infer<typeof LiftAuthorSchema>;
+export type LiftMedia = z.infer<typeof LiftMediaSchema>;
+export type LiftCollaborator = z.infer<typeof LiftCollaboratorSchema>;
