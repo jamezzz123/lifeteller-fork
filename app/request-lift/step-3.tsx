@@ -7,7 +7,6 @@ import {
   TextInput,
   TouchableOpacity,
   View,
-  Switch,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { router, type Href } from 'expo-router';
@@ -43,6 +42,7 @@ import {
 } from '@/components/ui/BottomSheet';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 import { Dropdown } from '@/components/ui/Dropdown';
+import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 
 export default function Step3Screen() {
   const {
@@ -452,14 +452,9 @@ export default function Step3Screen() {
                     </Text>
                   </View>
                 </View>
-                <Switch
+                <ToggleSwitch
                   value={addCollaboratorsEnabled}
                   onValueChange={handleToggleCollaborators}
-                  trackColor={{
-                    false: colors['grey-plain']['450'],
-                    true: colors.primary.purple,
-                  }}
-                  thumbColor={colors['grey-plain']['50']}
                 />
               </View>
             ) : (
@@ -481,14 +476,9 @@ export default function Step3Screen() {
                   </View>
                 </View>
                 <View className="flex-row items-center gap-2">
-                  <Switch
+                  <ToggleSwitch
                     value={addCollaboratorsEnabled}
                     onValueChange={handleToggleCollaborators}
-                    trackColor={{
-                      false: colors['grey-plain']['450'],
-                      true: colors.primary.purple,
-                    }}
-                    thumbColor={colors['grey-plain']['50']}
                   />
                 </View>
               </TouchableOpacity>

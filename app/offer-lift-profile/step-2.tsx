@@ -6,7 +6,6 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Switch,
 } from 'react-native';
 import { router, Href } from 'expo-router';
 import * as Haptics from 'expo-haptics';
@@ -16,6 +15,7 @@ import { colors } from '@/theme/colors';
 import { ContactRow } from '@/components/lift';
 import { MaterialInput } from '@/components/ui/MaterialInput';
 import { Dropdown } from '@/components/ui/Dropdown';
+import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import {
   LiftSettingsBottomSheet,
   LiftSettingsBottomSheetRef,
@@ -233,17 +233,12 @@ export default function Step2Screen() {
                   </Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={isAnonymous}
                 onValueChange={(value) => {
                   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                   setIsAnonymous(value);
                 }}
-                trackColor={{
-                  false: colors['grey-alpha']['250'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor="#FFFFFF"
               />
             </TouchableOpacity>
           </View>

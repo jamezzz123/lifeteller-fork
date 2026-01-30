@@ -4,12 +4,12 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Switch,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { CornerUpLeft, ShieldUser } from 'lucide-react-native';
 import { RadioButton } from '@/components/ui/RadioButton';
+import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 import { colors } from '@/theme/colors';
 
 type LiftVisibilityOption =
@@ -82,14 +82,9 @@ export default function AccountPrivacyScreen() {
                 and lifts
               </Text>
             </View>
-            <Switch
+            <ToggleSwitch
               value={isPrivateAccount}
               onValueChange={setIsPrivateAccount}
-              trackColor={{
-                false: colors['grey-plain']['300'],
-                true: colors.primary.purple,
-              }}
-              thumbColor="#FFFFFF"
             />
           </TouchableOpacity>
         </View>

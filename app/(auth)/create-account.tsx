@@ -20,11 +20,15 @@ import { TextInput } from '@/components/ui/TextInput';
 import { PhoneInput } from '@/components/ui/PhoneInput';
 import { colors } from '@/theme/colors';
 import { useRegister } from '@/lib/hooks/mutations/useRegister';
+import { useVerifyOtp } from '@/lib/hooks/mutations/useVerifyOtp';
+import { useResendOtp } from '@/lib/hooks/mutations/useResendOtp';
 import { useCheckUsername } from '@/lib/hooks/queries/useCheckUsername';
 import { EmailVerificationBottomSheet } from '@/components/auth/EmailVerificationBottomSheet';
 import { OTPVerificationBottomSheet } from '@/components/ui/OTPVerificationBottomSheet';
 import { BottomSheetRef } from '@/components/ui/BottomSheet';
 import { PasswordStrengthIndicator } from '@/components/ui/PasswordStrengthIndicator';
+import type { AxiosError } from 'axios';
+import type { ApiError } from '@/lib/api/endpoints';
 
 export default function CreateAccountScreen() {
   const [username, setUsername] = useState('');
@@ -32,9 +36,12 @@ export default function CreateAccountScreen() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [password, setPassword] = useState('');
   const [isMobileMode, setIsMobileMode] = useState(false);
+   const [otpResendTimeout, setOtpResendTimeout] = useState(180);
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
 
   const registerMutation = useRegister();
+  const verifyOtpMutation = useVerifyOtp();
+  const resendOtpMutation = useResendOtp();
   const emailVerificationSheetRef = useRef<BottomSheetRef>(null);
   const phoneVerificationSheetRef = useRef<BottomSheetRef>(null);
   const isSubmittingRef = useRef(false);
@@ -283,11 +290,17 @@ export default function CreateAccountScreen() {
       // Check what needs verification
       const needsEmailVerification = !response.data.is_email_verified;
       const needsPhoneVerification = !response.data.is_phone_verified;
+      const shouldShowPhoneVerification = hasPhone && needsPhoneVerification;
+      const shouldShowEmailVerification = hasEmail && needsEmailVerification;
 
-      if (needsEmailVerification) {
+      if (shouldShowPhoneVerification) {
+        setShowPhoneVerificationSheet(true);
+      } else if (shouldShowEmailVerification) {
         setShowEmailVerificationSheet(true);
       } else if (needsPhoneVerification) {
         setShowPhoneVerificationSheet(true);
+      } else if (needsEmailVerification) {
+        setShowEmailVerificationSheet(true);
       } else {
         // Both verified, go to onboarding
         router.replace('/(onboarding)/onboarding-index');
@@ -390,29 +403,80 @@ export default function CreateAccountScreen() {
   }
 
   async function handlePhoneVerification(otp: string) {
-    try {
-      // TODO: Verify OTP with backend API
-      // Example: await verifyPhoneOTP({ phone_number: phoneNumber, otp });
+    if (verifyOtpMutation.isPending) return;
 
-      // For now, assume verification is successful
-      // After successful verification, the user is already logged in from registration
+    try {
+      const response = await verifyOtpMutation.mutateAsync({ otp });
       setShowPhoneVerificationSheet(false);
       phoneVerificationSheetRef.current?.close();
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      router.replace('/(onboarding)/onboarding-index');
-    } catch {
-      Alert.alert('Error', 'Invalid OTP. Please try again.');
+      if (response.onboarding_complete) {
+        router.replace('/(tabs)');
+      } else {
+        router.replace('/(onboarding)/onboarding-index');
+      }
+    } catch (error) {
+      const axiosError = error as AxiosError<
+        ApiError | { detail?: string; message?: string }
+      >;
+      let errorMessage = 'Invalid OTP. Please try again.';
+
+      if (axiosError.response?.data) {
+        const errorData = axiosError.response.data as ApiError & {
+          detail?: string;
+          message?: string;
+        };
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } else if (axiosError.message) {
+        errorMessage = axiosError.message;
+      }
+
+      Alert.alert('Error', errorMessage);
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
     }
   }
 
   async function handleResendOTP() {
+    if (resendOtpMutation.isPending) return undefined;
+
     try {
-      // TODO: Resend OTP to phone number via API
-      // Example: await resendPhoneOTP({ phone_number: phoneNumber });
+      const response = await resendOtpMutation.mutateAsync({ channel: 'sms' });
+      const nextTimeout = response.data.token_time;
+      if (Number.isFinite(nextTimeout)) {
+        setOtpResendTimeout(nextTimeout);
+      }
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch {
-      Alert.alert('Error', 'Failed to resend OTP. Please try again.');
+      return nextTimeout;
+    } catch (error) {
+      const axiosError = error as AxiosError<
+        ApiError | { detail?: string; message?: string }
+      >;
+      let errorMessage = 'Failed to resend OTP. Please try again.';
+
+      if (axiosError.response?.data) {
+        const errorData = axiosError.response.data as ApiError & {
+          detail?: string;
+          message?: string;
+        };
+        if (errorData.detail) {
+          errorMessage = errorData.detail;
+        } else if (errorData.error) {
+          errorMessage = errorData.error;
+        } else if (errorData.message) {
+          errorMessage = errorData.message;
+        }
+      } else if (axiosError.message) {
+        errorMessage = axiosError.message;
+      }
+
+      Alert.alert('Error', errorMessage);
+      return undefined;
     }
   }
 
@@ -596,6 +660,7 @@ export default function CreateAccountScreen() {
           phoneNumber={formatPhoneForDisplay(phoneNumber)}
           onVerify={handlePhoneVerification}
           onResendOTP={handleResendOTP}
+          resendTimeout={otpResendTimeout}
           onClose={() => {
             setShowPhoneVerificationSheet(false);
             phoneVerificationSheetRef.current?.close();

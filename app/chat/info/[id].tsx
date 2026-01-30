@@ -4,7 +4,6 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
-  Switch,
   Image,
   Modal,
   TextInput,
@@ -62,6 +61,7 @@ import { ConfirmationModal } from '@/components/ui/ConfirmationModal';
 import { Avatar } from '@/components/ui/Avatar';
 import { Toast } from '@/components/ui/Toast';
 import { BottomSheetComponent, BottomSheetRef } from '@/components/ui/BottomSheet';
+import { ToggleSwitch } from '@/components/ui/ToggleSwitch';
 
 export default function ChatInfoScreen() {
   const { width } = Dimensions.get('window');
@@ -228,6 +228,10 @@ export default function ChatInfoScreen() {
 
   const handleShareProfile = () => {
     shareSheetRef.current?.expand();
+  };
+
+  const handleCreateGroup = () => {
+    router.push('/create-group' as any);
   };
 
   const handleReportUser = () => {
@@ -650,15 +654,9 @@ export default function ChatInfoScreen() {
                   </Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={blockScreenshotsEnabled}
                 onValueChange={handleToggleBlockScreenshots}
-                trackColor={{
-                  false: colors['grey-plain']['300'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-                ios_backgroundColor={colors['grey-plain']['300']}
               />
             </View>
 
@@ -685,15 +683,9 @@ export default function ChatInfoScreen() {
                   </Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={disappearingMessagesEnabled}
                 onValueChange={handleOpenDisappearingMessages}
-                trackColor={{
-                  false: colors['grey-plain']['300'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-                ios_backgroundColor={colors['grey-plain']['300']}
               />
             </View>
 
@@ -718,15 +710,9 @@ export default function ChatInfoScreen() {
                   <Text className="text-sm text-grey-plain-550">Off</Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={pinChatEnabled}
                 onValueChange={handleTogglePinChat}
-                trackColor={{
-                  false: colors['grey-plain']['300'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-                ios_backgroundColor={colors['grey-plain']['300']}
               />
             </View>
           </View>
@@ -764,15 +750,9 @@ export default function ChatInfoScreen() {
                   </Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={notificationsEnabled}
                 onValueChange={setNotificationsEnabled}
-                trackColor={{
-                  false: colors['grey-plain']['300'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-                ios_backgroundColor={colors['grey-plain']['300']}
               />
             </View>
 
@@ -800,15 +780,9 @@ export default function ChatInfoScreen() {
                   </Text>
                 </View>
               </View>
-              <Switch
+              <ToggleSwitch
                 value={muteUserEnabled}
                 onValueChange={handleOpenMuteUser}
-                trackColor={{
-                  false: colors['grey-plain']['300'],
-                  true: colors.primary.purple,
-                }}
-                thumbColor={colors['grey-plain']['50']}
-                ios_backgroundColor={colors['grey-plain']['300']}
               />
             </View>
 
@@ -890,7 +864,7 @@ export default function ChatInfoScreen() {
             <TouchableOpacity
               className="flex-row items-center justify-between px-4 py-4"
               activeOpacity={0.7}
-              onPress={handleShareProfile}
+              onPress={handleCreateGroup}
             >
               <View className="flex-row items-center gap-3">
                 <View

@@ -9,8 +9,11 @@ export const API_ROUTES = {
   auth: {
     login: '/api/v1/users/login',
     register: '/api/v1/users/register',
-    checkUsername: '/api/v1/users/check-username',
+    checkUsername: '/api/v1/users/username-check',
+    usernameSuggestions: '/api/v1/users/username-suggestions',
     refreshToken: '/api/v1/users/auth/token/refresh',
+    otpVerify: '/api/v1/users/auth/otp/verify',
+    otpResend: '/api/v1/users/auth/otp/resend',
     // Add more auth routes as needed:
     // logout: '/api/v1/users/logout',
   },

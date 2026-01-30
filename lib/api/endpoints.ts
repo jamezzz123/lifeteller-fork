@@ -8,8 +8,14 @@ import {
   RefreshTokenResponseSchema,
   RegisterRequestSchema,
   RegisterResponseSchema,
+  OtpVerifyRequestSchema,
+  OtpVerifyResponseSchema,
+  OtpResendRequestSchema,
+  OtpResendResponseSchema,
   CheckUsernameRequestSchema,
   CheckUsernameResponseSchema,
+  UsernameSuggestionsRequestSchema,
+  UsernameSuggestionsResponseSchema,
   ApiErrorSchema,
   UserProfileResponseSchema,
   UpdateProfileRequestSchema,
@@ -24,8 +30,14 @@ import {
   type RefreshTokenResponse,
   type RegisterRequest,
   type RegisterResponse,
+  type OtpVerifyRequest,
+  type OtpVerifyResponse,
+  type OtpResendRequest,
+  type OtpResendResponse,
   type CheckUsernameRequest,
   type CheckUsernameResponse,
+  type UsernameSuggestionsRequest,
+  type UsernameSuggestionsResponse,
   type UserProfileResponse,
   type UpdateProfileRequest,
   type UpdateProfileResponse,
@@ -88,6 +100,24 @@ export const authApi = {
     }
   },
 
+  verifyOtp: async (payload: OtpVerifyRequest): Promise<OtpVerifyResponse> => {
+    const validatedPayload = OtpVerifyRequestSchema.parse(payload);
+    const data = await apiClient.post<OtpVerifyResponse>(
+      API_ROUTES.auth.otpVerify,
+      validatedPayload
+    );
+    return OtpVerifyResponseSchema.parse(data);
+  },
+
+  resendOtp: async (payload: OtpResendRequest): Promise<OtpResendResponse> => {
+    const validatedPayload = OtpResendRequestSchema.parse(payload);
+    const data = await apiClient.post<OtpResendResponse>(
+      API_ROUTES.auth.otpResend,
+      validatedPayload
+    );
+    return OtpResendResponseSchema.parse(data);
+  },
+
   checkUsername: async (
     payload: CheckUsernameRequest
   ): Promise<CheckUsernameResponse> => {
@@ -118,6 +148,20 @@ export const authApi = {
 
     console.log('Username check parsed response:', parsed.data);
     return parsed.data;
+  },
+
+  usernameSuggestions: async (
+    payload: UsernameSuggestionsRequest
+  ): Promise<UsernameSuggestionsResponse> => {
+    const validatedPayload = UsernameSuggestionsRequestSchema.parse(payload);
+    const data = await apiClient.get<UsernameSuggestionsResponse>(
+      API_ROUTES.auth.usernameSuggestions,
+      {
+        params: { username: validatedPayload.username },
+      }
+    );
+
+    return UsernameSuggestionsResponseSchema.parse(data);
   },
 
   refreshToken: async (

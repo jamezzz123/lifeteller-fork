@@ -3,7 +3,7 @@ import { z } from 'zod';
 // API Response wrappers
 export const ApiErrorSchema = z.object({
   error: z.string(),
-  code: z.string(),
+  code: z.string().nullable().optional(),
   success: z.literal(false),
   detail: z.string().optional(),
   message: z.string().optional(),
@@ -82,6 +82,30 @@ export const RegisterResponseSchema = ApiSuccessSchema.extend({
   onboarding_complete: z.boolean().nullable().optional(),
 });
 
+// OTP verification schemas
+export const OtpVerifyRequestSchema = z.object({
+  otp: z.string(),
+});
+
+export const OtpVerifyResponseSchema = ApiSuccessSchema.extend({
+  data: z.null(),
+  onboarding_complete: z.boolean().nullable().optional(),
+});
+
+// OTP resend schemas
+export const OtpResendRequestSchema = z.object({
+  channel: z.enum(['sms', 'email']),
+});
+
+export const OtpResendDataSchema = z.object({
+  token_time: z.number(),
+});
+
+export const OtpResendResponseSchema = ApiSuccessSchema.extend({
+  data: OtpResendDataSchema,
+  onboarding_complete: z.boolean().nullable().optional(),
+});
+
 // Username check schemas
 export const CheckUsernameRequestSchema = z.object({
   username: z.string(),
@@ -95,6 +119,20 @@ export const CheckUsernameDataSchema = z.object({
 
 export const CheckUsernameResponseSchema = ApiSuccessSchema.extend({
   data: CheckUsernameDataSchema,
+  onboarding_complete: z.boolean().nullable().optional(),
+});
+
+// Username suggestions schemas
+export const UsernameSuggestionsRequestSchema = z.object({
+  username: z.string(),
+});
+
+export const UsernameSuggestionsDataSchema = z.object({
+  suggestions: z.array(z.string()),
+});
+
+export const UsernameSuggestionsResponseSchema = ApiSuccessSchema.extend({
+  data: UsernameSuggestionsDataSchema,
   onboarding_complete: z.boolean().nullable().optional(),
 });
 
@@ -295,9 +333,22 @@ export type RefreshTokenResponse = z.infer<typeof RefreshTokenResponseSchema>;
 export type RegisterRequest = z.infer<typeof RegisterRequestSchema>;
 export type RegisterData = z.infer<typeof RegisterDataSchema>;
 export type RegisterResponse = z.infer<typeof RegisterResponseSchema>;
+export type OtpVerifyRequest = z.infer<typeof OtpVerifyRequestSchema>;
+export type OtpVerifyResponse = z.infer<typeof OtpVerifyResponseSchema>;
+export type OtpResendRequest = z.infer<typeof OtpResendRequestSchema>;
+export type OtpResendResponse = z.infer<typeof OtpResendResponseSchema>;
 export type CheckUsernameRequest = z.infer<typeof CheckUsernameRequestSchema>;
 export type CheckUsernameData = z.infer<typeof CheckUsernameDataSchema>;
 export type CheckUsernameResponse = z.infer<typeof CheckUsernameResponseSchema>;
+export type UsernameSuggestionsRequest = z.infer<
+  typeof UsernameSuggestionsRequestSchema
+>;
+export type UsernameSuggestionsData = z.infer<
+  typeof UsernameSuggestionsDataSchema
+>;
+export type UsernameSuggestionsResponse = z.infer<
+  typeof UsernameSuggestionsResponseSchema
+>;
 export type Interest = z.infer<typeof InterestSchema>;
 export type UserProfileData = z.infer<typeof UserProfileDataSchema>;
 export type UserProfileResponse = z.infer<typeof UserProfileResponseSchema>;

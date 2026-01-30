@@ -14,7 +14,7 @@ type OTPVerificationBottomSheetProps = {
   phoneNumber: string;
   otpLength?: number;
   onVerify: (otp: string) => void;
-  onResendOTP?: () => void;
+  onResendOTP?: () => Promise<number | void> | void;
   onClose?: () => void;
   resendTimeout?: number; // in seconds
 };
@@ -90,10 +90,17 @@ export const OTPVerificationBottomSheet = forwardRef<
       inputRefs.current[0]?.focus();
     };
 
-    const handleResend = () => {
+    const handleResend = async () => {
       if (timeLeft > 0) return;
       setTimeLeft(resendTimeout);
-      onResendOTP?.();
+      try {
+        const updatedTimeout = await onResendOTP?.();
+        if (typeof updatedTimeout === 'number' && updatedTimeout > 0) {
+          setTimeLeft(updatedTimeout);
+        }
+      } catch {
+        setTimeLeft(0);
+      }
     };
 
     const handleConfirm = () => {
